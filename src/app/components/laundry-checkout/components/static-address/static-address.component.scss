@@ -1,0 +1,70 @@
+@import '~assets/css/variables';
+
+.staticAddress{
+  padding: 20px 85px;
+
+  .details{
+    font-family: $proxima-reg;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: #8A8888;
+    font-size: 16px;
+  }
+
+  .form{
+    .inputStyle, app-jw-google-autocomplete /deep/ input{
+      height: 40px;
+      border: 1px solid #ccc;
+      padding: 5px 10px;
+      color: #444;
+      font-size: 15px;
+      font-family: $proxima-reg;
+    }
+
+    /deep/.signup-input{
+      height: 40px !important;
+      font-size: 16px !important;
+    }
+
+    .continueBtn{
+      background-color: $color-theme;
+      font-family: $proxima-reg;
+      font-size: 16px;
+      color: #fff;
+      border: 1px solid transparent;
+      transition: .5s;
+      &:hover{
+        border: 1px solid $color-theme;
+        background-color: white;
+        color: $color-theme;
+      }
+    }
+
+    .changeAddress{
+      float: right;
+    }
+
+    .searchField{
+      width: 200px;
+      float: right;
+    }
+  }
+
+  .borderSelected{
+    border: 1px solid #ececec;
+  }
+}
+
+
+.mt-10{
+  margin-top: 10px;
+}
+
+.mt-20{
+  margin-top: 20px;
+}
+@media only screen and (max-width: 990px) {
+  .staticAddress{
+    padding: 10px !important;
+  }
+}

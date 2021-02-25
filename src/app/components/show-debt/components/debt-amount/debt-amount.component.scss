@@ -1,0 +1,97 @@
+.debt {
+    display: flex;
+    align-items: center;
+    padding-bottom: 20px;
+    // padding-top: 10px;
+    flex-direction: column;
+    .debt-img {
+        display: flex;
+        justify-content: center;
+        padding-top: 25px;
+        .debt-box {
+            height: 160px;
+            width: 160px;
+        }
+
+    }
+    .debt-amt {
+        font-size: 45px;
+        font-weight: bold;
+        color: #474747;
+        font-family: 'ProximaNova-Semibold';
+    }
+    .debt-text{
+        font-size: 20px;
+        text-align: center;
+        /* font-weight: bold; */
+        color: #474747;
+        /* padding: 0px 73px; */
+        font-family: 'ProximaNova-Light';
+    }
+    .pad-top {
+        padding-top: 23px;
+    }
+    button.dialog-cancel {
+        font-size: 15px;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        border-radius: 5px !important;
+        background-color: #2296ff;
+        border-color: #2296ff;
+        padding: 10px 40px;
+        color: #fff;
+        &:hover {
+            background-color: #fff;
+            color: #2296ff;
+        }
+    }
+    .sub-text {
+        padding-top: 10px ;
+    }
+    .skip-button {
+        color: #2296ff;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+}
+
+.backdrop {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: rgba(0,0,0,0.6);
+    height: 100%;
+    width: 100%;
+    z-index: 1040;
+}
+
+:host /deep/ .modal-footer {
+    border-top: none !important;
+    text-align: center !important;
+} 
+
+:host /deep/ .modal-header {
+    display: flex;
+    justify-content: center;
+    border: none !important;
+}
+:host /deep/ .modal-title {
+    color: #474747 !important;
+    font-size: 23px !important;
+    padding-top: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    .debt-box {
+        height: 120px !important;
+        width: 120px !important;
+    }
+    .debt-amt {
+        font-size: 35px !important;
+    }
+    .debt-text {
+        font-size: 17px !important;
+        padding: 0px 10px;
+    }
+}

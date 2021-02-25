@@ -1,0 +1,65 @@
+@import '~assets/css/variables';
+.p-action-btn {
+   .btn-container{
+    display: flex;
+    min-width: 80px;
+    max-width: 80px;
+    border: solid 1px #ebebeb;
+    position: relative;
+    .btn-minus,.btn-plus{
+      padding: 0 5px;
+      background-color: transparent;
+      svg{
+        path{
+          fill: $color-theme;
+        }
+      }
+      &:focus{
+        box-shadow: none;
+      }
+    }
+    .input-price{
+      text-align: center;
+      border: 0;
+      color: $color-theme;
+      width: 100%;
+      outline: none;
+    }
+    @supports (-ms-ime-align: auto) { 
+      .input-price { 
+        width: 50%;
+      } 
+      }
+   } 
+  }
+  .loaders {
+    height: 2px;
+    width: 100%;
+    position: absolute;
+    overflow: hidden;
+    background-color: transparent;
+    bottom: 0;
+  }
+  .loaders:before{
+    display: block;
+    position: absolute;
+    content: "";
+    left: 0px;
+    width: 30%;
+    height: 2px;
+    background-color: $color-theme;
+    animation: loading .9s ease-in-out infinite;
+  }
+  
+  @keyframes loading {
+      from {transform: translateX(0);}
+      50% {transform: translateX(55px);}
+      to {transform: translateX(0);}
+  }  
+  @-moz-document url-prefix() {
+    @media only screen and (max-width: 480px) {
+    .input-price{ 
+      width : 50% !important;
+    }
+    }
+  }

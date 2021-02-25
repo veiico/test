@@ -1,0 +1,147 @@
+
+
+@import '~assets/css/variables';
+
+.close-x{
+    color: $header-color;
+    font-size: 28px;
+    font-weight: 800;
+    position: absolute;
+    right: 11px;
+    cursor: pointer;
+    line-height: 1;
+    top: 3px;
+    &.sotreOpen{
+        opacity: 0.48;
+        color: #8b8b8b;
+        right: 30px;
+        top: 16px;
+    }
+}
+
+.preorder{
+    padding: 20px 30px 30px;
+    .preorder-heading{
+        font-family: $proxima-semi-bold;
+        font-size: 28px;
+        color: #8b8b8b;
+        margin-bottom: 30px;
+    }
+    .store-info{
+        display: flex;
+        justify-content: left;
+        .store-image{
+            margin-right: 20px;
+            img{
+                width: 111px;
+                height: 111px;
+                object-fit: contain;
+            }
+        }
+        .store-name{
+            font-family: $proxima-semi-bold;;
+            font-size: 24px;
+            color: #464646;
+            margin-bottom: 5px;
+        }
+        .store-address{
+            font-family: $proxima-reg;
+            font-size: 18px;
+            color: #464646;
+        }
+    }
+}
+
+.seperator{
+    margin: 0 0 20px;
+    border-top: solid 1px #f7f7f7;
+}
+.head-sep{
+    margin: 5px 0px 20px -30px;
+    border-top: solid 1px #f7f7f7;
+    width: calc(100% + 60px);
+}
+
+.schedule-delivery{
+    padding: 20px 30px 20px;
+    .schedule-delivery-heading{
+        font-family: $proxima-semi-bold;
+        font-size: 20px;
+        color: #818181;   
+        margin-bottom: 15px;
+    }
+}
+
+
+/deep/.ui-calendar{
+    width: 100% !important;
+    height: 40px !important;
+    border-radius: 4px !important;
+    border-width: 0px !important;
+    font-family: 'ProximaNova-Regular' !important;
+    font-size: 16px !important;
+    .ui-datepicker{
+        min-width: 50%
+    }
+}
+
+/deep/.ui-calendar input{
+    width: 100% !important;
+    height: 40px !important;
+    // border-width: 0px !important;
+    padding: 6px 12px 6px 35px !important;
+    background: transparent
+}
+
+// /deep/.ui-calendar .ui-calendar-button {
+//     width: 51px !important;
+//     top: 0px !important;
+//     right: 0px !important;
+// }
+
+.btn-box{
+    padding: 0 30px 20px 30px;
+}
+  
+.cancelButton{
+    border: 2px solid gray;
+    height: 34px;
+    margin-right: 1rem;
+}
+  
+.pos-rel{
+    position: relative;
+}
+
+.input-icon{
+    color: $color-theme;
+    position: absolute;
+    top: 10px;
+    left: 9px;
+    font-size: 20px;
+}
+
+
+.popup-head{
+    padding: 20px 30px 20px;
+    display: flex;
+    justify-content: flex-start;
+    background: $color-theme;
+    .popup-head-tag{
+        margin-right: 15px; 
+        img{
+            height: 40px;
+        }
+    }
+    .popup-head-text{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        p{
+            font-family: $proxima-semi-bold;
+            font-size: 15px;
+            color: $header-color;
+            margin: 0;
+        }
+    }
+}

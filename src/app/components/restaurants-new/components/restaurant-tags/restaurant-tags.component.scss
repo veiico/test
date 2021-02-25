@@ -1,0 +1,72 @@
+@import '~assets/css/stores-view';
+@import '../../../../themes/swiggy/theme';
+
+
+  .preorder-tag-data {
+    z-index: 1;
+    position: absolute;
+    min-width: 100px;
+    max-width: 164px;
+    overflow: hidden;
+    margin-bottom: -35px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 1px;
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+    background-color: $preorder-tag-color;
+    color: $preorder-tag-font-color;
+    bottom: $preorder-tag-top;
+    right: 0;
+    text-align: center;
+  }
+  .sponsored-tag-data {
+    z-index: 1;
+    min-width: 110px;
+    max-width: 164px;
+    overflow: hidden;
+    text-align: center;
+    position: absolute;
+    //top: this.styles.preorder_tag_top
+    margin-left: 13px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 1px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: $sponsored-tag-color;
+    color: $sponsored-tag-font-color;
+    bottom: $sponsored-tag-bottom;
+    left: 0;
+  }
+  .closed-tag-data {
+    z-index: 1;
+    position: absolute;
+    min-width: 80px;
+    max-width: 164px;
+    overflow: hidden;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+    text-align: center;
+    margin-top: -10px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 1px;
+    background-color: $closed-tag-color;
+    color: $closed-tag-font-color;
+    top: $closed-tag-top;
+    left: 0;
+  }
+
+  @media only screen and (max-width: 650px) {
+    .preorder-tag-data {
+      max-width: 114px;
+    }
+    .sponsored-tag-data {
+      max-width: 114px;
+    }
+    .closed-tag-data {
+      max-width: 114px;
+    }
+
+  }

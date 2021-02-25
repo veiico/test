@@ -1,0 +1,97 @@
+<div class="newPage">
+  <!-- Header Start --->
+  <app-header class="col-xs-12" [headerData]="data"></app-header>
+ <!-- Header End --->
+
+  <!-- Search and hero section Start--->
+  <div class="fetch-location hero-bg" *ngIf="config" id="fetchLocation"
+       [ngStyle]="{'background-image':config && config.background_image ? getBackgroundImage() : 'url(assets/img/background-home.jpg)'}">
+
+    <div class="main hero-setup" *ngIf="!isPlatformServer;else serverShimmer">
+      <div class="root hero-text-btn">
+        <div class="pop">
+          <div class="logo" *ngIf="config.web_header_logo || content">
+            <img alt="logo" [src]="content && content.homebox && content.homebox.data.logo ? content.homebox.data.logo : config.web_header_logo" />
+          </div>
+          <!-- Tagline Start--->
+          <div class="tagline">
+            <h1>
+              {{config ? config.app_description : 'We get what you love'}}
+            </h1>
+          </div>
+
+         <!-- Form Start--->
+          <form [formGroup]="locationForm" (ngSubmit)="onSubmit(locationForm,$event,'shake')" autocomplete="off">
+            <div class="form" [ngClass]="{'flip180': showFindBusiness}">
+              <div class="viewContent normalView d-fl"> 
+                <div class="location">
+                  <app-autocomplete></app-autocomplete>
+                </div>
+                <div>
+                  <button class="btn btn-primary-1 w-100" title="{{terminology.GO_TO_MARKETPLACE}}">
+                    <ng-container>
+                      {{terminology.GO_TO_MARKETPLACE}}
+                    </ng-container>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+          <!-- Form end --->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Search and hero section End -->
+</div>
+<!-- custom order section -->
+<section class="" *ngIf="showDefaultCustom">
+  <div class="container">
+      <div class="row">
+          <div class="col-md-4"> <img src="assets/images/coustm.png" class="img-fluid pos-relative w-100" />
+          </div>
+          <div class="col-md-8">
+            <div class="addstore">
+                <span>{{ languageStrings.place_custom_order || "Place Custom Order" }}</span>
+                <p>
+                    {{ languageStrings.custom_order_text || "Order anything from anywhere, and it will be purchased and delivered at your place." }} 
+                </p>
+                <a (click)="goToCustomCheckout('1')" class="btn btn-secondary">{{ languageStrings.order_now || "Order Now" }} </a>
+            </div>
+        </div>
+      </div>
+  </div>
+</section>
+<!-- partner with us section -->
+<section class="" *ngIf="config.show_merchant_signup_link_on_webapp">
+  <div class="container">
+      <div class="row">
+          <div class="col-md-8">
+              <div class="addstore addpartalign">
+                  <span>{{ languageStrings.add_your_store || "Add Your Store" }} </span>
+                  <p>
+                      {{ languageStrings.add_your_store_text || "Add your store or partner with us to grow together" }} 
+                  </p>
+                  <a [href]="merchant_url" target="_blank" class="btn btn-secondary">{{ terminology.MERCHANT_SIGNUP_LINK_TEXT || 'Partner with us' }}</a>
+              </div>
+          </div>
+          <div class="col-md-4">
+              <img src="assets/images/addstore.png" class="img-fluid pos-relative w-100" />
+          </div>
+      </div>
+  </div>
+</section>
+<!-- App Feature --->
+<app-features *ngIf="content && content.features && content.features.is_enabled" [styles]="content.features.styles" [data]="content.features.data"></app-features>
+
+<!-- Content --->
+<app-flow *ngIf="content && content.flow && content.flow.is_enabled" [styles]="content.flow.styles" [data]="content.flow.data"></app-flow>
+
+<!-- order popup start --->
+<app-order-placed-popup></app-order-placed-popup>
+<!-- order popup end --->
+
+<!-- Footer end --->
+<app-footer></app-footer>
+<!-- Footer end --->
+

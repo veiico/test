@@ -1,0 +1,40 @@
+<div class="sideorder-section">
+  <p class="heading">{{languageStrings.you_may_also_like || 'You May Also Like'}}</p>
+  <div #sideOrdersWrapper class="side-order-wrapper">
+    <div #sideOrdersDiv class="side-orders">
+      <div #productDiv class="product-div" *ngFor="let product of sideOrders; let i = index;">
+        <img (click)="addSideOrder(product,i)" src="assets/img/add-btn.svg" class="add-btn"
+        alt="add side order">
+        <div>
+            <img height="20" *ngIf="appConfig.enable_veg_non_veg_filter === 1 && (product.is_veg === 1 || product.is_veg === 0) "
+            [src]="product.is_veg?'assets/img/veg.jpg':'assets/img/non_veg.jpg'" alt="veg nonveg symbol"
+            [ngClass]="{'discount-img-filter': product.price > 0 && product.original_price }">
+          <!-- <img class="veg-img" [src]="product.is_veg ? 'assets/img/veg.svg' : 'assets/img/non-veg.svg'" height="20"> -->
+          <div class="prdct-img">
+            <img [src]="product.thumb_url ? product.thumb_url : 'assets/img/image-placeholder.svg'" [alt]="product.name +' product image'">
+            <div class="prdct-name" [tooltip]="product.layout_data.lines[0]?product.layout_data.lines[0].data:''" tooltipClass="wider-tooltip">
+             <span>{{product.layout_data.lines[0]?product.layout_data.lines[0].data:''}}</span>
+            </div>
+            <div>
+              <span class="discount-price" *ngIf="product.price > 0 && product.original_price">
+                {{((appConfig.is_multi_currency_enabled &&  product.currency_symbol ) ? product.currency_symbol : currency) + '' +(product.original_price |decimalConfig)}}
+              </span> <br *ngIf="product.price > 0 && product.original_price">
+              <span class="prdct-price">
+              {{((appConfig.is_multi_currency_enabled &&  product.currency_symbol ) ? product.currency_symbol : currency) + '' +(product.price |decimalConfig)}}
+            </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div *ngIf="!disableRightButton" (click)="slideRight($event)" class="right-btn">
+    <img height="90" src="assets/img/right-control.svg"  alt="side order scroll right">
+  </div>
+  <div *ngIf="!disableLeftButton" (click)="slideLeft($event)" class="left-btn">
+    <img height="90" src="assets/img/left-control.svg" alt="side order scroll left">
+  </div>
+
+
+</div>

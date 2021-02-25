@@ -1,0 +1,1141 @@
+<div class="checkout-wrapper">
+  <div class="add-address-overley" *ngIf="showAddAddress">
+    <div class="add-address-form" [@slideInOut]>
+      <!-- Aminate this -->
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-xs-12">
+            <a class="close" (click)="onAddressSave(false)">
+              <i class="fa fa-close" title="close"></i>
+            </a>
+            <h3 class="text-center textHead" *ngIf="!editAddress" >{{ languageStrings.add_new_address || 'Add New Address'}}</h3>
+            <h3 class="text-center textHead" *ngIf="editAddress" >{{ languageStrings.edit_address || 'Edit Address'}}</h3>
+          </div>
+        </div>
+        <div class="row">
+          <add-fav-location (save)="onAddressSave($event)" [address]="editValues"></add-fav-location>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-header style="height:85px;padding: 0px;" class="col-xs-12" [headerData]="headerData" *ngIf="!ecomView && !config.theme_enabled || config.use_new_route">
+  </app-header>
+  <div style="height:85px;padding: 0px;"  *ngIf="!ecomView && config.theme_enabled && !config.use_new_route"><app-header-dynamic></app-header-dynamic></div>
+
+  <div class="checkoutView">
+
+    <div class="row ye_c_main marginZero">
+      <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 ye_c_sub">
+        <div class="ye_checkout_head text-center">
+          <p class="chk_title">{{terminology.CHECKOUT}}</p>
+          <hr class="chk_title_bar" [style.border-top-color]="appConfig.color" />
+        </div>
+      </div>
+
+
+
+      <div class="row check_details marginZero">
+
+        <div class="col-lg-8 col-sm-12 col-md-8 col-xs-12 formDetails ">
+          <form [formGroup]="checkoutForm" class="checkout-form col-xs-12">
+            <div class="row pick_delivery ">
+              <div class="timeline">
+
+                <div class="user-journey">
+
+                  <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 pick" style="position:relative">
+                    <div *ngIf="deliveryMode">
+                      <div class="del-type">
+                        <p *ngFor="let item of items" [ngClass]="{'active': deliveryMethod === item.value }" (click)="item.command()">{{item.label}}</p>
+                      </div>
+                    </div>
+                    <div [@fadeInOutDOM] *ngIf="deliveryMethod != 'pickup' && deliveryMethod != 'pickDrop' && businessModal != 'RENTAL' && !staticAddress">
+                      <span class="yf yf-ic-person-pin-circle src_img_out"></span>
+                      <app-delivery-address #appDeliveryAddress [fetchAddressNotify]="fetchAddressNotify"
+                        [deliveryOrPickup]="pickUpOrDeliveryBool" (onAddressSelect)="onAddressSelect($event)"
+                        (onAddAddress)="openAddAddress()" (openEditValue)="openEditValue($event)"></app-delivery-address>
+                    </div>
+                    <div [@fadeInOutDOM] *ngIf="staticAddress && (deliveryMethod != 'pickup' && deliveryMethod != 'pickDrop' && businessModal != 'RENTAL')">
+                      <span class="yf yf-ic-person-pin-circle src_img_out"></span>
+                      <app-static-address #appStaticDeliveryAddress [deliveryOrPickup]="pickUpOrDeliveryBool"
+                        (onAddressSelect)="onAddressSelect($event)" [list]="staticAddressList"></app-static-address>
+                    </div>
+
+                    <div [@fadeInOutDOM] *ngIf="!workflowBool && (deliveryMethod == 'pickup' || businessModal == 'RENTAL')">
+                      <span class="yf yf-pick-up-food src_img_out"></span>
+
+                      <div>
+                        <div *ngIf="pickUpOrDeliveryBool==2">
+                          <app-pickup #appPickup></app-pickup>
+                          <app-delivery #appDelivery></app-delivery>
+                        </div>
+                        <div *ngIf="pickUpOrDeliveryBool!==2">
+                          <app-pickup #appPickup *ngIf="!pickUpOrDeliveryBool"></app-pickup>
+                          <app-delivery #appDelivery *ngIf="pickUpOrDeliveryBool"></app-delivery>
+                        </div>
+                      </div>
+                    </div>
+                    <div [@fadeInOutDOM] *ngIf="deliveryMethod == 'pickDrop' && businessModal != 'RENTAL'">
+                      <span class="yf yf-ic-person-pin-circle src_img_out"></span>
+                      <div class="white-back">
+                        <div class="chk_inr_hdng">
+                            <ng-container>
+                              <p class="chk_inr_hdng_txt"><ng-container>{{ languageStrings.type_address_detail || 'Pickup Address Details'}} </ng-container></p>
+                            </ng-container>
+                        </div>
+                        <div class="padd-section-address">
+                          <div class="address-parent-delievry">
+                            <i class="glyphicon glyphicon-map-marker map-icon" (click)="openMap()"aria-hidden="true"></i>
+                            <app-jw-google-autocomplete  placeholder="{{ languageStrings.enter_address || 'Enter Address'}}"
+                              [(ngModel)]="pickupAndDeliverySection.address" [ngModelOptions]="{standalone: true}" (latLng)="onLatLngEvent($event)"
+                              (modelChange)="clearLatLng()">
+                            </app-jw-google-autocomplete>
+                          </div>
+                        </div>
+                        <form [formGroup]="custmPickupForm">
+                          <div class="row custom-row-pickup">
+                            <div class="col-sm-6">
+                              <label for="profile-name" [ngStyle]="{ 'direction' : direction }">
+                                <ng-container >{{ languageStrings.name ||"Name"}}</ng-container>
+                              </label>
+                              <input id="profile-name" class="form-control"  placeholder="{{ languageStrings.enter_name || 'Enter name' }}"
+                                [ngStyle]="{ 'direction' : direction }" formControlName="name">
+                            </div>
+                            <div class="col-sm-6">
+                              <label for="profile-email" [ngStyle]="{ 'direction' : direction }">
+                                <ng-container >{{ languageStrings.email || "Email"}}</ng-container>
+                              </label>
+                              <input id="profile-email" class="form-control" formControlName="email" placeholder="example@gmail.com" />
+                              <app-control-messages [control]="custmPickupForm.controls.email"></app-control-messages>
+                            </div>
+                            <div class="col-sm-6">
+                              <br>
+                              <label for="profile-phone" [ngStyle]="{ 'direction' : direction }">
+                                <ng-container >{{languageStrings.phone_number || "Phone Number"}}</ng-container>
+                              </label>
+                              <app-fugu-tel-input id="profile-phone" class="phone-fav-add-pickup" formControlName="phone" [(dialCode)]="country_code">
+                              </app-fugu-tel-input>
+                              <app-control-messages [control]="custmPickupForm.controls.phone"></app-control-messages>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                      <app-delivery-address #appDeliveryAddress [fetchAddressNotify]="fetchAddressNotify" *ngIf="!staticAddress"
+                        [deliveryOrPickup]="pickUpOrDeliveryBool" (onAddressSelect)="onAddressSelect($event)"
+                        (onAddAddress)="openAddAddress()" (openEditValue)="openEditValue($event)"></app-delivery-address>
+
+                      <app-static-address #appStaticDeliveryAddress [deliveryOrPickup]="pickUpOrDeliveryBool"  *ngIf="staticAddress"
+                        (onAddressSelect)="onAddressSelect($event)" [list]="staticAddressList"></app-static-address>
+                      </div>
+                  </div>
+                </div>
+
+                <!-- -----------delivery mode--------------- -->
+                <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 custom-checkout user-journey" *ngIf="showAgentList">
+                  <i class="fa fa-user src_img_out" aria-hidden="true"></i>
+                  <div class="checkout_card">
+                    <div class="chk_inr_hdng">
+                      <p class="chk_inr_hdng_txt text-capitalize">{{ languageStrings.select_agent  || 'Select Agent'}}</p>
+                    </div>
+                    <div class="chk_cnt_div">
+                      <div class="agent-listing">
+                        <ng-container *ngIf="agentList && agentList.length > 0">
+                          <ng-container *ngFor="let agent of agentList;index as i">
+                            <div class="col-xs-12 col-md-12 agent-card" [ngClass]="{'selected-agent-card' : i == selectedAgentIndex}" (click)="onSelectAgent(agent, i)">
+                              <i class="fa fa-check" *ngIf="i == selectedAgentIndex" aria-hidden="true"></i>
+                              <div>
+                                <div class="image-div">
+                                  <img [src]="agent.fleet_thumb_image || 'assets/img/name-icon.svg'">
+                                </div>
+                                <div class="col-sm-12" *ngIf="agent.ratings > 0">
+                                  <ul class="list-inline" [ngClass]="{'rating-list' : !readOnly, 'read-only' : readOnly}"
+                                    *ngFor="let star of stars" style="display: inline-block">
+                                    <li
+                                      [ngClass]="{'selected': (star <= agent.ratings)}">
+                                      <i class="fa fa-star"></i>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                              <div class="agent-detail">
+                                <label class="agent-name">{{agent.username}}</label>
+                                <label class="agent-label d-flex" *ngIf="agent.phone">
+                                  <ng-container >{{languageStrings.phone_number || "Phone Number"}}</ng-container> : <span class="agent-value">{{agent.phone}}</span>
+                                </label>
+                                <label class="agent-label d-flex" *ngIf="agent.email">
+                                  <ng-container >{{languageStrings.email || "Email"}}</ng-container> : <span class="agent-value">{{agent.email}}</span>
+                                </label>
+                              </div>
+                            </div>
+                          </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="agentList && agentList.length == 0">
+                          <label class="no-data" [ngStyle]="{ 'direction' : direction }">{{ languageStrings.no_agent_avail || 'No Agent Available'}} </label>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ====================== datepicker ====================== -->
+                <div id="slots" [@slideTopBottom] class="col-lg-12 col-xs-12 col-md-12 col-sm-12 schedule user-journey" *ngIf="((restaurantInfo.scheduled_task || restaurantInfo.enable_start_time_end_time || restaurantInfo.enable_tookan_agent || (restaurantInfo.is_order_agent_scheduling_enabled && selectedAgent && selectedAgent.fleet_id)) &&
+                (restaurantInfo.business_type == businessTypeEnum.PRODUCT_MARKETPLACE ||
+                (restaurantInfo.business_type == businessTypeEnum.SERVICE_MARKETPLACE && restaurantInfo.pd_or_appointment==taskTypeEnum.SERVICE_AS_PRODUCT) ) && !hideScheduling) || recurringEnabled">
+                  <span class="fa fa-calendar src_img_out "> </span>
+                  <div class="checkout_card">
+
+                    <!-- if recurring then show btn -->
+                    <div class="order-type-card" *ngIf="recurringEnabled">
+                      <div class="order-type-selection row">
+                          <div class="col-xs-4 col-sm-4" *ngIf="restaurantInfo.instant_task  && ((restaurantInfo.available_for_home_delivery && deliveryMethod=='home') || (restaurantInfo.available_for_self_pickup && deliveryMethod=='pickup') ||(restaurantInfo.available_for_pick_and_drop && deliveryMethod=='pickDrop')) && restaurantInfo.available">
+                              <div class="order-type" [ngClass]="{'selected': orderType =='orderNow'}" (click)="changeOrderType('orderNow')">
+                                <ng-container >{{languageStrings.instant_order || "Instant Order"}}</ng-container>
+                              </div>
+                            </div>
+                          <div class="col-xs-4 col-sm-4"
+                          *ngIf="(restaurantInfo.scheduled_task || restaurantInfo.enable_start_time_end_time || restaurantInfo.enable_tookan_agent || restaurantInfo.is_order_agent_scheduling_enabled) && restaurantInfo.business_type != 2 && !hideScheduling">
+                          <div class="order-type" [ngClass]="{'selected': orderType =='schedule'}" (click)="changeOrderType('schedule')">
+                            <ng-container >{{languageStrings.schedule_order ||"Schedule Order"}}</ng-container>
+                          </div>
+                        </div>
+                        <div class="col-xs-4 col-sm-4" *ngIf="recurringEnabled">
+                          <div [ngClass]="{'selected': orderType =='subscription'}" (click)="changeOrderType('subscription')"
+                            class="order-type">
+                            <ng-container>{{terminology.SUBSCRIBE || 'Subscribe'}}</ng-container>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- if recurring then show btn -->
+                      <div class="order-type-selection row" *ngIf="(!restaurantInfo.is_delivery_charge_surge_active || (restaurantInfo.is_delivery_charge_surge_active && selectedAddress) && recurringEnabled)">
+                        <app-recurring-tasks #recurringTasksComponent *ngIf="orderType=='subscription' && recurringEnabled" [deliveryAddress]="selectedAddress"
+                        [pickupDropAddress]="selectedPickupAndDeliverySection">
+                        </app-recurring-tasks>
+                      </div>
+
+                    </div>
+
+
+                    <div class="chk_inr_hdng" *ngIf="!recurringEnabled">
+                      <p class="chk_inr_hdng_txt text-capitalize">{{terminology.SCHEDULE_ORDER}}</p>
+
+                      <div class="s_switch" [ngStyle]="{ 'direction' : direction }" *ngIf="(restaurantInfo.instant_task && ((restaurantInfo.available_for_home_delivery && deliveryMethod=='home') || (restaurantInfo.available_for_self_pickup && deliveryMethod=='pickup') ||(restaurantInfo.available_for_pick_and_drop && deliveryMethod=='pickDrop'))) && restaurantInfo.available && restaurantInfo.scheduled_task
+                    && !restaurantInfo.enable_start_time_end_time && !restaurantInfo.enable_tookan_agent && !preOrderTime &&
+                    !(restaurantInfo.business_type == businessTypeEnum.SERVICE_MARKETPLACE &&
+                    restaurantInfo.pd_or_appointment == taskTypeEnum.SERVICE_AS_PRODUCT)">
+
+                        <div>
+                          <p-inputSwitch formControlName="schedule_radio"></p-inputSwitch>
+                        </div>
+
+                      </div>
+                    </div>
+                    <div [ngClass]="{'schdeule-wrapper':recurringEnabled,'schedule_order':!recurringEnabled}">
+                      <div *ngIf="restaurantInfo.enable_tookan_agent && !(restaurantInfo.is_order_agent_scheduling_enabled && restaurantInfo.business_type == 2 && restaurantInfo.pd_or_appointment == 3)" class="scheduleData">
+                        <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+                          <div class="form-group" style="margin-bottom: 0">
+                            <div class="input-group" style="margin-bottom: 0;width:100%;" (click)="openStartSlots = false;openEndSlots = false">
+                              <label class="chk-lable" for="chk-start-date" [ngStyle]="{ 'direction' : direction }">
+                                <ng-container >{{ languageStrings.start_date || "Start Date"}}</ng-container>
+                              </label>
+                              <div class="input-group addon">
+                                <input type="text" id="chk-start-date" class="form-control chk-input" [minDate]="minDate" [maxDate]="maxStartDate"
+                                  #dp="bsDatepicker" (onHidden)="dateAgentStartChanged()" (onShown)="onDatePickerShown()"
+                                  formControlName="startDate" [value]=" bsStartValue | dateTimeFormat: 'mediumDate' "
+                                  bsDatepicker [(ngModel)]="bsStartValue" readonly style="color: #333333" [bsConfig]="bsConfig">
+                                <span class="input-group-addon no-border-fa" id="basic-addon5" (click)="dp.show()">
+                                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+                          <div class="form-group" style="margin-bottom: 0">
+                            <div class="input-group" style="margin-bottom: 0;width:100%;" (click)="openStartSlots = !openStartSlots;openEndSlots = false;openTimePicker(openStartSlots);">
+                              <label class="chk-lable" for="chk-start-time">{{terminology.START_TIME}}</label>
+                              <div class="input-group addon" style="margin-bottom: 0">
+                                <input type="text" id="chk-start-time" placeholder="--:-- - --:--" class="form-control chk-input"
+                                  [ngModel]="startTime" (ngModelChange)="dateStartGa($event)" formControlName="startTime" readonly style="color: #333333"
+                                  [value]="startTime ? startTime : ''">
+                                <span class="input-group-addon no-border-fa" id="basic-addon6">
+                                  <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="slots" [hidden]="!openStartSlots">
+                              <div>
+                                <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+                                  <ng-container >{{languageStrings.morning || "Morning"}}</ng-container>
+                                </p>
+                                <div class="slot-parent agent">
+                                  <div *ngFor="let slot of agentStartSlots.morning" class="slot-ui agent" (click)="startTime = slot;endTime = '';openStartSlots = false;highlightSlot($event,slot)">
+                                    {{slot}}
+                                  </div>
+                                </div>
+                                <div *ngIf="!agentStartSlots.morning.size" style="margin: auto">
+                                  <p [ngStyle]="{ 'direction' : direction }" style="text-align: center">
+                                    <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                  </p>
+                                </div>
+                              </div>
+                              <div>
+                                <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+                                  <ng-container >{{ languageStrings.afternoon ||"Afternoon"}}</ng-container>
+                                </p>
+                                <div class="slot-parent agent">
+                                  <div *ngFor="let slot of agentStartSlots.afternoon" class="slot-ui agent" (click)="startTime = slot;endTime = '';openStartSlots = false;highlightSlot($event,slot)">
+                                    {{slot}}
+                                  </div>
+                                </div>
+                                <div *ngIf="!agentStartSlots.afternoon.size" style="margin: auto">
+                                  <p style="text-align: center">
+                                    <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                  </p>
+                                </div>
+                              </div>
+                              <div>
+                                <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+                                  <ng-container >{{languageStrings.evening || "Evening"}}</ng-container>
+                                </p>
+                                <div class="slot-parent agent">
+                                  <div *ngFor="let slot of agentStartSlots.evening" class="slot-ui agent" (click)="startTime = slot;endTime = '';openStartSlots = false;highlightSlot($event,slot)">
+                                    {{slot}}
+                                  </div>
+                                </div>
+                                <div *ngIf="!agentStartSlots.evening.size" [ngStyle]="{ 'direction' : direction }"
+                                  style="margin: auto">
+                                  <p style="text-align: center">
+                                    <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                  </p>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+                          <div class="form-group" style="margin-bottom: 0">
+                            <div class="input-group" style="margin-bottom: 0;width:100%;" (click)="openEndSlots = false;openStartSlots = false">
+                              <label class="chk-lable" for="chk-end-date" [ngStyle]="{ 'direction' : direction }">
+                                <ng-container >{{languageStrings.end_date || "End Date"}}</ng-container>
+                              </label>
+                              <div class="input-group addon">
+                                <input type="text" id="chk-end-date" class="form-control chk-input" [minDate]="minDate" [maxDate]="maxEndDate"
+                                  #dpE="bsDatepicker" (onHidden)="dateAgentEndChanged()" (onShown)="onDatePickerShown()"
+                                  formControlName="endDate" [value]=" bsEndValue | dateTimeFormat: 'mediumDate' " bsDatepicker
+                                  [(ngModel)]="bsEndValue" readonly style="color: #333333" [bsConfig]="bsConfig">
+                                <span class="input-group-addon no-border-fa" id="basic-addon8" (click)="dpE.show()">
+                                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+                          <div class="form-group" style="margin-bottom: 0">
+                            <div class="input-group" style="margin-bottom: 0;width:100%;" (click)="checkIfStartSelected();openTimePicker(openEndSlots);">
+                              <label class="chk-lable" for="chk-end-time" >{{terminology.END_TIME}}</label>
+                              <div class="input-group addon" style="margin-bottom: 0">
+                                <input type="text" id="chk-end-time" placeholder="--:-- - --:--" class="form-control chk-input"
+                                  [ngModel]="endTime" (ngModelChange)="dateEndGa($event)" formControlName="endTime" readonly style="color: #333333"
+                                  [value]="endTime ? endTime : ''">
+                                <span class="input-group-addon no-border-fa" id="basic-addon7">
+                                  <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="slots" [hidden]="!openEndSlots">
+                              <div>
+                                <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+                                  <ng-container >{{languageStrings.morning || "Morning"}}</ng-container>
+                                </p>
+                                <div class="slot-parent agent">
+                                  <div *ngFor="let slot of agentEndSlots.morning" class="slot-ui agent" (click)="endTime = slot;openEndSlots = false;highlightSlot($event,slot)">
+                                    {{slot}}
+                                  </div>
+                                </div>
+                                <div *ngIf="!agentEndSlots.morning.size" [ngStyle]="{ 'direction' : direction }" style="margin: auto">
+                                  <p style="text-align: center">
+                                    <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                  </p>
+                                </div>
+                              </div>
+                              <div>
+                                <p class="slot-heading">
+                                  <ng-container >{{ languageStrings.afternoon || "Afternoon"}}</ng-container>
+                                </p>
+                                <div class="slot-parent agent">
+                                  <div *ngFor="let slot of agentEndSlots.afternoon" class="slot-ui agent" (click)="endTime = slot;openEndSlots = false;highlightSlot($event,slot)">
+                                    {{slot}}
+                                  </div>
+                                </div>
+                                <div *ngIf="!agentEndSlots.afternoon.size" style="margin: auto">
+                                  <p style="text-align: center">
+                                    <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                  </p>
+                                </div>
+                              </div>
+                              <div>
+                                <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+                                  <ng-container>{{languageStrings.evening || "Evening"}}</ng-container>
+                                </p>
+                                <div class="slot-parent agent">
+                                  <div *ngFor="let slot of agentEndSlots.evening" class="slot-ui agent" (click)="endTime = slot;openEndSlots = false;highlightSlot($event,slot)">
+                                    {{slot}}
+                                  </div>
+                                </div>
+                                <div *ngIf="!agentEndSlots.evening.size" style="margin: auto">
+                                  <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                                    <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                  </p>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div *ngIf="restaurantInfo.is_order_agent_scheduling_enabled && restaurantInfo.business_type == 2 && restaurantInfo.pd_or_appointment == 3" class="scheduleData"
+                      class="scheduleData">
+                      <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+                        <div class="form-group" style="margin-bottom: 0">
+                          <div class="input-group" style="margin-bottom: 0;width:100%;" (click)="openSlots = false">
+                            <label class="chk-lable" for="chk-select-date" [ngStyle]="{ 'direction' : direction }">
+                              <ng-container >{{ languageStrings.select_date ||"Select Date"}}</ng-container>
+                            </label>
+                            <div class="input-group addon">
+                              <input type="text" id="chk-select-date" [isDisabled]="disableSchedulingInput" [disabled]="disableSchedulingInput" class="form-control chk-input remove-z-index" [minDate]="minDate" [maxDate]="maxDate"
+                                #dp="bsDatepicker" (onHidden)="getSlotsForDayForAgent()" (onShown)="onDatePickerShown()"
+                                formControlName="date" [value]=" bsValue | dateTimeFormat: 'mediumDate' " bsDatepicker
+                                [(ngModel)]="bsValue" readonly style="color: #333333" [bsConfig]="bsConfig">
+                              <span class="input-group-addon no-border-fa" id="basic-addon1" (click)="dp.show()">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+                        <div class="form-group" style="margin-bottom: 0">
+                          <div class="input-group" style="margin-bottom: 0;width:100%;" (click)="openStartSlots = !openStartSlots;openEndSlots = false;openTimePicker(openStartSlots);">
+                            <label class="chk-lable" for="chk-start-time">{{terminology.START_TIME}}</label>
+                            <div class="input-group addon" style="margin-bottom: 0">
+                              <input type="text" id="chk-start-time" placeholder="--:-- - --:--" class="form-control chk-input"
+                                [ngModel]="startTime" (ngModelChange)="dateStartGa($event)" formControlName="startTime" readonly style="color: #333333"
+                                [value]="startTime ? startTime : ''">
+                              <span class="input-group-addon no-border-fa" id="basic-addon6">
+                                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                              </span>
+                            </div>
+                          </div>
+                          <div class="slots" [hidden]="!openStartSlots">
+                            <div>
+                              <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+                                <ng-container >{{ languageStrings.morning || "Morning"}}</ng-container>
+                              </p>
+                              <div class="slot-parent agent">
+                                <div *ngFor="let slot of agentStartSlots.morning" class="slot-ui agent" (click)="startTime = slot;endTime = '';openStartSlots = false;highlightSlot($event,slot)">
+                                  {{slot}}
+                                </div>
+                              </div>
+                              <div *ngIf="!agentStartSlots.morning.size" style="margin: auto">
+                                <p [ngStyle]="{ 'direction' : direction }" style="text-align: center">
+                                  <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                </p>
+                              </div>
+                            </div>
+                            <div>
+                              <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+                                <ng-container >{{ languageStrings.afternoon ||"Afternoon"}}</ng-container>
+                              </p>
+                              <div class="slot-parent agent">
+                                <div *ngFor="let slot of agentStartSlots.afternoon" class="slot-ui agent" (click)="startTime = slot;endTime = '';openStartSlots = false;highlightSlot($event,slot)">
+                                  {{slot}}
+                                </div>
+                              </div>
+                              <div *ngIf="!agentStartSlots.afternoon.size" style="margin: auto">
+                                <p style="text-align: center">
+                                  <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                </p>
+                              </div>
+                            </div>
+                            <div>
+                              <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+                                <ng-container >{{languageStrings.evening || "Evening"}}</ng-container>
+                              </p>
+                              <div class="slot-parent agent">
+                                <div *ngFor="let slot of agentStartSlots.evening" class="slot-ui agent" (click)="startTime = slot;endTime = '';openStartSlots = false;highlightSlot($event,slot)">
+                                  {{slot}}
+                                </div>
+                              </div>
+                              <div *ngIf="!agentStartSlots.evening.size" [ngStyle]="{ 'direction' : direction }"
+                                style="margin: auto">
+                                <p style="text-align: center">
+                                  <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                </p>
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                      </div>
+                      
+                      <div *ngIf="(checkoutForm['controls'].schedule_radio.value || (!checkoutForm['controls'].schedule_radio.value && !((restaurantInfo.instant_task && ((restaurantInfo.available_for_home_delivery && deliveryMethod=='home') || (restaurantInfo.available_for_self_pickup && deliveryMethod=='pickup') ||(restaurantInfo.available_for_pick_and_drop && deliveryMethod=='pickDrop'))) && restaurantInfo.available && restaurantInfo.scheduled_task
+                      && !restaurantInfo.enable_start_time_end_time && !restaurantInfo.enable_tookan_agent && !preOrderTime &&
+                      !(restaurantInfo.business_type == businessTypeEnum.SERVICE_MARKETPLACE &&
+                      restaurantInfo.pd_or_appointment == taskTypeEnum.SERVICE_AS_PRODUCT)))) && this.orderType!='subscription' && !restaurantInfo.enable_start_time_end_time && !restaurantInfo.enable_tookan_agent && !(restaurantInfo.is_order_agent_scheduling_enabled && restaurantInfo.business_type == 2 && restaurantInfo.pd_or_appointment == 3)"
+                        class="scheduleData">
+                        <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+                          <div class="form-group" style="margin-bottom: 0">
+                            <div class="input-group" style="margin-bottom: 0;width:100%;" (click)="openSlots = false">
+                              <label class="chk-lable" for="chk-select-date" [ngStyle]="{ 'direction' : direction }">
+                                <ng-container >{{ languageStrings.select_date ||"Select Date"}}</ng-container>
+                               
+                              </label>
+                              <div class="input-group addon">
+                                <input type="text" id="chk-select-date" [isDisabled]="disableSchedulingInput" [disabled]="disableSchedulingInput" class="form-control chk-input remove-z-index" [minDate]="minDate" [maxDate]="maxDate"
+                                  #dp="bsDatepicker" (onHidden)="dateChanged()" (onShown)="onDatePickerShown()"
+                                  formControlName="date" [value]=" bsValue | dateTimeFormat: 'mediumDate' " bsDatepicker
+                                  [(ngModel)]="bsValue" readonly style="color: #333333" [bsConfig]="bsConfig">
+                                <span class="input-group-addon no-border-fa" id="basic-addon1" (click)="dp.show()">
+                                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+                          <div class="form-group" style="margin-bottom: 0">
+                            <div class="input-group" style="margin-bottom: 0;width:100%;" (click)="toggleSlotPicker();openTimePicker(openSlots);">
+                              <label class="chk-lable" for="chk-select-time" [ngStyle]="{ 'direction' : direction }">
+                                <ng-container > {{ languageStrings.select_time ||"Select Time"}}</ng-container>
+                              </label>
+                              <div class="input-group addon" style="margin-bottom: 0">
+                                <input type="text" id="chk-select-time" placeholder="--:--" class="form-control chk-input remove-z-index"
+                                       [ngModel]="time" (ngModelChange)="makeDateChangedGa($event)" [disabled]="disableSchedulingInput"
+                                  formControlName="time" readonly style="color: #333333" [value]="time ? time + ' ' + tFormat: ''">
+                                <span class="input-group-addon no-border-fa" id="basic-addon2">
+                                  <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="slots" [hidden]="!openSlots">
+                              <div>
+                                <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+                                  <ng-container >{{ languageStrings.morning ||"Morning"}}</ng-container>
+                                </p>
+                                <div class="slot-parent" >
+                                  <div *ngFor="let slot of slots.morning" [ngClass]="{'booked': slot.booked == 1}" class="slot-ui" (click)="time = slot.date;openSlots = false;setTimeFormat('simple', 'AM');highlightSlot($event,slot.date)">
+                                     {{slot.date}}
+                                  </div>
+                                </div>
+                                <div *ngIf="!slots.morning.size" style="margin: auto">
+                                  <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                                    <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                  </p>
+                                </div>
+                              </div>
+                              <div>
+                                <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+                                  <ng-container >{{ languageStrings.afternoon || "Afternoon"}}</ng-container>
+                                </p>
+                                <div class="slot-parent" >
+                                  <div *ngFor="let slot of slots.afternoon" [ngClass]="{'booked': slot.booked == 1}" class="slot-ui" (click)="time = slot.date;openSlots = false;setTimeFormat('simple', 'PM');highlightSlot($event,slot.date)" >
+                                      {{slot.date}}
+                                  </div>
+                                </div>
+                                <div *ngIf="!slots.afternoon.size" style="margin: auto">
+                                  <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                                    <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                  </p>
+                                </div>
+                              </div>
+                              <div>
+                                <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+                                  <ng-container >{{languageStrings.evening || "Evening"}}</ng-container>
+                                </p>
+                                <div class="slot-parent" >
+                                  <div *ngFor="let slot of slots.evening" [ngClass]="{'booked': slot.booked == 1}" class="slot-ui" (click)="time = slot.date;openSlots = false;setTimeFormat('simple', 'PM');highlightSlot($event,slot.date)">
+                                    {{slot.date}}
+                                  </div>
+                                </div>
+                                <div *ngIf="!slots.evening.size" style="margin: auto">
+                                  <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                                    <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                  </p>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div *ngIf="restaurantInfo.instant_task && restaurantInfo.enable_start_time_end_time && restaurantInfo.scheduled_task && !restaurantInfo.enable_tookan_agent && !(restaurantInfo.is_order_agent_scheduling_enabled && restaurantInfo.business_type == 2 && restaurantInfo.pd_or_appointment == 3)"
+                        class="scheduleData">
+                        <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+                          <div class="form-group" style="margin-bottom: 0">
+                            <div class="input-group" style="margin-bottom: 0;width:100%;" (click)="openSlots = false">
+                              <label class="chk-lable" for="chk-start-dt" [ngStyle]="{ 'direction' : direction }">
+                                <ng-container >Start Date</ng-container>
+                              </label>
+                              <div class="input-group addon">
+                                <input type="text" id="chk-start-dt" class="form-control chk-input" [minDate]="minDate" [maxDate]="maxStartDate"
+                                  #dpS="bsDatepicker" (onHidden)="dateStartChanged()" formControlName="startDate"
+                                  [value]=" bsStartValue | dateTimeFormat: 'mediumDate'" bsDatepicker [(ngModel)]="bsStartValue"
+                                  (onShown)="onDatePickerShown()" readonly style="color: #333333" [bsConfig]="bsConfig">
+                                <span class="input-group-addon no-border-fa" id="basic-addon1" (click)="dpS.show()">
+                                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+                          <div class="form-group" style="margin-bottom: 0">
+                            <div class="input-group" style="margin-bottom: 0;width:100%;" (click)="openStartSlots = !openStartSlots;openEndSlots = false;openTimePicker(openEndSlots);">
+                              <label for="chk-start-tm" class="text-capitalize chk-lable">{{terminology.START_TIME}}</label>
+                              <div class="input-group addon" style="margin-bottom: 0">
+                                <input type="text" id="chk-start-tm"  placeholder="--:--" class="form-control chk-input" [ngModel]="startTime" (ngModelChange)="dateStartGa($event)"
+                                  formControlName="time" readonly style="color: #333333" [value]="startTime ? startTime + ' ' + tStartFormat: ''">
+                                <span class="input-group-addon no-border-fa" id="basic-addon2">
+                                  <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="slots" [hidden]="!openStartSlots">
+                              <div>
+                                <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+                                  <ng-container >{{ languageStrings.morning ||"Morning"}}</ng-container>
+                                </p>
+                                <div class="slot-parent">
+                                  <div *ngFor="let slot of startSlots.morning" [ngClass]="{'booked': slot.booked == 1}" class="slot-ui" (click)="startTime = slot.date;openStartSlots = false;setTimeFormat('start', 'AM');highlightSlot($event,slot.date)">
+                                    {{slot.date}}
+                                  </div>
+                                </div>
+                                <div *ngIf="!startSlots.morning.size" style="margin: auto">
+                                  <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                                    <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                  </p>
+                                </div>
+                              </div>
+                              <div>
+                                <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+                                  <ng-container >{{languageStrings.afternoon ||"Afternoon"}}</ng-container>
+                                </p>
+                                <div class="slot-parent">
+                                  <div *ngFor="let slot of startSlots.afternoon" [ngClass]="{'booked': slot.booked == 1}" class="slot-ui" (click)="startTime = slot.date;openStartSlots = false;setTimeFormat('start', 'PM');highlightSlot($event,slot.date)">
+                                    {{slot.date}}
+                                  </div>
+                                </div>
+                                <div *ngIf="!startSlots.afternoon.size" style="margin: auto">
+                                  <p style="text-align: center">
+                                    <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                  </p>
+                                </div>
+                              </div>
+                              <div>
+                                <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+                                  <ng-container >{{ languageStrings.evening ||"Evening"}}</ng-container>
+                                </p>
+                                <div class="slot-parent">
+                                  <div *ngFor="let slot of startSlots.evening" [ngClass]="{'booked': slot.booked == 1}" class="slot-ui" (click)="startTime = slot.date;openStartSlots = false;setTimeFormat('start', 'PM');highlightSlot($event,slot.date)">
+                                    {{slot.date}}
+                                  </div>
+                                </div>
+                                <div *ngIf="!startSlots.evening.size" style="margin: auto">
+                                  <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                                    <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                  </p>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+                          <div class="form-group" style="margin-bottom: 0">
+                            <div class="input-group" style="margin-bottom: 0;width:100%;" (click)="openSlots = false">
+                              <label for="chk-end-dt" class="chk-lable" [ngStyle]="{ 'direction' : direction }">
+                                <ng-container >{{ languageStrings.end_date || "End Date"}}</ng-container>
+                              </label>
+                              <div class="input-group addon">
+                                <input type="text" id="chk-end-dt" class="form-control chk-input" [minDate]="minDate" [maxDate]="maxEndDate"
+                                  #dpE="bsDatepicker" (onHidden)="dateEndChanged()" formControlName="endDate" [value]=" bsEndValue | dateTimeFormat: 'mediumDate' "
+                                  bsDatepicker [(ngModel)]="bsEndValue" (onShown)="onDatePickerShown()" readonly style="color: #333333"
+                                  [bsConfig]="bsConfig">
+                                <span class="input-group-addon no-border-fa" id="basic-addon1" (click)="dpE.show()">
+                                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+                          <div class="form-group" style="margin-bottom: 0">
+                            <div class="input-group" style="margin-bottom: 0;width:100%;" (click)="openEndSlots = !openEndSlots;openStartSlots = false;openTimePicker(openStartSlots);">
+                              <label class="text-capitalize chk-lable" for="chk-end-tm">{{terminology.END_TIME}}</label>
+                              <div class="input-group addon" style="margin-bottom: 0">
+                                <input type="text" id="chk-end-tm" placeholder="--:--" class="form-control chk-input" [ngModel]="endTime" (ngModelChange)="dateEndGa($event)"
+                                  formControlName="endTime" readonly style="color: #333333" [value]="endTime ? endTime + ' ' + tEndFormat: ''">
+                                <span class="input-group-addon no-border-fa" id="basic-addon2">
+                                  <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="slots" [hidden]="!openEndSlots">
+                              <div>
+                                <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+                                  <ng-container >{{ languageStrings.morning || "Morning"}}</ng-container>
+                                </p>
+                                <div class="slot-parent">
+                                  <div *ngFor="let slot of slots.morning" [ngClass]="{'booked': slot.booked == 1}" class="slot-ui" (click)="endTime = slot.date;openEndSlots = false;setTimeFormat('end', 'AM');highlightSlot($event,slot.date)">
+                                    <span *ngIf = 'restaurantInfo.display_range_intervals !=1'>{{slot.date}}</span>
+                                  </div>
+                                </div>
+                                <div *ngIf="!slots.morning.size" style="margin: auto">
+                                  <p style="text-align: center">
+                                    <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                  </p>
+                                </div>
+                              </div>
+                              <div>
+                                <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+                                  <ng-container >{{ languageStrings.afternoon || "Afternoon"}}</ng-container>
+                                </p>
+                                <div class="slot-parent">
+                                  <div *ngFor="let slot of slots.afternoon" [ngClass]="{'booked': slot.booked == 1}" class="slot-ui" (click)="endTime = slot.date;openEndSlots = false;setTimeFormat('end', 'PM');highlightSlot($event,slot.date)">
+                                    {{slot.date}}
+                                  </div>
+                                </div>
+                                <div *ngIf="!slots.afternoon.size" style="margin: auto">
+                                  <p style="text-align: center">
+                                    <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                  </p>
+                                </div>
+                              </div>
+                              <div>
+                                <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+                                  <ng-container >{{languageStrings.evening  || "Evening"}}</ng-container>
+                                </p>
+                                <div class="slot-parent">
+                                  <div *ngFor="let slot of slots.evening" [ngClass]="{'booked': slot.booked == 1}" class="slot-ui" (click)="endTime = slot.date;openEndSlots = false;setTimeFormat('end', 'PM');highlightSlot($event,slot.date)">
+                                    {{slot.date}}
+                                  </div>
+                                </div>
+                                <div *ngIf="!slots.evening.size" style="margin: auto">
+                                  <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                                    <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                  </p>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div *ngIf="!restaurantInfo.instant_task && restaurantInfo.enable_start_time_end_time && restaurantInfo.scheduled_task && !restaurantInfo.enable_tookan_agent && !(restaurantInfo.is_order_agent_scheduling_enabled && restaurantInfo.business_type == 2 && restaurantInfo.pd_or_appointment == 3)"
+                        class="scheduleData">
+                        <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+                          <div class="form-group" style="margin-bottom: 0">
+                            <div class="input-group" style="margin-bottom: 0;width:100%;" (click)="openSlots = false">
+                              <label class="chk-lable" for="chk-startd" [ngStyle]="{ 'direction' : direction }">
+                                <ng-container >{{languageStrings.start_date || "Start Date"}}</ng-container>
+                              </label>
+                              <div class="input-group addon">
+                                <input type="text" id="chk-startd" class="form-control chk-input" [minDate]="minDate" [maxDate]="maxStartDate"
+                                  (onShown)="onDatePickerShown()" #dpS="bsDatepicker" (onHidden)="dateStartChanged()"
+                                  formControlName="startDate" [value]=" bsStartValue | dateTimeFormat: 'mediumDate' "
+                                  bsDatepicker [(ngModel)]="bsStartValue" readonly style="color: #333333" [bsConfig]="bsConfig">
+                                <span class="input-group-addon no-border-fa" id="basic-addon1" (click)="dpS.show()">
+                                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+                          <div class="form-group" style="margin-bottom: 0">
+                            <div class="input-group" style="margin-bottom: 0;width:100%;" (click)="openStartSlots = !openStartSlots;openEndSlots = false;openTimePicker(openStartSlots);">
+                              <label for="chk-starttm" class="text-capitalize chk-lable">{{terminology.START_TIME}}</label>
+                              <div class="input-group addon" style="margin-bottom: 0">
+                                <input type="text" id="chk-starttm" placeholder="--:--" class="form-control chk-input" [ngModel]="startTime" (ngModelChange)="dateStartGa($event)"
+                                  formControlName="time" readonly style="color: #333333" [value]="startTime ? startTime + ' ' + tStartFormat: ''">
+                                <span class="input-group-addon no-border-fa" id="basic-addon2">
+                                  <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="slots" [hidden]="!openStartSlots">
+                              <div>
+                                <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+                                  <ng-container >{{ languageStrings.morning || "Morning"}}</ng-container>
+                                </p>
+                                <div class="slot-parent">
+                                  <div *ngFor="let slot of startSlots.morning" [ngClass]="{'booked': slot.booked == 1}" class="slot-ui" (click)="startTime = slot.date;openStartSlots = false;setTimeFormat('start', 'AM');highlightSlot($event,slot.date)">
+                                    {{slot.date}}
+                                  </div>
+                                </div>
+                                <div *ngIf="!startSlots.morning.size" style="margin: auto">
+                                  <p style="text-align: center">
+                                    <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                  </p>
+                                </div>
+                              </div>
+                              <div>
+                                <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+                                  <ng-container >{{ languageStrings.afternoon || "Afternoon"}}</ng-container>
+                                </p>
+                                <div class="slot-parent">
+                                  <div *ngFor="let slot of startSlots.afternoon" [ngClass]="{'booked': slot.booked == 1}" class="slot-ui" (click)="startTime = slot.date;openStartSlots = false;setTimeFormat('start', 'PM');highlightSlot($event,slot.date)">
+                                    {{slot.date}}
+                                  </div>
+                                </div>
+                                <div *ngIf="!startSlots.afternoon.size" style="margin: auto">
+                                  <p style="text-align: center">
+                                    <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                  </p>
+                                </div>
+                              </div>
+                              <div>
+                                <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+                                  <ng-container >{{ languageStrings.evening || "Evening"}}</ng-container>
+                                </p>
+                                <div class="slot-parent">
+                                  <div *ngFor="let slot of startSlots.evening" [ngClass]="{'booked': slot.booked == 1}" class="slot-ui" (click)="startTime = slot.date;openStartSlots = false;setTimeFormat('start', 'PM');highlightSlot($event,slot.date)">
+                                    {{slot.date}}
+                                  </div>
+                                </div>
+                                <div *ngIf="!startSlots.evening.size" [ngStyle]="{ 'direction' : direction }" style="margin: auto">
+                                  <p style="text-align: center">
+                                    <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                  </p>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+                          <div class="form-group" style="margin-bottom: 0">
+                            <div class="input-group" style="margin-bottom: 0;width:100%;" (click)="openSlots = false">
+                              <label class="chk-lable" for="chk-enddt"  [ngStyle]="{ 'direction' : direction }">
+                                <ng-container >{{ languageStrings.end_date || "End Date" }}</ng-container>
+                              </label>
+                              <div class="input-group addon">
+                                <input type="text" id="chk-enddt" class="form-control chk-input" [minDate]="minDate" [maxDate]="maxEndDate"
+                                  (onShown)="onDatePickerShown()" #dpE="bsDatepicker" (onHidden)="dateEndChanged()"
+                                  formControlName="endDate" [value]=" bsEndValue | dateTimeFormat: 'mediumDate' " bsDatepicker
+                                  [(ngModel)]="bsEndValue" readonly style="color: #333333" [bsConfig]="bsConfig">
+                                <span class="input-group-addon no-border-fa" id="basic-addon1" (click)="dpE.show()">
+                                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+                          <div class="form-group" style="margin-bottom: 0">
+                            <div class="input-group" style="margin-bottom: 0;width:100%;" (click)="openEndSlots = !openEndSlots;openStartSlots = false;openTimePicker(openEndSlots);">
+                              <label class="text-capitalize chk-lable" for="chk-endtm">{{terminology.END_TIME}}</label>
+                              <div class="input-group addon" style="margin-bottom: 0">
+                                <input type="text" id="chk-endtm" placeholder="--:--" class="form-control chk-input" [ngModel]="endTime" (ngModelChange)="dateEndGa($event)"
+                                  formControlName="endTime" readonly style="color: #333333" [value]="endTime ? endTime + ' ' + tEndFormat: ''">
+                                <span class="input-group-addon no-border-fa" id="basic-addon2">
+                                  <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="slots" [hidden]="!openEndSlots">
+                              <div>
+                                <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+                                  <ng-container >{{ languageStrings.morning || "Morning"}}</ng-container>
+                                </p>
+                                <div class="slot-parent">
+                                  <div *ngFor="let slot of slots.morning" [ngClass]="{'booked': slot.booked == 1}" class="slot-ui" (click)="endTime = slot.date;openEndSlots = false;setTimeFormat('end', 'AM');highlightSlot($event,slot.date)">
+                                    {{slot.date}}
+                                  </div>
+                                </div>
+                                <div *ngIf="!slots.morning.size" style="margin: auto">
+                                  <p style="text-align: center">
+                                    <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                  </p>
+                                </div>
+                              </div>
+                              <div>
+                                <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+                                  <ng-container >{{ languageStrings.afternoon || "Afternoon"}}</ng-container>
+                                </p>
+                                <div class="slot-parent">
+                                  <div *ngFor="let slot of slots.afternoon" [ngClass]="{'booked': slot.booked == 1}" class="slot-ui" (click)="endTime = slot.date;openEndSlots = false;setTimeFormat('end', 'PM');highlightSlot($event,slot.date)">
+                                    {{slot.date}}
+                                  </div>
+                                </div>
+                                <div *ngIf="!slots.afternoon.size" style="margin: auto">
+                                  <p style="text-align: center">
+                                    <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                  </p>
+                                </div>
+                              </div>
+                              <div>
+                                <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+                                  <ng-container >{{ languageStrings.evening || "Evening"}}</ng-container>
+                                </p>
+                                <div class="slot-parent">
+                                  <div *ngFor="let slot of slots.evening" [ngClass]="{'booked': slot.booked == 1}" class="slot-ui" (click)="endTime = slot.date;openEndSlots = false;setTimeFormat('end', 'PM');highlightSlot($event,slot.date)">
+                                    {{slot.date}}
+                                  </div>
+                                </div>
+                                <div *ngIf="!slots.evening.size" style="margin: auto">
+                                  <p style="text-align: center">
+                                    <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+                                  </p>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div *ngIf="!scheduleRadio && restaurantInfo.enable_start_time_end_time && restaurantInfo.instant_task && !restaurantInfo.scheduled_task && !restaurantInfo.enable_tookan_agent && !(restaurantInfo.is_order_agent_scheduling_enabled && restaurantInfo.business_type == 2 && restaurantInfo.pd_or_appointment == 3)"
+                        class="scheduleData">
+                        <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+                          <div class="form-group" style="margin-bottom: 0">
+                            <div class="input-group" style="margin-bottom: 0;width:100%;" (click)="openSlots = false">
+                              <label class="chk-lable" for="chk-stdt" [ngStyle]="{ 'direction' : direction }">
+                                <ng-container >{{ languageStrings.start_date || "Start Date"}}</ng-container>
+                              </label>
+                              <div class="input-group addon">
+                                <!--<input type="text"-->
+                                <!--class="form-control"-->
+                                <!--[minDate]="minDate" [maxDate]="maxStartDate"-->
+                                <!--#dpS="bsDatepicker" (onHidden)="dateStartChanged()" formControlName="startDate" [value]=" bsStartValue | dateTimeFormat: 'mediumDate' "-->
+                                <!--bsDatepicker [(ngModel)]="bsStartValue"  readonly style="color: #333333" [bsConfig]="bsConfig">-->
+                                <input class="form-control chk-input" id="chk-stdt" [owlDateTimeTrigger]="dt3" formControlName="startDate"
+                                  [ngModel]="bsStartValue" (ngModelChange)="dateStartGa($event)" style="color: #333333" [owlDateTime]="dt3">
+                                <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
+                                <span class="input-group-addon no-border-fa" id="basic-addon1_1" [owlDateTimeTrigger]="dt3">
+                                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+                          <div class="form-group" style="margin-bottom: 0">
+                            <div class="input-group" style="margin-bottom: 0;width:100%;" (click)="openSlots = false">
+                              <label for="chk-sttm" class="text-capitalize chk-lable">{{terminology.START_TIME}}</label>
+                              <div class="input-group addon">
+                                <!--<input type="text"-->
+                                <!--class="form-control"-->
+                                <!--[minDate]="minDate" [maxDate]="maxStartDate"-->
+                                <!--#dpS="bsDatepicker" (onHidden)="dateStartChanged()" formControlName="startDate" [value]=" bsStartValue | dateTimeFormat: 'mediumDate' "-->
+                                <!--bsDatepicker [(ngModel)]="bsStartValue"  readonly style="color: #333333" [bsConfig]="bsConfig">-->
+                                <input class="form-control chk-input"  id="chk-sttm" [owlDateTimeTrigger]="dt4" placeholder="--:--"
+                                  formControlName="startTime" [ngModel]="startTime" (ngModelChange)="dateStartGa($event)" style="color: #333333"
+                                  [owlDateTime]="dt4">
+                                <owl-date-time [pickerType]="'timer'" #dt4></owl-date-time>
+                                <span class="input-group-addon no-border-fa" id="basic-addon1_2" [owlDateTimeTrigger]="dt4">
+                                  <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+                          <div class="form-group" style="margin-bottom: 0">
+                            <div class="input-group" style="margin-bottom: 0;width:100%;" (click)="openSlots = false">
+                              <label class="chk-lable" for="end-dt">
+                                <ng-container >{{ languageStrings.end_date || "End Date"}}</ng-container>
+                              </label>
+                              <div class="input-group addon">
+                                <!--<input type="text"-->
+                                <!--class="form-control"-->
+                                <!--[minDate]="minDate" [maxDate]="maxStartDate"-->
+                                <!--#dpS="bsDatepicker" (onHidden)="dateStartChanged()" formControlName="startDate" [value]=" bsStartValue | dateTimeFormat: 'mediumDate' "-->
+                                <!--bsDatepicker [(ngModel)]="bsStartValue"  readonly style="color: #333333" [bsConfig]="bsConfig">-->
+                                <input class="form-control chk-input" id="end-dt" [owlDateTimeTrigger]="dt5" formControlName="endDate"
+                                  [ngModel]="bsEndValue" (ngModelChange)="dateEndGa($event)" style="color: #333333" [owlDateTime]="dt5">
+                                <owl-date-time [pickerType]="'calendar'" #dt5></owl-date-time>
+                                <span class="input-group-addon no-border-fa" id="basic-addon1_1" [owlDateTimeTrigger]="dt5">
+                                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+                          <div class="form-group" style="margin-bottom: 0">
+                            <div class="input-group" style="margin-bottom: 0;width:100%;" (click)="openSlots = false">
+                              <label class="text-capitalize chk-lable" for="end-tm">{{terminology.END_TIME}}</label>
+                              <div class="input-group addon">
+                                <!--<input type="text"-->
+                                <!--class="form-control"-->
+                                <!--[minDate]="minDate" [maxDate]="maxStartDate"-->
+                                <!--#dpS="bsDatepicker" (onHidden)="dateStartChanged()" formControlName="startDate" [value]=" bsStartValue | dateTimeFormat: 'mediumDate' "-->
+                                <!--bsDatepicker [(ngModel)]="bsStartValue"  readonly style="color: #333333" [bsConfig]="bsConfig">-->
+                                <input class="form-control chk-input" id="end-tm" [owlDateTimeTrigger]="dt6" placeholder="--:--"
+                                  formControlName="endTime" [ngModel]="endTime" (ngModelChange)="dateEndGa($event)" style="color: #333333" [owlDateTime]="dt6">
+                                <owl-date-time [pickerType]="'timer'" #dt6></owl-date-time>
+                                <span class="input-group-addon no-border-fa" id="basic-addon1_2" [owlDateTimeTrigger]="dt6">
+                                  <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Custom checkout -->
+                <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 custom-checkout user-journey" *ngIf="showCheckoutTemplate">
+                  <i class="fa fa-align-left src_img_out" aria-hidden="true"></i>
+                  <div class="checkout_card">
+                    <div class="chk_inr_hdng">
+                      <!--<img style="margin-top:18.5px;" src="assets/img/notes-heading.svg" />-->
+
+                      <p class="chk_inr_hdng_txt text-capitalize">{{terminology.CHECKOUT_TEMPLATE}}</p>
+                    </div>
+                    <div class="chk_cnt_div">
+                      <div class="p-20-40">
+                        <app-checkout-template   #checkoutTemplate (updatePrice)="onCheckoutTemplateEvent($event)"
+                        [checkoutType]="checkoutTemplateType.NORMAL_ORDER"
+                        ></app-checkout-template>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- ====================== notes ====================== -->
+                <!-- <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 notes user-journey">
+                <div class="checkout_card">
+                  <div class="chk_inr_hdng">
+
+                    <i class="fa fa-align-left" aria-hidden="true"></i>
+                    <p class="chk_inr_hdng_txt text-capitalize">{{terminology.NOTES}}</p>
+
+                  </div>
+                  <div class="chk_cnt_div">
+                    <div class="p-20-40">
+                      <textarea class="chk-input" row="1" formControlName="notes" [ngStyle]="{ 'direction' : direction }"
+                        style="resize:vertical;min-height:100px;"  placeholder="Enter description here"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+                <!-- ====================== submit button ====================== -->
+
+              </div>
+
+
+            </div>
+          </form>
+        </div>
+        <!-- Cart Details -->
+        <div class="col-lg-4 col-sm-12 col-md-4 col-xs-12 cartDetails">
+          <app-checkout-cart [cartData]="cartData" [direction]="direction"  (setNotes)="setNotes($event)" (returnFlow)="returnFlow($event)"></app-checkout-cart>
+        </div>
+
+        <div class="col-lg-8 col-sm-12 col-xs-12 col-md-8 submitButton hidden-sm hidden-xs">
+          <!--<div class="pull-left backToShop" (click)="goBack()">-->
+          <!--<img src="assets/img/group.svg" /> <span class="textShop">Return to Shop</span>-->
+          <!--</div>-->
+          <div class="">
+            <button appBs mat-button type="submit" class="chk_proceed_pay ripple text-capitalize" appColor bg="true"
+              hoverbgSimple="true" [class.half-opacity]="!checkoutForm.valid" (click)="confirmLocation()">
+              {{terminology.PROCEED_TO_PAY}}
+            </button>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+      <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 submitButton visible-sm visible-xs text-center">
+        <!--<div class="backToShop" (click)="goBack()">-->
+        <!--<img src="assets/img/group.svg" /> <span class="textShop">Return to Shop</span>-->
+        <!--</div>-->
+        <div>
+          <button appBs mat-button type="submit" class="chk_proceed_pay ripple text-capitalize" appColor bg="true"
+            hoverbgSimple="true" [class.half-opacity]="!checkoutForm.valid" (click)="confirmLocation()">
+            {{terminology.PROCEED_TO_PAY}}
+          </button>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+
+      <div class="modal fade" id="myModal" role="dialog">
+        <div class="modalFlex">
+          <div class="modal-dialog" *ngIf="dialogStatus">
+            <div class="modal-content">
+              <div class="modal-header removeHeader">
+                <h4 class="text-capitalize">{{ languageStrings.remove_cart || 'Remove Cart' }}</h4>
+              </div>
+              <div class="modal-body dialog-msg">
+                <span>{{message}}</span>
+                <div class="modal-footer dialog-action" *ngIf="actionBool">
+                  <button class="dialog-cancel btn btn-default" mat-button (click)="closeDialog()" [ngStyle]="{ 'direction' : direction }">
+                    <ng-container >{{ languageStrings.no || "No"}}</ng-container>
+                  </button>
+                  <button class="dialog-ok btn btn-default" mat-button (click)="showDialog(true)" [ngStyle]="{ 'direction' : direction }"
+                    appColor bg="'true'">
+                    <ng-container >{{ languageStrings.yes || "Yes"}}</ng-container>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <app-modal [showCross]="true" header="{{terminology.DELIVERY || 'Delivery'}} {{terminology.ADDRESS || 'Address'}}" [modalType]="modalType" *ngIf="confirmCheckoutLocationPopup" (esc)="confirmCheckoutLocationPopup = false"
+    (onClose)="confirmCheckoutLocationPopup = false">
+      <div body style="padding : 20px;" class="d-fl-c">
+        <div [ngStyle]="{ 'direction' : direction }" class="checkout-confirmation-popup">
+          <img src="assets/images/map.svg">
+          <span class="delivering-to">{{ languageStrings.delivering_to || "Delivering to"}}</span>
+          <div class="confirmed-address"> 
+              {{selectedAddress.house?selectedAddress.house+',
+              ':''}}{{selectedAddress.address}}
+          </div>
+        </div>
+        <div class="col-md-12" style="padding:0px">
+            <div class="modal-footer dialog-action">
+                <button class="dialog-cancel btn btn-default" mat-button (click)="closeCheckoutLocationPopup()" [ngStyle]="{ 'direction' : direction }">
+                    <ng-container>{{ languageStrings.change || "Change"}}</ng-container>
+                </button>
+                <button class="dialog-ok btn btn-default" mat-button (click)="onSubmit()"
+                    [ngStyle]="{ 'direction' : direction }" appColor bg="'true'">
+                    <ng-container>{{ languageStrings.confirm || "Confirm"}}</ng-container>
+                </button>
+            </div>
+        </div>
+      </div>
+    </app-modal>
+    <app-modal  header="{{languageStrings.did_you_also_want || 'Did you also want...' }}" [modalType]="modalType" *ngIf="oftenBoughtModal">
+      <div body  class="d-fl-c pad20">
+        <div [ngStyle]="{ 'direction' : direction }">
+          <app-product-checkout class="product-app" [ngClass]="{'product-app': productList && productList.length, 'product-app_without_product': !productList.length}"
+            [productData]="productList" [cardInfo]="cardInfo" [searchProducts]="searchOn" 
+            [paginating]="paginating" [hasImages]="product_has_images" [isRestaurantActive]="restaurantInfo.available || restaurantInfo.scheduled_task" [layout_type]="product_layout_type"></app-product-checkout>
+        </div>
+        <div class="col-md-12" style="padding:0px">
+            <div class="modal-footer dialog-action removeInline">
+                <button class="viewMore" (click)="MoveToOftenBought()" [ngStyle]="{ 'direction' : direction }">
+                    <ng-container>{{languageStrings.view_more || "View More" }}</ng-container>
+                </button>
+                <button class="checkout"  (click)="hideOftenBoughtModal()"
+                    [ngStyle]="{ 'direction' : direction }"  bg="'true'">
+                    <ng-container> {{languageStrings.continue_to_checkout || "Continue To Checkout" }}</ng-container>
+                </button>
+            </div>
+        </div>
+      </div>
+    </app-modal>
+    <!-- <app-footer></app-footer> -->
+  </div>
+  <app-map-popup *ngIf="showTemplatePopup" [lat]="pickupAndDeliverySection.lat" [formattedAddress]="pickupAndDeliverySection.address"
+                [lng]="pickupAndDeliverySection.lng" (save)="onMapPopupSave($event)" (close)="hideTempltePopup($event)">
+  </app-map-popup>
+</div>

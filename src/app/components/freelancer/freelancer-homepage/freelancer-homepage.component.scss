@@ -1,0 +1,98 @@
+@import '~assets/css/variables';
+.main-content
+{
+background-size: cover;
+background-repeat: no-repeat;
+background-position: bottom;
+min-height: calc(100vh);
+}
+.content-div
+{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+   
+
+}
+@media only screen and (max-width: 768px)
+{.main-content
+    {
+        background-position: top!important;
+    }
+    .freelancer-btn
+    {
+        font-size: 16px!important;
+        margin-right: 0rem!important;
+    }
+}
+.freelancer-btn
+{
+    display: flex;
+    font-size: 20px;
+    margin-right: 1rem;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+    height: 48px;
+    border-radius: 6.3px;
+background-color: $color-theme;
+  color: #fff;
+    border: none;
+    &:focus{
+        outline: none;  
+      }
+    
+}
+.find-job
+{
+    background-color: $color-theme;
+  color: #fff;
+    &:hover{
+        background-color: #fff;
+        color: $color-theme;
+    }
+    &:focus{
+        outline: none;  
+      }
+}
+.fits-job
+{   background-color: $color-theme;
+  color: #fff;
+    &:hover{
+        background-color: #fff;
+        color: $color-theme;
+    }
+}
+
+@media only screen and (max-width: 768px)
+{
+.find-font
+{
+    font-size: 22px;
+    margin-top: 0px!important;
+    color: $color-theme;
+    &:focus{
+        outline: none;  
+      }
+}
+.hire-btn
+{    flex-direction: column;
+    justify-content: space-around;
+    width: 100%!important;
+}
+}
+@media only screen and (min-width: 768px)
+{
+.find-font
+{
+    font-size: 44px;
+    font-weight: bold;
+    color: $color-theme;
+}
+}
+.d-flex
+{
+    display: flex;
+}

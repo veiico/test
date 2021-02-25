@@ -1,0 +1,9 @@
+<div id="alertPopupContainer" [@layer] keyboard-event (enter)="onEnterPress($event)">
+  <div id="alertPopup" [@scale]>
+    <!-- <div class="header">{{header}}</div> -->
+    <div class="body">{{message}}</div>
+    <div class="footer">
+      <button class="btn btn-ok" (click)="onOkClick($event)"><ng-container>{{languageStrings.OK || 'OK'}}</ng-container></button>
+    </div>
+  </div>
+</div>

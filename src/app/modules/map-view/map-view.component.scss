@@ -1,0 +1,244 @@
+@import '~assets/css/variables';
+@import '~assets/css/mapbox-gl';
+@import '~assets/css/stores-view';
+
+#map {
+  height: 100vh;
+}
+agm-map {
+  height: 100%;
+}
+.agm-overlay-div{
+  position: absolute;
+  top: -46px;
+  left: -10px;
+}
+.preorderTag{
+  color: #F39C12;
+  font-size:x-small;
+  margin-top: -12px;
+}
+
+.sponsoredTag{
+  color: #3C963C;
+  font-size:x-small;
+  
+}
+.closedTag{
+  color: #f00;
+  font-size:x-small;
+  margin-top: -12px;
+}
+.view-menu{
+      margin-right: 40px;
+      margin-top: -35px;
+      float: right;
+      color: green;
+      font-size: small;
+      font-weight: 400;
+      cursor: pointer;
+}
+.storeImg-marker{
+  position: relative;
+  cursor: pointer;
+  width: 149px;
+  height: 125px;
+  
+}
+.img-marker{
+  position: relative;
+  cursor: pointer;
+  width: 140px;
+  max-width: 150px;
+  min-height: 150px;
+  max-height: 165px;
+  padding-bottom: 5px;
+}
+.store_Add{
+  font-size: small;
+  margin-top: -9px;
+}
+.store_Name{
+  padding-left: 10px;
+  margin-top: -2px;
+}
+.store_Name_popup{
+  padding-left: 8px;
+  margin-top: -2px;
+}
+.store_rating {
+  background: #41c476;
+  padding: 0px;  color: white;                        
+  width: 35px;
+  margin-top: 3px;
+}
+.store_rating_popup{
+  background: #41c476;
+  padding: 0px;  color: white;                        
+  width: 35px;
+  margin-top: 0px;
+}
+.storeAddress{
+  position: relative;
+  width: 150px;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  font-weight: 400;
+}
+.storeAddressDist{
+  position: relative;
+  width: 133px;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.storeName{
+  position: relative;
+  width: 80px;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.storeAddress_popup{
+  position: relative;
+  width: 125px;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.storeAddressDist_popup{
+  position: relative;
+  width: 115px;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.p5{
+  padding: 5%;
+}
+.pt17{
+  padding-top: 17px
+}
+.mt8{
+  margin-top: -8px;
+}
+ .card_heading{
+  font-size: 16px;
+  font-weight: 500;
+  padding-left: 60px;
+  padding-top: 1px;
+  img {
+    height: 20px;
+    width: 20px;
+  }  
+ }
+.rating {
+  margin-right: 5px;
+  margin-left: 3px;
+  margin-bottom: 2px;  
+}
+
+:host /deep/ .gm-style .gm-style-iw >div  {
+  overflow: hidden !important;
+  font-family: 'Poppins' !important;
+}
+
+:host /deep/ .gm-style {
+  font-family: 'Poppins' !important;
+}
+
+:host /deep/ .gm-style .gm-style-iw { 
+  height: 170px !important;
+  width: 350px !important;
+  font-family: 'Poppins' !important;
+  max-width: 100%; 
+  max-height: 100%; 
+
+}
+ :host /deep/ .gm-ui-hover-effect {
+   display: none !important;
+ }
+ :host /deep/ .gmnoprint .gm-control-active {
+  @media screen and (max-width: 767px) {
+    height: 31px  !important;
+  }
+ }
+
+.flex-1view {
+  flex: 1;
+  text-align: center;
+  position: fixed;
+  right: 34px;
+  top: 142px;
+  color:#41c476;
+}
+.flex-1view_popup {
+  line-height: normal;
+  letter-spacing: normal;
+  color: #0a9e44;
+  text-align: right;
+  position: absolute;
+  margin-bottom: 8px;
+  right: 70px;
+  bottom: -30px;
+  // color:#41c476;
+  font-size:x-small;
+}
+
+.flex_popup{
+  box-shadow: 6px 6px 9px 8px #c7c7c7;
+  padding-top: 8px;
+  padding-left: 10px;
+  display: flex !important; 
+}
+
+
+:host /deep/ .marker-custom  span {
+  top: 0;
+  background-image: url('https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi2.png') !important;
+  left: 0;
+  will-change: transform;
+  background-size: cover;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  // box-sizing:border-box;
+  width: 28px;
+  height: 40px;
+  color:#fff;
+  // background: $color-theme;
+  // border:solid 2px;
+  // border-radius: 0 70% 70%;
+  // box-shadow:0 0 2px #000;
+  cursor: pointer;
+  // transform-origin:0 0;
+  // transform: rotateZ(-135deg);
+  position: absolute;
+}
+
+:host /deep/ .mapboxgl-popup {
+  max-width: 372px !important;
+  background: white;
+  min-width: 250px !important;
+  }
+
+:host /deep/ .mapboxgl-popup-close-button{ 
+float: right; 
+background: none; 
+border: none; 
+}
+
+.card {
+  cursor: pointer !important;
+}
+
+.card_right {
+  cursor: pointer !important;
+}

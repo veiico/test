@@ -1,0 +1,13 @@
+<div class="row-eq-height">
+    <div class="row-col-eq" *ngFor="let category of categoryData">
+        <div class="grid-item" (click)="selectCategory(category)">
+            <div class="image_div">
+                <img [src]="category.image_url || 'assets/img/image-placeholder.svg'" class="image-cat"
+                    [alt]="category.name">
+            </div>
+            <div class="name_div">
+                <span>{{category.name}}</span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+<div class="container-fluid calendar-container">
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-3 col-md-3">
+            <div class="date-types">
+                <div class="type">
+                    <div class="dot selected"></div>
+                    <ng-container>{{languageStrings.selected || 'Selected'}}</ng-container>
+                </div>
+                <div class="type">
+                    <div class="dot enabled"></div>
+                    <ng-container>{{languageStrings.skipped || 'Skipped'}}</ng-container>
+                </div>
+                <div class="type">
+                    <div class="dot disabled"></div>
+                    <ng-container>{{languageStrings.disabled || 'Disabled'}}</ng-container>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-9 col-md-9" *ngIf="minDateCalendar && maxDateCalendar">
+            <p-calendar [(ngModel)]="selectedDates" [minDate]="minDateCalendar" [maxDate]="maxDateCalendar"
+                [disabledDates]="disabledDates" [panelStyleClass]="'custom-datepicker'" [inline]="true"
+                [selectionMode]="'multiple'">
+            </p-calendar>
+
+        </div>
+    </div>
+    <div class="cal-divider"></div>
+    <div class="row">
+        <div class="col-xs-12 cal-action-btn">
+            <button class="btn cancel-btn" (click)="close()">{{languageStrings.cancel || 'Cancel'}}</button>
+            <button class="btn confirm-btn" (click)="onSubmit()">{{languageStrings.confirm || 'Confirm'}}</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+@import '~assets/css/variables';
+.mt-15 {
+  margin-top: 15px;
+}
+
+.custom-order-details {
+  width: 60rem;
+  /* border: 1px solid #c7c7c7c7; */
+  background: #fff;
+  padding: 3rem 3rem;
+  margin-top: 4rem;
+  box-shadow: 2px 5px 9px #c7c7c7;
+  margin-bottom: 10rem;
+  word-break: break-word!important;
+  h2 {
+    margin: 0;
+  }
+
+  .details {
+    span {
+      font-size: 1.6rem;
+    }
+
+    margin-top: 2rem;
+    flex-direction: column;
+
+    span:first-child {
+      font-weight: bold;
+    }
+  }
+}
+.page-link{
+    cursor: pointer;
+    text-decoration: underline;
+    color: $color-theme;
+    font-size: 16px;
+}
+.p-10-40{
+  padding: 10px 40px;
+}
+@media only screen and (max-width: 425px){
+  .pd-10{
+    padding: 10px !important;
+  }
+}

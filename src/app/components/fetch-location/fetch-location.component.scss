@@ -1,0 +1,453 @@
+@import '~assets/css/variables';
+.fetch-location{
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: calc( 100vh );
+  height: auto;
+
+  /deep/.auto-detect{
+	  width: 27% !important;
+  }
+
+  @media only screen and (max-width: 767px) {
+    /deep/.auto-detect{
+      width: 10% !important;
+    }
+    .conciergeBtn{
+      width:100% !important;
+      border-radius: 5px !important;
+    }
+  }
+  .location-div-1{
+    max-width:1280px !important;
+    margin: 6vh auto 28vh auto !important;
+    div.heading{
+      margin-bottom: 8%;
+    }
+    div.heading h1{
+      text-align: center;
+      font-size: 3vw;
+      font-family: $proxima-reg;
+      color: #fff;
+    }
+    div.heading h3{
+      color: #263238;
+      font-weight: normal;
+      text-align: center;
+      font-size: 20px;
+      font-family: $proxima-reg;
+      color: #fff;
+    }
+    @media only screen and (max-width: 700px){
+      div.heading h1{
+        font-size: 5vw;
+      }
+    }
+    .form-div{
+      max-width: 700px;
+      margin: 0 auto;
+      input{
+        border-left: 0px;
+      }
+      .find{
+        text-align: center;
+        margin: 15px 0px;
+        .findButton{
+          min-height: 45px;
+          font-size: 18px;
+          font-family: $proxima-reg;
+          width: 48%;
+          margin: 10px 2px;
+          white-space: normal;
+          &:hover{
+            transition: .5s;
+          }
+
+        }
+
+        @media only screen and (max-width: 700px){
+          .findButton{
+            width: auto;
+          }
+        }
+      }
+    }
+  }
+  .location-div{
+    max-width:1280px;
+    margin: 6vh auto 28vh auto;
+    div.heading{
+      margin-bottom: 8%;
+    }
+    div.heading h1{
+      text-align: center;
+      font-size: 3vw;
+      font-family: $proxima-reg;
+      color: #fff;
+    }
+    div.heading h3{
+      color: #263238;
+      font-weight: normal;
+      text-align: center;
+      font-size: 20px;
+      font-family: $proxima-reg;
+      color: #fff;
+    }
+    @media only screen and (max-width: 700px){
+      div.heading h1{
+        font-size: 5vw;
+      }
+    }
+    .form-div{
+      max-width: 700px;
+      margin: 0 auto;
+      input{
+        border-left: 0px;
+      }
+      .find{
+        text-align: center;
+        margin: 15px 0px;
+        .findButton{
+          min-height: 45px;
+          font-size: 18px;
+          font-family: $proxima-reg;
+          width: 48%;
+          margin: 10px 2px;
+          white-space: normal;
+          &:hover{
+            transition: .5s;
+          }
+
+        }
+        @media only screen and (max-width: 700px){
+          .findButton{
+            width: auto;
+          }
+        }
+      }
+    }
+  }
+  @media only screen and (max-width: 1350px) and (min-width: 1280px) {
+    .location-div {
+      margin: 13vh auto 28vh auto;
+      div.heading {
+        margin-bottom: 5%;
+      }
+    }
+    .location-div-1{
+      margin: 13vh auto 28vh auto !important;
+      div.heading {
+        margin-bottom: 5%;
+      }
+    }
+  }
+  @media only screen and (max-width: 1500px) and (min-width: 1351px) {
+    .location-div {
+      margin: 11vh auto 28vh auto;
+      div.heading {
+        margin-bottom: 5%;
+      }
+    }
+    .location-div-1{
+      margin: 11vh auto 28vh auto !important;
+      div.heading {
+        margin-bottom: 5%;
+      }
+    }
+  }
+
+  @media only screen and (max-width: 1600px) and (min-width: 1501px) {
+    .location-div {
+      margin: 8vh auto 28vh auto;
+      div.heading {
+        margin-bottom: 5%;
+      }
+    }
+    .location-div-1{
+      margin: 8vh auto 28vh auto !important;
+      div.heading {
+        margin-bottom: 5%;
+      }
+    }
+  }
+
+  @media only screen and (max-width: 700px) {
+    .location-div {
+      margin: 28vh auto 28vh auto;
+      div.heading {
+        margin-bottom: 0%;
+      }
+    }
+    .location-div-1{
+      margin: 15vh auto 15vh auto !important;
+      div.heading {
+        margin-bottom: 0%;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 990px){
+  .fetch-location{
+    background-size: cover;
+    background-position: bottom;
+  }
+}
+
+.checkInOut{
+  font-family: $proxima-reg;
+  font-size: 9px;
+  font-weight: 300;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #333333;
+  margin-bottom: 0px;
+}
+.date{
+  font-family: $proxima-reg;
+  font-size: 12px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #333333;
+  margin-bottom: 0px;
+}
+.day{
+  font-family: $proxima-reg;
+  font-size: 10px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #838383;
+  margin-bottom: 0px;
+}
+.displayFlex{
+  display: inline-flex;
+  width: 100%;
+}
+.widthDiv{
+  width:321px;
+  height:46px;
+}
+.borderRadius{
+  border-radius: 0px !important;
+}
+.positionRelative{
+  position: relative;
+}
+.checkInOutDiv{
+  position:absolute !important;
+  top: 0px;
+  padding: 4px 15px;
+  background-color:#fff;
+  width:100%;
+  height:46px;
+}
+.paddingLeft{
+  padding-left: 10px;
+}
+.widthFifty{
+  width: 50%;
+}
+.borderRight{
+  &::after{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 15px;
+    top: 9px;
+    height: 1.5em;
+    border-right: 1px solid #d2d2d2;
+  }
+}
+
+.widthFull{
+  width:100%;
+}
+
+.hoverEffect{
+  .calendarImage i{
+    margin-top: 8px;
+    color: #ABABAB;
+    font-size: 21px;
+  }
+  &:hover{
+    .checkInOut{
+      color: $color-theme;
+    }
+    .calendarImage i{
+      color: $color-theme;
+    }
+  }
+}
+
+.mobileUiFilter{
+  background: #fff;
+  border-radius: 5px;
+  padding-bottom: 10px;
+  .form-group{
+    margin-bottom: 0px;
+  }
+  .checkInOutDiv{
+    border-bottom: 1px solid #d2d2d2;
+  }
+  .calendarUi{
+    margin-bottom: 30px;
+  }
+}
+
+/* Standard syntax */
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+@-webkit-keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+@-moz-keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+@-o-keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+.apply-shake {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+.eqHeight{
+  display: flex !important;
+  flex-wrap: wrap !important;
+  width: 100% !important;
+  justify-content: space-between !important;
+}
+.conciergeBtn{
+  width:47% !important;
+}
+
+.centerConcierge{
+  margin:20vh auto 28vh auto !important;
+}
+
+.headingConcirege{
+  margin-bottom:0% !important;
+}
+.back-link{
+  font-size: 16px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  i{
+    font-size: 18px;
+    font-weight: bold;
+  }
+}
+.transparentConcirege{
+  background: transparent !important;
+}
+
+$shimmer-left: 1.5rem;
+$shimmer-height: 2.2rem;
+.skeleton-loader:empty {
+  min-height: 80px;
+  margin: auto;
+  width: 500px;
+  height: 100%; 
+  background-color:#ebebeb45;
+  background-image:
+    linear-gradient( 100deg, rgba(235, 235, 235, 0), rgba(235, 235, 235, 0.5) 50%, rgba(235, 235, 235, 0) 80% ),    
+    linear-gradient( #d3d3d3ba $shimmer-height, transparent 0 ),
+    linear-gradient( #d3d3d3ba $shimmer-height, transparent 0 );
+
+  background-repeat: repeat-y;
+
+  background-size:
+    50px 200px,
+    93% 200px,
+    60% 200px;
+
+
+  background-position:
+    0 0, 
+    $shimmer-left 1.2rem,
+    $shimmer-left 4.2rem;
+
+
+  animation: shine 1s infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position: 100% 0, 
+    $shimmer-left 1.2rem,
+    $shimmer-left 4.2rem,
+    $shimmer-left  6.2rem,
+    $shimmer-left  8.2rem;
+  }
+}

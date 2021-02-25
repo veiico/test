@@ -1,0 +1,1006 @@
+<app-header style="height:85px;padding: 0px;" class="col-xs-12" [headerData]="headerData"></app-header>
+<div class="productDetails" *ngIf="productDetailsData && this.config.nlevel_enabled !== 2  && this.config.business_model_type !== 'ECOM'">
+    <div class="mainDiv">
+        <div class="row marginZero">
+            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 paddingZero">
+
+                <div class="row makeDisplay">
+
+                    <div class="col-lg-7 col-sm-12 col-md-7 col-xs-12 imageDiv visible-sm visible-xs">
+                        <!-----------------------div with crousel---------------------->
+                        <div class="carouselDiv">
+                            <div id="lightbox-1" class="carousel slide">
+                                <!--data-ride="carousel"-->
+                                <ol class="carousel-indicators" *ngIf="productDetailsData.multi_image_url && productDetailsData.multi_image_url.length > 1">
+                                    <li *ngFor="let image of productDetailsData.multi_image_url;let i = index;"
+                                        data-target="#lightbox" [attr.data-slide-to]="i" [ngClass]="{'active' : i==0}"></li>
+                                </ol>
+                                <div class="carousel-inner" *ngIf="productDetailsData.image_url">
+                                    <div *ngFor="let image of productDetailsData.multi_image_url;let i = index;" class="item" [ngClass]="{'active' : i==0}">
+                                        <img [src]="image || 'assets/img/image-placeholder.svg'"
+                                        [alt]="'carausel image ' + i">
+                                    </div>
+                                </div>
+                                <div class="carousel-inner" *ngIf="!productDetailsData.image_url">
+                                    <div class="item active">
+                                        <img src="assets/img/image-placeholder.svg"
+                                        alt="placeholder image">
+                                    </div>
+                                </div>
+                                <a *ngIf="productDetailsData.multi_image_url && productDetailsData.multi_image_url.length > 1" class="left carousel-control"
+                                    href="#lightbox-1" role="button" data-slide="prev" aria-label="go to previous slide">
+                                    <span class="glyphicon glyphicon-chevron-left"></span>
+                                </a>
+                                <a *ngIf="productDetailsData.multi_image_url && productDetailsData.multi_image_url.length > 1" class="right carousel-control"
+                                    href="#lightbox-1" role="button" data-slide="next" aria-label="go to next slide">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-5 col-sm-12 col-md-5 col-xs-12 mainText">
+                        <div class="mainTextData">
+                            <div class="productName">
+                                <p appColor onlyColor="true">{{productDetailsData.name}}</p>
+                                <span class="review-rating-box" *ngIf="productDetailsData.product_rating">
+                                    <star-rating-comp [readOnly]="true" [rating]="productDetailsData.product_rating?productDetailsData.product_rating:0"
+                                        [showHalfStars]="true" [starType]="'svg'"></star-rating-comp>
+                                    <div *ngIf="productDetailsData.product_rating" class="customRatingReviewdiv"
+                                        aria-hidden="false" [ngClass]="{'green-bold': getColourGreen(productDetailsData.product_rating), 'red-bold': getColourRed(productDetailsData.product_rating), 'yellow-bold': getColourYellow(productDetailsData.product_rating)}">
+                                        <span class="rating-reviewCount ng-binding">{{productDetailsData.product_rating.toFixed(1)}}</span>
+                                    </div>
+                                </span>
+                            </div>
+
+                            <div class="locationDiv" *ngIf="productDetailsData.display_address && config.show_product_location">
+                                <div class="locationText">
+                                    <a *ngIf="productDetailsData.latitude" class="clickMarker">
+                                        <!-- (click)="triggerScrollTo()"  -->
+                                        <img src="assets/img/location-marker-red.svg"
+                                        style="width:16px; position: relative; top:2px;" alt="location marker" />
+                                    </a>
+                                    <img *ngIf="!productDetailsData.latitude"
+                                    src="assets/img/location-marker-red.svg" alt="location marker"
+                                    style="width:16px;" />
+                                    <p>{{productDetailsData.display_address?productDetailsData.display_address:productDetailsData.address}}</p>
+                                </div>
+                            </div>
+
+                            <div class="numberFields displayMobile" *ngIf="productDetailsData.numberFields && productDetailsData.numberFields.length">
+                                <div class="numberValue" *ngFor="let number of productDetailsData.numberFields">
+                                    {{number.value}} {{number.display_name}}
+                                </div>
+                            </div>
+                            <div class="numberFields displayTab" *ngIf="productDetailsData.numberFields && productDetailsData.numberFields.length">
+                                <div class="numberValue col-lg-6 col-sm-6 col-md-6 paddingZero" *ngFor="let number of productDetailsData.numberFields">
+                                    {{number.value}} {{number.display_name}}
+                                </div>
+                            </div>
+
+                            <div class="hostedMerchantName" [ngStyle]="{ 'direction' : direction }">
+                                <p>
+                                    <ng-container>{{languageStrings.hosted_by || 'Hosted By'}}</ng-container>:
+                                    <a *ngIf="config.merchant_view_profile == 1" appColor onlyColor="true" class="tk-link"
+                                        (click)="viewProfile()" title="{{languageStrings.view_profile ||'View Profile'}}">{{productDetailsData.store_name}}</a>
+                                    <span *ngIf="config.merchant_view_profile == 0">{{productDetailsData.store_name}}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-7 col-sm-7 col-md-7 col-xs-12 imageDiv hidden-sm hidden-xs">
+                        <!-----------------------div with crousel---------------------->
+                        <div class="carouselDiv">
+                            <div id="lightbox" class="carousel slide">
+                                <!--data-ride="carousel"-->
+                                <ol class="carousel-indicators" *ngIf="productDetailsData.multi_image_url && productDetailsData.multi_image_url.length > 1">
+                                    <li *ngFor="let image of productDetailsData.multi_image_url;let i = index;"
+                                        data-target="#lightbox" [attr.data-slide-to]="i" [ngClass]="{'active' : i==0}"></li>
+                                </ol>
+                                <div class="carousel-inner" *ngIf="productDetailsData.image_url">
+                                    <div *ngFor="let image of productDetailsData.multi_image_url;let i = index;" class="item" [ngClass]="{'active' : i==0}">
+                                        <img [src]="image || 'assets/img/image-placeholder.svg'" [alt]="'carausel image ' + i">
+                                    </div>
+                                </div>
+                                <div class="carousel-inner" *ngIf="!productDetailsData.image_url">
+                                    <div class="item active">
+                                        <img src="assets/img/image-placeholder.svg" alt="placehoder image">
+                                    </div>
+                                </div>
+                                <a *ngIf="productDetailsData.multi_image_url && productDetailsData.multi_image_url.length > 1" class="left carousel-control"
+                                    href="#lightbox" role="button" data-slide="prev" aria-label="go to previous slide">
+                                    <span class="glyphicon glyphicon-chevron-left"></span>
+                                </a>
+                                <a *ngIf="productDetailsData.multi_image_url && productDetailsData.multi_image_url.length > 1" class="right carousel-control"
+                                    href="#lightbox" role="button" data-slide="next" aria-label="go to next slide">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row descriptionDisplay">
+                    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 descriptionC">
+                        <div class="floatLeft">
+                            <div class="descText" *ngIf="!readMore">
+                                {{productDetailsData.description | truncate: 500}}
+                                <a (click)="readMore = true;" [ngStyle]="{ 'direction' : direction }" *ngIf="productDetailsData.description && productDetailsData.description.length > 500"
+                                    appColor onlyColor="true" style="cursor:pointer;">
+                                    <ng-container>{{languageStrings.read_more || 'Read More'}}</ng-container>
+                                </a>
+                            </div>
+                            <div class="descText" *ngIf="readMore">
+                                {{productDetailsData.description }}
+                                <a (click)="readMore = false;" appColor [ngStyle]="{ 'direction' : direction }"
+                                    onlyColor="true" style="cursor:pointer;" *ngIf="productDetailsData.description && productDetailsData.description.length > 500">
+                                    <ng-container>{{languageStrings.read_less ||'Read Less'}}</ng-container>
+                                </a>
+                            </div>
+
+                        </div>
+
+                        <!--<div class="numberFields displayMobile" *ngIf="productDetailsData.numberFields && productDetailsData.numberFields.length">-->
+                        <!--<div class="numberValue" *ngFor="let number of productDetailsData.numberFields">-->
+                        <!--{{number.value}} {{number.display_name}}-->
+                        <!--</div>-->
+                        <!--</div>-->
+
+                        <div class="floatRight">
+                            <div class="priceTxt" [ngStyle]="{ 'direction' : direction }" *ngIf="!productDetailsData.layout_data.lines[2] && !productDetailsData.layout_data.lines[2].data && config.show_product_price == 1 ">
+                                <span class="priceLabel">
+                                    <ng-container>{{languageStrings.price || 'Price'}}</ng-container>: {{currency+''+ (productDetailsData.price
+                                    |decimalConfig) || '0'}}
+                                </span>
+                                <span *ngIf="productDetailsData.unit_type == 2" class="unitTypeStyle">
+                                    <ng-container>{{languageStrings.per_minute ||'Per Minute'}}</ng-container>
+                                </span>
+                                <span *ngIf="productDetailsData.unit_type == 3" class="unitTypeStyle">
+                                    <ng-container>{{languageStrings.per_hour || 'Per Hour'}}</ng-container>
+                                </span>
+                                <span *ngIf="productDetailsData.unit_type == 4" class="unitTypeStyle">
+                                    <ng-container>{{languageStrings.per_day || 'Per Day'}}</ng-container>
+                                </span>
+                                <span *ngIf="productDetailsData.unit_type == 5" class="unitTypeStyle">
+                                    <ng-container>{{languageStrings.per_week || 'Per Week'}}</ng-container>
+                                </span>
+                                <span *ngIf="productDetailsData.unit_type == 6" class="unitTypeStyle">
+                                    <ng-container>{{languageStrings.per_month || 'Per Month'}}</ng-container>
+                                </span>
+                                <span *ngIf="productDetailsData.unit_type == 7" class="unitTypeStyle">
+                                    <ng-container>{{languageStrings.per_year || 'Per Year'}}</ng-container>
+                                </span>
+                            </div>
+                            <div class="priceTxt" *ngIf="productDetailsData.layout_data.lines[2] && productDetailsData.layout_data.lines[2].data && config.show_product_price == 1"
+                                [ngStyle]="{ 'direction' : direction }">
+                                <span class="priceLabel">
+                                    <ng-container>{{languageStrings.price || 'Price'}}</ng-container>:
+                                    {{productDetailsData.layout_data.lines[2].data}}
+                                </span>
+
+                                <span style="position: relative;" #priceoverlay *ngIf="productDetailsData && productDetailsData.variablePrice && productDetailsData.variablePrice.length > 1"
+                                    (mouseenter)="op.show($event)" (mouseleave)="op.hide($event)">
+                                    <i class="fa fa-info-circle"  style="cursor:pointer;" aria-hidden="true"></i>
+                                    <p-overlayPanel [appendTo]="priceoverlay" [showCloseIcon]="'true'" [dismissable]="'true'" #op>
+                                        <ul class="price-list">
+                                            <li *ngFor="let price of productDetailsData.variablePrice">{{currency +
+                                                ((price.price |decimalConfig) || '0') + ' / ' +
+                                                priceTypeConst[price.price_type].name }}</li>
+                                        </ul>
+                                    </p-overlayPanel>
+                                </span>
+
+                            </div>
+                            <div class="checkAvailabilityButton">
+                                <button appBs class="btn" [ngStyle]="{ 'direction' : direction }" mat-button (click)="checkAvail()"
+                                    appColor hoverbgSimple="true">
+                                    <ng-container>{{languageStrings.proceed || 'Proceed'}}</ng-container>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <!--<div class="numberFields displayTab" *ngIf="productDetailsData.numberFields && productDetailsData.numberFields.length">-->
+                        <!--<div class="numberValue" *ngFor="let number of productDetailsData.numberFields">-->
+                        <!--{{number.value}} {{number.display_name}}-->
+                        <!--</div>-->
+                        <!--</div>-->
+                    </div>
+                </div>
+
+
+                <div class="row thirdContainer">
+                    <div class="col-lg-6 col-sm-12 col-md-6 col-xs-12 paddingZero">
+                        <!--<img src="assets/img/productDetailsDefault.png" class="defaultImage" />-->
+                        <img [src]="productDetailsData.multi_image_url && productDetailsData.multi_image_url.length >= 2 ? productDetailsData.multi_image_url[1]:productDetailsData.multi_image_url && productDetailsData.multi_image_url[0]?productDetailsData.multi_image_url[0]:'assets/img/image-placeholder.svg'"
+                            class="defaultImage" [alt]="productDetailsData.name + ' image'" />
+                    </div>
+                    <div class="col-lg-6 col-sm-12 col-md-6 col-xs-12 textAreaDiv">
+                        <div class="text" *ngIf="productDetailsData.text && productDetailsData.text.length">
+                            <div *ngFor="let txt of productDetailsData.text;" class="" [ngClass]="{'col-lg-6': txt.data_type != 'TextArea' , 'col-lg-12': txt.data_type == 'TextArea'}">
+                                <div class="textDiv" *ngIf="txt.data_type == 'Text' || txt.data_type == 'Email' || txt.data_type == 'Telephone' ||
+                                txt.data_type == 'Date' || txt.data_type == 'Date-Future' || txt.data_type == 'Date-Past' ||
+                                txt.data_type == 'Date-Time' || txt.data_type == 'Datetime-Future' || txt.data_type == 'Datetime-Past' || txt.data_type == 'Time' || txt.data_type == 'Single-Select'">
+
+                                    <div class="textDivValue" *ngIf="txt.data_type == 'Text' || txt.data_type == 'Email' || txt.data_type == 'Telephone'">
+                                        {{txt.display_name}}:
+                                        <span class="text-val-span">{{txt.value}}</span>
+                                    </div>
+                                    <div class="textDivValue" *ngIf="txt.data_type == 'Date' || txt.data_type == 'Date-Future' || txt.data_type == 'Date-Past'">
+                                        {{txt.display_name}}:
+                                        <span class="text-val-span">{{txt.value | dateTimeFormat: 'MMM d, y'}}</span>
+                                    </div>
+                                    <div class="textDivValue" *ngIf="txt.data_type == 'Time'">
+                                        {{txt.display_name}}:
+                                        <span class="text-val-span">{{txt.value | dateTimeFormat: 'h:mm a':'+0000'}}</span>
+                                    </div>
+                                    <div class="textDivValue" *ngIf="txt.data_type == 'Date-Time' || txt.data_type == 'Datetime-Future' || txt.data_type == 'Datetime-Past'">
+                                        {{txt.display_name}}:
+                                        <span class="text-val-span">{{txt.value | dateTimeFormat: 'MMM d, y, h:mm a':'+0000'}}</span>
+                                    </div>
+                                    <div class="textDivValue" *ngIf="txt.data_type == 'Single-Select' && txt.value">
+                                        {{txt.display_name}}:
+                                        <span class="text-val-span">{{txt.value}}</span>
+                                    </div>
+                                </div>
+                                <div class="textArea" *ngIf="txt.data_type == 'TextArea'">
+                                    <div>
+                                        <div class="textAreaHeader">
+                                            {{txt.display_name}}
+                                        </div>
+                                        <div class="textAreaValue">
+                                            <span>{{txt.value}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <div class="text" *ngIf="productDetailsData.singleSelect && productDetailsData.singleSelect.length">
+                        <div *ngFor="let txt of productDetailsData.singleSelect;" class="paddingZero col-lg-6" >
+                            <div class="textDiv">
+                                <div class="textDivValue">
+                                    {{txt.display_name}}: {{txt.value}}
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+
+
+
+                    </div>
+                </div>
+
+                <div class="row fourthContainer">
+                    <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 fourthPadding" *ngIf="productDetailsData.multiSelect && productDetailsData.multiSelect.length">
+                        <div class="multiSelectDiv">
+                            <div *ngFor="let multi of productDetailsData.multiSelect">
+                                <div *ngIf="multi.value && multi.value.length">
+                                    <div class="multiHeader">
+                                        {{multi.display_name}}
+                                    </div>
+                                    <div class="multiValue">
+                                        <div class="multiValueDisplay">
+                                            <div *ngFor="let mVal of multi.value" [style.width]="multi.width" class="multi">
+                                                {{mVal}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--<div class="row fourthContainer" *ngIf="productDetailsData.last_review_rating && productDetailsData.last_review_rating.length">-->
+                <div class="row fourthContainer">
+                    <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 fourthPadding">
+                        <div class="multiSelectDiv">
+                            <div>
+                                <div class="multiHeader">
+                                    <ng-container>{{languageStrings.ratings_reviews || 'Ratings & Reviews'}}</ng-container>
+                                </div>
+                                <div class="multiValue product-rating">
+                                    <div [hidden]="!(loggedIn && config.is_review_rating_enabled)" class="review-button-div">
+                                        <p class="review-text" [ngStyle]="{ 'direction' : direction }" *ngIf="(!productDetailsData.last_review_rating || !productDetailsData.last_review_rating.length) && loggedIn">
+                                            <ng-container>{{languageStrings.be_first_one_to_review || 'Be the first one to review.'}}</ng-container>
+                                        </p>
+                                        <p class="review-text" [ngStyle]="{ 'direction' : direction }" *ngIf="(!productDetailsData.last_review_rating || !productDetailsData.last_review_rating.length) && !loggedIn">
+                                            <ng-container>{{languageStrings.no_reviews_yet || 'No reviews yet.'}}</ng-container>
+                                        </p>
+                                        <button class="review-button btn text-capitalize" (click)="viewReviewPopup()"
+                                            [ngStyle]="{ 'direction' : direction }" *ngIf="loggedIn">
+                                            <ng-container *ngIf="!myReview || !myReview.rating">{{languageStrings.rate_and_review || 'Rate & Review'}}</ng-container>
+                                            <ng-container *ngIf="myReview && myReview.rating">{{languageStrings.edit_rate_and_review ||'Edit Rate & Review'}}</ng-container>
+                                        </button>
+                                    </div>
+                                    <div class="review-rating-box" *ngFor="let item of productDetailsData.last_review_rating; let i = index;">
+                                        <div class="pull-left customer-rating" *ngIf="item.rating != 0" aria-hidden="false">
+                                            <star-rating-comp [readOnly]="true" [rating]="item.rating?item.rating:0"
+                                                [showHalfStars]="true" [starType]="'svg'"></star-rating-comp>
+                                        </div>
+                                        <div *ngIf="item.rating" class="customRatingReviewdiv" aria-hidden="false"
+                                            [ngClass]="{'green-bold': getColourGreen(item.rating), 'red-bold': getColourRed(item.rating), 'yellow-bold': getColourYellow(item.rating)}">
+                                            <span class="rating-reviewCount ng-binding">{{item.rating.toFixed(1)}}</span>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="rator-name">{{item.customer_name}}</div>
+                                        <div class="review" *ngIf="item.review">{{item.review}}</div>
+                                    </div>
+                                    <div class="see-all" *ngIf="productDetailsData.total_review_count > 3">
+                                        <p (click)="seeAllReviewProduct()" appColor onlyColor="true">
+                                            <ng-container>{{languageStrings.see_all_reviews || 'See all reviews'}}</ng-container>
+                                            ({{productDetailsData.total_review_count}})
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row fifthContainer" *ngIf="productDetailsData.latitude && config.show_product_location" id="mapContainer1">
+                    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 mapDiv">
+                        <div class="mapHeader" [ngStyle]="{ 'direction' : direction }">
+                            <ng-container>{{languageStrings.location_on_map ||'Location On Map'}}</ng-container>
+                        </div>
+                        <div class="mapPadding">
+                            <agm-map [latitude]="productDetailsData.latitude" [longitude]="productDetailsData.longitude"
+                                [zoom]="15" [styles]="mapStyle" [minZoom]="15" [scrollwheel]="false">
+                                <agm-marker [latitude]="productDetailsData.latitude" [longitude]="productDetailsData.longitude">
+                                </agm-marker>
+                            </agm-map>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!--------------------------product timing modla------------------------>
+    <div class="modal fade" id="timeSelection">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <app-product-timing [product]="productSelectedToAdd" [productIndex]="indexGot" (sendDataForProduct)="getSelectedTiming($event)"></app-product-timing>
+            </div>
+        </div>
+    </div>
+
+    <!----------------------------custom modal----------------------------->
+    <div class="modal fade" id="myModal" role="dialog" *ngIf="currentProduct">
+        <div class="modalFlex">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title header-modal text-capitalize">{{langJson['Customize Item']}}</h4>
+                        <div class="cls-cust-head">
+                            <div class="cls-cust-n pl-25">
+                                <p>{{currentProduct?.name}}</p>
+                                <p>{{currency+' '+currentProduct?.price}}</p>
+                            </div>
+                            <!--<div class="p-action-btn">-->
+                            <!--<div [ngStyle]="{'display':(currentProduct.type != 1) ? 'flex':'none'}">-->
+                            <!--<div  class="p-minus btn-cursor" (click)="decreaseCustomizeProduct()" appBs>&lt;!&ndash;appBs&ndash;&gt;-->
+                            <!--<svg width="10" height="7" viewBox="0 0 10 2">-->
+                            <!--<path fill="#858585" fill-rule="nonzero" d="M0 1.75h10V.25H0z" />-->
+                            <!--</svg>-->
+                            <!--</div>-->
+                            <!--<div class="p-quantity">{{currentProduct.quantity}}</div>-->
+                            <!--<div   class="p-plus btn-cursor" (click)="increaseCustomizeProduct()" [style.background-color]="config.btn_color?config.btn_color:'#1a9943'" appBs> &lt;!&ndash;appBs appColor bg='true'&ndash;&gt;-->
+                            <!--<svg width="9" height="9" viewBox="0 0 10 10">-->
+                            <!--<path fill="#FFF" fill-rule="nonzero" d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />-->
+                            <!--</svg>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--<div [ngStyle]="{'display':(currentProduct.type == 1) ? 'flex':'none'}">-->
+                            <!--<div  class="p-minus btn-cursor t-btn t-btn-26 "  (click)="decreaseCustomizeProduct()" appBs>-->
+                            <!--{{removeBtnTxt}}-->
+                            <!--</div> &lt;!&ndash;appBs&ndash;&gt;-->
+                            <!--</div>-->
+
+                            <!--</div>-->
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="cls-cust-body">
+                            <div class="cls-cust-main-div" *ngFor="let custom of currentProduct.customization;let custIndex = index;">
+                                <p class="cls-pcust-head">{{custom.name | truncate : 100 : '.'}}
+                                    <span style="font-size:10px">{{ !custom.is_check_box ? (( languageStrings.select_any || "Select any" ) + '1') : (languageStrings.optional || 'Optional' ) }}</span>
+                                </p>
+                                <div class="cls-cust-option" *ngFor="let option of custom.customize_options;let optionIndex = index;">
+                                    <div class="cls-cust-check" (click)="changeExtrasStatus(currentProduct.product_id,custom,custIndex,optionIndex,customizedObj[currentProduct.product_id].customization[custIndex].customize_options[optionIndex].is_default)">
+                                        <svg width="10" height="12" viewBox="0 0 10 7" *ngIf="customizedObj[currentProduct.product_id].customization[custIndex].customize_options[optionIndex].is_default">
+                                            <path [attr.fill]="config.color" fill-rule="nonzero" d="M3.598 6.906a.808.808 0 0 1-.561-.223L.232 3.991a.74.74 0 0 1 0-1.076.817.817 0 0 1 1.122 0l2.244 2.153L8.646.223a.817.817 0 0 1 1.122 0 .74.74 0 0 1 0 1.077l-5.61 5.383a.808.808 0 0 1-.56.223z" />
+                                        </svg>
+                                    </div>
+                                    <div style="flex: 1 1 0%; margin-right: 10px;">
+                                        <span>{{option.name}}</span>
+                                    </div>
+                                    <div class="txt-right" *ngIf="option.price > 0">
+                                        <span>{{currency+' '+(option.price |decimalConfig )}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button mat-button class="dialog-cancel btn" (click)="resetDialog()" [ngStyle]="{ 'direction' : direction }"
+                                appBs>
+                                <ng-container>{{languageStrings.cancel || 'Cancel'}}</ng-container>
+                            </button>
+                            <button mat-button class="dialog-ok btn" (click)="addCustomization(0)" [ngStyle]="{ 'direction' : direction }"
+                                appColor bg="'true'" *ngIf="addBtnTxt" appBs>{{addBtnTxt}}
+                                <ng-container>{{languageStrings.for || 'for'}}</ng-container> {{currency+' '+
+                                ((currentProduct.totalPrice*currentProduct.quantity) |decimalConfig)
+                                }}
+                            </button>
+                            <button mat-button class="dialog-ok btn" (click)="addCustomization(0)" [ngStyle]="{ 'direction' : direction }"
+                                appColor bg="'true'" appBs *ngIf="!addBtnTxt">
+                                <ng-container>{{languageStrings.add_for ||'Add for'}}</ng-container> {{currency+'
+                                '+((currentProduct.totalPrice*currentProduct.quantity)
+                                |decimalConfig)}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="ecomProductDetails" *ngIf="productDetailsData && this.config.nlevel_enabled === 2  && this.config.business_model_type === 'ECOM'">
+    <div class="mainDiv">
+        <div class="row marginZero">
+            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 paddingZero">
+
+                <div class="row makeDisplay">
+
+                    <div class="col-lg-5 col-sm-12 col-md-5 col-xs-12 imageDiv ">
+                        <!-----------------------div with crousel---------------------->
+                        <div class="carouselDiv">
+                            <div id="lightbox-1" class="carousel slide">
+                                <!--data-ride="carousel"-->
+                                <!-- <ol class="carousel-indicators" *ngIf="productDetailsData.multi_image_url && productDetailsData.multi_image_url.length > 1">
+                    <li *ngFor="let image of productDetailsData.multi_image_url;let i = index;" data-target="#lightbox" [attr.data-slide-to]="i" [ngClass]="{'active' : i==0}"></li>
+                  </ol> -->
+                                <div class="carousel-inner" *ngIf="productDetailsData.image_url">
+                                    <div *ngFor="let image of productDetailsData.multi_image_url;let i = index;" class="item" [ngClass]="{'active' : i==0}">
+                                        <img [src]="image || 'assets/img/image-placeholder.svg'" [alt]="'carausel image ' + i">
+                                    </div>
+                                </div>
+                                <div class="carousel-inner" *ngIf="!productDetailsData.image_url">
+                                    <div class="item active">
+                                        <img src="assets/img/image-placeholder.svg" alt="placeholder image">
+                                    </div>
+                                </div>
+                                <!-- <a *ngIf="productDetailsData.multi_image_url && productDetailsData.multi_image_url.length > 1" class="left carousel-control" href="#lightbox-1" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                  </a> -->
+                                <!-- <a *ngIf="productDetailsData.multi_image_url && productDetailsData.multi_image_url.length > 1" class="right carousel-control" href="#lightbox-1" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                  </a> -->
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-5 col-sm-12 col-md-5 col-xs-12 mainText" style="margin-left:14px; margin-right:14px;">
+                        <div class="mainTextData">
+                            <div class="productName">
+                                <p appColor onlyColor="true">{{productDetailsData.name}}</p>
+                            </div>
+                            <div class="descText" *ngIf="!readMore">
+                                {{productDetailsData.description | truncate: 500}}
+                                <a (click)="readMore = true;" [ngStyle]="{ 'direction' : direction }" *ngIf="productDetailsData.description && productDetailsData.description.length > 500"
+                                    appColor onlyColor="true" style="cursor:pointer;">
+                                    <ng-container>{{languageStrings.read_more ||'Read More'}}</ng-container>
+                                </a>
+                            </div>
+                            <div class="descText" *ngIf="readMore">
+                                {{productDetailsData.description }}
+                                <a (click)="readMore = false;" appColor [ngStyle]="{ 'direction' : direction }"
+                                    onlyColor="true" style="cursor:pointer;" *ngIf="productDetailsData.description && productDetailsData.description.length > 500">
+                                    <ng-container>{{languageStrings.read_less || 'Read Less'}}</ng-container>
+                                </a>
+                            </div>
+
+
+                            <div class="hostedMerchantName" [ngStyle]="{ 'direction' : direction }" *ngIf="productDetailsData.layout_data.lines[2] && productDetailsData.layout_data.lines[2].data && config.show_product_price == 1">
+                                <p>
+                                    <ng-container>{{languageStrings.price || 'Price'}}</ng-container>:
+                                    {{productDetailsData.layout_data.lines[2].data}}
+                                </p>
+                            </div>
+
+
+                            <!-- <button (click)='checkAvail()'>Add</button> -->
+                        </div>
+                    </div>
+                    <!--======================cart data========================-->
+                    <div class="col-lg-2 col-sm-12 col-xs-12 col-md-2 cartData">
+                        <div class="hidden-xs hidden-sm deskView row mainCart" id="cart-fix-1">
+                            <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12 cartStart paddingZero">
+                                <div class="app-cart-text text-center" appColor bg="true">
+                                    <span class="text-capitalize">{{languageStrings.your_cart || 'Your cart'}}</span>
+                                    <!-- <span class="text-capitalize">Your Cart</span> -->
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12 paddingZero">
+                                <div class="app-cart-div">
+                                    <div class="app-cart-item" *ngIf="cartData.length">
+                                        <div class="app-cart-list">
+                                            <div class="app-cart-item" *ngFor="let product of cartData;let i = index;">
+                                                <div style="padding-top:20px;">
+                                                    <p class="app-item-head">{{product.name}}</p>
+                                                    <p *ngIf="product.customizations && product.customizations.length"
+                                                        class="app-sub-item">
+                                                        <span *ngFor="let custom of product.customizations;let last = last">{{custom.name | truncate : 100 : '.'}}
+                                                            <span *ngIf="!last" style="padding:0;">, </span>
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                                <div class="app-item-info">
+                                                    <div class="cart-p-detail-sec">
+                                                        <div class="p-action-btn">
+                                                            <div [ngStyle]="{'display': (product.type != 1) ? 'flex':'none'}">
+                                                                <div class="ecom-p-button btn-cursor" (click)="decreamentQuantityCart(product.id,i)"
+                                                                    appBs>
+                                                                    <!--appBs-->
+                                                                    <svg width="10" height="7" viewBox="0 0 10 2">
+                                                                        <path fill="#858585" fill-rule="nonzero" d="M0 1.75h10V.25H0z" />
+                                                                    </svg>
+                                                                </div>
+                                                                <div class="p-quantity">{{product.quantity}}</div>
+                                                                <div class="ecom-p-plus-button btn-cursor" (click)="increaseQuantityCart(product.id,i)"
+                                                                    [style.background-color]="config.btn_color?config.btn_color:'#1a9943'"
+                                                                    appBs appTapEffect>
+                                                                    <!-- appBs appColor bg='true'-->
+                                                                    <svg width="9" height="9" viewBox="0 0 10 10">
+                                                                        <path fill="#FFF" fill-rule="nonzero" d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                            <div [ngStyle]="{'display': (product.type == 1) ? 'flex':'none'}">
+                                                                <div class=" btn-cursor t-btn" (click)="decreamentQuantityCart(product.id,i)"
+                                                                    appBs>
+                                                                    <!--appBs-->
+                                                                    {{removeBtnTxt}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="app-item-totalprice" *ngIf="config.show_product_price == 1 || product.showPrice > 0"
+                                                            style="padding-top:10px;">
+                                                            <span>{{currency+''+ ((product.quantity *
+                                                                product.showPrice) |decimalConfig)
+                                                                }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr [ngClass]="{'app-cart_item_seperation': i < cartData.length - 1 , 'app-subtotal_seperation': i == cartData.length - 1 }" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="!cartData.length" class="emptyCart">
+                                        <span class="">{{languageStrings.your_cart_empty || 'Your cart is empty'}}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 paddingZero" *ngIf="config.show_product_price == 1 || totalCount > 0">
+                                <div class="app-subtotal">
+                                    <div class="separtor" *ngIf="!cartData.length"></div>
+                                    <div class="app-item-subtotal" *ngIf="cartData.length" style="padding-bottom:10px; padding-left:20px;">
+                                        <div class="total-txt" [ngStyle]="{ 'direction' : direction }">
+                                            <span class="head">
+                                                <ng-container>{{languageStrings.subtotal || 'Subtotal'}}</ng-container>
+                                            </span>
+                                        </div>
+                                        <div class="total">
+                                            <span class="total">{{currency+''+(totalCount |decimalConfig)}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 paddingZero">
+                                <button mat-button *ngIf="cartData.length" class="cart-btn btn btn-default btn-block ripple"
+                                    appColor hoverbgSimple="true" (click)="goToCheckoutForEcom()"
+                                    [style.background-color]="config.color">
+                                    <span class="text-capitalize">{{terminology.CHECKOUT}}</span>
+                                </button>
+                            </div>
+
+                        </div>
+
+
+                        <button class="visible-sm visible-xs bottom-bar" mat-button appColor bg="true" *ngIf="cartData.length"
+                            (click)="goToCheckoutForEcom()">
+                            <div class="col-xs-6  align-items-center checkout-bottom" style="justify-content: flex-start;">
+                                <div style="padding: 4px;">
+                                    <!--<img src="assets/img/cart-heading.svg" />-->
+                                    <span style="font-size: 24px;padding-right: 8px;">
+                                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                    </span>
+                                    <span style="text-transform: uppercase;">{{cartData.length > 1 ? cartData.length +'
+                                        '+ terminology.ITEM + languageStrings.in ||'IN'  + terminology.CART
+                                        : cartData.length +' '+ terminology.ITEM +  languageStrings.in ||'IN' + terminology.CART }}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-6 align-items-center checkout-bottom text-capitalize" *ngIf="config.show_product_price == 1 || totalCount > 0">
+                                <!--<span>{{terminology.CHECKOUT}}</span>-->
+                                <span class="total">{{currency+' '+(totalCount |decimalConfig )}}</span>
+                            </div>
+                        </button>
+
+                    </div>
+
+                    <!-- <div class="col-lg-4 col-sm-12 col-md-4 col-xs-12 imageDiv hidden-sm hidden-xs">
+
+              <div class="carouselDiv">
+                <div id="lightbox" class="carousel slide" >
+                  <ol class="carousel-indicators" *ngIf="productDetailsData.multi_image_url && productDetailsData.multi_image_url.length > 1">
+                    <li *ngFor="let image of productDetailsData.multi_image_url;let i = index;" data-target="#lightbox" [attr.data-slide-to]="i" [ngClass]="{'active' : i==0}"></li>
+                  </ol>
+                  <div class="carousel-inner" *ngIf="productDetailsData.image_url">
+                    <div *ngFor="let image of productDetailsData.multi_image_url;let i = index;" class="item" [ngClass]="{'active' : i==0}">
+                      <img [src]="image || 'assets/img/image-placeholder.svg'" alt="First slide">
+                    </div>
+                  </div>
+                  <div class="carousel-inner" *ngIf="!productDetailsData.image_url">
+                    <div class="item active">
+                      <img src="assets/img/image-placeholder.svg" alt="First slide">
+                    </div>
+                  </div>
+                  <a *ngIf="productDetailsData.multi_image_url && productDetailsData.multi_image_url.length > 1" class="left carousel-control" href="#lightbox" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                  </a>
+                  <a *ngIf="productDetailsData.multi_image_url && productDetailsData.multi_image_url.length > 1" class="right carousel-control" href="#lightbox" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                  </a>
+                </div>
+              </div>
+
+            </div> -->
+                </div>
+
+                <div class="row descriptionDisplay" style="margin-top:25px;">
+                    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 descriptionC">
+
+
+                        <div class="floatRight">
+
+                            <div class="priceTxt" *ngIf="productDetailsData.layout_data.lines[2] && productDetailsData.layout_data.lines[2].data && config.show_product_price == 1"
+                                [ngStyle]="{ 'direction' : direction }">
+                                <span class="ecomMerchantDetail" style="font-size:16px"></span>
+                                <!-- <span  class="ecom-p-plus-button btn-cursor"  (click)="increaseQuantityCart(product.id,i)" [style.background-color]="config.btn_color?config.btn_color:'#1a9943'" appBs appTapEffect>
+                    <svg width="9" height="9" viewBox="0 0 10 10">
+                    <path fill="#FFF" fill-rule="nonzero" d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z"/>
+                  </svg>
+                </span> -->
+                                <!-- <div class="p-action-btn">
+                  <div [ngStyle]="{'display':'flex'}">
+
+                    <div ><ng-container >Seller</ng-container> : {{productDetailsData.store_name}}</div>
+                    <div  class="ecom-p-plus-button btn-cursor"  (click)="checkAvailForEcom()"  style="    margin-left: 10px;" [style.background-color]="config.btn_color?config.btn_color:'#1a9943'" appBs appTapEffect>
+                      <svg width="9" height="9" viewBox="0 0 10 10">
+                      <path fill="#FFF" fill-rule="nonzero" d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z"/>
+                    </svg>
+                    </div>
+                  </div>
+
+                </div>
+                   -->
+
+                                <!-- <span><button class="btn btn-default" [style.background-color]="config.color" (click)="checkAvail()" >vnb</button></span> -->
+                                <!-- <span> <button mat-button class="cart-btn btn btn-default btn-block ripple" appColor hoverbgSimple="true" (click)="goToCheckout()" [style.background-color]="config.color">
+                    <span class="text-capitalize">{{terminology.CHECKOUT}}</span>
+                  </button></span> -->
+                            </div>
+                            <div class="priceTxt" *ngIf="productDetailsData.sellers  && productDetailsData.sellers.length>1"
+                                [ngStyle]="{ 'direction' : direction }">
+
+                                <span class="ecomMerchantDetail" style="font-size:16px">
+                                    <ng-container>{{languageStrings.this_product_available_with ||'This product is available with'}}</ng-container>
+                                    {{(productDetailsData.sellers.length )}}
+                                    <ng-container>{{languageStrings.seller || 'seller(s).' }}</ng-container>
+                                </span>
+                                <hr>
+                            </div>
+                            <div *ngFor="let seler of productDetailsData.sellers ;let i = index; " [ngStyle]="{ 'direction' : direction }">
+                                <!-- <span class="ecomMerchantDetail" style="font-size:16px"> {{seler.seller_name}} <ng-container >on</ng-container>  {{currency+seler.price}}   </span> -->
+
+                                <!-- <div class="p-action-btn">
+                        <div [ngStyle]="{'display':'flex'}" style="margin-top:10px;">
+                         <div claa="row">
+                          <div  class="col-sm-10">{{seler.seller_name}} <ng-container >on</ng-container>  {{currency+seler.price}}   </div>
+                          <div  class="col-sm-2" (click)="checkAvailForEcom(seler)"  style="    margin-left: 10px;" [style.background-color]="config.btn_color?config.btn_color:'#1a9943'" >
+                            <svg width="9" height="9" viewBox="0 0 10 10">
+                            <path fill="#FFF" fill-rule="nonzero" d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z"/>
+                          </svg>
+                          </div>
+                         </div>
+                        </div>
+
+                      </div> -->
+
+                                <div class="row" style="margin-top:10px">
+                                    <div class="col-sm-6 col-md-6 col-lg-3">
+                                        {{seler.seller_name}}
+                                        <ng-container>{{languageStrings.on || 'on'}}</ng-container> {{currency+(seler.price |decimalConfig)}}
+
+                                    </div>
+
+                                    <div class="col-sm-6 col-md-6 col-lg-9">
+
+                                        <button (click)="checkAvailForEcom(seler)" mat-button class="cart-btn btn btn-default ripple"
+                                            appColor hoverbgSimple="true" [style.background-color]="config.color">
+                                            <ng-container>{{languageStrings.add_to_cart ||'Add to cart'}}</ng-container>
+                                        </button>
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- <div class="checkAvailabilityButton">
+                  <button appBs class="btn" [ngStyle]="{ 'direction' : direction }" mat-button (click)="checkAvail()" appColor hoverbgSimple="true" ><ng-container >Proceed</ng-container></button>
+                </div> -->
+                        </div>
+                        <div class="clearfix"></div>
+                        <!--<div class="numberFields displayTab" *ngIf="productDetailsData.numberFields && productDetailsData.numberFields.length">-->
+                        <!--<div class="numberValue" *ngFor="let number of productDetailsData.numberFields">-->
+                        <!--{{number.value}} {{number.display_name}}-->
+                        <!--</div>-->
+                        <!--</div>-->
+                    </div>
+                </div>
+
+                <div class="row fourthContainer">
+                    <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 fourthPadding" *ngIf="productDetailsData.multiSelect && productDetailsData.multiSelect.length">
+                        <div class="multiSelectDiv">
+                            <div *ngFor="let multi of productDetailsData.multiSelect">
+                                <div *ngIf="multi.value && multi.value.length">
+                                    <div class="multiHeader">
+                                        {{multi.display_name}}
+                                    </div>
+                                    <div class="multiValue">
+                                        <div class="multiValueDisplay">
+                                            <div *ngFor="let mVal of multi.value" [style.width]="multi.width" class="multi">
+                                                {{mVal}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row fifthContainer" *ngIf="productDetailsData.latitude" id="mapContainer">
+                    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 mapDiv">
+                        <div class="mapHeader" [ngStyle]="{ 'direction' : direction }">
+                            <ng-container>{{languageStrings.location_on_map || 'Location On Map'}}</ng-container>
+                        </div>
+                        <div class="mapPadding">
+                            <agm-map [latitude]="productDetailsData.latitude" [longitude]="productDetailsData.longitude"
+                                [zoom]="15" [styles]="mapStyle" [minZoom]="15" [scrollwheel]="false">
+                                <agm-marker [latitude]="productDetailsData.latitude" [longitude]="productDetailsData.longitude">
+                                </agm-marker>
+                            </agm-map>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!----------------------------custom modal----------------------------->
+    <div class="modal fade" id="myModal" role="dialog" *ngIf="currentProduct">
+        <div class="modalFlex">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title header-modal text-capitalize">{{langJson['Customize Item']}}</h4>
+                        <div class="cls-cust-head">
+                            <div class="cls-cust-n pl-25">
+                                <p>{{currentProduct?.name}}</p>
+                                <p>{{currency+' '+currentProduct?.price}}</p>
+                            </div>
+                            <!--<div class="p-action-btn">-->
+                            <!--<div [ngStyle]="{'display':(currentProduct.type != 1) ? 'flex':'none'}">-->
+                            <!--<div  class="p-minus btn-cursor" (click)="decreaseCustomizeProduct()" appBs>&lt;!&ndash;appBs&ndash;&gt;-->
+                            <!--<svg width="10" height="7" viewBox="0 0 10 2">-->
+                            <!--<path fill="#858585" fill-rule="nonzero" d="M0 1.75h10V.25H0z" />-->
+                            <!--</svg>-->
+                            <!--</div>-->
+                            <!--<div class="p-quantity">{{currentProduct.quantity}}</div>-->
+                            <!--<div   class="p-plus btn-cursor" (click)="increaseCustomizeProduct()" [style.background-color]="config.btn_color?config.btn_color:'#1a9943'" appBs> &lt;!&ndash;appBs appColor bg='true'&ndash;&gt;-->
+                            <!--<svg width="9" height="9" viewBox="0 0 10 10">-->
+                            <!--<path fill="#FFF" fill-rule="nonzero" d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />-->
+                            <!--</svg>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--<div [ngStyle]="{'display':(currentProduct.type == 1) ? 'flex':'none'}">-->
+                            <!--<div  class="p-minus btn-cursor t-btn t-btn-26 "  (click)="decreaseCustomizeProduct()" appBs>-->
+                            <!--{{removeBtnTxt}}-->
+                            <!--</div> &lt;!&ndash;appBs&ndash;&gt;-->
+                            <!--</div>-->
+
+                            <!--</div>-->
+                        </div>
+                    </div>
+                    <!-- <div class="modal-body">
+              <div class="cls-cust-body">
+                <div class="cls-cust-main-div" *ngFor="let custom of currentProduct.customization;let custIndex = index;">
+                  <p class="cls-pcust-head">{{custom.name}}
+                    <span style="font-size:10px">{{!custom.is_check_box ? '(required)':'(optional)'}}</span>
+                  </p>
+                  <div class="cls-cust-option" *ngFor="let option of custom.customize_options;let optionIndex = index;">
+                    <div class="cls-cust-check" (click)="changeExtrasStatus(currentProduct.product_id,custom,custIndex,optionIndex,customizedObj[currentProduct.product_id].customization[custIndex].customize_options[optionIndex].is_default)">
+                      <svg width="10" height="12" viewBox="0 0 10 7" *ngIf="customizedObj[currentProduct.product_id].customization[custIndex].customize_options[optionIndex].is_default">
+                        <path [attr.fill]="config.color" fill-rule="nonzero" d="M3.598 6.906a.808.808 0 0 1-.561-.223L.232 3.991a.74.74 0 0 1 0-1.076.817.817 0 0 1 1.122 0l2.244 2.153L8.646.223a.817.817 0 0 1 1.122 0 .74.74 0 0 1 0 1.077l-5.61 5.383a.808.808 0 0 1-.56.223z"
+                        />
+                      </svg>
+                    </div>
+                    <div style="flex: 1 1 0%; margin-right: 10px;">
+                      <span>{{option.name}}</span>
+                    </div>
+                    <div class="txt-right" *ngIf="option.price > 0">
+                      <span>{{currency+' '+option.price}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button mat-button class="dialog-cancel btn" (click)="resetDialog()" [ngStyle]="{ 'direction' : direction }" appBs ><ng-container >Cancel</ng-container></button>
+                <button mat-button class="dialog-ok btn" (click)="addCustomization(0)" [ngStyle]="{ 'direction' : direction }" appColor bg="'true'" *ngIf="addBtnTxt" appBs>{{addBtnTxt}} <ng-container >for</ng-container> {{currency+' '+(currentProduct.totalPrice*currentProduct.quantity).toFixed(2)}}</button>
+                <button mat-button class="dialog-ok btn" (click)="addCustomization(0)" [ngStyle]="{ 'direction' : direction }" appColor bg="'true'" appBs *ngIf="!addBtnTxt"><ng-container >Add for</ng-container> {{currency+' '+(currentProduct.totalPrice*currentProduct.quantity).toFixed(2)}}</button>
+              </div>
+            </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+<div class="noProductDetails" *ngIf="!productDetailsData && !productShow">
+    <div class="mainDiv">
+        <div class="noDetails">
+            <h3>
+                <ng-container>{{languageStrings.sorry_this_product_not_available_right_now ||'Sorry, This product is not available right now.'}}</ng-container>
+            </h3>
+        </div>
+    </div>
+</div>
+
+
+<app-modal *ngIf="showViewProfilePopup" [modalType]="modalType.MEDIUM" (esc)="hideViewProfilePopup()" (onClose)="hideViewProfilePopup()">
+    <!--header="View custom fields"-->
+    <div body class="view-profile-popup">
+        <i class="close-icon" title="{{languageStrings.close || 'Close'}}"  (click)="hideViewProfilePopup()" > &times;</i>
+        <div class="merchant-dp">
+            <img [src]="merchantProfile.logo" class="img-circle img-responsive"  alt="{{languageStrings.merchant_profile || 'Merchant Profile'}}" />
+        </div>
+        <div class="rating">
+            <div class="hidden-xs visible-sm visible-md visible-lg" *ngIf="config.is_review_rating_enabled" aria-hidden="false">
+                <star-rating-comp [readOnly]="true" [rating]="merchantProfile.store_rating?merchantProfile.store_rating:0"
+                    [showHalfStars]="true" [starType]="'svg'"></star-rating-comp>
+            </div>
+            <div class="hidden-lg hidden-sm hidden-md visible-xs" *ngIf="config.is_review_rating_enabled" aria-hidden="false">
+                <star-rating-comp [readOnly]="true" [rating]="merchantProfile.store_rating?merchantProfile.store_rating:0"
+                    [size]="'small'" [showHalfStars]="true" [starType]="'svg'"></star-rating-comp>
+            </div>
+        </div>
+        <div class="profile-detail">
+            <p class="name">{{merchantProfile.store_name}}</p>
+            <p class="emal">{{merchantProfile.email}}</p>
+            <p class="phone">{{merchantProfile.phone}}</p>
+        </div>
+
+        <div class="review-rating" *ngIf="config.is_review_rating_enabled && merchantProfile.last_review_rating && merchantProfile.last_review_rating.length > 0">
+            <p class="heading">
+                <ng-container>{{languageStrings.reviews_and_ratings || 'Reviews & Ratings'}}</ng-container>
+            </p>
+            <hr class="seperator" />
+            <div class="review-rating-box" *ngFor="let item of merchantProfile.last_review_rating; let i = index;">
+                <div class="pull-left customer-rating" *ngIf="item.rating != 0" aria-hidden="false">
+                    <star-rating-comp [readOnly]="true" [rating]="item.rating?item.rating:0" [showHalfStars]="true"
+                        [starType]="'svg'"></star-rating-comp>
+                </div>
+                <div *ngIf="item.rating" class="customRatingReviewdiv" aria-hidden="false" [ngClass]="{'green-bold': getColourGreen(item.rating), 'red-bold': getColourRed(item.rating), 'yellow-bold': getColourYellow(item.rating)}">
+                    <span class="rating-reviewCount ng-binding">{{item.rating.toFixed(1)}}</span>
+                </div>
+
+                <div class="clearfix"></div>
+                <div class="rator-name">{{item.customer_name}}</div>
+                <div class="review" *ngIf="item.review">{{item.review}}</div>
+            </div>
+            <div class="see-all" *ngIf="merchantProfile.total_ratings_count > 3">
+                <p (click)="seeAllReview()" appColor onlyColor="true">
+                    <ng-container>{{languageStrings.see_all_reviews ||'See all reviews'}}</ng-container> ({{merchantProfile.total_ratings_count}})
+                </p>
+            </div>
+        </div>
+    </div>
+</app-modal>
+
+
+<app-modal *ngIf="showReviewPopup" [modalType]="modalType.MEDIUM" (esc)="hideReviewPopup()" (onClose)="hideViewProfilePopup()">
+    <div body class="view-profile-popup">
+        <i class="close-icon" title="{{languageStrings.close || 'Close'}}"  (click)="hideReviewPopup()"> &times;</i>
+
+        <div class="row padding-15">
+            <p class="main-heading">
+                <ng-container>{{languageStrings.rate_and_review || 'Rate & Review'}}</ng-container>
+            </p>
+            <hr class="line">
+        </div>
+        <div class="main-content">
+            <form [formGroup]="ratingForm">
+                <div class="rating">
+                    <div class="hidden-xs visible-sm visible-md visible-lg" *ngIf="config.is_review_rating_enabled"
+                        aria-hidden="false">
+                        <star-rating-comp formControlName="ratingInput" [starType]="'svg'"></star-rating-comp>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-12">
+                    <textarea placeholder="{{languageStrings.write_comment_max_250_characters || 'Write a comment (max 250 characters)'}}" aria-label='Write a comment (max 250 characters)' [ngStyle]="{ 'direction' : direction }"  maxlength="250"
+                        formControlName="description"></textarea>
+                </div>
+            </form>
+            <div class="col-12 col-lg-12 text-center text-danger" [hidden]="!ratingError">
+                <h4>{{ratingError}}</h4>
+            </div>
+        </div>
+        <div class="footer text-center">
+            <button class="btn btn-cancel" (click)="hideReviewPopup()" [ngStyle]="{ 'direction' : direction }">{{languageStrings.cancel || 'Cancel'}}</button>
+            <button class="btn btn-save" (click)="submitReview()" [ngStyle]="{ 'direction' : direction }">{{languageStrings.save || 'Save'}}</button>
+        </div>
+
+    </div>
+</app-modal>
+
+<app-modal *ngIf="showAllReviewsPopup" [modalType]="modalType.MEDIUM" (esc)="hideAllReviewsPopup()" (onClose)="hideViewProfilePopup()">
+    <div body class="view-profile-popup">
+        <i class="close-icon" title="{{languageStrings.close || 'Close'}}"  (click)="hideAllReviewsPopup()"> &times;</i>
+
+        <div class="row padding-15">
+            <p class="main-heading">
+                <ng-container>{{languageStrings.ratings_reviews || 'Ratings & Reviews'}}</ng-container>
+            </p>
+            <hr class="line">
+        </div>
+        <div class="main-content review-content">
+            <div class="multiSelectDiv">
+                <div class="multiValue product-rating">
+                    <div class="review-rating-box" *ngFor="let item of allReviews; let i = index;">
+                        <div class="pull-left customer-rating" *ngIf="item.rating != 0" aria-hidden="false">
+                            <star-rating-comp [readOnly]="true" [rating]="item.rating?item.rating:0" [showHalfStars]="true"
+                                [starType]="'svg'"></star-rating-comp>
+                        </div>
+                        <div *ngIf="item.rating" class="customRatingReviewdiv" aria-hidden="false" [ngClass]="{'green-bold': getColourGreen(item.rating), 'red-bold': getColourRed(item.rating), 'yellow-bold': getColourYellow(item.rating)}">
+                            <span class="rating-reviewCount ng-binding">{{item.rating.toFixed(1)}}</span>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="rator-name">{{item.customer_name}}</div>
+                        <div class="review" *ngIf="item.review">{{item.review}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-modal>
+
+<app-footer></app-footer>
+<app-customer-verification-popup *ngIf="showCustomerVerificationPopUp" (popUpClose)="onPopUpClose()" ></app-customer-verification-popup> 

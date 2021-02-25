@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="124px" height="161px" viewBox="0 0 124 161" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>bsshimmer no boundaries </title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="bsshimmer-no-boundaries-">
+            <path d="M7.57,0.036 C3.66534682,0.036 0.5,3.20134682 0.5,7.106 L0.5,153.38 C0.5,157.284653 3.66534682,160.45 7.57,160.45 L116.002,160.45 C119.906653,160.45 123.072,157.284653 123.072,153.38 L123.072,7.106 C123.072,3.20134682 119.906653,0.036 116.002,0.036 L7.57,0.036 Z" id="Path"></path>
+            <g id="a-link" transform="translate(11.075000, 10.356000)" fill="#EAEAEA" fill-rule="nonzero">
+                <path d="M7.85,0.536 L93.193,0.536 C95.2006888,0.536 97.1261479,1.33355128 98.5457983,2.75320167 C99.9654487,4.17285205 100.763,6.09831117 100.763,8.106 L100.763,93.902 C100.763,98.0827956 97.3737956,101.472 93.193,101.472 L7.85,101.472 C3.66920444,101.472 0.28,98.0827956 0.28,93.902 L0.28,8.106 C0.28,3.92520444 3.66920444,0.536 7.85,0.536 Z" id="a"></path>
+            </g>
+            <rect id="Rectangle" fill="#EAEAEA" fill-rule="nonzero" x="25" y="136.536" width="74" height="10" rx="1"></rect>
+        </g>
+    </g>
+</svg>

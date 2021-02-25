@@ -1,0 +1,12 @@
+<div class="container-fluid innstapay">
+  <div class="row" *ngIf="innstapayPaymentUrl" style="padding: 10px">
+    <div class="col-md-12 text-center">
+      <h4>
+        <ng-container>Innstapay</ng-container>
+      </h4>
+    </div>
+    <div class="col-md-12">
+      <iframe id="innstapayIFrame" style="border: none" #innstapayIFrame [src]="innstapayPaymentUrl" height="610px" width="100%" (load)="getContentInnstapay(innstapayIFrame)"></iframe>
+    </div>
+  </div>
+</div>

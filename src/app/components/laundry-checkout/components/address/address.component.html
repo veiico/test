@@ -1,0 +1,107 @@
+<div class="address">
+  <p class="details" *ngIf="type == 'pickup'" [ngStyle]="{ 'direction' : direction }">
+    <ng-container>{{ languageStrings.pickup_details || "Pickup Details"}}</ng-container>
+  </p>
+  <p class="details" *ngIf="type == 'delivery'" [ngStyle]="{ 'direction' : direction }">
+    <ng-container>{{languageStrings.delivery_details || '"Delivery Details"'}}</ng-container>
+  </p>
+  <div class="row" *ngIf="type == 'delivery'">
+    <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12">
+      <label class="sameAsPickup" [ngStyle]="{ 'direction' : direction }">
+        <input type="checkbox" [(ngModel)]="sameAsPickup" (change)="sameAsPickupDetails($event)"
+        aria-label="Make delivery details same." />
+        <ng-container >{{ languageStrings.make_delivery_details_same_pickup || "Make DELIVERY details same as PICKUP"}}.</ng-container>
+      </label>
+    </div>
+  </div>
+  <form [formGroup]="addressForm" class="form">
+    <div class="row">
+      <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+        <label for="addr-name" class="control-label" [ngStyle]="{ 'direction' : direction }">
+          <ng-container >{{ languageStrings.first_name || "First Name"}}</ng-container><span style="color:red">*</span>
+        </label>
+        <input type="text" id="addr-name" [ngStyle]="{ 'direction' : direction }" class="form-control inputStyle" 
+          placeholder="{{ languageStrings.enter_first_name || 'Enter First Name'}}" formControlName="name" />
+        <app-control-messages [control]="addressForm.controls.name"></app-control-messages>
+      </div>
+      <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+        <label for="addr-last-name" class="control-label" [ngStyle]="{ 'direction' : direction }">
+          <ng-container >{{ languageStrings.last_name || "Last Name"}}</ng-container><span style="color:red">*</span>
+        </label>
+        <input type="text" id="addr-last-name" [ngStyle]="{ 'direction' : direction }" class="form-control inputStyle" 
+          placeholder="{{ languageStrings.enter_last_name || 'Enter Last Name'}}" formControlName="lastName" />
+        <app-control-messages [control]="addressForm.controls.lastName"></app-control-messages>
+      </div>
+    </div>
+    <div class="row mt-10">
+        <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+          <label for="addr-email" class="control-label" [ngStyle]="{ 'direction' : direction }">
+            <ng-container >{{ languageStrings.email || "Email"}}</ng-container><span style="color:red">*</span>
+          </label>
+          <input type="text" id="addr-email" [ngStyle]="{ 'direction' : direction }" class="form-control inputStyle" 
+            placeholder="{{ languageStrings.enter_email || 'Enter Email'}}" formControlName="email" />
+          <app-control-messages [control]="addressForm.controls.email"></app-control-messages>
+        </div>
+      <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+        <label for="addr-mob" class="control-label" [ngStyle]="{ 'direction' : direction }">
+          <ng-container >{{ languageStrings.mobile_number || "Mobile Number"}}</ng-container><span style="color:red">*</span>
+        </label>
+        <app-fugu-tel-input id="addr-mob" class="phone_style" formControlName="phone" [(ngModel)]="phoneNumber" [(phone)]="phoneNumber" [(dialCode)]="country_code"></app-fugu-tel-input>
+        <app-control-messages [control]="addressForm.controls.phone"></app-control-messages>
+      </div>
+    </div>
+
+
+    <div class="row mt-10">
+      <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+        <label class="control-label"  for="addr-appartmentno" [ngStyle]="{ 'direction' : direction }">
+          <ng-container>{{terminology.APARTMENT_NO || 'Apartment No'}}</ng-container><span *ngIf="formSettings.is_apartment_no_mandatory" style="color:red">*</span>
+        </label>
+        <input id="addr-appartmentno" [ngStyle]="{ 'direction' : direction }" class="form-control inputStyle" type="text" 
+          placeholder="{{terminology.APARTMENT_NO || 'Apartment No'}}" formControlName="flat" />
+      </div>
+      <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+        <label for="addr-landmark" class="control-label" [ngStyle]="{ 'direction' : direction }">
+          <ng-container>{{terminology.LANDMARK || 'Landmark'}}</ng-container><span *ngIf="formSettings.is_landmark_mandatory" style="color:red">*</span>
+        </label>
+        <input  id="addr-landmark" [ngStyle]="{ 'direction' : direction }" class="form-control inputStyle" type="text" 
+          placeholder="{{terminology.LANDMARK || 'Landmark'}}" formControlName="landmark" />
+      </div>
+    </div>
+    <div class="row mt-10">
+      <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12" *ngIf="type == 'pickup'">
+          <label class="control-label" for="addr-pickup" [ngStyle]="{ 'direction' : direction }">
+            <ng-container >{{ languageStrings.pickup_address ||  "PICKUP Address" }}</ng-container><span style="color:red">*</span>
+          </label>
+          <div class="address-parent"><i class="glyphicon glyphicon-map-marker map-icon" (click)="openMap()"
+            aria-hidden="true"></i>
+          <app-jw-google-autocomplete id="addr-pickup" [ngStyle]="{ 'direction' : direction }" (latLng)="onLatLngEvent($event)"
+            (modelChange)="clearLatLng()"  placeholder="{{terminology.PICKUP}} Address" formControlName="address"></app-jw-google-autocomplete>
+          <app-control-messages [control]="addressForm.controls.address"></app-control-messages></div>
+        </div>
+        <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12" *ngIf="type == 'delivery'">
+          <label class="control-label" for="addr-delivery" [ngStyle]="{ 'direction' : direction }">
+            <ng-container > {{ languageStrings.delivery_address ||  "DELIVERY Address" }}</ng-container><span style="color:red">*</span>
+          </label>
+          <div class="address-parent"><i class="glyphicon glyphicon-map-marker map-icon" (click)="openMap()"
+            aria-hidden="true"></i>
+          <app-jw-google-autocomplete id="addr-delivery" [ngStyle]="{ 'direction' : direction }" (latLng)="onLatLngEvent($event)"
+            (modelChange)="clearLatLng()"  placeholder="{{terminology.DELIVERY}} Address" formControlName="address"></app-jw-google-autocomplete>
+          <app-control-messages [control]="addressForm.controls.address"></app-control-messages></div>
+        </div>
+  </div>
+    <div class="row mt-20">
+      <div class="col-lg-12 text-right">
+        <button class="btn continueBtn" type="button" (click)="continueOption()" [disabled]="!addressForm.valid"
+                [ngStyle]="{ 'direction' : direction }">
+          <ng-container >{{ languageStrings.next || "Next"}}</ng-container>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<app-map-popup
+*ngIf="showTemplatePopup"
+[lat]="lat" [lng]="lng" [formattedAddress]="address" (save)="onMapPopupSave($event)"
+(close)="hideTempltePopup($event)"></app-map-popup> 

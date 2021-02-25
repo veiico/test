@@ -1,0 +1,200 @@
+<div class="add-address-overley" *ngIf="showAddAddress">
+  <div class="add-address-form" [@slideInOut]>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-12">
+          <a class="close" (click)="onAddressSave(false)"><i class="fa fa-close" title="close"></i></a>
+          <h3 class="text-center textHead" *ngIf="!editAddress">{{languageStrings.add_new_addresses  ||'Add New Address'}}</h3>
+          <h3 class="text-center textHead" *ngIf="editAddress">{{languageStrings.edit_address ||'Edit Address'}}</h3>
+        </div>
+      </div>
+      <div class="row">
+        <add-fav-location (save)="onAddressSave($event)" [address]="editValues"></add-fav-location>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-header style="height:85px;padding: 0px;" class="col-xs-12" [headerData]="headerData" *ngIf="!ecomView"></app-header>
+
+<div class="checkoutView">
+
+  <div class="row ye_c_main marginZero">
+    <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 ye_c_sub">
+      <div class="ye_checkout_head text-center">
+        <p class="chk_title">{{terminology.CHECKOUT || 'Checkout'}}</p>
+        <hr class="chk_title_bar" [style.border-top-color]="appConfig.color" />
+      </div>
+    </div>
+
+    <div class="row check_details marginZero">
+
+      <div class="col-xs-12 formDetails">
+        <div class="custom-order-details" *ngIf="customQuotationOrderDetails.order_id">
+          <h2>{{languageStrings.your_order_details || 'Your order Details'}}</h2>
+          <div class="flex details">
+            <span>{{terminology.ORDER}} <ng-container>{{languageStrings.description  ||'Description'}}</ng-container> :</span>
+            <span> {{customQuotationOrderDetails.job_description}}</span>
+          </div>
+          <div class="flex details">
+            <span >{{terminology.PICKUP_FROM || 'Pickup From'}}</span>:
+            <span *ngIf="!isLaundryFlow"> {{customQuotationOrderDetails.is_pickup_anywhere ? 'Anywhere'
+              :customQuotationOrderDetails.job_pickup_address}}
+            </span>
+            <span *ngIf="isLaundryFlow"> {{customQuotationOrderDetails.customer_pickup_address}}
+            </span>
+          </div>
+          <div class="flex details">
+            <span>{{languageStrings.deliver_to ||'Deliver To'}}</span>:
+            <span> {{customQuotationOrderDetails.customer_address}}</span>
+          </div>
+
+        </div>
+        <form [formGroup]="checkoutForm" (ngSubmit)="confirmAddress()" class="checkout-form col-xs-12" *ngIf="!customQuotationOrderDetails.order_id">
+          <div class="row pick_delivery">
+
+            <!-- ====================== notes ====================== -->
+            <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 notes">
+              <div class="checkout_card">
+                  <div class="p-10-40 text-right pd-10" *ngIf="appConfig.is_dynamic_pages_active && customOrderActivePage">
+                      <span class="page-link" (click)="goToPages(customOrderActivePage.route)">{{customOrderActivePage.name}}</span>
+                  </div>
+                <div class="chk_inr_hdng">
+                  <!--<img style="margin-top:18.5px;" src="assets/img/notes-heading.svg" />-->
+                  <i class="fa fa-align-left" aria-hidden="true"></i>
+                  <p class="chk_inr_hdng_txt text-capitalize">
+                    <ng-container *ngIf="!isLaundryFlow">{{terminology.YOUR_ORDER_DESCRIPTION || 'What do you want to order?'}}</ng-container>
+                    <ng-container *ngIf="isLaundryFlow">{{terminology.YOUR_ORDER_DESCRIPTION || 'Your order description ?'}}</ng-container>
+                  </p>
+                </div>
+                <div class="chk_cnt_div">
+                  <div class="p-20-40">
+                    <textarea class="chk-input" row="1" formControlName="notes" [ngStyle]="{ 'direction' : direction }"
+                      style="resize:vertical;min-height:100px;" placeholder="{{terminology.ENTER_DESCRIPTION_HERE || 'Enter description here'}}"
+                      aria-label="What do you want to order?"></textarea>
+                    <app-control-messages [control]="checkoutForm.controls['notes']"></app-control-messages>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 pick mt-15" *ngIf="storeCustomOrder">
+              <div>
+                <app-pickup-option (pickupOptionChange)="onPickupOptionChange($event)"></app-pickup-option>
+              </div>
+            </div>
+
+
+            <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 pick mt-15" *ngIf="pickupOption === 2 &&  storeCustomOrder">
+              <div>
+                <app-pickup #appPickup [isCustomPickup]="'true'"></app-pickup>
+                <!-- <app-delivery #appDelivery></app-delivery> -->
+              </div>
+            </div>
+
+
+            <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 pick mt-15" *ngIf="isLaundryFlow">
+              <app-delivery-address #appCustomerPickupAddress [fetchAddressNotify]="fetchAddressNotify" [deliveryOrPickup]="pickUpOrDeliveryBool"
+                (onAddressSelect)="onlaundryPickupAddressSelect($event)" (onAddAddress)="openAddAddress()" (openEditValue)="openEditValue($event)"
+                [customOrder]="'true'" [laundry_pickup]="'true'" (markLaundryDeliverAsPickupEvent)="markLaundryDeliverAsPickupEvent($event)"></app-delivery-address>
+            </div>
+
+            <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 pick mt-15" *ngIf="!pickupDeliveryLaundryEqual">
+              <app-delivery-address #appDeliveryAddress [fetchAddressNotify]="fetchAddressNotify" [deliveryOrPickup]="pickUpOrDeliveryBool"
+                (onAddressSelect)="onAddressSelect($event)" (onAddAddress)="openAddAddress()" (openEditValue)="openEditValue($event)"
+                [customOrder]="'true'" [laundry_delivery]="'true'"></app-delivery-address>
+            </div>
+
+
+            <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 pick mt-15" *ngIf="isLaundryFlow">
+              <div class="checkout_card">
+                <div class="chk_inr_hdng">
+                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                  <p class="chk_inr_hdng_txt text-capitalize" style="padding-left:10px">
+                    <ng-container>{{languageStrings.schedule ||'Schedule'}}</ng-container>
+                  </p>
+                </div>
+                <div class="chk_cnt_div">
+                  <div class="p-20-40">
+                    <app-laundry-schedule [customOrder]="true" (customSlotEvent)="getLaundryTimeslots($event)"></app-laundry-schedule>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 pick mt-15" *ngIf="showCheckoutTemplate">
+                <div class="checkout_card">
+                  <div class="chk_inr_hdng">
+                    <!-- <i class="fa fa-calendar" aria-hidden="true"></i> -->
+                    <p class="chk_inr_hdng_txt text-capitalize" style="padding-left:10px">
+                      <ng-container>{{terminology.CHECKOUT_TEMPLATE || 'Additional Information'}}</ng-container>
+                    </p>
+                  </div>
+                  <div class="chk_cnt_div">
+                    <div class="p-20-40">
+                        <app-checkout-template #checkoutTemplate (updatePrice)="onCheckoutTemplateEvent($event)"
+                        [checkoutType]="checkoutTemplateType.CUSTOM_ORDER" [custumOrderAdmin]="storeCustomOrder"></app-checkout-template>
+                      </div>
+                  </div>
+                </div>
+            </div>
+
+            <!-- ====================== submit button ====================== -->
+            <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 submitButton hidden-sm hidden-xs">
+              <div class="pull-right">
+                <button appBs mat-button type="submit" class="chk_proceed_pay ripple text-capitalize" appColor bg="true"
+                  hoverbgSimple="true" [class.half-opacity]="!checkoutForm.valid">
+                  <span *ngIf="appConfig.custom_quotation_enabled && !appConfig.is_hold_amount_active && storeCustomOrder">{{languageStrings.submit || 'SUBMIT'}}</span>
+                  <span *ngIf="!appConfig.custom_quotation_enabled || appConfig.is_hold_amount_active || !storeCustomOrder">{{terminology.PROCEED_TO_PAY}}</span>
+                </button>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+            <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 submitButton visible-sm visible-xs text-center">
+              <div>
+                <button appBs mat-button type="submit" class="chk_proceed_pay ripple text-capitalize" appColor bg="true"
+                  hoverbgSimple="true" [class.half-opacity]="!checkoutForm.valid">
+                  <span *ngIf="appConfig.custom_quotation_enabled && !appConfig.is_hold_amount_active  && storeCustomOrder"> {{languageStrings.submit || 'SUBMIT'}}</span>
+                  <span *ngIf="!appConfig.custom_quotation_enabled || appConfig.is_hold_amount_active || !storeCustomOrder">{{terminology.PROCEED_TO_PAY}}</span>
+                </button>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<app-footer></app-footer>
+<app-customer-verification-popup *ngIf="showCustomerVerificationPopUp" (popUpClose)="onPopUpClose()" ></app-customer-verification-popup>
+
+<app-modal [showCross]="true" header="{{terminology.DELIVERY || 'Delivery'}} {{terminology.ADDRESS || 'Address'}}" [modalType]="modalType" *ngIf="confirmCheckoutLocationPopup" (esc)="confirmCheckoutLocationPopup = false"
+(onClose)="confirmCheckoutLocationPopup = false">
+  <div body style="padding : 20px;" class="d-fl-c">
+    <div [ngStyle]="{ 'direction' : direction }" class="checkout-confirmation-popup">
+      <img src="assets/images/map.svg">
+      <span class="delivering-to">{{ languageStrings.delivering_to || "Delivering to"}}</span>
+      <div class="confirmed-address"> 
+          {{selectedAddress.house?selectedAddress.house+',
+          ':''}}{{selectedAddress.address}}
+      </div>
+    </div>
+    <div class="col-md-12" style="padding:0px">
+        <div class="modal-footer dialog-action">
+            <button class="dialog-cancel btn btn-default" mat-button (click)="closeCheckoutLocationPopup()" [ngStyle]="{ 'direction' : direction }">
+                <ng-container>{{ languageStrings.change || "Change"}}</ng-container>
+            </button>
+            <button class="dialog-ok btn btn-default" mat-button (click)="onSubmit()"
+                [ngStyle]="{ 'direction' : direction }" appColor bg="'true'">
+                <ng-container>{{ languageStrings.confirm || "Confirm"}}</ng-container>
+            </button>
+        </div>
+    </div>
+  </div>
+</app-modal>

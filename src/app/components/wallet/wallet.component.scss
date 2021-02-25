@@ -1,0 +1,194 @@
+@import '~assets/css/variables';
+
+.wallet{
+  padding-bottom: 50px;
+  .heading{
+    text-align: center;
+    padding: 20px 0;
+  }
+  .title {
+    font-size: 30px;
+    line-height: 30px;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    text-align: center;
+    color: #333333;
+    margin-bottom: 20px;
+    display: inline-block;
+  }
+  .line{
+    margin: 0 auto;
+    width: 50px;
+  }
+  .line_1{
+    margin: 0;
+    width: 50px;
+  }
+  .center-p-p{
+    display: flex;
+    display: -webkit-flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    margin: 17px auto;
+    padding: 0px 15px;
+  }
+
+  .card-p{
+    background-color: #ffffff;
+    padding: 20px;
+    box-shadow: 0 13px 25px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .current_balance{
+    font-size: 20px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 2.6px;
+    //text-align: center;
+    color: #3c3c3c;
+    margin-top: 30px;
+    .points{
+      padding-bottom:5px;
+    }
+  }
+
+  .history-1{
+    .transactions{
+      font-family: $proxima-reg;
+      font-size: 16px;
+      color: #474747;
+    }
+  }
+  .history{
+    max-height: 500px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    .list{
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 5px;
+      box-shadow: 1px 1px 1px 1px #dedede;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .addedFrom{
+        display: flex;
+        align-items: center;
+        .icon{
+          .view{
+            height: 50px;
+            width: 50px;
+            border: 1px solid #d1d1d1;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 20px;
+            line-height: 50px;
+            i{
+              color: $color-theme;
+            }
+          }
+        }
+        .addedFromL{
+          padding-left: 15px;
+          .added{
+            font-family: $proxima-reg;
+            font-size: 18px;
+            color: #474747;
+            margin-bottom: 2px;
+          }
+          .info{
+            font-family: $proxima-reg;
+            font-size: 14px;
+            color: #bababa;
+            .balance{
+              padding-left: 10px;
+            }
+          }
+        }
+      }
+
+      .transAmount{
+        .amount{
+          font-family: $proxima-reg;
+          font-size: 18px;
+          color: #474747;
+          margin-bottom: 2px;
+        }
+        .date{
+          font-family: $proxima-reg;
+          font-size: 14px;
+          color: #bababa;
+        }
+      }
+    }
+  }
+
+  .addMoney{
+    font-size: 40px;
+    color: $color-theme;
+    cursor: pointer;
+  }
+
+}
+
+.modal-padding{
+  padding: 15px;
+  .fa{
+    cursor: pointer;
+  }
+  .text{
+    font-size: 20px;
+    line-height: 30px;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    text-align: center;
+    color: #333333;
+    margin-bottom: 20px;
+    display: inline-block;
+  }
+
+  .addMoney{
+    font-size: 16px;
+    font-family: $proxima-reg;
+    color: white;
+    background-color: $color-theme;
+    border: 1px solid $color-theme;
+    &:hover{
+      color: $color-theme;
+      background-color: white;
+      border: 1px solid $color-theme;
+    }
+  }
+  .showProcess{
+    padding: 20px;
+    p{
+      text-align: center;
+      font-size: 15px;
+      font-family: $proxima-reg;
+      font-weight: bold;
+    }
+  }
+}
+
+.mt-10{
+  margin-top: 10px;
+}
+
+:host /deep/ app-limelight payment-limelight .message-content-payment.setWidth {
+  width: 65% !important;
+}
+
+:host /deep/ app-limelight .message-modal-payment.d-flex.justify-content-center.align-items-center.flex-column.h-100.w-100 {
+  position: inherit;
+}
+
+:host /deep/ app-two-checkout payment-twocheckout .message-content-payment.setWidth {
+  width: 65% !important;
+}
+
+:host /deep/ app-two-checkout .message-modal-payment.d-flex.justify-content-center.align-items-center.flex-column.h-100.w-100 {
+  position: inherit;
+}

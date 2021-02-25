@@ -1,0 +1,17 @@
+<app-header class="col-xs-12" style="height: 85px;padding: 0px;" [headerData]="config" [hideLoginBtn]="true"></app-header>
+<div>
+  <div class="main-content" [ngStyle]="{'background-image': freelancerLandingPageConfig && freelancerLandingPageConfig.freelancer_landing_page_image?'url(' + freelancerLandingPageConfig.freelancer_landing_page_image + ')':'url(https://uppic.cc/d/6KDe)'}">
+  <div class="content-div">
+    <div style="display: flex">
+        <h1  class="find-font">{{freelancerLandingPageConfig?freelancerLandingPageConfig.freelancer_landing_page_tag_line : 'Find the Job That Fits You'}}&nbsp;</h1><h1 class="find-font" style="font-weight: bold;
+        color: white;"></h1>
+    </div>
+    <div class="hire-btn d-flex">
+      <button class="freelancer-btn fits-job" (click)="moveToMerchant()">{{freelancerLandingPageConfig?freelancerLandingPageConfig.find_job_btn : 'I want to Work'}}</button>
+      <button class="freelancer-btn find-job" (click)="moveToHomepage()">{{freelancerLandingPageConfig?freelancerLandingPageConfig.post_job_btn : 'I want to Hire'}}</button>
+    </div>
+  </div>
+  </div>
+  </div>
+  <app-footer></app-footer>
+  

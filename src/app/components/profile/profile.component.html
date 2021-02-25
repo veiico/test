@@ -1,0 +1,344 @@
+<app-header style="height:85px;padding: 0px;" class="col-xs-12" [headerData]="headerData" *ngIf="!ecomView"></app-header>
+<div class="profilePage row">
+  <div class="col-xs-12">
+    <div class="heading">
+      <p class="title" [ngStyle]="{ 'direction' : direction }">
+        <ng-container>{{languageStrings.profile || 'Profile'}}</ng-container>
+      </p>
+      <hr class="line" [style.border-top-color]="appConfig.color" />
+    </div>
+  </div>
+
+  <div class="container profileStyle">
+    <div class="row" *ngIf="data">
+      <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 profileP">
+        <div class="row">
+          <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 profileViewOnly" *ngIf="!edit && !changePasswordFlag">
+              <div class="profileNameHeading" style="margin-bottom: 20px">
+                  <img [src]="data.vendor_image||'assets/img/name-icon.svg'" alt="customer image" height="130px" width="130px" class="img-circle">
+              </div>
+            <div class="profileNameHeading">
+              <p>{{data.first_name}}</p>
+            </div>
+            <div *ngIf="appConfig.merchant_customer_rating && data && data.average_rating">
+              <star-rating-comp [readOnly]="true" [rating]="data.average_rating" [showHalfStars]="false"
+                                [starType]="'svg'"></star-rating-comp>
+            </div>
+            <div class="profileNumberDiv" *ngIf="data.email">
+              <p>
+                <img src="assets/img/mail.svg" aria-hidden="true" alt="mail icon" />
+                <span>{{data.email}}</span>
+              </p>
+            </div>
+            <div class="profileEmailDiv" *ngIf="data.phone_no">
+              <p>
+                <img src="assets/img/phone-call.svg" aria-hidden="true" alt="telephone icon" />
+                <span>{{data.phone_no}}</span>
+              </p>
+            </div>
+            <div class="editButton">
+              <button class="btn text-capitalize edit-margin" [ngStyle]="{ 'direction' : direction }" mat-button appColor bg="true"
+                      (click)="edit = true;emailCopy = data.email" ><ng-container>{{languageStrings.edit || 'Edit'}}</ng-container></button>
+              <button class="btn changePassword" *ngIf="!hideChangePassword" [ngStyle]="{ 'direction' : direction }" mat-button (click)="changePassword()">{{languageStrings.change_password || 'Change Password'}}</button>
+            </div>
+          </div>
+
+          <div class="col-lg-10 col-lg-offset-1 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-xs-12 profileEditView" *ngIf="changePasswordFlag">
+            <app-change-password (back)="goBackChange($event)" (save)="saveChangePassword($event)"></app-change-password>
+          </div>
+
+          <div class="col-lg-10 col-lg-offset-1 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-xs-12 profileEditView" *ngIf="edit">
+              <div class="profileNameHeading text-center">
+                  <img [src]="imageData || data.vendor_image||'assets/img/name-icon.svg'" alt="customer profile pic" height="130px" width="130px" class="img-circle">
+                  <div class="profileNameHeading text-center" style="margin-top:-20px;">
+                          <label for="upload" class="uploadIcon" aria-label="change profile image">
+                             <i class="fa fa-pencil">
+                               <span class="sr-only">{{languageStrings.upload_profile_image ||'Upload profile image'}}</span>
+                             </i>
+                          </label>
+                          <input type="file" id="upload" accept="image/jpeg, image/png" style="visibility:hidden" (change)="onImageSelect($event)" #profileImage *ngIf="edit" aria-label="uploda profile image">
+                      </div>
+              </div>
+            <div class="nameEdit">
+              <label for="profile-name" [ngStyle]="{ 'direction' : direction }">
+                <ng-container>{{languageStrings.name ||'Name'}}</ng-container>
+              </label>
+              <input id="profile-name" class="form-control"  placeholder="{{languageStrings.enter_name || 'Enter name'}}" [ngStyle]="{ 'direction' : direction }" [(ngModel)]="dataCopy.first_name">
+            </div>
+            <form [formGroup]="phoneForm" *ngIf="data">
+
+              <div class="nameEdit" style="margin-top:10px;">
+                <label for="profile-email"  [ngStyle]="{ 'direction' : direction }">
+                  <ng-container>{{languageStrings.email || 'Email'}}</ng-container>
+                </label>
+                <input id="profile-email" class="form-control" formControlName="email" placeholder="example@gmail.com" [(ngModel)]="emailCopy" />
+              </div>
+
+
+              <div class="nameEdit" style="margin-top:10px;">
+                <label for="profile-phone"  [ngStyle]="{ 'direction' : direction }">
+                  <ng-container>{{languageStrings.phone_number || 'Phone Number'}}</ng-container>
+                </label>
+                <app-fugu-tel-input id="profile-phone" class="phone_style" formControlName="phone" [(ngModel)]="phoneCopy" [(dialCode)]="country_code"></app-fugu-tel-input>
+                <app-control-messages [control]="phoneForm.controls.phone"></app-control-messages>
+              </div>
+            </form>
+            <div class="nameEdit" style="margin-top:10px;" *ngIf="languageArray && languageArray.length > 1">
+              <label for="profile-language"  [ngStyle]="{ 'direction' : direction }">
+                <ng-container>{{languageStrings.language ||'Language'}}</ng-container>
+              </label>
+              <select id="profile-language" class="form-control" [(ngModel)]="languageSelected"
+              [ngStyle]="{ 'direction' : direction }" (change)="languageChanged(languageSelected)" aria-level="select language">
+                <option *ngFor="let lang of languageArray" [value]="lang.language_code">{{lang.language_name}}</option>
+              </select>
+            </div>
+            <div class="saveButton text-center">
+              <button class="btn backButton text-capitalize" mat-button (click)="edit = false;image='';imageData ='';" [ngStyle]="{ 'direction' : direction }">
+                <ng-container>{{languageStrings.back || 'Back'}}</ng-container>
+              </button>
+              <button class="btn okButton text-capitalize" mat-button appColor bg="true" (click)="saveEdits()" [disabled]="!phoneForm.valid"
+                [ngStyle]="{ 'direction' : direction }">
+                <ng-container>{{languageStrings.save || 'Save'}}</ng-container>
+              </button>
+            </div>
+          </div>
+
+          <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 additionalInformation" *ngIf="templateFields && templateFields.length > 0">
+            <div class="additionalText text-center" [ngStyle]="{ 'direction' : direction }">
+              <ng-container>{{languageStrings.additional_information || 'Additional Information'}}</ng-container>
+            </div>
+          </div>
+
+          <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 additionalData profileViewOnly" *ngIf="templateFields && templateFields.length > 0 && !editTemplate">
+            <div class="childAdditional row">
+              <div *ngFor="let field of templateFields" class="col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                <div *ngIf="field.data_type == 'Date' || field.data_type == 'Date-Past' || field.data_type == 'Date-Future'">
+                  <div class="col-xs-12 minheightft">
+                    {{field.display_name}} :
+                    <span *ngIf="field.data">{{field.data | dateTimeFormat: 'mediumDate'}}</span>
+                    <span *ngIf="!field.data">--</span>
+                  </div>
+                </div>
+                <div *ngIf="field.data_type == 'Date-Time' || field.data_type == 'Datetime-Past' || field.data_type == 'Datetime-Future'">
+                  <div class="col-xs-12 minheightft">
+                    {{field.display_name}} :
+                    <span *ngIf="field.data">{{field.data | dateTimeFormat:'MMM d, y, h:mm a'}}</span>
+                    <span *ngIf="!field.data">--</span>
+                  </div>
+                </div>
+                <div *ngIf="field.data_type == 'Multi-Select'">
+                  <div class="col-xs-12 minheightft">
+                    {{field.display_name}} :
+                    <span *ngIf="field.data">
+                        <span *ngFor="let elem of field.data; let index = index"> {{elem}}<span *ngIf="index != (field.data.length - 1)">{{', '}} </span></span> 
+                    </span>
+                    <span *ngIf="!field.data">--</span>
+                  </div>
+                </div>
+                <div *ngIf="field.data_type == 'Single-Select'">
+                    <div class="col-xs-12 minheightft">
+                      {{field.display_name}} :
+                      <span *ngIf="field.data">
+                       {{field.data}}
+                      </span>
+                      <span *ngIf="!field.data">--</span>
+                    </div>
+                  </div>
+                <div *ngIf="field.data_type == 'Text' || field.data_type == 'Email' || field.data_type == 'Number' || field.data_type == 'Telephone' || field.data_type == 'Checkbox' || field.data_type == 'Dropdown'">
+                  <div class="col-xs-12 minheightft">
+                    {{field.display_name}} :
+                    <span *ngIf="field.data">{{field.data}}</span>
+                    <span *ngIf="!field.data">--</span>
+                  </div>
+                </div>
+              </div>
+              <div *ngFor="let fieldIm of templateFields" class="col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                <div *ngIf="fieldIm.data_type == 'Image'">
+                  <div class="col-xs-12 minheightft">
+                    {{fieldIm.display_name}}
+                  </div>
+                  <div class="col-xs-12">
+                    <span *ngIf="fieldIm.data.length" style="max-height: 100px;overflow: scroll;">
+                      <img *ngFor="let img of fieldIm.data" style="height: 100px;width: 100px;margin: 5px;margin-left: 0;" [src]="img"
+                      [alt]="fieldIm.display_name +' value'">
+                    </span>
+                    <span *ngIf="!fieldIm.data.length">
+                      --
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="editButton">
+              <button class="btn text-capitalize" [ngStyle]="{ 'direction' : direction }" mat-button appColor bg="true" (click)="editTemplateData()">
+                <ng-container>{{languageStrings.edit ||'Edit'}}</ng-container>
+              </button>
+            </div>
+          </div>
+
+          <div class="col-lg-10 col-lg-offset-1 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-xs-12 profileEditView" *ngIf="editTemplate">
+
+            <form role="form" [formGroup]="templateForm" autocomplete="off">
+              <div *ngFor="let field of templateFields">
+
+                <div class="nameEdit" *ngIf="field.data_type == 'Text'">
+                  <label [ngStyle]="{ 'direction' : direction }" [for]="field.display_name">{{field.display_name}}</label>
+                  <input [id]="field.display_name" type="text" autocomplete="off" [formControlName]="field.label" class="form-control" [placeholder]="field.display_name"/>
+                </div>
+
+                <div class="nameEdit" *ngIf="field.data_type == 'Number'">
+                  <label [ngStyle]="{ 'direction' : direction }" [for]="field.display_name">{{field.display_name}}</label>
+                  <input [id]="field.display_name" type="number" autocomplete="off" [formControlName]="field.label" class="form-control" [placeholder]="field.display_name"/>
+                </div>
+
+                <div class="nameEdit" *ngIf="field.data_type == 'Image'">
+                  <label [ngStyle]="{ 'direction' : direction }" [for]="field.display_name">{{field.display_name}}</label>
+                  <div>
+                    <input type="file" [id]="field.label"  (change)="onFileChange($event)" #fileInput style="display:none;">
+                    <button class="btn uploadFileButton" appColor hoverbgSimple="true" mat-button (click)="fileInput.click()">
+                      <ng-container>{{languageStrings.upload_file || 'Upload File'}}</ng-container>
+                    </button>
+                    <div style="width:100%;max-height: 100px;overflow: scroll;">
+                      <div style="width:80px;height:80px;margin: 5px;margin-left: 0;float:left" *ngFor="let img of imageList[field.label];let i = index">
+                        <img style="height: 100%;width: 100%;" [src]="img" [alt]="field.display_name +' value ' + i">
+                        <span style="position: relative;left: 65px;bottom: 80px;background: #ddd;padding: 1px 2px;" (click)="clearFile(field.label,i)">
+                          <i class="fa fa-times" style="color:red" aria-hidden="true"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="nameEdit" *ngIf="field.data_type == 'Date'">
+                  <label class="fontSze" [for]="field.display_name">{{field.display_name}}</label>
+                    <!--<input [id]="field.display_name" [placeholder]="field.display_name" class="form-control" [owlDateTimeTrigger]="dt1" [formControlName]="field.label" [owlDateTime]="dt1">-->
+                    <!--<owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>-->
+                  <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100"  [inputId]="field.display_name" [id]="field.display_name"
+                               [readonlyInput]="true" [formControlName]="field.label"
+                               placeholder="{{field.display_name}}" [showIcon]="false"></p-calendar>
+                </div>
+
+                <div class="nameEdit" *ngIf="field.data_type == 'Date-Past'">
+                  <label [ngStyle]="{ 'direction' : direction }" [for]="field.display_name">{{field.display_name}}</label>
+                    <!--<input [id]="field.display_name" [placeholder]="field.display_name" class="form-control" [max]="maxDate" [owlDateTimeTrigger]="dt2" [formControlName]="field.label"-->
+                      <!--[owlDateTime]="dt2">-->
+                    <!--<owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>-->
+                  <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100"  [inputId]="field.display_name" [id]="field.display_name"
+                               [maxDate]="maxDate"
+                               [readonlyInput]="true" [formControlName]="field.label"
+                               placeholder="{{field.display_name}}" [showIcon]="false"></p-calendar>
+                </div>
+
+                <div class="nameEdit" *ngIf="field.data_type == 'Date-Future'">
+                  <label [ngStyle]="{ 'direction' : direction }" [for]="field.display_name">{{field.display_name}}</label>
+                  <!--<input [id]="field.display_name" [placeholder]="field.display_name" class="form-control" [min]="minDate" [owlDateTimeTrigger]="dt3" [formControlName]="field.label"-->
+                    <!--[owlDateTime]="dt3">-->
+                  <!--<owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>-->
+                  <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100"  [inputId]="field.display_name" [id]="field.display_name"
+                               [minDate]="minDate"
+                               [readonlyInput]="true" [formControlName]="field.label"
+                               placeholder="{{field.display_name}}" [showIcon]="false"></p-calendar>
+                </div>
+
+                <div class="nameEdit" *ngIf="field.data_type == 'Date-Time'">
+                  <label [ngStyle]="{ 'direction' : direction }" [for]="field.display_name">{{field.display_name}}</label>
+                  <!--<input [id]="field.display_name" class="form-control" [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4" [formControlName]="field.label" [placeholder]="field.display_name">-->
+                  <!--<owl-date-time #dt4></owl-date-time>-->
+                  <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100"  [inputId]="field.display_name" [showTime]="true" [id]="field.display_name"
+                               [hourFormat]="appConfig.time_format === timeFormat.TWELVE_HOURS ? 12 : 24"
+                               [readonlyInput]="true" [formControlName]="field.label"
+                               placeholder="{{field.display_name}}" [showIcon]="false"></p-calendar>
+                </div>
+
+                <div class="nameEdit" *ngIf="field.data_type == 'Datetime-Past'">
+                  <label [ngStyle]="{ 'direction' : direction }" [for]="field.display_name">{{field.display_name}}</label>
+                  <!--<input [id]="field.display_name" class="form-control" [max]="maxDate" [owlDateTimeTrigger]="dt5" [owlDateTime]="dt5" [formControlName]="field.label"-->
+                    <!--[placeholder]="field.display_name">-->
+                  <!--<owl-date-time #dt5></owl-date-time>-->
+                  <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100"  [inputId]="field.display_name" [showTime]="true" [id]="field.display_name"
+                               [hourFormat]="appConfig.time_format === timeFormat.TWELVE_HOURS ? 12 : 24"
+                               [maxDate]="maxDate" [readonlyInput]="true" [formControlName]="field.label"
+                               placeholder="{{field.display_name}}" [showIcon]="false"></p-calendar>
+                </div>
+
+                    <!-- SINGLE SELECT / MULTI SELECT -->
+
+                  <div class="input-group full-width"  *ngIf="field.data_type == 'Single-Select'">
+                        <label class="displayBlock fontSize" [for]="field.display_name">{{field.display_name}}</label>
+                        <p-dropdown [showClear]="true" [options]="field.allowed_values" [formControlName]="field.label" placeholder="{{languageStrings.select_value || 'Select a value'}}" optionLabel="name"></p-dropdown>
+                      </div>
+                      <div class="input-group full-width" *ngIf="field.data_type == 'Multi-Select'">
+                          <label class="displayBlock fontSize" [for]="field.display_name">{{field.display_name}}</label>
+                          <p-multiSelect [options]="field.allowed_values" [formControlName]="field.label" optionLabel="name"></p-multiSelect>
+                        </div>
+
+                <div class="nameEdit" *ngIf="field.data_type == 'Datetime-Future'">
+                  <label [ngStyle]="{ 'direction' : direction }" [for]="field.display_name">{{field.display_name}}</label>
+                  <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100"  [inputId]="field.display_name" [showTime]="true" [id]="field.display_name"
+                               [hourFormat]="appConfig.time_format === timeFormat.TWELVE_HOURS ? 12 : 24"
+                               [minDate]="minDate" [readonlyInput]="true" [formControlName]="field.label"
+                               placeholder="{{field.display_name}}" [showIcon]="false"></p-calendar>
+                  <div>
+                    <!--<input [id]="field.display_name" class="form-control" [min]="minDate" [owlDateTimeTrigger]="dt6" [owlDateTime]="dt6" [formControlName]="field.label"-->
+                      <!--[placeholder]="field.display_name">-->
+                    <!--<owl-date-time #dt6></owl-date-time>-->
+                  </div>
+                </div>
+
+                <div class="nameEdit" *ngIf="field.data_type == 'Email'">
+                  <label [ngStyle]="{ 'direction' : direction }" [for]="field.display_name">{{field.display_name}}</label>
+                  <input [id]="field.display_name" type="email" [formControlName]="field.label" class="form-control" [placeholder]="field.display_name"/>
+                </div>
+
+                <div id="formTelephone" class="nameEdit" *ngIf="field.data_type == 'Telephone'">
+                  <label [ngStyle]="{ 'direction' : direction }" [for]="field.display_name">{{field.display_name}}</label>
+                  <app-fugu-tel-input class="phone_style" [id]="field.display_name" [formControlName]="field.label" [(dialCode)]="country_code"></app-fugu-tel-input>
+                </div>
+
+                <div class="nameEdit" *ngIf="field.data_type == 'Checkbox'">
+                  <div class="checkbox">
+                    <mat-checkbox [formControlName]="field.label" [id]="field.display_name">{{field.display_name}}</mat-checkbox>
+                  </div>
+                </div>
+
+                <div class="nameEdit" *ngIf="field.data_type == 'Dropdown'">
+                  <label [ngStyle]="{ 'direction' : direction }" [for]="field.display_name">{{field.display_name}}</label>
+                  <div class="dropdown">
+                    <button [id]="field.display_name" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{field.display_name}}
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li [id]="option.id" *ngFor="let option of field.dropdown">
+                        <a href="#">{{option.value}}</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <app-control-messages *ngIf="field.data_type !== 'Image'" [control]="templateForm.controls[field.label]"></app-control-messages>
+              </div>
+            </form>
+
+            <div class="saveButton text-center">
+              <button class="btn backButton text-capitalize" mat-button (click)="editTemplate = false;" [ngStyle]="{ 'direction' : direction }">
+                <ng-container>{{languageStrings.back || 'Back'}}</ng-container>
+              </button>
+              <button class="btn okButton text-capitalize" mat-button appColor bg="true" (click)="editSignupTemplate()" [disabled]="!phoneForm.valid"
+                [ngStyle]="{ 'direction' : direction }">
+                <ng-container>{{languageStrings.save || 'Save'}}</ng-container>
+              </button>
+            </div>
+          </div>
+
+
+          <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12" *ngIf="profileData">
+            <app-subscription [profileData]="profileData"></app-subscription>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<app-footer></app-footer>

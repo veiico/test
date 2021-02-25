@@ -1,0 +1,112 @@
+<nav class="navbar navbar-default navbar-fixed-top navHeight" [ngStyle]="{'background-color': bg_color}">
+  <div class="container-fluid paddingMobile">
+    <div class="navbar-header headerHeight marginZero" [ngClass]="{'widthFull': loggedIn, 'widthAuto': !loggedIn}">
+
+      <button type="button" [style.border-color]="formSettings.header_element_color" class="navbar-toggle burgurButton"
+        data-toggle="collapse" data-target="#myNavbarWithoutLogin">
+        <span class="icon-bar" [style.background-color]="formSettings.header_element_color"></span>
+        <span class="icon-bar" [style.background-color]="formSettings.header_element_color"></span>
+        <span class="icon-bar" [style.background-color]="formSettings.header_element_color"></span>
+      </button>
+
+      <div class="pull-right" *ngIf="loggedIn">
+        <ul class="nav navbar-nav navbar-right loggedInUi">
+
+
+
+
+        </ul>
+      </div>
+
+    </div>
+    <div class="navbar-collapse collapse" id="myNavbarWithoutLogin" [ngStyle]="{'background-color': bg_color}">
+      <ul class="nav navbar-nav navbar-right" style="margin: 0px;" *ngIf="!loggedIn">
+
+        <li *ngIf="languageArray && languageArray.length > 1">
+          <div class="changeLanguage dropdown" [hidden]="loggedIn">
+            <button id="langBtn_2" mat-button profileColor="true" class="btn dropdown-toggle profileButton text-uppercase"
+              type="button" data-toggle="dropdown">{{languageSelected}}
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu langBtn hidden-xs visible-sm visible-lg visible-md">
+              <li *ngFor="let lang of languageArray">
+                <a (click)="languageChanged(lang.language_code)" appColor onlyColor="true">{{lang.language_name}}</a>
+              </li>
+            </ul>
+            <ul class="dropdown-menu langBtn visible-xs hidden-sm hidden-lg hidden-md">
+              <li *ngFor="let lang of languageArray">
+                <a (click)="languageChanged(lang.language_code)" [style.color]="formSettings.header_element_color">{{lang.language_name}}</a>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li *ngIf="!env.production">
+          <button class="btn dropdown-toggle profileButton changeLanguage" title="Change Api Url"
+            [style.background-color]="profile_color" (click)="changePort()">Change Url</button>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right" style="margin: 0px;" *ngIf="loggedIn">
+        <li [ngStyle]="{ 'direction' : direction }" *ngIf="hideSearch &&
+                                                                   !formSettings.pdp_view &&
+                                                                   !showHeadingSearch &&
+                                                                   formSettings.business_model_type != 'FREELANCER' &&
+                                                                   formSettings.onboarding_business_type !== 805"
+          class="visible-xs hidden-lg hidden-sm hidden-md">
+          <a class="loginBtn" appColor loginColor="true" (click)="goToSearch()">
+            <i class="fa fa-search" [style.color]="formSettings.header_element_color"></i>
+            <ng-container i18n>Search</ng-container>
+          </a>
+        </li>
+        <li *ngIf="!env.production" class="visible-xs hidden-lg hidden-sm hidden-md">
+          <button class="btn dropdown-toggle profileButton changeLanguage" title="Change Api Url"
+            [style.background-color]="profile_color" (click)="changePort()">Change Url</button>
+        </li>
+        <li [ngStyle]="{ 'direction' : direction }" class="visible-xs hidden-lg hidden-sm hidden-md">
+          <div class="dropdown profileMobile">
+            <button id="profileBtn_3" [ngStyle]="{ 'direction' : direction }" mat-button class="btn dropdown-toggle profileButton"
+              type="button" data-toggle="dropdown" [style.background-color]="profile_color">
+              {{name}}
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu profileButtonDrop" [ngStyle]="{ 'direction' : direction }">
+              <li *ngIf="headerData.is_dual_user_enable" (click)="$event.stopPropagation()">
+                <a style="display:flex;justify-content:space-between;align-items: center;">
+                  <ng-container i18n>Switch to {{headerData.terminology.MERCHANT}} Panel</ng-container>
+                  <label class="switch switch custom-switch" style="margin-bottom: 0px;    margin-left: 3px;">
+                    <input type="checkbox" value="false" [ngStyle]="{'direction': direction}" (change)="onAccountSwitch($event)"
+                    attr.aria-label="Switch to {{headerData && headerData.terminology.MERCHANT}} Panel">
+                    <span></span>
+                  </label>
+                </a>
+              </li>
+              <li>
+                <a (click)="goToProfile()" [style.color]="formSettings.header_element_color">
+                  <ng-container i18n>Profile</ng-container>
+                </a>
+              </li>
+              <li>
+                <a (click)="goToOrders()" *ngIf="terminology" class="text-capitalize" [style.color]="formSettings.header_element_color">{{terminology.ORDERS}}</a>
+              </li>
+
+              <li *ngIf="refStatus">
+                <a (click)="goToRefer()" [style.color]="formSettings.header_element_color">
+                  <ng-container i18n>Refer and Earn</ng-container>
+                </a>
+              </li>
+              <li *ngIf="!formSettings.is_demo && !formSettings.hide_gdpr">
+                <a (click)="goToSettings()" [style.color]="formSettings.header_element_color" *ngIf="terminology && langJson"
+                  class="text-capitalize">{{terminology.CUSTOMER_RIGHTS || 'Customer Rights'}}</a>
+              </li>
+              <li (click)="logout()">
+                <a [style.color]="formSettings.header_element_color">
+                  <ng-container i18n>Logout</ng-container>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <app-pop-up></app-pop-up>
+  </div>
+</nav>

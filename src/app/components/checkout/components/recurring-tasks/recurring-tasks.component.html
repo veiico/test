@@ -1,0 +1,225 @@
+<div class="rec-tk-type">
+  <div>
+    <ng-container >{{ languageStrings.repeats || "REPEATS"}}</ng-container>
+  </div>
+  <table class="rec-table">
+    <thead>
+
+      <tr>
+        <td (click)="setRecurrenceRule(0)" [ngClass]="{'selected': recurrenceRule ==0}" >{{ languageStrings.everyday || "Everyday"}}</td>
+        <td (click)="showWeekDaysOption && setRecurrenceRule(1)"
+          [ngClass]="{'selected': recurrenceRule ==1, 'disabled': !showWeekDaysOption}" >{{ languageStrings.weekdays || "Weekdays"}} </td>
+        <td (click)="showWeekendOption && setRecurrenceRule(2)"
+          [ngClass]="{'selected': recurrenceRule ==2, 'disabled': !showWeekendOption}" >{{ languageStrings.weekends || "Weekends"}}</td>
+      </tr>
+    </thead>
+  </table>
+</div>
+<div class="rec-tk-days">
+  <div class="day" (click)="weekDays[i].is_active && selectWeekDay(i)"
+    [ngClass]="{'selected': weekDays[i].is_selected && weekDays[i].is_active, 'disabled': !weekDays[i].is_active}"
+    *ngFor="let day of weekDays; let i = index;">
+    {{day.day_name.substring(0,2)}}
+  </div>
+</div>
+
+
+
+<div class="rec-tk-start-time col-xs-12">
+  <div class="row">
+    <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+      <div class="form-group" style="margin-bottom: 0">
+        <div class="input-group" style="margin-bottom: 0;width:100%;" (click)="openSlots = false">
+          <label class="chk-lable" for="chk-select-date" [ngStyle]="{ 'direction' : direction }">
+            <ng-container >{{ languageStrings.select_date || "Select Date" }}</ng-container>
+          </label>
+          <div class="input-group addon">
+            <input type="text" id="chk-select-date" [isDisabled]="disableRecInput" [disabled]="disableRecInput"
+              class="form-control chk-input" [minDate]="minStartDate" [maxDate]="maxStartDate" #dpRecSt="bsDatepicker"
+              (onHidden)="dateChanged()" (onShown)="onDatePickerShown()"
+              [value]=" bsRecurStartDate | dateTimeFormat: 'mediumDate' " (bsValueChange)="valueChanges()" bsDatepicker
+              [(ngModel)]="bsRecurStartDate" readonly style="color: #333333" [bsConfig]="bsConfig">
+            <span class="input-group-addon no-border-fa" id="basic-addon1" (click)="dpRecSt.show()">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+      <div class="form-group" style="margin-bottom: 0">
+        <div class="input-group" style="margin-bottom: 0;width:100%;"
+          (click)="toggleSlotPicker();">
+          <label class="chk-lable" for="chk-select-time" [ngStyle]="{ 'direction' : direction }">
+            <ng-container > {{ languageStrings.select_time || "Select Time"}}</ng-container>
+          </label>
+          <div class="input-group addon" style="margin-bottom: 0">
+            <input type="text" id="chk-select-time" placeholder="--:--" class="form-control chk-input"
+              [ngModel]="recurStartTime" [disabled]="disableRecInput" readonly style="color: #333333"
+              [value]="recurStartTime ? recurStartTime + ' ' + tFormat: ''">
+            <span class="input-group-addon no-border-fa" id="basic-addon2">
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
+            </span>
+          </div>
+        </div>
+
+        <div class="slots" [hidden]="!openSlots">
+          <div>
+            <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+              <ng-container >{{ languageStrings.morning || "Morning"}}</ng-container>
+            </p>
+            <div class="slot-parent">
+              <div *ngFor="let slot of slots.morning" [ngClass]="{'booked': slot.booked == 1}" class="slot-ui"
+                (click)="recurStartTime = slot;openSlots = false;setTimeFormat('AM');highlightSlot($event,slot)">
+                {{slot}}
+              </div>
+            </div>
+            <div *ngIf="!slots.morning.size" style="margin: auto">
+              <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+              </p>
+            </div>
+          </div>
+          <div>
+            <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+              <ng-container >{{ languageStrings.afternoon || "Afternoon"}}</ng-container>
+            </p>
+            <div class="slot-parent">
+              <div *ngFor="let slot of slots.afternoon" [ngClass]="{'booked': slot.booked == 1}" class="slot-ui"
+                (click)="recurStartTime = slot;openSlots = false;setTimeFormat('PM');highlightSlot($event,slot)">
+                {{slot}}
+              </div>
+            </div>
+            <div *ngIf="!slots.afternoon.size" style="margin: auto">
+              <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+              </p>
+            </div>
+          </div>
+          <div>
+            <p class="slot-heading" [ngStyle]="{ 'direction' : direction }">
+              <ng-container >{{ languageStrings.evening || "Evening"}}</ng-container>
+            </p>
+            <div class="slot-parent">
+              <div *ngFor="let slot of slots.evening" [ngClass]="{'booked': slot.booked == 1}" class="slot-ui"
+                (click)="recurStartTime = slot;openSlots = false;setTimeFormat('PM');highlightSlot($event,slot)">
+                {{slot}}
+              </div>
+            </div>
+            <div *ngIf="!slots.evening.size" style="margin: auto">
+              <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                <ng-container >{{ languageStrings.no_slot_avail || "No Slots Available"}}</ng-container>
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+</div>
+
+
+<div class="rec-tk-end row">
+  <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+    <div class="form-group" style="margin-bottom: 0">
+      <div class="input-group" style="margin-bottom: 0;width:100%;" (click)="openSlots = false">
+        <label class="chk-lable" for="chk-select-date" [ngStyle]="{ 'direction' : direction }">
+          <ng-container >{{ languageStrings.end_date || "End Date"}}</ng-container>
+        </label>
+        <div class="input-group addon">
+          <span class="input-group-addon no-bgcolor">
+            <input id="end-date" type="radio" name="recurrenceType" value="date" [(ngModel)]="recurringEndType"
+              (click)="stopPropagation($event)" />
+            <label (click)="stopPropagation($event)" for="end-date"></label>
+          </span>
+          <input type="text" id="chk-select-date" [isDisabled]="recurringEndType=='occurrence'"
+            [disabled]="recurringEndType=='occurrence'" class="form-control chk-input" [minDate]="minEndDate"
+            [maxDate]="maxEndDate" #dpRecEnd="bsDatepicker" (onHidden)="endDateChanged()"
+            (onShown)="onDatePickerShown()" (bsValueChange)="valueChanges()"
+            [value]=" bsRecurEndDate | dateTimeFormat: 'mediumDate' " bsDatepicker [(ngModel)]="bsRecurEndDate" readonly
+            style="color: #333333" [bsConfig]="bsConfig">
+          <span class="input-group-addon no-border-fa" id="basic-addon1"
+            (click)="recurringEndType=='date' && dpRecEnd.show()">
+            <i class="fa fa-calendar" aria-hidden="true"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+
+    <div class="form-group" style="margin-bottom: 0">
+      <div class="input-group" style="margin-bottom: 0;width:100%;" (click)="openSlots = false">
+        <label class="chk-lable" for="chk-select-date" [ngStyle]="{ 'direction' : direction }">
+          <ng-container >{{languageStrings.end_after || "Ends After"}}</ng-container>
+        </label>
+        <div class="input-group addon">
+          <span class="input-group-addon no-bgcolor">
+            <input id="end-occurrence" type="radio" name="recurrenceType" value="occurrence"
+              [(ngModel)]="recurringEndType" (click)="stopPropagation($event)" />
+            <label (click)="stopPropagation($event)" for="end-occurrence"></label>
+          </span>
+          <input type="text" class="form-control chk-input" appNumberOnly maxlength="2" (ngModelChange)="valueChanges()"
+            [(ngModel)]="occurrence" id="chk-select-date" [disabled]="recurringEndType=='date'">
+          <span class="input-group-addon no-border-fa" id="basic-addon1" >{{ languageStrings.occurrences || "Occurrences"}}</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 p-0" *ngIf="restaurantInfo.is_delivery_charge_surge_active && recurStartTime && deliverySurgeList && deliverySurgeList.length">
+  <hr>
+</div>
+
+ <!-- Delivery Surge Charges -->
+ <div *ngIf="restaurantInfo.is_delivery_charge_surge_active && recurStartTime && deliverySurgeList && deliverySurgeList.length">
+  <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 bg-color">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-0 marBottom10 text-upper">
+      <ng-container >{{ languageStrings.delivery_surge_charge || "Delivery Surge Charge"}}</ng-container>
+    </div>
+    <div>
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-0">
+        <div class="delivery_mssg">
+          <ng-container >{{ languageStrings.delivery_charges_may_vary || "Delivery Charges may vary per day"}}</ng-container>
+        </div>
+        <div class="delivery_mssg">
+          <ng-container >{{ languageStrings.slots_chosen_msg || "As per the slots chosen above, the Delivery Charges for different days would be as follows" }}
+          </ng-container>:
+        </div>
+      </div>
+
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-0 delivery_head">
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 p-0">
+          <ng-container >{{ languageStrings.day || "Day"}}</ng-container>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+          <ng-container >{{languageStrings.time || "Time"}}</ng-container>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 p-0">
+          <ng-container >{{ terminology.DELIVERY_CHARGE || 'Delivery Charge'}} </ng-container>
+        </div>
+      </div>
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-0 marBottom10"
+        *ngFor="let data of deliverySurgeList; let i = index;">
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 p-0">
+          <ng-container >{{data.day}}</ng-container>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+          <ng-container >{{showRecurrTime}}</ng-container>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 p-0">
+          <ng-container >{{(currency )+ ' ' + (data.charge|decimalConfig)}}</ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+ </div>
+

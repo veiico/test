@@ -1,0 +1,45 @@
+$color-blue: var(--blue);
+$color-black: var(--black);
+$color-gray: var(--gray);
+$color-dark-gray: var(--dark-gray);
+$color-orange: var(--orange);
+$color-radio: $color-blue;
+$color-light-gray: var(--light-gray);
+$color-theme: var(--theme);
+$color-white: var(--white);
+$header-bg-color: var(--header_bg_color);
+$header-height: var(--header_height);
+$header-color: var(--header_font_color);
+$autocomplete-btn-search-bg-color: var(--autocomplete_btn_search_bg_color);
+$autocomplete-btn-search-font-color: var(--autocomplete_btn_search_font_color);
+$autocomplete-box-height: var(--autocomplete_box_height);
+$proxima-reg : 'Poppins';
+$proxima-thin : 'ProximaNova-Light';
+$proxima-semi-bold : 'ProximaNova-Semibold';
+$mont-reg: 'Montserrat-Regular';
+$mont-light: 'Montserrat-Light';
+$mont-med:'Montserrat-Medium';
+
+$heading-font-color: #474747; 
+//transition form b4
+$transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+:root {
+    //colors
+    --blue: #1394ff;
+    --black: #282828;
+    --gray: #e2e4e6;
+    --dark-gray: gray;
+    --white: #ffffff;
+    --light-gray: #d3d3d3;
+    --orange: #ff8f00; //components prefix component name
+    --bg-color: var(--white);
+    //header
+    --header_height: 60px;
+    --header_bg_color: var(--black);
+    --header_font_color: white; //autocomplete search
+    --autocomplete_btn_search_bg_color: var(--blue);
+    --autocomplete_btn_search_font_color: white;
+    --autocomplete_box_height: 40px;
+    --theme: var(--blue);
+    --rating-bar-color: #3c3b3b;
+}

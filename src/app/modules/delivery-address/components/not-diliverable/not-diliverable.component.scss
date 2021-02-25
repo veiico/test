@@ -1,0 +1,63 @@
+@import '~assets/css/variables';
+
+.not-diliverable{
+    position: fixed;
+    bottom: 100px;
+    -ms-transform: translateY(100%);
+    transform: translateY(100%);
+    width: 100%;
+    z-index: 1000;
+    opacity: 1;
+    // transition: opacity .3s,transform .3s;
+    // will-change: opacity,transform;
+    pointer-events: none;
+    .outer{
+        display: table;
+        max-width: 400px;
+        padding: 0;
+        margin: 0 auto;
+        background: #3d4152;
+        pointer-events: auto;
+        color: #fff;
+        .inner{
+            width: 100%;
+            height: 100%;
+            padding: 12px 15px;
+            position: relative;
+            box-shadow: 0 3px 15px 0 rgba(40,44,63,.3);
+            min-height: 50px;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: center;
+            align-items: center;
+            .err-img{
+                display: -ms-flexbox;
+                display: flex;
+                -ms-flex-align: center;
+                align-items: center;
+                margin-right: 10px;
+                width: 25px;
+                .err-icon{
+                    width: 25px;
+                }
+            }
+            .err-text{
+                flex: 1;
+                font-size: 12px;
+                margin-top: 3px;
+              .link{
+                color: $color-theme;
+                cursor: pointer;
+              }
+            }
+            .err-link{
+                padding: 0 10px;
+                color: #fff;
+                cursor: pointer;
+                text-transform: uppercase;
+                margin-left: 30px;
+                font-size: 12px;
+            }
+        }
+    }
+}

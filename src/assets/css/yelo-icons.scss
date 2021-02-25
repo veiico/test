@@ -1,0 +1,278 @@
+@font-face {
+  font-family: 'yelo-web-font';
+  src: url('/assets/fonts/custom/yelo-web-font.eot?87d6z1');
+  src: url('/assets/fonts/custom/yelo-web-font.eot?87d6z1#iefix') format('embedded-opentype'),
+    url('/assets/fonts/custom/yelo-web-font.ttf?87d6z1') format('truetype'),
+    url('/assets/fonts/custom/yelo-web-font.woff?87d6z1') format('woff'),
+    url('/assets/fonts/custom/yelo-web-font.svg?87d6z1#yelo-web-font') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+.yf {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'yelo-web-font' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.yf-no-address:before {
+  content: "\e900";
+}
+.yf-custom-template:before {
+  content: "\e901";
+}
+.yf-group_2 .path1:before {
+  content: "\e902";
+  color: rgb(0, 0, 0);
+}
+.yf-group_2 .path2:before {
+  content: "\e903";
+  margin-left: -0.744140625em;
+  color: rgb(0, 0, 0);
+  opacity: 0.443;
+}
+.yf-group_2 .path3:before {
+  content: "\e904";
+  margin-left: -0.744140625em;
+  color: rgb(0, 0, 0);
+  opacity: 0.443;
+}
+.yf-group_2 .path4:before {
+  content: "\e905";
+  margin-left: -0.744140625em;
+  color: rgb(255, 255, 254);
+}
+.yf-group_2 .path5:before {
+  content: "\e906";
+  margin-left: -0.744140625em;
+  color: rgb(0, 0, 0);
+  opacity: 0.443;
+}
+.yf-group_2 .path6:before {
+  content: "\e907";
+  margin-left: -0.744140625em;
+  color: rgb(255, 255, 254);
+}
+.yf-group_3:before {
+  content: "\e908";
+}
+.yf-group-2:before {
+  content: "\e909";
+}
+.yf-group-7_2 .path1:before {
+  content: "\e90a";
+  color: rgb(0, 0, 0);
+  opacity: 0.728;
+}
+.yf-group-7_2 .path2:before {
+  content: "\e90b";
+  margin-left: -1.5693359375em;
+  color: rgb(0, 0, 0);
+  opacity: 0.3050;
+}
+.yf-group-7_2 .path3:before {
+  content: "\e90c";
+  margin-left: -1.5693359375em;
+  color: rgb(0, 0, 0);
+  opacity: 0.728;
+}
+.yf-group-7_2 .path4:before {
+  content: "\e90d";
+  margin-left: -1.5693359375em;
+  color: rgb(0, 0, 0);
+  opacity: 0.728;
+}
+.yf-group-7_3:before {
+  content: "\e90e";
+}
+.yf-group-7 .path1:before {
+  content: "\e90f";
+  color: rgb(0, 0, 0);
+}
+.yf-group-7 .path2:before {
+  content: "\e910";
+  margin-left: -2em;
+  color: rgb(255, 255, 255);
+}
+.yf-group-24:before {
+  content: "\e911";
+}
+.yf-group-25:before {
+  content: "\e912";
+}
+.yf-group .path1:before {
+  content: "\e913";
+  color: rgb(0, 0, 0);
+}
+.yf-group .path2:before {
+  content: "\e914";
+  margin-left: -2em;
+  color: rgb(255, 255, 255);
+}
+.yf-ic-access-alarm:before {
+  content: "\e915";
+}
+.yf-ic-access-alarms:before {
+  content: "\e916";
+}
+.yf-ic-access-time:before {
+  content: "\e917";
+}
+.yf-ic-account-balance-wallet:before {
+  content: "\e918";
+}
+.yf-ic-account-balance:before {
+  content: "\e919";
+}
+.yf-ic-add-box:before {
+  content: "\e91a";
+}
+.yf-ic-add-circle:before {
+  content: "\e91b";
+}
+.yf-ic-add-location:before {
+  content: "\e91c";
+}
+.yf-ic-add-shopping-cart:before {
+  content: "\e91d";
+}
+.yf-ic-add:before {
+  content: "\e91e";
+}
+.yf-ic-arrow-back:before {
+  content: "\e91f";
+}
+.yf-ic-arrow-downward:before {
+  content: "\e920";
+}
+.yf-ic-arrow-drop-down:before {
+  content: "\e921";
+}
+.yf-ic-arrow-drop-up:before {
+  content: "\e922";
+}
+.yf-ic-arrow-forward:before {
+  content: "\e923";
+}
+.yf-ic-arrow-upward:before {
+  content: "\e924";
+}
+.yf-ic-card-travel:before {
+  content: "\e925";
+}
+.yf-ic-chat:before {
+  content: "\e926";
+}
+.yf-ic-check-box-outline-blank:before {
+  content: "\e927";
+}
+.yf-ic-check-box:before {
+  content: "\e928";
+}
+.yf-ic-chevron-left:before {
+  content: "\e929";
+}
+.yf-ic-chevron-right:before {
+  content: "\e92a";
+}
+.yf-ic-content-cut:before {
+  content: "\e92b";
+}
+.yf-ic-create:before {
+  content: "\e92c";
+}
+.yf-ic-credit-card:before {
+  content: "\e92d";
+}
+.yf-ic-edit-location:before {
+  content: "\e92e";
+}
+.yf-ic-event:before {
+  content: "\e92f";
+}
+.yf-ic-expand-less:before {
+  content: "\e930";
+}
+.yf-ic-expand-more:before {
+  content: "\e931";
+}
+.yf-ic-home:before {
+  content: "\e932";
+}
+.yf-ic-insert-invitation:before {
+  content: "\e933";
+}
+.yf-ic-live-help:before {
+  content: "\e934";
+}
+.yf-ic-local-grocery-store:before {
+  content: "\e935";
+}
+.yf-ic-location-off:before {
+  content: "\e936";
+}
+.yf-ic-menu:before {
+  content: "\e937";
+}
+.yf-ic-notifications-none:before {
+  content: "\e938";
+}
+.yf-ic-notifications-off:before {
+  content: "\e939";
+}
+.yf-ic-notifications:before {
+  content: "\e93a";
+}
+.yf-ic-perm-identity:before {
+  content: "\e93b";
+}
+.yf-ic-person-pin-circle:before {
+  content: "\e93c";
+}
+.yf-ic-person:before {
+  content: "\e93d";
+}
+.yf-ic-pin-drop:before {
+  content: "\e93e";
+}
+.yf-ic-place:before {
+  content: "\e93f";
+}
+.yf-ic-playlist-add:before {
+  content: "\e940";
+}
+.yf-ic-radio-button-checked:before {
+  content: "\e941";
+}
+.yf-ic-radio-button-unchecked:before {
+  content: "\e942";
+}
+.yf-ic-search:before {
+  content: "\e943";
+}
+.yf-ic-shopping-cart:before {
+  content: "\e944";
+}
+.yf-ic-star:before {
+  content: "\e945";
+}
+.yf-ic-warning:before {
+  content: "\e946";
+}
+.yf-ic-work:before {
+  content: "\e947";
+}
+.yf-pick-up-food:before {
+  content: "\e948";
+}

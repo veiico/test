@@ -1,0 +1,83 @@
+//components logo-heading
+$logo-heading-heading-font-color: var(--logo_heading_heading_font_color);
+$logo-heading-btn-bg-color: var(--logo_heading_btn_bg_color);
+$logo-heading-btn-font-color: var(--logo_heading_btn_font_color);
+$logo-heading-search-box-color: var(--logo_heading_search_box_color);
+
+//features component
+$features-bg-color: var(--features_bg_color);
+$features-heading-font-color: var(--features_heading_font_color);
+$features-description-font-color: var(--features_description_font_color);
+
+//flow component
+$flow-bg-color: var(--flow_bg_color);
+$flow-line-color: var(--flow_line_color);
+$flow-item-heading-font-color: var(--flow_item_heading_font_color);
+$flow-item-description-font-color: var(--flow_item_description_font_color);
+
+//footer
+$footer-height: var(--footer_height);
+$footer-bg-color: var(--footer_bg_color);
+$footer-font-color: var(--footer_font_color);
+
+//preorder tag
+$preorder-tag-top: var(--preorder_tag_top);
+$preorder-tag-color: var(--preorder_tag_bg_color);
+$preorder-tag-font-color: var(--preorder_tag_font_color);
+
+//sponsored tag
+$sponsored-tag-bottom: var(--sponsored_tag_bottom);
+$sponsored-tag-color: var(--sponsored_tag_bg_color);
+$sponsored-tag-font-color: var(--sponsored_tag_font_color);
+
+//closed tag
+$closed-tag-top: var(--closed_tag_top);
+$closed-tag-color: var(--closed_tag_bg_color);
+$closed-tag-font-color: var(--closed_tag_font_color);
+
+//delievry time tag
+$show-delivery-time-font-color: var(--show_delivery_time_font_color);
+
+//
+$show-location-font-color: var(--show_location_font_color);
+$show-rating-font-color: var(--show_rating_font_color);
+
+//theme specific variables.
+//these variables should not conflict with global variables in assets/css/variables.scss file
+:root {
+  --logo_heading_heading_font_color: #ffffff;
+  --logo_heading_btn_bg_color: #000000;
+  --logo_heading_btn_font_color: white;
+  --logo_heading_search_box_color: white;
+
+  //features component
+  --features_bg_color: white;
+  --features_heading_font_color: black;
+  --features_description_font_color: #ddd;
+
+  //flow component
+  --flow_bg_color: white;
+  --flow_item_heading_font_color: black;
+  --flow_item_description_font_color: black;
+  --flow_line_color: #627fbb;
+
+  //footer component
+  --footer_bg_color: #3C4B61;
+  --footer_font_color: white;
+  --footer_height: 200px;
+
+  --preorder_tag_top: 20px;
+  --preorder_tag_bg_color: #ba68c8;
+  --preorder_tag_font_color: #ffffff;
+
+  --sponsored_tag_bottom: 20px;
+  --sponsored_tag_bg_color: #ba68c8;
+  --sponsored_tag_font_color: #ffffff;
+
+  --closed_tag_top: 20px;
+  --closed_tag_bg_color: #ba68c8;
+  --closed_tag_font_color: #ffffff;
+
+  --show_location_font_color: black;
+  --show_rating_font_color: black;
+}

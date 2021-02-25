@@ -1,0 +1,1393 @@
+<app-header class="col-xs-12 p-0 header-ht" [headerData]="headerData" *ngIf="!ecomView">
+</app-header>
+<div class="main-c row">
+  <div class="col-xs-12">
+    <div class="heading">
+      <p class="title text-capitalize">{{terminology.ORDERS}}</p>
+      <hr class="line" [style.border-top-color]="appConfig.color" />
+    </div>
+  </div>
+  <div class="container Order center-c d">
+    <div class="row-eq-height">
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 row-col-eq" *ngFor="let order of ordersData">
+        <div class="cards"
+          [ngClass]="{'servicesHeight': order.business_type == 2, 'productHeight':order.business_type == 1}" (click)="openNav(order)">
+
+
+
+          <div class="orderIDDiv">
+            <div class="orderIdOnly">
+              <span class="idText text-capitalize">{{ languageStrings.order_id || 'Order Id'}}</span>
+              <span class="idNumber">{{order.job_id}}</span>
+            </div>
+
+            <div class="orderStatusWrapper">
+              <div class="orderStatusOnly">
+                <span class="statusText text-capitalize" [hidden]="!order.show_status"
+                  *ngIf="order.pd_or_appointment != taskTypeEnum.APPOINTMENT && order.job_status != -1">
+                  <span class="fw-bold"
+                    [style.color]="tookanStatusColor[order.job_status] ? tookanStatusColor[order.job_status] : '#000000'">{{order.job_status
+                    | TookanStatus | Capitalize}}</span>
+                </span>
+                <!-- bluewander case -->
+                <span class="statusText text-capitalize" [hidden]="!order.show_status"
+                  *ngIf="order.business_type == 1 && order.pd_or_appointment != 1 && order.job_status != -1">
+                  <span class="fw-bold"
+                    [style.color]="tookanStatusColor[order.job_status] ? tookanStatusColor[order.job_status] : '#000000'">{{order.job_status
+                    | TookanStatus | Capitalize}}
+                  </span>
+                </span>
+              </div>
+              <div class="imgforChat" *ngIf="order.hide_chat_icon !=1">
+                <a (click)="initiateChat(order); $event.stopPropagation()">
+                  <svg class="chatIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                    version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 489.3 489.3"
+                     xml:space="preserve" height="25px">
+                    <path id="XMLID_61_"
+                      d="M228.3,243.35h122.5l65.8,63v-63h27.9c19.6,0,35.6-16,35.6-35.6v-132    c0-19.6-16-35.6-35.6-35.6H228.3c-19.6,0-35.6,16-35.6,35.6v132C192.7,227.35,208.7,243.35,228.3,243.35z"
+                      data-original="#A7A9AC" class="active-path white-fill" data-old_color="#A7A9AC" />
+                    <path
+                      d="M68.5,457.55c1.1,0.5,2.4,0.7,3.6,0.7c2.3,0,4.6-0.9,6.3-2.5l62.7-60H259c24.5,0,44.4-19.9,44.4-44.4v-66.9    c0-5-4.1-9.1-9.1-9.1s-9.1,4.1-9.1,9.1v66.9c0,14.5-11.8,26.2-26.2,26.2H137.4c-2.3,0-4.6,0.9-6.3,2.5l-50,47.8v-41.1    c0-5-4.1-9.1-9.1-9.1H44.4c-14.5,0-26.2-11.8-26.2-26.2v-131c0-14.5,11.8-26.3,26.2-26.3h107.3c5,0,9.1-4.1,9.1-9.1    s-4.1-9.1-9.1-9.1H44.4c-24.5,0-44.4,19.9-44.4,44.4v131c0,24.5,19.9,44.4,44.4,44.4H63v53.5C63,452.85,65.2,456.15,68.5,457.55z"
+                      data-original="#000000" class="" />
+                    <path
+                      d="M347.2,252.45l63.2,60.5c1.7,1.6,4,2.5,6.3,2.5c1.2,0,2.4-0.2,3.6-0.7c3.3-1.4,5.5-4.7,5.5-8.3v-54h18.8    c24.6,0,44.7-20,44.7-44.7v-132c0-24.6-20-44.7-44.7-44.7H228.3c-24.6,0-44.7,20-44.7,44.7v132c0,24.6,20,44.7,44.7,44.7    L347.2,252.45L347.2,252.45z M201.8,207.75v-132c0-14.6,11.9-26.5,26.5-26.5h216.2c14.6,0,26.5,11.9,26.5,26.5v132    c0,14.6-11.9,26.5-26.5,26.5h-27.9c-5,0-9.1,4.1-9.1,9.1v41.8l-50.5-48.3c-1.7-1.6-3.9-2.5-6.3-2.5H228.3    C213.7,234.35,201.8,222.45,201.8,207.75z"
+                      data-original="#000000" class="" />
+                    <path
+                      d="M336.4,152.65c2.4,0,4.7-1,6.4-2.7c1.7-1.7,2.7-4,2.7-6.4s-1-4.7-2.7-6.4s-4-2.7-6.4-2.7s-4.7,1-6.4,2.7    c-1.7,1.7-2.7,4-2.7,6.4s1,4.7,2.7,6.4C331.7,151.75,334,152.65,336.4,152.65z"
+                      data-original="#000000" class="" />
+                    <path
+                      d="M370.2,152.65c2.4,0,4.7-1,6.4-2.7c1.7-1.7,2.7-4,2.7-6.4s-1-4.7-2.7-6.4s-4-2.7-6.4-2.7s-4.7,1-6.4,2.7    c-1.7,1.7-2.7,4-2.7,6.4s1,4.7,2.7,6.4C365.4,151.75,367.8,152.65,370.2,152.65z"
+                      data-original="#000000" class="" />
+                    <path
+                      d="M302.7,152.65c2.4,0,4.7-1,6.4-2.7c1.7-1.7,2.7-4,2.7-6.4s-1-4.7-2.7-6.4s-4-2.7-6.4-2.7s-4.7,1-6.4,2.7    c-1.7,1.7-2.7,4-2.7,6.4s1,4.7,2.7,6.4C298,151.75,300.3,152.65,302.7,152.65z"
+                      data-original="#000000" class="" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+
+          <div class="merchant-name-div" *ngIf="order.merchant_name">
+            <span class="orderAmountText text-capitalize text-grey">
+              <ng-container>{{ languageStrings.merchant_name || 'Merchant Name'}} </ng-container>
+            </span>
+            <span class="orderAmountText paddingLeft text-capitalize text-right">{{order.merchant_name}}</span>
+          </div>
+          <div class="otherDetailsDiv" >
+            <div class="orderAmount">
+              <div class="row">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <span class="orderAmountText text-capitalize text-grey"
+                    *ngIf="appConfig.show_product_price == 1 || order.total_amount > 0">
+                    {{ languageStrings.order_amount || 'Order Amount'}}</span>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6 text-right">
+                  <span class="orderAmountNumber"
+                    *ngIf="appConfig.show_product_price == 1 || order.total_amount > 0">{{(order.order_currency_symbol ?
+                    order.order_currency_symbol : currency)
+                    +''}}
+                    {{order.total_amount|decimalConfig}}</span>
+                </div>
+                <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12"
+                  *ngIf="appConfig.show_product_price == 1 || order.total_amount > 0">
+                </div>
+              </div>
+            </div>
+            <div class="orderAmount">
+              <div class="row"
+                *ngIf="formSettings.business_model_type === 'FREELANCER' && order.project != undefined  ">
+                <div class="col-lg-4 col-xs-4 col-sm-4 col-md-4 pt-08">
+                  <span class="orderAmountText text-capitalize text-grey">{{terminology.PROJECT}}&nbsp;{{ languageStrings.id ||
+                    'Id' }}</span>
+                </div>
+                <div class="col-lg-8 col-xs-8 col-sm-8 col-md-8 text-right pt-08">
+                  <span class="orderAmountNumber" *ngIf="order.project.project_id != undefined ">
+                    {{order.project.project_id}} 
+                  </span>
+                </div>
+                <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12"
+                  *ngIf="appConfig.show_product_price == 1 || order.total_amount > 0">
+                  <hr class="hr-border m-t-5"/>
+                </div>
+
+              </div>
+            </div>
+            <div class="orderAmount">
+              <div class="row"
+                *ngIf="formSettings.business_model_type === 'FREELANCER' && order.project != undefined &&  order.project.template.length > 0 ">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <span class="orderAmountText text-capitalize"
+                    *ngIf="order.project != undefined">{{terminology.PROJECT}}
+                    {{ languageStrings.name || 'Name'}}</span>
+
+                </div>
+                <div *ngFor="let projectDetail  of order.project.template"
+                  class="col-lg-6 col-xs-6 col-sm-6 col-md-6 text-right">
+                  <span class="orderAmountNumber" *ngIf="projectDetail.label === 'headline' "> {{projectDetail.value}}
+                  </span>
+                </div>
+                <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12"
+                  *ngIf="appConfig.show_product_price == 1 || order.total_amount > 0">
+                  <hr class="hr-border m-t-5" />
+                </div>
+
+              </div>
+            </div>
+            <div class="orderDateTime orderAmount">
+              <div class="row"
+                *ngIf="!order.enable_start_time_end_time && order.business_type == 1 && order.task_type === 0">
+                <div class="col-lg-5 col-xs-5 col-sm-5 col-md-5 pt-08">
+                  <span class="text-capitalize orderAmountText text-grey">{{ languageStrings.order_time || 'Order Time'}}</span>
+                </div>
+                <div class="col-lg-7 col-xs-7 col-sm-7 col-md-7 text-right pt-08">
+                  <span class="orderAmountNumber">{{order.creation_datetime | dateTimeFormat:'MMM d, y, h:mm a'}}</span>
+                </div>
+              </div>
+              <div class="row"
+                *ngIf="!order.enable_start_time_end_time && order.business_type == 1 && order.task_type === 0 && !order.is_custom_order else adjustScheduledTime;">
+                <div class="col-lg-5 col-xs-5 col-sm-5 col-md-5 pt-08">
+                  <span class="text-capitalize orderAmountText text-grey"> {{ languageStrings.scheduled_time || 'Scheduled Time'}} </span>
+                </div>
+                <div class="col-lg-7 col-xs-7 col-sm-7 col-md-7 text-right pt-08">
+                  <span class="orderAmountNumber">{{order.job_delivery_datetime | dateTimeFormat:'MMM d, y, h:mm a'}}</span>
+                </div>
+              </div>
+
+
+              <ng-template #adjustScheduledTime>
+                <div class="sc-time-ht"></div>
+              </ng-template>
+              <div class="row" *ngIf="order.task_type === 1">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <span class="text-capitalize orderAmountText">
+                    <ng-container>{{ languageStrings.pickup_time || 'Pickup Time' }} </ng-container>
+                  </span>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6 text-right">
+                  <span class="orderAmountNumber">{{order.job_pickup_datetime | dateTimeFormat:'MMM d, y, h:mm a'}}</span>
+                </div>
+              </div>
+              <div class="row" *ngIf="order.task_type === 2">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <span class="text-capitalize orderAmountText">
+                    <ng-container>{{ languageStrings.delivery_time || 'Delivery Time' }}</ng-container>
+                  </span>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6 text-right">
+                  <span class="orderAmountNumber">{{order.job_delivery_datetime | dateTimeFormat:'MMM d, y, h:mm a'}}</span>
+                </div>
+              </div>
+
+              <div class="row" *ngIf="!order.enable_start_time_end_time && order.business_type == 2">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <span class="text-capitalize orderAmountText">
+                    <ng-container>{{ languageStrings.created_at || 'Created At'}}</ng-container>
+                  </span>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6 text-right">
+                  <span class="orderAmountNumber">{{order.created_at | dateTimeFormat:'MMM d, y, h:mm a'}}</span>
+                </div>
+              </div>
+              <div class="row" *ngIf="order.enable_start_time_end_time">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <span class="text-capitalize orderAmountText">{{terminology.START_TIME}}</span>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6 text-right">
+                  <span class="orderAmountNumber">{{order.job_pickup_datetime | dateTimeFormat:'MMM d, y, h:mm a'}}</span>
+                </div>
+              </div>
+              <div class="row" *ngIf="order.enable_start_time_end_time">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <span class="text-capitalize orderAmountText">{{terminology.END_TIME}}</span>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6 text-right">
+                  <span class="orderAmountNumber">{{order.job_delivery_datetime | dateTimeFormat:'MMM d, y, h:mm a'}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="ratingReviewAndTrack" (click)="$event.stopPropagation()">
+              <div class="ratingDiv" *ngIf="order && !(order.is_rating_deleted)">
+                <div class="row">
+                              <!-- Track order btn -->
+                  <div class="pt-08" *ngIf="!hybridAppsView && order.tracking_link && order.job_status != 15 ">
+                    <a class="btn custom-btn" [href]="order.tracking_link"
+                       target="_blank">
+                      <ng-container >{{ languageStrings.track || "Track"}}</ng-container>
+                    </a>
+                  </div>
+                  <div class="pt-08" *ngIf="hybridAppsView && order.tracking_link && order.job_status != 15">
+                    <a class="btn custom-btn" (click)="trackForApps(order.tracking_link)"
+                      >
+                      <ng-container >{{ languageStrings.track || "Track"}}</ng-container>
+                    </a>
+                  </div>
+                  <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6 text-left" *ngIf="(order.delivery_method==deliveryMethod.SELF_PICKUP && (order.job_status==10||order.job_status==12))">
+                    <span><i class="glyphicon glyphicon-map-marker locateStyle"
+                      (click)="openMap(order)"></i></span>
+                    <a (click)="openMap(order)" class="click-style">{{ languageStrings.locate_store || 'Locate STORE'}}</a>
+                  </div>
+                  <div class="">
+                    <p class="cursor-text"
+                      *ngIf="order.job_status == 13 && order.customer_rating && appConfig.is_review_rating_enabled">
+                      <ng-container >{{ languageStrings.rating || "Rating"}}</ng-container>
+                      :
+                      <span class="ratingDivOrder" aria-hidden="false"
+                        [ngClass]="{'green-bold': getColourGreen(order.customer_rating), 'red-bold': getColourRed(order.customer_rating), 'yellow-bold': getColourYellow(order.customer_rating)}">
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <span class="ratingCountOrder ng-binding p-0"
+                          >{{order.customer_rating?order.customer_rating.toFixed(1):0}}</span>
+                      </span>
+                    </p>
+                    <p (click)="showRatingDialog(order)" class="pointer" *ngIf="order.job_status == 13 && !order.customer_rating && appConfig.is_review_rating_enabled &&
+                    (appConfig.onboarding_business_type !== 805 || order.task_type !== 1)">
+                      <ng-container >{{ languageStrings.rating || "Rating"}}</ng-container>
+                      :
+                      <span class="ng-binding p-0">
+                        <a>
+                          <ng-container >{{ languageStrings.click_to_review || "Click to review!"}}</ng-container>
+                        </a>
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-5"
+            *ngIf=" !order.is_custom_order && !order.is_menu_enabled && foodFlow && [13,14,15].includes(order.job_status) && !order.is_menu_enabled">
+            <a class="btn custom-btn reorder fs-14" (click)="checkForReorder(order); $event.stopPropagation();">{{terminology.REORDER || 'Reorder'}}</a>
+          </div>
+
+          <div class="cancelPolicy"
+          *ngIf="appConfig.is_cancellation_policy_enabled && (order.cancel_allowed || order.cancelAllowed)"
+          (click)="viewPolicyDetails(order.job_id,$event); $event.stopPropagation();">
+          <a onlyColor="true" class="tk-link">*<ng-container>{{ languageStrings.cancellation_policy || "Cancellation Policy"}}</ng-container></a>
+        </div>
+
+        </div>
+      </div>
+    </div>
+    <div *ngIf="showPaginating" class="pg-ldr-prt">
+      <div class="pg-ldr-cld">
+        <div class="pg-ldr-ctr">
+          <div class="pg-loader"
+            [ngStyle]="{'border-bottom-color': appConfig.color,'border-left-color': appConfig.color}"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="no-orders" *ngIf="hitC && !ordersData.length">
+    <h3 class="no-orders-text">
+      {{ languageStrings.no_orders_to_display || 'No orders to display.'}}
+    </h3>
+  </div>
+</div>
+<div id="main"></div>
+
+<div class="parent-dialog" *ngIf="cancelDialog?.show">
+  <div class="content-dialog">
+    <div class="dialog-title" [ngClass]="{'min-height':refundDetails && !refundDetails.refundLoyaltyPoint,
+    'max-height': refundDetails && refundDetails.refundLoyaltyPoint,
+    'def-height':!appConfig.is_cancellation_policy_enabled}">
+      <div class="refund-detail" *ngIf="appConfig.is_cancellation_policy_enabled">
+        <label class="label-heading">
+          <ng-container>{{ languageStrings.cancellation_charge || "Cancellation Charges"}}</ng-container> :
+          <span class="label-value">{{currency}}{{refundDetails.cancellationCharge|decimalConfig}}</span>
+        </label>
+        <label [ngClass]="{'padding-bottom':!refundDetails.refundLoyaltyPoint}" class="label-heading">
+          <ng-container>{{ languageStrings.amount_to_refund || "Amount to be refunded"}}</ng-container> :
+          <span class="label-value">{{currency}}{{refundDetails.refundAmount|decimalConfig}}</span>
+        </label>
+        <label [ngClass]="{'padding-bottom':refundDetails.refundLoyaltyPoint}" *ngIf="refundDetails.refundLoyaltyPoint"
+          class="label-heading">{{ languageStrings.loyality_points_to_refunded || "Loyalty points to be refunded :"}}
+          <span class="label-value">{{refundDetails.refundLoyaltyPoint}}</span>
+        </label>
+      </div>
+      <span class="l-ht-1">{{cancelDialog?.title}}</span>
+    </div>
+    <div class="dialog-msg">
+      <div *ngIf="cancelType==1" class="cancel-dropdown">
+        <select class="add-category-input" [(ngModel)]="selectedReason" aria-label="Select cancellation reason">
+          <option [ngValue]="undefined" disabled selected>
+            <ng-container>{{ languageStrings.select_option || "Select Option"}}</ng-container>
+          </option>
+          <option [ngValue]="reason.reason" *ngFor="let reason of reasonData;">{{reason.reason}}</option>
+        </select>
+        <div class="error-msg"
+          *ngIf="reasonNotSelected">
+          <ng-container>{{ languageStrings.field_required || "This field is required"}}</ng-container>
+        </div>
+      </div>
+      <textarea [(ngModel)]="cancelDialog.value" maxlength="247"
+        class="form-control w-100 ht-150"
+        [class.has-error]="cancelDialog.error && !cancelDialog.value" [ngClass]="{'cls-upcase':cancelDialog.value}"
+        placeholder="{{languageStrings.enter_reason_maximum_characters_can_be_250 || 'Enter a reason (maximum characters can be 250)'}}"
+        rows="5" id="comment"></textarea>
+      <div class="error-msg"
+        *ngIf="cancelDialog.error && !cancelDialog.value">
+        <ng-container>{{ languageStrings.field_required || "This field is required"}}</ng-container>
+      </div>
+    </div>
+    <hr class="p-hr">
+    <div class="dialog-action">
+      <div class="dialog-cancel btn btn-default" (click)="hideCancelDialog()" appBs>
+        <ng-container>{{ languageStrings.skip || "Skip"}}</ng-container>
+      </div>
+      <div class="dialog-ok btn btn-default" (click)="cancelOrder()" appColor bg="'true'" appBs>
+        <ng-container>{{ languageStrings.submit || "Submit"}}</ng-container>
+      </div>
+    </div>
+  </div>
+  <div class="back-dialog"></div>
+</div>
+
+<div class="modal fade" id="orderDetails" role="dialog" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content topMargin" *ngIf="details">
+      <div class="modal-header headerBgColor">
+        <button type="button" class="close" data-dismiss="modal">
+          <img src="assets/img/close.svg" alt="close" />
+        </button>
+        <h4 class="modal-title titleColor text-capitalize">{{terminology.ORDER}} / #{{details.job_id}} </h4>
+      </div>
+      <div class="modal-body orderScroll" id="orderScroll">
+        <div class="row">
+          <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+            <p class="text-capitalize textStyle"
+              *ngIf="(!details.is_custom_order || details.delivery_method === 2) && details.task_type === 0">
+              {{terminology.DELIVERY_FROM || 'Delivery From'}} : {{details.merchant_name}}
+            </p>
+            <p class="text-capitalize textStyle" *ngIf="details.task_type === 2">
+              {{terminology.DELIVERY_FROM || 'Delivery From'}} : {{details.merchant_name}}
+            </p>
+            <p class="textStyle" *ngIf="details.task_type === 1">
+              {{terminology.PICKUP_FROM || 'Pickup From'}} : {{details.job_pickup_address || '-'}}
+            </p>
+          </div>
+          <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+            <p *ngIf="!details.enable_start_time_end_time && details.business_type != 2 && details.task_type === 0"
+              class="text-capitalize textStyle showTextTime">
+              {{ languageStrings.order_time || 'Order Time'}} : {{details.creation_datetime | dateTimeFormat:'MMM d, y,h:mm a'}}
+            </p>
+            <p *ngIf="!details.enable_start_time_end_time && details.business_type != 2 && details.task_type === 0 && !details.is_custom_order"
+              class="text-capitalize textStyle showTextTime">
+              {{ languageStrings.scheduled_time || 'Scheduled Time'}} : {{details.job_delivery_datetime |
+              dateTimeFormat:'MMM d, y, h:mm a'}}
+            </p>
+            <p *ngIf="details.task_type === 1" class="text-capitalize textStyle showTextTime">
+              <span>
+                <ng-container>{{terminology.PICKUP || 'Pickup'}} Time</ng-container>:
+                {{details.job_pickup_datetime | dateTimeFormat:'MMM d, y, h:mm a'}} <b>-</b>
+              </span><br />
+              <span class="pr-2">{{details.job_delivery_datetime | dateTimeFormat:'MMM d, y, h:mm a'}}</span>
+            </p>
+            <p *ngIf="details.task_type === 2" class="text-capitalize textStyle showTextTime">
+              <span>
+                <ng-container>{{terminology.DELIVERY || 'Delivery'}} Time</ng-container>:
+                {{details.job_pickup_datetime | dateTimeFormat:'MMM d, y, h:mm a'}} <b>-</b>
+              </span><br />
+              <span class="pr-2">{{details.job_delivery_datetime | dateTimeFormat:'MMM d, y, h:mm a'}}</span>
+            </p>
+            <p *ngIf="!details.enable_start_time_end_time && details.business_type == 2" class="textStyle showTextTime">
+              <ng-container>{{ languageStrings.created_at || "Created At"}}</ng-container>
+              : {{details.created_at | dateTimeFormat:'MMM d, y, h:mm a'}}
+            </p>
+            <p *ngIf="details.enable_start_time_end_time" class="text-capitalize textStyle showTextTime">
+              {{terminology.START_TIME}} : {{details.job_pickup_datetime | dateTimeFormat:'MMM d, y, h:mm a'}}</p>
+            <p *ngIf="details.enable_start_time_end_time" class="text-capitalize textStyle showTextTime">
+              {{terminology.END_TIME}} : {{details.job_delivery_datetime | dateTimeFormat:'MMM d, y, h:mm a'}}</p>
+          </div>
+          <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12">
+            <p class="textStyle"
+              *ngIf="(!details.is_custom_order && details.delivery_method === 2) && details.task_type === 0">
+              {{terminology.DELIVER_TO || 'Deliver To'}} : {{details.job_pickup_address}}
+            </p>
+            <p class="textStyle"
+              *ngIf="(!details.is_custom_order && details.delivery_method === 8) && details.task_type === 0">
+              {{terminology.DELIVER_TO || 'Deliver To'}} : {{details.job_pickup_address}}
+            </p>
+            <p class="textStyle" *ngIf="details.task_type === 2">
+              {{terminology.DELIVER_TO || 'Deliver To'}} : {{details.job_address}}
+            </p>
+            <p class="textStyle" *ngIf="details.is_custom_order && details.task_type === 0">
+              {{terminology.PICKUP_FROM || 'Pickup From'}} : {{details.job_pickup_address || '-'}}
+            </p>
+            <p class="textStyle" *ngIf="!details.is_custom_order && details.delivery_method === 4">
+              {{terminology.PICKUP_FROM || 'Pickup From'}} : {{details.job_pickup_address || '-'}}
+            </p>
+          </div>
+          <div *ngIf="details.is_custom_order && details.task_type === 0"
+            class="col-lg-12 col-sm-12 col-xs-12 col-md-12">
+            <p class="textStyle">{{terminology.DELIVER_TO || 'Deliver To'}} : {{details.job_address}}</p>
+          </div>
+          <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12" *ngIf="details.job_description">
+            <p class="textStyle" *ngIf="!details.is_custom_order">
+              <ng-container>{{ languageStrings.notes || "Notes"}}</ng-container> : {{details.job_description}}
+            </p>
+            <p class="textStyle" *ngIf="details.is_custom_order">
+              <ng-container>{{ languageStrings.description || "Description"}}</ng-container> :
+              {{details.job_description}}
+            </p>
+
+          </div>
+          <div *ngIf="details.return_enabled" class="col-lg-12 col-sm-12 col-xs-12 col-md-12">
+            <p class="textStyle c-blue" > {{ languageStrings.return_enabled || "Return Enabled"}}</p>
+          </div>
+        </div>
+        <div class="row"
+          *ngIf="details.payment_method && (!(details.payment_method === paymentMode.CASH || details.payment_method === paymentMode.PAY_LATER || details.payment_method === 64) || (isLaundryFlow && details.payment_method !== paymentMode.CASH && details.payment_method !== paymentMode.PAY_LATER)) && details.task_type !== 1">
+          <div class="col-md-12">
+            <span class="textStyle">{{ languageStrings.payment_status || "Payment Status"}}</span> :
+            <span class="textStyle"
+              *ngIf="details.overall_transaction_status && details.overall_transaction_status != 0 && details.overall_transaction_status != 11;else unpaid_status"
+              [ngClass]="transactionStatus[details.overall_transaction_status].color_class || 'Unpaid'">{{languageStrings[(transactionStatus[details.overall_transaction_status].label
+              || 'Unpaid' )]}}</span>
+            <span class="textStyle"
+              *ngIf="details.overall_transaction_status && details.overall_transaction_status == 11">{{
+              languageStrings.payment_released || "Payment Released"}}</span>
+            <ng-template #unpaid_status>
+              <span class="textStyle" *ngIf="details.overall_transaction_status != 11" class="Unpaid">{{
+                languageStrings.unpaid || 'Unpaid'}}</span>
+            </ng-template>
+          </div>
+        </div>
+        <div class="row pickup-detail" *ngIf="details.custom_pickup_address">
+          <p>{{ languageStrings.unpaid || 'Pickup Details'}}</p>
+          <p class="textStyle">
+            {{terminology.PICKUP_FROM || 'Pickup From'}} : {{details.custom_pickup_address || '-'}}
+          </p>
+          <div class="col-sm-6" *ngIf="details.custom_pickup_name">
+            <span class="textStyle">{{ languageStrings.name || "Name"}}</span> :
+            <span class="textStyle">{{details.custom_pickup_name}}</span>
+          </div>
+          <div class="col-sm-6" *ngIf="details.custom_pickup_email">
+            <span class="textStyle">{{ languageStrings.email || "Email"}}</span> :
+            <span class="textStyle">{{details.custom_pickup_email}}</span>
+          </div>
+          <div class="col-sm-6" *ngIf="details.custom_pickup_phone">
+            <span class="textStyle">{{ languageStrings.phone || "Phone Number"}}</span> :
+            <span class="textStyle">{{details.custom_pickup_phone}}</span>
+          </div>
+        </div>
+        <div class="row"
+          *ngIf="(![13,14,15].includes(details.job_status)) && details.payment_method && details.is_custom_order !== 2 && details.task_type !== 1">
+          <div class="col-md-12 payment-status">
+            <span class="textStyle">{{ languageStrings.payement_mode || "Payment Mode"}}</span> :
+            <span class="textStyle">{{details.payment_name}}
+              <button
+                *ngIf="(!details.overall_transaction_status && details.payment_method !== paymentMode.CASH && details.payment_method !== paymentMode.PAY_LATER) || ([3,4,5,7].includes(details.overall_transaction_status) && details.payment_method !== paymentMode.CASH && details.payment_method !== paymentMode.PAY_LATER) && details.is_custom_order !== 2 && details.payment_method !== paymentMode.CASH"
+                class="btn text-capitalize pay-btn pull-right" (click)="payUnpaidOrder(details)">{{ languageStrings.pay
+                || "Pay"}}</button>
+            </span>
+          </div>
+        </div>
+        <div class="row"
+          *ngIf="details.job_otp && appConfig.business_model_type === 'HYPERLOCAL_PRODUCT' && !isLaundryFlow">
+          <div class="col-md-12 payment-status">
+            <span class="textStyle">{{terminology.DELIVERY}} OTP</span>:
+            <span class="textStyle">{{details.job_otp}}
+            </span>
+          </div>
+        </div>
+
+        <div class="row"
+          *ngIf="details.loyalty_points && details.loyalty_points.loyalty_points_earned && headerData.is_loyalty_point_enabled">
+          <div class="col-md-12">
+            <span class="textStyle">
+              <ng-container>{{ languageStrings.loyality_point_earned || " LOYALTY_POINTS Earned "}} </ng-container>
+            </span> :
+            <span class="textStyle">{{details.loyalty_points.loyalty_points_earned}}</span>
+          </div>
+          <div class="col-md-12">
+            <span class="textStyle">
+              <ng-container>{{ languageStrings.loyality_point_expire_on || "These LOYALTY_POINTS will expire on"}}
+              </ng-container>
+              {{details.loyalty_points.expiry_date |dateTimeFormat }}
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12">
+            <h4 class="summary">
+              <ul class="nav nav-tabs">
+                <li [ngClass]="{'active' : (!showAdditonalInfo && !showTemplateInfo)}"
+                  (click)="showAdditonalInfo = false; showTemplateInfo = false"><a>{{ languageStrings.summary ||
+                    "Summary"}}</a>
+                </li>
+                <li [ngClass]="{'active' : showAdditonalInfo}"
+                  (click)="showTemplateInfo = false; showAdditonalInfo = true;"
+                  *ngIf="this.details.checkout_template && this.details.checkout_template.length>0">
+                  <a>{{terminology.CHECKOUT_TEMPLATE}}</a>
+                </li>
+                <li *ngIf="productHasTemplate" [ngClass]="{'active' : showTemplateInfo}"
+                  (click)="showTemplateInfo = true; showAdditonalInfo = false"><a>{{ languageStrings.template_info ||
+                    "Template Info"}}</a>
+                </li>
+              </ul>
+
+              <span *ngIf="showChatIcon && details.hide_chat_icon !=1"
+                (click)="startChat(details.grouping_tags,details.hippo_transaction_id,details.user_id,details.job_id,details.merchant_name)"
+                class="commenting-icon">
+                <i class="fa  fa-commenting-o" aria-hidden="true"></i>
+              </span>
+            </h4>
+          </div>
+
+          <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12" *ngIf="(!showAdditonalInfo && !showTemplateInfo)">
+            <div *ngFor="let item of details.orderDetails" class="repeatProduct">
+              <div class="row">
+                <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6" *ngIf="item.product.services">
+                  <p>
+                    <span
+                      [style.color]="tookanStatusColor[item.product.services.job_status] ? tookanStatusColor[item.product.services.job_status] : '#000000'">
+                      {{item.product.services.job_status | TookanStatus | Capitalize}}
+                    </span>
+                  </p>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6 text-right" *ngIf="item.product.services">
+                  <p>
+                    <span *ngIf="item.product.services.tracking_link && item.product.services.job_status != 15">
+                      <a [href]="item.product.services.tracking_link" [style.color]="profile_color" target="_blank">
+                        <ng-container>{{ languageStrings.track || "Track"}}</ng-container>
+                      </a>
+                    </span>
+                  </p>
+                </div>
+
+              </div>
+              <div class="row">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6 word-wrap-break">
+                  <p class="text-capitalize">
+                    <span>{{item.product.product_name}}</span>
+                  </p>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6" *ngIf="item.product.quantity > 1">
+                  <p class="showText">
+                    <span class="quantityDiv">{{item.product.quantity}}</span>
+                  </p>
+                </div>
+                <div class="col-xs-12 col-lg-12 col-sm-12 col-md-12"
+                  *ngIf="item.product.unit_type == 1 && (!item.product.multiPrice || appConfig.business_model_type !== 'RENTAL')">
+                  <p class="textStyle"
+                    *ngIf="appConfig.show_product_price == 1 || item.product.unit_price > 0 || isLaundryFlow">
+                    <span>
+                      <b>{{(details.order_currency_symbol ? details.order_currency_symbol : currency) +''}}
+                        {{item.product.unit_price|decimalConfig}} </b>
+                    </span>
+                  </p>
+                </div>
+                <div class="col-xs-12 col-lg-12 col-sm-12 col-md-12"
+                  *ngIf="item.product.unit_type != 1  && (!item.product.multiPrice || appConfig.business_model_type !== 'RENTAL')">
+                  <p class="textStyle" *ngIf="appConfig.show_product_price == 1 || item.product.unit_price > 0">
+                    <span>
+                      <b>{{(details.order_currency_symbol ? details.order_currency_symbol : currency) +''}}
+                        {{(item.product.unit_price * item.product.unit_count) |decimalConfig}}
+                        {{isLaundryFlow ? ('/ '+priceTypeConst[item.product.unit_type].name || ''):''}}</b>
+                    </span>
+                  </p>
+                </div>
+                <div class="col-xs-12 col-lg-12 col-sm-12 col-md-12"
+                  *ngIf="item.product.multiPrice && appConfig.business_model_type === 'RENTAL'">
+                  <p class="textStyle" *ngIf="appConfig.show_product_price == 1 || item.product.unit_price > 0">
+                    <span>
+                      <b>{{(details.order_currency_symbol ? details.order_currency_symbol : currency) +''}}
+                        {{item.product.total_price |decimalConfig}}</b>
+                    </span>
+                    <span class="position-relative" #container (mouseenter)="op.show($event)"
+                      (mouseleave)="op.hide($event)" *ngIf="item.product.multiPrice && item.product.multiPrice.length">
+                      <i class="fa fa-info-circle pointer" aria-hidden="true"></i>
+                      <p-overlayPanel [appendTo]="container" [dismissable]="'true'" #op>
+                        <div class="price-list">
+                          <div *ngFor="let billData of item.product.multiPrice">
+                            <div *ngIf="billData.unit > 0">{{(details.order_currency_symbol ? details.currency_symbol :
+                              currency) + (((billData.price * billData.unit)
+                              |decimalConfig) || '0') + ' @ ' + ((billData.price
+                              |decimalConfig) || '0') + ' / ' + priceTypeConst[billData.price_type].name + ' x ' +
+                              billData.unit}}</div>
+                          </div>
+                        </div>
+                      </p-overlayPanel>
+                    </span>
+
+                  </p>
+                </div>
+              </div>
+              <div class="row" *ngIf="item.product.sku && ecomView">
+                <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12 word-break-all">
+                  <p class="text-capitalize">
+                    <span>{{ languageStrings.barcode || 'Barcode'}}: &nbsp;&nbsp;{{item.product.sku}}</span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="row" *ngIf="item.product.task_start_time">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <p class="text-capitalize textStyle">{{terminology.START_TIME}}</p>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <p class="text-capitalize textStyle text-right">{{item.product.task_start_time | dateTimeFormat:'MMM d, y, h:mm a'}}</p>
+                </div>
+              </div>
+              <div class="row"
+                *ngIf="(item.product.task_end_time && details.pd_or_appointment == 1 && item.product.unit_type != 1)">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <p class="text-capitalize textStyle">{{terminology.END_TIME}}</p>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <p class="text-capitalize textStyle text-right">{{item.product.task_end_time | dateTimeFormat:'MMM d, y, h:mm a'}}</p>
+                </div>
+              </div>
+
+              <div class="row"
+                *ngIf="(item.product.task_end_time && details.pd_or_appointment == 1 && item.product.unit_type == 1 && item.product.enable_tookan_agent)">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <p class="text-capitalize textStyle">{{terminology.END_TIME}}</p>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <p class="text-capitalize textStyle text-right">{{item.product.task_end_time | dateTimeFormat:'MMM d, y, h:mm a'}}</p>
+                </div>
+              </div>
+              <div class="row" *ngIf="(item.product.task_end_time && details.pd_or_appointment != 1)">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <p class="text-capitalize textStyle">{{terminology.END_TIME}}</p>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <p class="text-capitalize textStyle text-right">{{item.product.task_end_time | dateTimeFormat:'MMM d, y, h:mm a'}}</p>
+                </div>
+              </div>
+              <div class="row" *ngIf="item.product.surge_amount">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6 c-red f-s-14">
+                  (
+                  <ng-container>{{terminology.SURGE || 'Surge'}}</ng-container>
+                  <span>{{currency +''}} {{item.product.surge_amount|decimalConfig}} </span>
+                  )
+                  <span class="f-s-16">&uarr;</span>
+                </div>
+              </div>
+
+              <div class="row" *ngIf="item.customizations" class="mainCus">
+                <div class="makeCustom">
+                  <div *ngFor="let c of item.customizations" class="makeCustomWidth">
+                    <div class="side-card">
+                      <div class="col-xs-12 textStyle word-break-all">
+                        <p>
+                          <ng-container>{{ languageStrings.customization || "Customization"}}</ng-container>
+                          :
+                          <span>{{c.cust_name}}</span>
+                        </p>
+                      </div>
+                      <div class="col-xs-12 textStyle" *ngIf="c.quantity > 1">
+                        <p>
+                          <ng-container>{{ languageStrings.quantity || "Quantity"}}</ng-container>
+                          :
+                          <span>{{c.quantity}}</span>
+                        </p>
+                      </div>
+                      <div class="col-xs-12 textStyle" *ngIf="item.product.unit_type == 1 && c.unit_price > 0">
+                        <p>
+                          <ng-container>{{ languageStrings.price || "Price"}}</ng-container>
+                          :
+                          <span>{{(details.order_currency_symbol ? details.order_currency_symbol : currency) +''}}
+                            {{c.unit_price|decimalConfig}}</span>
+                        </p>
+                      </div>
+                      <div class="col-xs-12 textStyle" *ngIf="item.product.unit_type != 1 && c.unit_price > 0">
+                        <p>
+                          <ng-container>{{ languageStrings.price || "Price"}}</ng-container>
+                          :
+                          <span>{{(details.order_currency_symbol ? details.order_currency_symbol : currency) +''}}
+                            {{(c.unit_price) |decimalConfig}}</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row p-t-8"
+                *ngIf="(appConfig.show_product_price == 1 || item.product.productWiseTotal > 0 ) && !(isLaundryFlow && details.task_type === 1)">
+                <!-- Template Cost -->
+                <div *ngIf="item.product.is_product_template_enabled == 1 && (this.appConfig.theme_enabled == 0)">
+                  <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6">
+                    <p class="textStyle">
+                      <b>
+                        <ng-container>{{ languageStrings.template_cost || "Template Cost"}}</ng-container>
+                        <span (click)="viewTemplateClick()" style="font-weight: normal;" class="clickableText">(<span>{{
+                            languageStrings.view_details || "View Details"}}</span>)</span>
+                      </b>
+                    </p>
+                  </div>
+                  <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6 text-right">
+                    <p class="textStyle text-right">{{(details.order_currency_symbol ? details.order_currency_symbol :
+                      currency) +''}} {{item.product.template_cost |decimalConfig}}</p>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6">
+                  <p class="textStyle">
+                    <b>
+                      <ng-container>{{ languageStrings.total_price || "Total Price"}}</ng-container>
+                    </b>
+                  </p>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6 text-right">
+                  <p class="textStyle text-right">{{(details.order_currency_symbol ? details.order_currency_symbol :
+                    currency) +''}} {{item.product.productWiseTotal|decimalConfig}}</p>
+                </div>
+                <div *ngIf="item.product.taxes && item.product.taxes.length">
+
+                  <div *ngFor="let tax of item.product.taxes">
+                    <p class="col-lg-6 col-md-6 col-sm-6 col-xs-6" [ngStyle]="{ 'direction' : direction }">
+                      {{tax.tax_name}}
+                      <span class="tax-percantage" *ngIf="!tax.tax_type">@ {{tax.tax_percentage}}%</span>
+                    </p>
+                    <p class="text-right col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                      {{(details.order_currency_symbol ? details.order_currency_symbol : currency) +''}}
+                      {{tax.tax_amount|decimalConfig}}
+                    </p>
+                  </div>
+
+                  <div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" [ngStyle]="{ 'direction' : direction }">
+                      <p class="textStyle">
+                        <b>
+                          <ng-container>{{ languageStrings.total_price_tax || "Total Price (with tax)"}}</ng-container>
+                        </b>
+                      </p>
+                    </div>
+                    <div class="text-right col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                      <p class="textStyle text-right">{{(details.order_currency_symbol ? details.order_currency_symbol :
+                        currency) +''}}
+                        {{item.product.productWiseTotalWithTax|decimalConfig}}</p>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="col-xs-12 col-lg-12 col-sm-12 col-md-12 pad-12" *ngIf="ecomView">
+                  <div class="col-xs-6 col-lg-6 col-sm-6 col-md-6 pad-0" *ngIf="item.product.unit_type == 1">
+                    <p class="textStyle" *ngIf="appConfig.show_product_price == 1 || item.product.unit_price > 0">
+                      <span>
+                        <b>
+                          <ng-container>{{ languageStrings.sold_by || "Sold by"}}</ng-container>
+                        </b> {{item.product.seller_name}}</span>
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                  <div *ngIf="item.product.unit_type && item.product.unit_type > 1">
+                    <p class="pull-left p-t-0"
+                      *ngIf="(appConfig.show_product_price == 1 || item.product.productWiseTotal > 0) && appConfig.business_model_type != 'RENTAL'">
+                      <span class="fs13 float-none">
+                        <span class="float-none">
+                          <ng-container>{{ languageStrings.charge || 'Charge'}}</ng-container> @
+                          {{details.orderDetails[0].product.unit}}
+                        </span>
+                        <span class="float-none">
+                          <ng-container>{{priceTypeConst[item.product.unit_type].name}}(s)</ng-container> x
+                          {{item.product.unit_count}}
+                        </span>
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div
+                  *ngIf="details.business_type == 2 && details.pd_or_appointment == 2 && item.product.services.amount_add_by_agent && item.product.services.amount_add_by_agent > 0">
+
+                  <div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" [ngStyle]="{ 'direction' : direction }">
+                      <p class="textStyle">
+                        <b>
+                          <ng-container>{{ languageStrings.additional_amount_by_agent || "Additional Amount(added) by Agent "}}</ng-container> :
+                        </b>
+                      </p>
+                    </div>
+                    <div class="text-right col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                      <p class="textStyle text-right">{{(details.order_currency_symbol ? details.order_currency_symbol :
+                        currency) +''}}
+                        {{item.product.services.amount_add_by_agent|decimalConfig}}</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+
+              <div class="row p-t-8 m-0" *ngIf="item.product.agent_id">
+                <a class="agent-info-btn pointer" (click)="getAgentData(item.product)">{{
+                  languageStrings.agent_information || 'Agent Information'}} </a><i class="fa fa-caret-up caret-icon"
+                  aria-hidden="true" *ngIf="item.product.show_agent_info"></i><i class="fa fa-caret-down caret-icon"
+                  aria-hidden="true" *ngIf="!item.product.show_agent_info"></i>
+                <div *ngIf="item.product.show_agent_info" class="mainCus agent-detail" [@fadeInOut]>
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <p class="textStyle">
+                      <b>
+                        <ng-container>{{ languageStrings.name || "Name"}}</ng-container>
+                      </b>
+                    </p>
+                  </div>
+                  <div class="text-right col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <p class="textStyle text-right">{{item.product.agent_info.username}}
+                    </p>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <p class="textStyle">
+                      <b>
+                        <ng-container>{{ languageStrings.email || "Email"}}</ng-container>
+                      </b>
+                    </p>
+                  </div>
+                  <div class="text-right col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <p class="textStyle text-right">{{item.product.agent_info.email}}
+                    </p>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <p class="textStyle">
+                      <b>
+                        <ng-container>{{ languageStrings.phone || "Phone"}}</ng-container>
+                      </b>
+                    </p>
+                  </div>
+                  <div class="text-right col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <p class="textStyle text-right">{{item.product.agent_info.phone}}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                  <div *ngIf="item.product.services">
+                    <p class="button-carrier" *ngIf="item.product.services.cancel_allowed">
+                      <button class="btn text-capitalize cancelButton" 
+                        (click)="showCancelDialog(item)" [style.background-color]="profile_color">
+                        {{terminology.CANCEL_ORDER}}
+                      </button>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <app-show-order-additonal-info [additionalInformation]="details.checkout_template" *ngIf="showAdditonalInfo">
+        </app-show-order-additonal-info>
+        <div class="template-info-div" *ngIf="showTemplateInfo && productHasTemplate">
+          <div *ngFor="let product of details.orderDetails; let i = index">
+            <div class="d-flex flex-column">
+              <div class="product-lists">
+                <div *ngIf="product.product.is_product_template_enabled == 1 && (this.appConfig.theme_enabled == 0)"
+                  class="d-flex">
+                  <div class="flex-1">
+                    {{product.product.product_name}} - {{details.order_currency_symbol}}
+                    {{product.product.template_cost}}
+                  </div>
+                  <div>
+                    <span class="clickableText" *ngIf="(isViewMoreOn[i] == true)" (click)="viewLess(i)">{{
+                      languageStrings.view_less || "View Less"}}</span>
+                    <span class="clickableText" *ngIf="!(isViewMoreOn[i] == true)" (click)="viewMore(i)">{{
+                      languageStrings.view_more || "View More"}}</span>
+                  </div>
+                </div>
+              </div><br>
+              <div *ngIf="isViewMoreOn[i] == true" class="product-template-details">
+                <app-show-order-additonal-info [currency]="details.order_currency_symbol"
+                  [additionalInformation]="product.product.template">
+                </app-show-order-additonal-info>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row total-card m_t-2 m0" *ngIf="(!showAdditonalInfo && !showTemplateInfo)">
+          <div class="col-xs-12" *ngIf="subtotal">
+            <p class="textStyle">
+              <ng-container>{{ languageStrings.subtotal || "Subtotal"}}</ng-container>
+              :
+              <span>{{(details.order_currency_symbol ? details.order_currency_symbol : currency) +''}}
+                {{subtotal|decimalConfig}}</span>
+            </p>
+          </div>
+          <div class="col-xs-12" *ngIf="details.adjusted_amount > 0">
+            <p class="textStyle">
+              <ng-container>Flat Discount</ng-container>
+              :
+              <span>-{{(details.order_currency_symbol ? details.order_currency_symbol : currency) +''}}
+                {{details.adjusted_amount|decimalConfig}}</span>
+            </p>
+          </div>
+          <div class="col-xs-12" *ngIf="details.surge_amount">
+            <div class="promo-applied c-red">
+              (
+              <ng-container>{{terminology.SURGE || 'Surge'}}</ng-container>
+              <span>{{currency +''}} {{details.surge_amount|decimalConfig}} </span>
+              )
+              <span class="fs16">&uarr;</span>
+            </div>
+          </div>
+          <div class="col-xs-12" *ngIf="details.transaction_charges > 0">
+            <p class="textStyle">
+              <ng-container>{{terminology.TRANSACTION_CHARGE || 'Transaction Charge'}}</ng-container>
+              :
+              <span>{{(details.order_currency_symbol ? details.order_currency_symbol : currency) +''}}
+                {{details.transaction_charges|decimalConfig}}</span>
+            </p>
+          </div>
+          <div class="col-xs-12" *ngIf="details.coupon_discount">
+            <p class="textStyle" [ngClass]="{'mb-0': details.promoOnSubtotal}">
+              <ng-container>{{ languageStrings.discount || "Discount"}}</ng-container>
+              :
+              <span>-{{(details.order_currency_symbol ? details.order_currency_symbol : currency) +''}}
+                {{details.coupon_discount|decimalConfig}}</span>
+            </p>
+          </div>
+          <div class="col-xs-12" *ngIf="details.promoOnSubtotal">
+            <div class="promo-applied">
+              (
+              <ng-container>{{ languageStrings.promo_applied || "Promo Applied"}}</ng-container>
+              :
+              <span>{{details.promoOnSubtotal.promo_code}}</span>
+              )
+            </div>
+          </div>
+
+          <div class="col-xs-12" *ngIf="(details.delivery_charge || details.promoOnDelivery) && terminology">
+            <p class="text-capitalize textStyle" [ngClass]="{'mb-0': details.promoOnSubtotal}">
+              {{terminology.DELIVERY_CHARGE}} :
+              <span>{{(details.order_currency_symbol ? details.order_currency_symbol : currency) +''}}
+                {{(details.delivery_charge || 0) |decimalConfig}}</span>
+            </p>
+          </div>
+          <div class="col-xs-12" *ngIf="details.promoOnDelivery">
+            <div class="promo-applied">
+              (
+              <ng-container>{{ languageStrings.promo_applied || "Promo Applied"}}</ng-container>
+              :
+              <span>{{details.promoOnDelivery.promo_code}}</span>
+              )
+            </div>
+          </div>
+
+
+          <div class="col-xs-12" *ngFor="let tax of details.user_taxes">
+            <p class="textStyle" *ngIf="tax.tax_type">
+              {{tax.tax_name}} :
+              <span *ngIf="tax.tax_amount">{{(details.order_currency_symbol ? details.order_currency_symbol :
+                currency)+''}} {{tax.tax_amount|decimalConfig}}</span>
+            </p>
+            <p class="textStyle" *ngIf="!tax.tax_type">
+              {{tax.tax_name+' @ '+tax.tax_percentage+'%'}} :
+              <span *ngIf="tax.tax_amount">{{(details.order_currency_symbol ? details.order_currency_symbol :
+                currency)+''}} {{tax.tax_amount|decimalConfig}}</span>
+            </p>
+          </div>
+          <div class="col-xs-12" *ngIf="details.tip > 0">
+            <p class="textStyle">
+              <ng-container>{{terminology.TIP}}</ng-container>
+              :
+              <span>{{(details.order_currency_symbol ? details.order_currency_symbol : currency) +''}}
+                {{details.tip|decimalConfig}}</span>
+            </p>
+          </div>
+          <div class="col-xs-12" *ngIf="details.checkout_template && details.checkout_template.length>0">
+            <div class="textStyle pointer" (click)="showAdditonalInfo = true">
+              <span>{{ languageStrings.additional_amount || "Additional Amount"}}</span>
+              (<a class="view_additional">{{languageStrings.view_details || 'View details'}}</a>)
+              :
+              <span class="float-right">{{(details.order_currency_symbol ? details.order_currency_symbol : currency)
+                +''}} {{additionalPrice|decimalConfig}}</span>
+            </div>
+          </div>
+          <div class="col-xs-12" *ngIf="details.loyalty_points && details.loyalty_points.loyalty_points_redeem">
+            <p class="textStyle">
+              <ng-container>{{ languageStrings.loyality_points_used || " LOYALTY_POINTS Used"}}</ng-container>
+              ({{details.loyalty_points.loyalty_points_redeem}})
+              :
+              <span>- {{(details.order_currency_symbol ? details.order_currency_symbol : currency) +''}}
+                {{details.loyalty_points.discount_amount|decimalConfig}}</span>
+            </p>
+          </div>
+          <div class="col-xs-12" *ngIf="details.refunded_amount > 0">
+            <p class="textStyle">
+              <ng-container>{{ languageStrings.refund_amount || "Refund Amount"}}</ng-container>
+              :
+              <span>- {{(details.order_currency_symbol ? details.order_currency_symbol : currency) +''}}
+                {{details.refunded_amount|decimalConfig}}</span>
+            </p>
+          </div>
+          <div class="col-xs-12" *ngIf="appConfig.show_product_price == 1 || details.total_amount > 0">
+            <hr />
+          </div>
+          <div class="col-xs-12" *ngIf="appConfig.show_product_price == 1 || details.total_amount > 0">
+            <p>
+              <b>
+                <ng-container>{{ languageStrings.total_amount || "Total Amount"}}</ng-container> :
+              </b>
+              <span>{{(details.order_currency_symbol ? details.order_currency_symbol : currency) +''}}
+                {{details.total_amount|decimalConfig}}</span>
+            </p>
+          </div>
+          <div class="col-xs-12" *ngIf="appConfig.show_product_price == 1 || details.total_amount > 0">
+            <hr />
+          </div>
+          <div class="col-xs-12"
+            *ngIf="isLaundryFlow && details.task_type === 2 && details.remaining_balance && !details.is_custom_order">
+            <p>
+              <b>
+                <ng-container>{{ languageStrings.remaining_balance || "Remaining Balance"}}</ng-container> :
+              </b>
+              <span>{{(details.order_currency_symbol ? details.order_currency_symbol : currency) +''}}
+                {{details.remaining_balance|decimalConfig}}</span>
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="details.business_type == 1 && details.amount_add_by_agent && details.amount_add_by_agent > 0">
+
+          <div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" [ngStyle]="{ 'direction' : direction }">
+              <p class="textStyle">
+                <b>
+                  <ng-container></ng-container>{{ languageStrings.additional_amount_by_agent || 'Additional Amount(added) by Agent'}}:
+                </b>
+              </p>
+            </div>
+            <div class="text-right col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <p class="textStyle text-right">{{(details.order_currency_symbol ? details.order_currency_symbol :
+                currency) +''}}
+                {{details.amount_add_by_agent|decimalConfig}}</p>
+            </div>
+          </div>
+
+        </div>
+
+        <div
+          *ngIf="details.business_type == 2 && details.pd_or_appointment == 3 && details.amount_add_by_agent && details.amount_add_by_agent > 0">
+
+          <div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" [ngStyle]="{ 'direction' : direction }">
+              <p class="textStyle">
+                <b>
+                  {{ languageStrings.additional_amount_by_agent || 'Additional Amount(added) by Agent'}}:
+                </b>
+              </p>
+            </div>
+            <div class="text-right col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <p class="textStyle text-right">{{(details.order_currency_symbol ? details.order_currency_symbol :
+                currency) +''}}
+                {{details.amount_add_by_agent|decimalConfig}}</p>
+            </div>
+          </div>
+
+        </div>
+
+        <div
+          *ngIf="details.business_type == 2 && details.pd_or_appointment == 2 && details.total_add_amt_agent && details.total_add_amt_agent > 0">
+
+          <div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" [ngStyle]="{ 'direction' : direction }">
+              <p class="textStyle">
+                <b>
+                  {{ languageStrings.additional_amount_by_agent || 'Additional Amount(added) by Agent'}}:
+                </b>
+              </p>
+            </div>
+            <div class="text-right col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <p class="textStyle text-right">{{(details.order_currency_symbol ? details.order_currency_symbol :
+                currency) +''}}
+                {{details.total_add_amt_agent|decimalConfig}}</p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row total-card m0"
+          *ngIf="details.job_status == 13 && appConfig.is_review_rating_enabled && !showAdditonalInfo && (appConfig.onboarding_business_type !== 805 || details.task_type !== 1)">
+          <div class="col-xs-12">
+            <p class="textStyle" *ngIf="!details.customer_rating && !details.customer_comment"
+              [ngStyle]="{ 'direction' : direction }">
+              <ng-container>{{ languageStrings.rate_and_review || "Rating & Review"}}</ng-container>
+              :
+              <span>
+                <a (click)="showRatingDialog(details)" class="pointer">
+                  <ng-container>{{ languageStrings.none_yet_click_to_add || "None yet! Click to add"}}</ng-container>
+                </a>
+              </span>
+            </p>
+          </div>
+        </div>
+        <div class="row total-card m0"
+          *ngIf="details.job_status == 13 && appConfig.is_review_rating_enabled && !showAdditonalInfo">
+          <div class="col-xs-12">
+            <p *ngIf="details.customer_rating" class="textStyle">
+              <ng-container>{{ languageStrings.rating || "Rating"}}</ng-container> :
+              <span>
+                <star-rating-comp [readOnly]="true" [rating]="details.customer_rating?details.customer_rating:0"
+                  [starType]="'svg'"></star-rating-comp>
+              </span>
+            </p>
+          </div>
+          <div class="col-xs-12">
+            <p class="textStyle" *ngIf="details.customer_comment">
+              <ng-container>{{ languageStrings.review || "Review"}}</ng-container> :
+              <span class="fw-200">{{details.customer_comment}}</span>
+            </p>
+          </div>
+        </div>
+        <div class="row total-card m0"  *ngIf="(!showAdditonalInfo && !showTemplateInfo)">
+          <div class="col-xs-12">
+            <p class="button-carrier textStyle">
+              <button class="btn text-capitalize editButton"
+                *ngIf="details.business_type == 1 && details.job_status == 9 && !details.is_custom_order && !details.is_menu_enabled && foodFlow && details.edit_job_status"
+                mat-button (click)="checkForEditOrder(details)">{{terminology.EDIT_ORDER || 'Edit order'}}
+              </button>
+              <button class="btn text-capitalize cancelButton" mat-button
+                (click)="showCancelDialog(details,cancel_allowed)" *ngIf="details.cancel_allowed"
+                [style.background-color]="profile_color">{{terminology.CANCEL_ORDER}}
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="orderDetailsFreelancer" role="dialog" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content topMargin" *ngIf="details">
+      <div class="modal-header headerBgColor">
+        <button type="button" class="close" data-dismiss="modal" aria-label="close modal">
+          <img src="assets/img/close.svg" alt="close" />
+        </button>
+        <h4 class="modal-title titleColor text-capitalize">{{terminology.ORDER}} / #{{details.job_id}} </h4>
+      </div>
+      <div class="modal-body orderScroll p-30" id="orderScroll">
+        <div class="row">
+
+          <div class="row">
+
+            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12" *ngIf="details.formattedPath">
+              <p-breadcrumb [model]="details.formattedPath"></p-breadcrumb>
+            </div>
+            <div *ngIf="details.project != undefined" class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+              {{terminology.PROJECT}}&nbsp;<ng-container class="text-capitalize textStyle orderId">Id</ng-container> :
+              {{details.project.project_id ? details.project.project_id : ''}}
+
+            </div>
+            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+              <ng-container class="text-capitalize textStyle pd_t">{{ languageStrings.Headline || "Headline"}}
+              </ng-container> : {{projectName ?
+              projectName : ''}}
+
+            </div>
+            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+              <ng-container class="text-capitalize textStyle pd_t"> {{ languageStrings.merchant_name || " MERCHANT Name"}} </ng-container> :
+              {{details.merchant_name}}<span *ngIf="showChatIcon && [10,12].includes(details.job_status)"
+                (click)="startChat(details.grouping_tags,details.hippo_transaction_id,details.user_id,details.job_id,details.merchant_name)"
+                class="commenting-icon">
+                <i tooltip="chat" class="fa  fa-commenting-o" aria-hidden="true"></i>
+              </span>
+
+            </div>
+            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12" *ngIf='showMerchantDetails'>
+              <ng-container class="text-capitalize textStyle">{{ languageStrings.merchant_phone || "MERCHANT Phone"}}
+              </ng-container> :
+              {{details.merchant_phone_number}}
+
+            </div>
+            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12" *ngIf='showMerchantDetails'>
+              <ng-container class="text-capitalize textStyle">{{ languageStrings.merchant_email || "MERCHANT Email"}}
+              </ng-container> :
+              {{details.merchant_email}}
+            </div>
+            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+              {{terminology.PROJECT}}&nbsp;<ng-container *ngIf="details.job_pickup_datetime != undefined"
+                class="text-capitalize textStyle pd_t">{{ languageStrings.start_date_n_time || "Start Date & Time"}}
+              </ng-container> :
+              {{details.job_pickup_datetime | dateTimeFormat:'MMM d, y, h:mm a'}}
+            </div>
+            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+              {{terminology.PROJECT}}&nbsp;<ng-container *ngIf="details.job_delivery_datetime != undefined"
+                class="text-capitalize textStyle pd_t">{{ languageStrings.start_date_n_time || "Start Date & Time"}}
+              </ng-container> :
+              {{details.job_delivery_datetime | dateTimeFormat:'MMM d, y, h:mm a'}}
+            </div>
+
+
+
+          </div>
+          <div class="flex f-d-c" *ngIf="details.is_custom_order && appConfig.business_model_type === 'FREELANCER'">
+            <div class="f-s-16">
+              <ng-container class="text-capitalize textStyle pd_t"> {{ languageStrings.order_description || "Order Description"}} </ng-container>
+            </div>
+            <div *ngFor="let item of details.job_description" class="f-s-14 flex flex-1" style="width: 70%;">
+              <span class="flex-1">{{item.header}}</span> <span class="flex-1">{{item.content}} </span>
+            </div>
+          </div>
+
+          <div class="row total-card amountDiv">
+            <div class="col-xs-12" *ngIf="details.initial_amount">
+              <p class="textStyle">
+                <ng-container>{{ languageStrings.intial_amount || "Initial Amount"}}</ng-container>
+                :
+                <span>{{currency+''}} {{details.initial_amount|decimalConfig}}</span>
+              </p>
+            </div>
+            <div class="col-xs-12" *ngFor="let tax of details.category_taxes">
+              <p class="textStyle" *ngIf="tax.tax_type">
+                {{tax.tax_name}} :
+                <span *ngIf="tax.tax_amount">{{currency+''}} {{tax.tax_amount|decimalConfig}}</span>
+              </p>
+              <p class="textStyle" *ngIf="!tax.tax_type">
+                {{tax.tax_name+' @ '+tax.tax_percentage+'%'}} :
+                <span *ngIf="tax.tax_amount">{{currency+''}} {{tax.tax_amount|decimalConfig}}</span>
+              </p>
+            </div>
+            <div class="col-xs-12" *ngIf="subtotal">
+              <p class="textStyle">
+                <ng-container>{{ languageStrings.subtotal || "Subtotal"}}</ng-container>
+                :
+                <span>{{currency +''+ subtotal.toFixed(2)}}</span>
+              </p>
+            </div>
+            <div class="col-xs-12" *ngFor="let tax of details.user_taxes">
+              <p class="textStyle" *ngIf="tax.tax_type">
+                {{tax.tax_name}} :
+                <span *ngIf="tax.tax_amount">{{currency+''}} {{tax.tax_amount|decimalConfig}}</span>
+              </p>
+              <p class="textStyle" *ngIf="!tax.tax_type">
+                {{tax.tax_name+' @ '+tax.tax_percentage+'%'}} :
+                <span *ngIf="tax.tax_amount">{{currency+''}} {{tax.tax_amount|decimalConfig}}</span>
+              </p>
+            </div>
+            <div class="col-xs-12" *ngIf="details.additionalPaymentViaLink">
+              <p class="textStyle">
+                <ng-container>{{ languageStrings.additional_amount || "Additional Amount"}}</ng-container> :
+                <span>{{currency+''}} {{details.additionalPaymentViaLink|decimalConfig}}</span>
+              </p>
+            </div>
+            <div class="col-xs-12" *ngIf="details.refunded_amount > 0">
+              <p class="textStyle">
+                <ng-container>{{ languageStrings.refund_amount || "Refund Amount"}}</ng-container>
+                :
+                <span>- {{currency +''}} {{details.refunded_amount|decimalConfig}}</span>
+              </p>
+            </div>
+            <div class="col-xs-12" *ngIf="appConfig.show_product_price == 1 || details.total_amount > 0">
+              <p>
+                <b>
+                  <ng-container>{{ languageStrings.total_amount || "Total Amount"}}</ng-container> :
+                </b>
+                <span>{{currency +''}} {{details.total_amount|decimalConfig}}</span>
+              </p>
+            </div>
+            <div class="col-xs-12" *ngIf="appConfig.show_product_price == 1 || details.total_amount > 0">
+              <hr />
+            </div>
+          </div>
+
+          <div class="row total-card" *ngIf="details.job_status == 13 && appConfig.is_review_rating_enabled">
+            <div class="col-xs-12">
+              <p class="textStyle" *ngIf="!details.customer_rating && !details.customer_comment"
+                [ngStyle]="{ 'direction' : direction }">
+                <ng-container>{{ languageStrings.rate_and_review || "Rating & Review"}}</ng-container>
+                :
+                <span>111
+                  <a (click)="showRatingDialog(details)" class="pointer">
+                    <ng-container>{{ languageStrings.none_yet_click_to_add ||"None yet! Click to add"}}</ng-container>
+                  </a>
+                </span>
+              </p>
+            </div>
+          </div>
+          <div class="row total-card" *ngIf="details.job_status == 13 && appConfig.is_review_rating_enabled">
+            <div class="col-xs-12">
+              <p *ngIf="details.customer_rating" class="textStyle">
+                <ng-container>{{ languageStrings.rating || "Rating"}}</ng-container> :
+                <span>
+                  <star-rating-comp [readOnly]="true" [rating]="details.customer_rating?details.customer_rating:0"
+                    [starType]="'svg'"></star-rating-comp>
+                </span>
+              </p>
+            </div>
+            <div class="col-xs-12">
+              <p class="textStyle" *ngIf="details.customer_comment">
+                <ng-container>{{ languageStrings.review || "Review"}}</ng-container> :
+                <span class="fw-200">{{details.customer_comment}}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal [modalType]="modalType" *ngIf="openCancellationPopUp" (onClose)="hidePopup()" (esc)="hidePopup()">
+  <div body class="p-25-50">
+    <div class="col-12 p-0 cancel-popup">
+      <label class="heading-popup">{{ languageStrings.cancellation_policy || "Cancellation Policy"}}</label>
+      <div><i class="fa fa-close icons" (click)="hidePopup()"></i></div>
+    </div>
+    <ol class="p-t-20">
+      <li *ngFor="let rule of cancelRules">{{rule}}</li>
+    </ol>
+  </div>
+</app-modal>
+
+<app-modal [modalType]="modalType" *ngIf="openRatingReview" (onClose)="hideDialog()" (esc)="hideDialog()">
+  <div body class="p-25-30">
+    <div class="row">
+      <div class="col-12 cancel-popup">
+        <label class="heading-popup">{{ languageStrings.review_n_rate || "Review & Rate"}}</label>
+        <div><i class="fa fa-close icons" (click)="hideDialog()"></i></div>
+      </div>
+      <div class="col-12" *ngIf="appConfig.is_tookan_active && orderForRating && orderForRating.tookan_job_hash">
+        <h4 class="summary p-0">
+          <ul class="nav nav-tabs">
+            <li [ngClass]="{'active' : !showAgentRatingTab}" (click)="showAgentRatingTab = false;"><a>{{
+                languageStrings.order_rating || "Order Rating"}}</a>
+            </li>
+            <li [ngClass]="{'active' : showAgentRatingTab}" (click)="showAgentRatingTab = true;">
+              <a>{{terminology.AGENT || 'Agent'}} {{ languageStrings.rating || "Rating"}}</a>
+            </li>
+          </ul>
+        </h4>
+      </div>
+      <div class="col-12 m-t-10">
+        <app-order-rating [orderForRating]="orderForRating" (hideDialog)="hideDialog($event)"
+          (shiftAgentRating)="shiftAgentRating($event)" *ngIf="!showAgentRatingTab"></app-order-rating>
+        <app-agent-rating [orderForRating]="orderForRating" (hideDialog)="hideDialog($event)"
+          *ngIf="showAgentRatingTab"></app-agent-rating>
+      </div>
+    </div>
+  </div>
+</app-modal>
+
+<app-footer></app-footer>
+
+<app-modal *ngIf="mapTemplatePopup" [modalType]="modalType.LARGE" (esc)="hideTempltePopup()"
+  (onClose)="hideTempltePopup()">
+  <div body>
+    <div class="popup-div">
+      <agm-map [latitude]="lat" [longitude]="lng" [zoom]="15" [styles]="mapStyle" [minZoom]="8" [scrollwheel]="false">
+        <agm-marker [latitude]="lat" [longitude]="lng">
+          <agm-info-window>{{this.storeAddress}}</agm-info-window>
+        </agm-marker>
+      </agm-map>
+    </div>
+    <div class="locateDiv">
+      <button type="button" class="btn accept button-style" appColor bg="true" [ngStyle]="{ 'direction' : direction }"
+        (click)="hideTempltePopup()">
+        <ng-container>{{ languageStrings.close || "Close"}}</ng-container>
+      </button>
+    </div>
+  </div>
+
+</app-modal>

@@ -1,0 +1,52 @@
+<div class="history row">
+  <div class="displayFlex">
+    <div class="col-xs-12 col-sm-10 col-md-10 col-lg-10 h-1">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 history-1 mt-10" *ngIf="!historyHave">
+        <p class="transactions text-center" >{{ languageStrings.no_history_found || "No History Found."}}</p>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 history-1 mt-10" *ngIf="history && history.length">
+        <p class="transactions"><ng-container >{{ languageStrings.latest_transactions || "Latest Transactions"}}</ng-container></p>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 history-l mt-10" *ngIf="history && history.length">
+        <!--<p-dataScroller [value]="history" [rows]="4" [inline]="true" [lazy]="true" (onLazyLoad)="loadData($event)" [totalRecords]="totalRecords"> &lt;!&ndash; [lazy]="true" (onLazyLoad)="loadData($event)" [totalRecords]="totalRecords"&ndash;&gt;-->
+        <!--<ng-template let-x pTemplate="item" let-i="index">-->
+        <div class="list" *ngFor="let x of history;let i = index;">
+          <div class="addedFrom">
+            <div class="icon">
+              <!--<div class="view"><i class="yfn yfn-failedTran"></i></div>-->
+              <div class="view" *ngIf="x.type === giftCardType.SELF_REEDEM"><i class="yfn yfn-group_copy"></i></div>
+              <div class="view" *ngIf="x.type === giftCardType.OTHER_REEDEM"><i class="yfn yfn-group_copy"></i></div>
+              <div class="view" *ngIf="x.type === giftCardType.RECEIVED"><i class="yfn yfn-group_4"></i></div>
+              <div class="view" *ngIf="x.type === giftCardType.SENT"><i class="yfn yfn-group_5"></i></div>
+            </div>
+            <div class="addedFromL">
+              <p class="added">
+                <span *ngIf="x.type === giftCardType.SELF_REEDEM"><ng-container >{{terminology.SELF_REDEEM}}</ng-container></span>
+                <span *ngIf="x.type === giftCardType.OTHER_REEDEM"><ng-container > {{ languageStrings.redeem_by.replace('----',x.receiver_name) || ('Redeemed By' + x.receiver_name)}}</ng-container></span>
+                <span *ngIf="x.type === giftCardType.RECEIVED"><span> {{ languageStrings.recived_by.replace('----',x.sender_name) || ('Received From'+  x.sender_name)}}</span></span>
+                <span *ngIf="x.type === giftCardType.SENT"><span> {{ languageStrings.sent_to.replace('----',x.receiver_name) || ('Sent to' + x.receiver_name) }}</span></span>
+              </p>
+              <p class="info">
+                <span class="time">{{x.creation_datetime | dateTimeFormat: 'hh:mm a'}}</span>
+              </p>
+              <p class="info">
+                <span class="balance">{{x.message}}</span>
+              </p>
+            </div>
+          </div>
+          <div class="transAmount">
+            <p class="amount text-right">
+              <span *ngIf="x.type === giftCardType.SELF_REEDEM">+ {{config.payment_settings[0].symbol}}{{x.amount |decimalConfig}}</span>
+              <span *ngIf="x.type === giftCardType.RECEIVED">+ {{config.payment_settings[0].symbol}}{{x.amount |decimalConfig}}</span>
+              <span *ngIf="x.type === giftCardType.SENT">- {{config.payment_settings[0].symbol}}{{x.amount |decimalConfig}}</span>
+              <span *ngIf="x.type === giftCardType.OTHER_REEDEM">- {{config.payment_settings[0].symbol}}{{x.amount |decimalConfig}}</span>
+            </p>
+            <p class="date text-right">
+              <span class="time">{{x.creation_datetime | dateTimeFormat: 'MMM, dd'}}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

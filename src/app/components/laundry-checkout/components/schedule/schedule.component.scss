@@ -1,0 +1,61 @@
+@import '~assets/css/variables';
+
+.schedule{
+  padding: 0px;
+  .m0{
+    margin: 0px;
+  }
+  .pickupSchedule{
+    padding: 20px 50px 0px;
+    border-right: 1px solid #d2d2d2;
+  }
+  .deliverySchedule{
+    padding: 20px 50px 0px;
+  }
+  .details{
+    font-family: $proxima-reg;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: #8A8888;
+    font-size: 16px;
+    text-align: center;
+  }
+  .continue{
+    padding: 20px 60px;
+  }
+  .continueBtn{
+    background-color: $color-theme;
+    font-family: $proxima-reg;
+    font-size: 16px;
+    color: #fff;
+    border: 1px solid transparent;
+    transition: .5s;
+    &:hover{
+      border: 1px solid $color-theme;
+      background-color: white;
+      color: $color-theme;
+    }
+  }
+}
+
+
+@media only screen and (max-width: 990px) {
+  .schedule{
+    padding: 0px !important;
+  }
+  .pickupSchedule{
+    padding: 10px !important;
+  }
+  .deliverySchedule{
+    padding: 10px !important;
+  }
+  .continue{
+    padding: 20px !important;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .pickupSchedule{
+    border-right: 0px !important;
+  }
+}

@@ -1,0 +1,85 @@
+@import '../../../../../assets/css/variables';
+@import '../../../../../assets/css/custom-datepicker';
+
+.calendar-container {
+    padding: 5px 15px;
+    min-height: 300px;
+    border: 1px solid #b3b3b3;
+}
+
+.cancel-btn {
+    color: var(--black);
+}
+
+
+.date-types {
+    height: 100%;
+    min-height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    .type {
+        display: flex;
+        align-items: center;
+        margin-right: 7px;
+
+        .dot {
+            height: 9px;
+            width: 9px;
+            border-radius: 50%;
+            margin-right: 7px;
+
+            &.selected {
+                background-color: $color-theme;
+            }
+
+            &.enabled {
+                background-color: $color-black;
+            }
+
+            &.disabled {
+                background-color: #d6d6d6;
+            }
+        }
+
+        margin-top: 10px;
+    }
+}
+
+.confirm-btn {
+    width: 130px;
+    border-radius: 5px;
+    color: $color-white;
+    max-width: 48%;
+    border: solid 1px var(--theme);
+    background-color: var(--theme);
+}
+
+.cancel-btn {
+    width: 130px;
+    max-width: 48%;
+    border-radius: 5px;
+    background-color: #e2e4e6;
+}
+
+.cal-divider {
+    color: #b3b3b3;
+    width: 98%;
+    border: 0.3px solid #d6d5d5;
+    margin: 20px 0px;
+}
+
+.cal-action-btn {
+    text-align: right;
+}
+
+
+@media only screen and (min-width: 768px) {
+    .date-types {
+
+        flex-direction: column;
+        padding-left: 20px;
+    }
+
+}

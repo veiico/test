@@ -1,0 +1,56 @@
+<div class="business" *ngIf="merchantFlag">
+
+  <!--=======================list view==============================-->
+
+  <app-list-view *ngIf="businessData && businessData.data  && showListView" [paginatingList]="paginatingForMerchantList" [categoryDataChild]="categoryData"></app-list-view>
+
+</div> 
+
+<!--=========================-product view===========================-->
+<div class="productViewOnly" *ngIf="productShowFlag" id="general_background">
+
+  <app-product-only [productList]="productDataFull"
+                    [selectedProductFilterInput]="selectedProductFilter"
+                    [queryParam]="queryParam"
+                    *ngIf="productDataFull && productDataFull.length > 0 && !checkIfProductGot"></app-product-only>
+  <div class="noProductAvail"
+       *ngIf="config.business_model_type != 'ECOM' && productDataFull && productDataFull.length == 0  && checkIfProductGot">
+       {{languageStrings.no_product_available || "No Product Available."}}
+  </div>
+
+  <!-- ECOM ONLY -->
+  <div *ngIf="config.business_model_type == 'ECOM' && productDataFull && productDataFull.length == 0  && checkIfProductGot && (queryParam && !queryParam.hideFilters)"
+    style="margin-top: 20px;margin-left: 110px;">
+    <div class="selectbox" [ngStyle]="{ 'direction' : direction }" *ngIf='!isEcomFlow'>
+      <span class="selectbox" style="font-weight: bold">
+        <ng-container>{{languageStrings.categories || "CATEGORIES"}}</ng-container>
+      </span>
+      <br>
+      <select class="chk-input selectbox"
+              placeholder="SELECT"
+              aria-label="select categories"
+              [(ngModel)]="selectedProductFilter"
+              (change)="getFilteredData(selectedProductFilter)">
+        <option [value]="0">
+          <ng-container>{{languageStrings.all || "All"}}</ng-container>
+        </option>
+        <option [value]="option.catalogue_id"
+                *ngFor="let option of filteredData;">{{option.name}}</option>
+      </select>
+    </div>
+    <div class="noProductAvail">{{languageStrings.no_product_available || "No Product Available."}}</div>
+  </div>
+
+  <div *ngIf="paginating" class="pg-ldr-prt">
+    <div class="pg-ldr-cld">
+      <div class="pg-ldr-ctr">
+        <div class="pg-loader" [ngStyle]="{'border-bottom-color': config.color,'border-left-color': config.color}"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--custom order flotaing button  -->
+<app-custom-order *ngIf="config.is_custom_order_active && ((config.home_delivery && config.admin_home_delivery) || (config.pick_and_drop && config.admin_pick_and_drop)) && config.is_marketplace_delivery_availabile"></app-custom-order>
+<app-order-placed-popup></app-order-placed-popup>
+<app-footer></app-footer>

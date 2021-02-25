@@ -1,0 +1,25 @@
+@import '~assets/css/variables';
+
+
+.gift{
+  background-image: url('assets/img/gift-back.svg');
+  background-repeat: no-repeat;
+  background-position: 0% -8%;
+  min-height: 100vh;
+  height: auto;
+  background-origin: content-box;
+  background-size: cover;
+}
+.marginAuto{
+  margin: auto;
+}
+
+@media only screen and (max-width: 768px) {
+  .gift {
+    background-image: none;
+  }
+}
+
+:host /deep/ app-two-checkout payment-twocheckout .message-content-payment.setWidth {
+  width: 38% !important;
+}

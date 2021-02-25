@@ -1,0 +1,32 @@
+@import '~assets/css/variables';
+.checkoutView{
+  // background-color: #f3f3f3;
+  min-height: calc(100vh - 180px);
+  padding-bottom: 20px;
+  .container.boxView{
+    height: auto;
+    background: #FFF;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    padding: 0 0 20px;
+    border-radius: 5px;
+    box-shadow: #ccc 1px 3px 8px 1px;
+    .head{
+      font-family: $proxima-reg;
+      line-height: 44px;
+      text-transform: uppercase;
+      font-weight: 400;
+      //border-bottom: 1px solid #ccc;
+      padding-left: 11px;
+      color: #8A8888;
+      margin: 0;
+      font-size: 20px;
+    }
+  }
+}
+
+@media only screen and (max-width:650px) {
+  .checkoutView{
+    padding-bottom: 60px !important;
+  }
+}

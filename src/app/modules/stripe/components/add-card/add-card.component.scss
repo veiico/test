@@ -1,0 +1,158 @@
+@import '~assets/css/variables';
+
+.addCard{
+  .addCardButton{
+    height: 48px;
+    border: solid 1px #dddddd;
+    font-family: Proximanova-Regular;
+    font-size: 16px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.7px;
+    color: #464646;
+    transition: 0.5s;
+    min-width: 185px;
+    span{
+      padding-left: 20px;
+    }
+    &:hover{
+      border: 1px solid $color-theme;
+      background-color: $color-theme;
+      color: #fff;
+    }
+  }
+
+  .addCardForm{
+    form{
+      padding: 20px 10px;
+      .form-row{
+        #card-errors{
+          font-family: Proximanova-Regular;
+          text-align: center;
+          font-size: 14px;
+          font-weight: 600;
+          font-style: normal;
+          font-stretch: normal;
+          line-height: normal;
+          letter-spacing: 0.7px;
+          color: red;
+        }
+        label{
+          font-family: Proximanova-Regular;
+          text-align: center;
+          font-size: 16px;
+          font-weight: 600;
+          font-style: normal;
+          font-stretch: normal;
+          line-height: normal;
+          letter-spacing: 0.7px;
+          color: #464646;
+          width:100%;
+        }
+        .cardInfo{
+          padding: 15px 0px;
+        }
+        .StripeElement {
+          background-color: white;
+          padding: 8px 12px;
+
+          border: 1px solid transparent;
+          box-shadow: 0 1px 3px 0 #e6ebf1;
+          -webkit-transition: box-shadow 150ms ease;
+          transition: box-shadow 150ms ease;
+        }
+
+        .StripeElement--focus {
+          box-shadow: 0 1px 3px 0 #cfd7df;
+        }
+
+        .StripeElement--invalid {
+          border-color: #fa755a;
+        }
+
+        .StripeElement--webkit-autofill {
+          background-color: #fefde5 !important;
+        }
+      }
+      .btnsForSave{
+        padding: 20px 0px;
+        text-align: center;
+        .saveButton{
+          height: 38px;
+          border: solid 1px $color-theme;
+          font-family: Proximanova-Regular;
+          font-size: 16px;
+          font-weight: 600;
+          font-style: normal;
+          font-stretch: normal;
+          line-height: normal;
+          letter-spacing: 0.7px;
+          color: #fff;
+          background-color: $color-theme;
+          transition: 0.5s;
+          &:hover{
+            border: 1px solid #dddddd;
+            background-color: #fff;
+            color: #464646;
+          }
+        }
+        .cancelButton{
+          height: 38px;
+          border: solid 1px #dddddd;
+          font-family: Proximanova-Regular;
+          font-size: 16px;
+          font-weight: 600;
+          font-style: normal;
+          font-stretch: normal;
+          line-height: normal;
+          letter-spacing: 0.7px;
+          color: #464646;
+          background-color: #f3f3f3;
+          transition: 0.5s;
+          &:hover{
+            border: 1px solid #dddddd;
+            background-color: #fff;
+            color: #464646;
+          }
+        }
+      }
+    }
+  }
+}
+
+.f-c {
+  flex-direction: column;
+}
+
+.d-flex  {
+  display: flex;
+}
+
+span#mandatory {
+  color: red;
+  text-align: left;
+  font-size: 1.35rem;
+}
+
+input#billing {
+  padding-left: 1rem;
+  border: 0;
+  box-shadow: 1px 0px 3px 1px #80808029 !important;
+  height: 4rem;
+  font-size: 1.35rem;
+  margin-top: 1rem !important;
+  -webkit-appearance: none;
+}
+
+input#billing:focus {
+  border: 0;
+  outline: 0;
+}
+
+div#cityDiv {
+  display: flex;
+  justify-content: space-between;
+}
+

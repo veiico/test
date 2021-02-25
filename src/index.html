@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" id="size32" sizes="32x32" />
+  <link rel="icon" id="size192" sizes="192x192" />
+  <link id="appFavicon" rel="icon" type="image/x-icon">
+  <link rel="manifest" href="manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#1976d2">
+  <script type="text/javascript" src="new-relic.js"></script>
+
+</head>
+
+<body>
+  <!-- <button class="add-button" id="btnSubmit" style="position: fixed;top: 8px;display: none;
+    z-index: 999999999;right: 41%;width: 120px;background: transparent;border: none;padding: 0;">
+    <img src="assets/img/google-play.png" alt="Install App" style="max-width: 100%;">
+  </button> -->
+
+  <app-root>
+
+  </app-root>
+
+  <div id="splashLoader" class="loader-wrap">
+
+  </div>
+
+  <script type="application/javascript" defer="">
+    function getIP(json) {
+      localStorage.setItem('ip_address', json.ip)
+      console.log("My public IP address is: ", json.ip);
+    }
+  </script>
+  <script type="application/javascript">
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Prevent Chrome 67 and earlier from automatically showing the prompt
+      e.preventDefault();
+      // Stash the event so it can be triggered later.
+    });
+  </script>
+  <!-- <iframe id="socomokey2" style="opacity: 0; visibility: hidden; pointer-events: none; width: 0;height: 0; position: absolute;" src="index2.html"></iframe> -->
+
+  <noscript>Please enable JavaScript to continue using this application.</noscript>
+</body>
+
+</html>

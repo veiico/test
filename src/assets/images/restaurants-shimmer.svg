@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="393" height="184" viewBox="0 0 393 184">
+    <g fill="none" fill-rule="nonzero">
+        <rect width="393" height="184" fill="#FFF" rx="4"/>
+        <path fill="#EAEAEA" d="M7 10h164v165H7z"/>
+        <rect width="187" height="10" x="183" y="10" fill="#EAEAEA" rx="1"/>
+        <rect width="102" height="10" x="183" y="28" fill="#EAEAEA" rx="1"/>
+        <rect width="148" height="10" x="183" y="78" fill="#EAEAEA" rx="1"/>
+        <rect width="148" height="10" x="183" y="98" fill="#EAEAEA" rx="1"/>
+        <rect width="148" height="10" x="183" y="118" fill="#EAEAEA" rx="1"/>
+        <rect width="148" height="10" x="221" y="158" fill="#EAEAEA" rx="1"/>
+    </g>
+</svg>

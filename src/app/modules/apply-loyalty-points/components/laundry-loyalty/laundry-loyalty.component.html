@@ -1,0 +1,26 @@
+<div class="loyalty">
+  <form [formGroup]="loyaltyForm" class="form">
+    <div class="point">
+      <div class="text" [ngStyle]="{ 'direction' : direction }">
+        <p>
+          <img src="assets/img/coins.svg" width="20px" aria-hidden="true" alt="coins loyalty point"/>
+          {{terminology.LOYALTY_POINTS}}
+        </p>
+      </div>
+      <div class="inputField">
+        <input type="text" [ngStyle]="{ 'direction' : direction }"
+               formControlName="point"
+               class="inputPromo"  placeholder="{{languageStrings.enter_points_to_redeem || 'Enter points to redeem'}}" aria-label="Enter points to redeem"/>
+        <button type="button" (click)="submitLoyalty()" class="loyaltybtn">{{languageStrings.apply || 'Apply'}}</button>
+      </div>
+      <app-control-messages [control]="loyaltyForm.controls.point"></app-control-messages>
+    </div>
+    <div class="info">
+      <hr/>
+      <div>
+        <p>{{terminology.LOYALTY_POINTS}} <ng-container>{{languageStrings.balance || 'Balance'}}</ng-container>: {{_list.LOYALTY_POINTS || 0}}</p>
+        <p><ng-container>{{languageStrings.maximum_loyality_you_can_apply || 'Maximum loyality point you can apply'}}</ng-container>: {{_list.MAX_USABLE_POINT || 0}}</p>
+      </div>
+    </div>
+  </form>
+</div>

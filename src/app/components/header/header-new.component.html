@@ -1,0 +1,334 @@
+
+<div class="top-header" [ngStyle]="{'visibility':hidden ? 'hidden':'visible'}">
+  <div class="header">
+    <div class="nav-left">
+      <div class="merchant-logo">
+        <!-- logo -->
+        <a class="logo" (click)="goToHome()">
+        <i class="fa fa-angle-left" (click)="goBack()"></i><img [src]="image_link" [alt]="title">
+        </a>
+      </div>
+      <!-- Delivery mode - inner pages -->
+      <div class="deliveryMode deliveryHideAt700"
+        [ngClass]="{'white-theme': (formSettings.header_color == '#fff' || formSettings.header_color == '#ffffff' )}"
+       *ngIf="(formSettings.business_model_type !== 'RENTAL') && ((formSettings.business_model_type !== 'FREELANCER') || (formSettings.business_model_type == 'FREELANCER' && formSettings.show_serving_restriction)) " >
+        <app-delivery-modes *ngIf="showAddressBarOnlyRestaurant" [method]="deliveryHTMLToShow"></app-delivery-modes>
+        <app-autocomplete [hideMapIcon]="hideMapIcon" *ngIf="showAddressBarOnlyRestaurant" [ngClass]="{'width350': (formSettings.admin_home_delivery && formSettings.admin_self_pickup)}"  class="ml-10"></app-autocomplete>
+      </div>
+    </div>
+    <!-- nav left end -->
+
+    <!-- nav right start -->
+    <div class="nav-right">
+      <ul class="items">
+          <!-- partner with us start -->
+          <li class="login merchant-link" *ngIf="config.show_merchant_signup_link_on_webapp">
+            <a style="word-break: break-all; max-width: 170px;" [href]="merchant_url" target="_blank">
+                <span><ng-container>{{headerData && headerData.terminology.MERCHANT_SIGNUP_LINK_TEXT || 'Partner with us'}}</ng-container></span>
+            </a>
+        </li>
+         <!-- Search IC -->
+        <li *ngIf="hideSearch &&
+                 !formSettings.pdp_view &&
+                 !showHeadingSearch &&
+                 formSettings.business_model_type != 'FREELANCER' &&
+                 formSettings.onboarding_business_type !== 805 &&
+                 showSearch && showSearchLocal" class="search">
+          <a (click)="goToSearch()">
+            <i class="fa fa-search" aria-hidden="true"></i>
+            <span class="hideText"><ng-container *ngIf="languageStrings.search" >{{languageStrings.search ||'Search'}}</ng-container></span>
+          </a>
+        </li>
+         <!-- Login -->
+        <li *ngIf="!loggedIn  || guestLoginData" class="login">
+          <a (click)="goToLogin()"
+             data-toggle="modal"
+             data-target="#loginDialog"
+             *ngIf="formSettings && hideLogin">
+            <i class="fa fa-user-o" aria-hidden="true"></i>
+            <span class="hideText"><ng-container *ngIf="languageStrings.login">{{languageStrings.login ||'Login'}}</ng-container></span>
+          </a>
+        </li>
+        <!-- guest user -->
+        <li *ngIf="guestLoginData" class="login">
+          <a>
+            <span><ng-container>{{languageStrings.guest_user || 'Guest User'}}</ng-container></span>
+          </a>
+        </li>
+
+        <!-- Lang -->
+        <li *ngIf="languageArray &&
+                 languageArray.length > 1 &&
+                 !loggedIn" class="language">
+          <a class="text-uppercase dropdown-toggle" data-toggle="dropdown">
+            {{languageSelected}}
+            <span class="caret ml-10"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="drop" *ngFor="let lang of languageArray">
+              <a class="dropAnchor" (click)="languageChanged(lang.language_code)">{{lang.language_display_name}}</a>
+            </li>
+          </ul>
+        </li>
+        <!-- Notification -->
+        <li *ngIf="loggedIn" class="notification">
+          <a class="notification">
+            <app-notifications (logout)="logout()"></app-notifications>
+          </a>
+        </li>
+        <!-- Login Profile Start -->
+        <li *ngIf="loggedIn && !guestLoginData" class="profile">
+          <a class="dropdown-toggle profileDrop" data-toggle="dropdown">
+            <i class="fa fa-user" aria-hidden="true" *ngIf="!profileImage"></i>
+            <img [src]="profileImage" alt="profile image" *ngIf="profileImage">
+            <span class="hidden-xs hidden-sm">{{name | truncate : 10 : '.'}}</span>
+            <span class="caret ml-5"></span>
+          </a>
+          <ul class="dropdown-menu"
+              [ngStyle]="{ 'direction' : direction }"
+              [ngClass]="{'dual-user': headerData ?  headerData.is_dual_user_enable :0}">
+            <!-- Marchant Panel -->
+            <li class="drop"
+                *ngIf="headerData && headerData.is_dual_user_enable"
+                (click)="$event.stopPropagation()">
+              <a class="switchA dropAnchor">
+                <ng-container *ngIf="languageStrings.switch_to_merchant_panel">{{languageStrings.switch_to_merchant_panel || 'Switch to Merchant Panel'}}</ng-container>
+                <label class="switch switch custom-switch"
+                       style="margin-bottom: 0px;margin-left: 3px;">
+                  <input type="checkbox"
+                         value="false"
+                         [ngStyle]="{'direction': direction}"
+                         (change)="onAccountSwitch($event)"
+                         attr.aria-label="{{languageStrings.switch_to_merchant_panel || 'Switch to Merchant Panel'}}">
+                  <span></span>
+                </label>
+              </a>
+            </li>
+            <!-- My Profile -->
+            <li class="drop"  *ngIf="languageStrings.profile">
+              <a class="dropAnchor"
+                 (click)="goToProfile()">
+                <ng-container>{{languageStrings.profile ||'Profile'}}</ng-container>
+              </a>
+            </li>
+            <!-- Subcription -->
+            <li class="drop" *ngIf="formSettings.is_customer_subscription_enabled">
+              <a class="dropAnchor" (click)="goToCustomerSubscriptionPage()"
+                onlyColor="true">
+                <ng-container *ngIf="languageStrings.subscription_plans" >{{languageStrings.subscription_plans ||'Subscription Plans'}}</ng-container>
+              </a>
+            </li>
+            <!-- My orders  -->
+            <li class="drop"
+                *ngIf="formSettings.business_model_type === 'FREELANCER'">
+              <a class="dropAnchor text-capitalize"
+                 (click)="freelancerOrders()">
+                {{terminology.ORDERS || 'Orders'}}
+              </a>
+            </li>
+            <!-- Address -->
+            <li class="drop"
+                *ngIf="formSettings.user_id === 60863 || formSettings.user_id === 68544 ">
+              <a class="dropAnchor"
+                 (click)="goToFavLocation()">
+                <ng-container *ngIf="languageStrings.my_fav_address" >{{languageStrings.my_fav_address ||'My Fav Address'}}</ng-container>
+              </a>
+            </li>
+            <!-- Freelance -->
+            <li class="drop"
+                *ngIf="terminology">
+              <a class="dropAnchor"
+                 (click)="goToOrders()">
+                {{formSettings.business_model_type === 'FREELANCER' ? (terminology.PROJECTS || 'Projects') : terminology.ORDERS || 'Orders'}}
+              </a>
+            </li>
+            <!-- Subcriptions -->
+            <li class="drop" *ngIf="formSettings.is_recurring_enabled">
+              <a class="dropAnchor" (click)="goToSubscription()">
+                <ng-container>{{terminology.SUBSCRIPTIONS || 'Subscriptions'}}</ng-container>
+              </a>
+            </li>
+            <!-- Referal -->
+            <li class="drop"
+                *ngIf="refStatus">
+              <a class="dropAnchor"
+                 (click)="goToRefer()">
+                {{terminology.REFERRAL}}
+              </a>
+            </li>
+            <!-- Loyalty Point -->
+            <li class="drop"
+                *ngIf="formSettings.is_loyalty_point_enabled">
+              <a class="dropAnchor"
+                 (click)="goToLoyaltyPoints()">
+                {{terminology.LOYALTY_POINTS}}
+              </a>
+            </li>
+            <!-- Coustomer Right -->
+            <li class="drop"
+                *ngIf="!formSettings.is_demo && !formSettings.hide_gdpr && terminology"
+                [hidden]="formSettings.business_model_type === 'FREELANCER'">
+              <a class="dropAnchor text-capitalize"
+                 (click)="goToSettings()">
+                {{terminology.CUSTOMER_RIGHTS || 'Customer Rights'}}
+              </a>
+            </li>
+            <!-- Wallets -->
+            <li class="drop"
+                *ngIf="walletEnabled && terminology">
+              <a class="dropAnchor text-capitalize"
+                 (click)="goToWallet()">
+                {{terminology.WALLET}}
+              </a>
+            </li>
+            <!-- Gift Card  -->
+            <li class="drop"
+                *ngIf="terminology &&
+                     formSettings.is_gift_card_activated">
+              <a class="dropAnchor text-capitalize"
+                 (click)="goToGiftCard()">
+                {{terminology.GIFT_CARD}}
+              </a>
+            </li>
+            <!-- Reward Plan -->
+            <li *ngIf="terminology && (formSettings.is_reward_active || (loginData && loginData.vendor_details.is_reward_active_for_customer))" class="drop">
+              <a (click)="goToReward()"
+                 class="text-capitalize dropAnchor"><ng-container>{{languageStrings.reward_plans || 'Reward Plan'}}</ng-container></a>
+            </li>
+            <li class="drop subnav" *ngIf="staticPages && staticPages.length" (click)="$event.stopPropagation()">
+              <a class="dropAnchor subnavbtn text-capitalize" (click)='showSubHead = !showSubHead'>
+                <ng-container>{{languageStrings.more ||'More'}}</ng-container><i class="fa fa-caret-down"></i>
+              </a>
+              <div class="subnav-content" [ngStyle]="{'display':(showSubHead)?'block':'none'}">
+                <a  [href]="page.url" target="_blank" *ngFor='let page of staticPages;let i = index'>
+                  {{page.name}}
+                </a>
+              </div>
+            </li>
+            <!-- Logout -->
+            <li class="drop">
+              <a class="dropAnchor text-capitalize"
+                 (click)="logout()">
+                <ng-container>{{languageStrings.logout ||'Logout'}}</ng-container>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <!-- Change URL -->
+        <li *ngIf="!env.production"
+            class="hidden-xs hidden-sm changeUrl">
+          <a (click)="changePort()">
+            <span>Change Url</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- Deliery Mode Dropdwon Start -->
+  <div class="deliveryMode deliveryShowAt700"
+    [ngClass]="{'white-theme': (formSettings.header_color == '#fff' || formSettings.header_color == '#ffffff' )}"
+    *ngIf="showAddressBarOnlyRestaurant && (formSettings.business_model_type !== 'RENTAL') && ((formSettings.business_model_type !== 'FREELANCER' || (formSettings.business_model_type == 'FREELANCER' && formSettings.show_serving_restriction)))">
+      <app-delivery-modes [method]="deliveryHTMLToShow" [ngClass]="{'width32': showDeliveryMode}"></app-delivery-modes>
+      <app-autocomplete [hideMapIcon]="hideMapIcon" [ngClass]="{'width80': !showDeliveryMode}" class="ml-5 width64"></app-autocomplete>
+  </div>
+  <!-- Deliery Mode Dropdwon End -->
+</div>
+
+<app-pop-up></app-pop-up>
+
+<app-pop-up-modal></app-pop-up-modal>
+
+<!-- login model popup -->
+<div id="loginDialog"
+     class="modal fade"
+     role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button"
+                class="close"
+                (click)="showSignInFalse()"
+                data-dismiss="modal">&times;</button>
+        <app-login [showFbSignIn]="showFbSignIn"
+                   [headerData]="headerData"></app-login>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- signup model popup -->
+<div id="signupDialog"
+     style="max-height:calc( 100% - 12px ); overflow:scroll; padding-bottom: 20px; top:0px !important"
+     class="modal fade "
+     role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button"
+                class="close"
+                data-dismiss="modal">&times;</button>
+        <app-signup ></app-signup>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- forgot modal dialog -->
+<div id="forgotModal"
+     class="modal fade "
+     role="dialog"
+     style="margin: 10px;">
+  <div class="modal-dialog">
+<div class="modal-content">
+    <div class="modal-body">
+      <button type="button"
+                class="close"
+                data-dismiss="modal">&times;</button>
+      <p class="main-heading p-l-15" [ngStyle]="{ 'direction' : direction }" >
+          <ng-container *ngIf="languageStrings.forgot_password" >{{languageStrings.forgot_password ||'Forgot Password'}} ?</ng-container>
+      </p>
+      
+      <hr  [ngStyle]="{ 'direction' : direction }" />
+      <div style="clear: both;"></div> <!-- Clear -->
+      <form role="form"
+            [formGroup]="forgotForm" (keydown)="keyDownFunction($event)">
+        <div class="modal-body p-t-0">
+          <div class="form-group frm-grp-set">
+            <app-phone-email-hybrid formControlName="phone_email" [dialCode]="country_code"></app-phone-email-hybrid>
+            <app-control-messages [control]="forgotForm.controls.phone_email"></app-control-messages>
+          </div>
+          <div class="">
+            <button type="submit"
+                    [ngStyle]="{ 'direction' : direction }"
+                    class="btn btn-primary-1 w-100"
+                    (click)="forgotEmailOtp()"
+                    [disabled]="!forgotForm.valid">
+              <ng-container *ngIf="languageStrings.submit" >{{languageStrings.submit ||'Submit'}}</ng-container>
+            </button>
+          </div>
+        </div>  
+      </form>
+    </div>
+  </div>
+  </div>
+</div>
+
+
+<!-- otp modal popup start -->
+<div id="otpDialog" style="max-height:calc( 100% - 12px ); overflow:scroll;"
+class="modal fade"
+role="dialog">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-body">
+      <button type="button" class="close"
+        (click)="closeOTPDialog()"
+        >&times;</button>
+        <app-otp-plus-change-password [otpData]="otpObjectDetails"></app-otp-plus-change-password>
+    </div>
+  </div>
+</div>
+</div>
+
+<app-change-api-url *ngIf="showChangeApiUrlPopup"
+                    (hide)="hideChangeProtPopup()"></app-change-api-url>

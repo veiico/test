@@ -1,0 +1,84 @@
+@import '~assets/css/variables';
+
+.complete-address {
+  color: #afafaf
+}
+
+.change-address {
+  display: flex;
+  justify-content: flex-end;
+
+  a {
+    text-decoration: none;
+    cursor: pointer;
+  }
+}
+
+.currentAddress {
+  background: var(--address_bg_color, white);
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #f7f7f7;
+  min-height: 18rem;
+  max-width: 30rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.selected-address {
+  padding: 20px 40px;
+}
+
+.loc-type-img {
+  margin-right: 10px;
+  height: 16px;
+  width: 16px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.chk_cnt_div.chk_form {
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 20px;
+  grid-row-gap: 10px;
+
+  fav-location-model {
+    cursor: pointer;
+  }
+}
+
+.add-new-address {
+  cursor: pointer;
+}
+
+p.title {
+  display: flex;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.address {
+  border: 1px solid #dfdfdf;
+  border-radius: 5px;
+  padding: 10px 0px;
+}
+
+.chk_inr_hdng {
+  display: flex;
+  justify-content: space-between;
+
+  .heading-btn {
+    margin: auto 20px;
+
+    button {
+      color: $color-blue;
+      font-family: $proxima-semi-bold;
+      border: 2px solid $color-blue;
+    }
+  }
+}
+
+.img-checked {
+  height: 18px;
+  width: 18px;
+}

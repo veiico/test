@@ -1,0 +1,125 @@
+<div class="checkout_card ">
+  <form [formGroup]="customerDetails" (ngSubmit)="onSubmit(customerDetails.value)" class="login-form">
+    <div class="chk_inr_hdng">
+      <div>
+        <!-- <span class="src_img"><img src="assets/img/pickup-heading.svg" /></span> -->
+        <p *ngIf="terminology" class="chk_inr_hdng_txt">
+          {{ languageStrings.customer_details || 'Customer Details'}}
+        </p>
+      </div>
+    </div>
+
+    <div class="chk_cnt_div chk_form no-gutter m0">
+      <div class="chk_form_col">
+        <label class="chk-lable" for="fullName">
+          <ng-container >{{ languageStrings.full_name || "Full Name"}}</ng-container>
+        </label>
+        <div class="chk_hidden_space cf-col">
+          <input type="text" id="fullName" class="form-control chk-input"  placeholder=" {{ languageStrings.enter_full_name || 'Enter Full Name' }}"
+            formControlName="name">
+          <app-control-messages [control]="customerDetails.controls.name"></app-control-messages>
+        </div>
+      </div>
+      <div class="chk_form_col">
+        <label class="chk-lable" for="email">
+          <ng-container >{{ languageStrings.email || "Email"}}</ng-container>
+        </label>
+        <div class="chk_hidden_space cf-col">
+          <input type="text" id="email" class="form-control chk-input"  placeholder="{{ languageStrings.enter_email  || 'Enter Email'}}" formControlName="email">
+          <app-control-messages [control]="customerDetails.controls.email"></app-control-messages>
+        </div>
+      </div>
+      <div class="chk_form_col">
+        <label class="chk-lable">
+          <ng-container >{{ languageStrings.phone  || "Phone"}}</ng-container>
+        </label>
+        <div class="chk_hidden_space cf-col">
+          <app-fugu-tel-input class="phone_style phone-fav-add" formControlName="phone" [value]="customerDetails.controls.phone.value"
+            [(dialCode)]="country_code"></app-fugu-tel-input>
+        </div>
+      </div>
+    </div>
+  </form>
+
+</div>
+
+<div class="checkout_card">
+
+  <div class="chk_inr_hdng">
+    <div>
+      <!-- <span><img src="assets/img/delivery-heading.svg" /></span> -->
+      <p *ngIf="terminology" class="chk_inr_hdng_txt">
+        {{ languageStrings.delivery_details || 'Delivery Details'}}
+      </p>
+      <!-- <img *ngIf="selectedAddress" class="img-checked" src="assets/img/checked.svg" /> -->
+    </div>
+    <div class="heading-btn">
+      <div *ngIf="!selectedAddress">
+        <!--<span class="icon"><i class="fa fa-search fa-lg"></i></span>-->
+        <input type="text" [(ngModel)]="searchText" class="form-control widthSearch"  placeholder="{{ languageStrings.search  || 'Search' }}"  aria-label="search address" />
+      </div>
+      <button type="button" class="btn btn-sm" *ngIf="selectedAddress" (click)="onChangeClick()">
+        <ng-container >{{ languageStrings.change_address  || "Change Address"}}</ng-container>
+      </button>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!selectedAddress; else elseTemplate">
+    <ng-container *ngIf="list.length; else elseTemplate">
+      <div class="chk_cnt_div chk_form no-gutter m0 scrollData" *ngIf="content">
+        <div *ngFor="let data of list | search : searchText; let i = index;">
+          <div class="container-fluid model-container" *ngIf="i < showLimit">
+
+            <div class="content">
+              <div class="content-inner">
+                <div class="col-xs-12">
+                  <p class="title">
+                    <!--<img class="loc-type-img" [src]="locationTypes[address.locType].icon" alt="">-->
+                    {{data.label}}
+                  </p>
+                </div>
+                <div class="col-xs-12">
+                  <p class="complete-address">{{data.address}}</p>
+                </div>
+              </div>
+              <div class="col-xs-12 text-center">
+                <button type="button" class="btn btn-sm btn-deliver-here " (click)="onAddressClick(data, i)">
+                  <ng-container>{{terminology.DELIVER_HERE || 'Deliver here'}}</ng-container>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="seeMore text-center" style="padding: 6px 0px;" *ngIf="hideSeeMore">
+        <button type="button" class="btn btn-sm btn-deliver-here " (click)="seeMore()">
+          <ng-container >{{ languageStrings.see_more || "See More"}}</ng-container>
+        </button>
+      </div>
+    </ng-container>
+    <ng-template #elseTemplate>
+      <p style="padding:20px;font-size:18px;" class="text-center">
+        <ng-container >{{ languageStrings.no_saved_addresses || "No Saved Addresses"}}</ng-container>
+      </p>
+    </ng-template>
+  </ng-container>
+  <ng-template #elseTemplate>
+    <div class="chk_cnt_div selected-address m0">
+      <div class="container-fluid flex">
+        <div class="icon">
+          <span class="yf yf-ic-place"> </span>
+        </div>
+        <div class="row address">
+          <div class="col-xs-12">
+            <p class="title">
+              {{selectedAddress.label}}
+            </p>
+          </div>
+          <div class="col-xs-12">
+            <p class="complete-address">{{selectedAddress.flat_no+', '}}{{selectedAddress.address}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>

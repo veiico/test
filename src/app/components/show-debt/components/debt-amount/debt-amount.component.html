@@ -1,0 +1,45 @@
+<div class="profilePage row">
+    <div class="col-xs-12">
+        <div class="heading">
+            <p class="title" [ngStyle]="{ 'direction' : direction }">
+                <ng-container>{{languageStrings.outstanding_payment ||'Outstanding Payment'}}</ng-container>
+            </p>
+            <hr class="line" [style.border-top-color]="appConfig.color" />
+        </div>
+    </div>
+
+    <div class="container profileStyle" *ngIf="languageStrings">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 profileP">
+                <div class="row">
+                        <div class="debt">
+                                <div class="col-12 debt-img">
+                                    <img src="assets/images/debt.png" class="debt-box">
+                                </div>
+                                <div class="debt-amt" *ngIf="!isPlatformServer">
+                                    {{currency}}{{debtAmount | decimalConfig}}
+                                </div>
+                                <div class="debt-text">
+                                    <p><ng-container>{{languageStrings.amount_pending_from_your_past_order ||'Amount is pending from your past order.'}}</ng-container></p>
+                                </div>
+                                <div class="col-12 pad-top">
+                                    <div class="modal-footer dialog-action">
+                                        <button class="dialog-cancel btn btn-default" mat-button (click)="redirectToPayment()">
+                                            <ng-container>{{languageStrings.continue_to_pay || 'Continue to Pay'}}</ng-container>
+                                        </button>
+                                        <p class="sub-text"><ng-container>{{languageStrings.please_settle_the_amount_continue_using_website ||'Please settle the amount to continue using the website.'}}</ng-container></p>
+                                        <span class="skip-button" *ngIf="!appConfig.is_debt_payment_compulsory" (click)="goBack()"
+                                            ><ng-container>{{languageStrings.skip_for_now || 'Skip for now'}}</ng-container></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<app-footer></app-footer>

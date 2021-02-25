@@ -1,0 +1,430 @@
+<!-- <html>
+  
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ENTER CVV OF YOUR CARD</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js"></script>
+     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/angular-toastr@2/dist/angular-toastr.tpls.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/angular-toastr@2/dist/angular-toastr.css">
+    <style>
+      select.form-control:not([size]):not([multiple]) {
+        height: 34px;
+      }
+  
+      body {
+        background-color: #fff;
+      }
+  
+      .panel {
+        width: 95%;
+        margin: 2em auto;
+      }
+  
+      .bootstrap-basic {
+        background: white;
+      }
+  
+      .panel-body {
+        width: 90%;
+        margin: 2em auto;
+      }
+  
+      #loader {
+        background: transparent;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: 1001;
+        width: 50px;
+        height: 50px;
+        margin: -25px 0 0 -25px;
+        border: 6px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 6px solid #3498db;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+      }
+  
+      @-webkit-keyframes spin {
+        0% {
+          -webkit-transform: rotate(0deg);
+        }
+        100% {
+          -webkit-transform: rotate(360deg);
+        }
+      }
+  
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+  
+      .helper-text {
+        color: #8A6D3B;
+        font-size: 12px;
+        margin-top: 5px;
+        height: 12px;
+        display: block;
+      }
+  
+      /* Braintree Hosted Fields styling classes*/
+  
+      .braintree-hosted-fields-focused {
+        border: 1px solid #0275d8;
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+      }
+  
+      .braintree-hosted-fields-focused.focused-invalid {
+        border: 1px solid #ebcccc;
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(100, 100, 0, .6);
+      }
+  
+      .img-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+      }
+  
+      .img-container>img {
+        margin-top: -50%;
+        margin-left: -50%;
+      }
+  
+      @media (max-width: 670px) {
+        .form-group {
+          width: 100%;
+        }
+  
+        .btn {
+          white-space: normal;
+        }
+      }
+  
+      .has-error,
+      .has-error .help-block,
+      .has-error .form-control {
+        border: #e60000 1px solid
+      }
+  
+      .red {
+        color: #e60000;
+      }
+  
+  
+      .error_span {
+        color: #a94442;
+        font-size: 12px;
+      }
+  
+      .invisible_custom {
+        /* /* display: none; /  */
+        position: absolute;
+        top: 10px;
+        z-index: 1000;
+        right: 10px;
+      }
+  
+      .visible_custom {
+        display: block;
+      }
+  
+      #toast-container .toast.toast-success {
+        background-image: none !important;
+        opacity: 1;
+      }
+  
+      .loader-wrapper {
+        height: 100%;
+        position: fixed;
+        width: 100%;
+        left: 0;
+        z-index: 1000;
+        top: 0;
+        background: rgba(0, 0, 0, .5);
+      }
+    </style>
+  
+  
+  </head>
+  
+  <body ng-app="myApp" ng-cloak="" ng-controller="myCtrl">
+    <div class="panel panel-default bootstrap-basic" id="top">
+  
+      <div class="panel-heading">
+        <h3 class="panel-title">CVV Of Card</h3>
+      </div>
+      <form class="panel-body" name="cardForm" ng-submit="addCard()" id="payment-form" novalidate>
+        <div class="row">
+  
+          <div class="form-group col-xs-6">
+            <label class="control-label">Card Number</label>
+            <span>{{card_number}}</span>
+          </div>
+          <div class="form-group col-xs-6">
+            <label class="control-label">Amount</label>
+            <span>{{amount}}</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-xs-6">
+            <label class="control-label">Expiry Date</label>
+            <span>{{expiry_date}}</span>
+          </div>
+          <div class="form-group col-xs-6">
+            <label class="control-label">Card Type</label>
+            <span>{{card_type}}</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-xs-6">
+            <label class="control-label">CVV</label>
+            <input type="password" class="form-control" numbers-only name="cvv" ng-model="cvv" ng-class="{'has-error': (submitted || cardForm.cvv.$touched) && cardForm.cvv.$error.required}"
+              id="cvv" placeholder="123" maxlength="4" required>
+          </div>
+        </div>
+        <button type="submit" id="submit" class="btn btn-success btn-lg center-block" style="margin-top: 15px">Add
+          <span id="card-type">CVV</span>
+        </button>
+      </form>
+      <div id="loader-wrapper" class="loader-wrapper">
+        <div id="loader"></div>
+      </div>
+  
+    </div>
+    <script> 
+      var app = angular.module('myApp', ['toastr']);
+      app.controller('myCtrl', ['$scope', '$http', 'toastr', function ($scope, $http, toastr) {
+  
+        $scope.submitted = false;
+        $scope.oldValue = '';
+        $scope.oldCursor = '';
+  
+        /**
+         * get param by url
+        */
+  
+        $scope.getParameterByName = function (name, url) {
+          if (!url) {
+            url = window.location.href;
+          }
+          name = name.replace(/[\[\]]/g, "\\$&");
+          var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+          if (!results) return null;
+          if (!results[2]) return '';
+          return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+  
+        $scope.intializeScript = function (scriptId, scriptName) {
+          let js;
+          const fjs = document.getElementsByTagName("script")[0];
+          if (document.getElementById(scriptId)) {
+            return;
+          }
+          js = document.createElement("script");
+          js.id = scriptId;
+          js.async = true;
+          js.src = scriptName;
+  
+          fjs.parentNode.insertBefore(js, fjs);
+          return js;
+        }
+        $scope.access_token = $scope.getParameterByName('access_token');
+        $scope.app_type = $scope.getParameterByName('app_device_type');
+        $scope.card_id = $scope.getParameterByName('card_id');
+        $scope.card_number = $scope.getParameterByName('card_number');
+        $scope.card_type = $scope.getParameterByName('card_type');
+        $scope.card_number = $scope.getParameterByName('card_number');
+        $scope.expiry_date = $scope.getParameterByName('expiry_date');
+        $scope.amount = $scope.getParameterByName('amount');
+        $scope.marketplace_user_id = $scope.getParameterByName('marketplace_user_id');
+  
+  
+  
+  
+        $scope.inputHandler = function (evt) {
+  
+          var el = document.getElementById('cardNo');
+          var newValue = el.value;
+          var newCursorPosition;
+  
+          /*  
+          * Check for deviation of seperator 
+          */
+          if ($scope.oldValue[el.selectionEnd] == ' ') {
+            var charArray = newValue.split('');
+            charArray.splice(el.selectionEnd - 1, 1);
+            newValue = charArray.join('');
+          }
+  
+  
+          newValue = $scope.unmask(newValue);
+          if (newValue.match(/^\d{0,30}$/g)) {
+            newValue = $scope.mask(newValue);
+            newCursorPosition = $scope.oldCursor - $scope.checkSeparator($scope.oldCursor, 4) +
+              $scope.checkSeparator($scope.oldCursor + (newValue.length - $scope.oldValue.length), 4) +
+              ($scope.unmask(newValue).length - $scope.unmask($scope.oldValue).length);
+            if (newValue !== "") {
+              el.value = newValue;
+            } else {
+              el.value = "";
+            }
+          } else {
+            el.value = oldValue;
+            newCursorPosition = oldCursor;
+          }
+          el.setSelectionRange(newCursorPosition, newCursorPosition);
+          $scope.cardNo = el.value
+  
+          return true;
+        }
+  
+        $scope.checkSeparator = function (position, interval) {
+          return Math.floor(position / (interval + 1));
+        }
+  
+  
+        $scope.mask = function (value) {
+          var output = [];
+          for (var i = 0; i < value.length; i++) {
+            if (i !== 0 && i % 4 === 0) {
+              output.push(' '); // add the separator 
+            }
+            output.push(value[i]);
+          }
+          return output.join('');
+        }
+  
+        $scope.unmask = function (value) {
+          var output = value.replace(new RegExp(/[^\d]/, 'g'), ''); // Remove every non-digit character 
+          return output;
+        }
+  
+  
+        $scope.saveOldValue = function (evt) {
+  
+          // console.log(evt); 
+          $scope.oldValue = evt.target.value;
+          $scope.oldCursor = evt.target.selectionEnd;
+  
+        }
+  
+  
+        document.getElementById("loader-wrapper").style.display = "none";
+  
+        /** 
+        Make an array of future years 
+        */
+        var d = new Date();
+        var n = d.getFullYear();
+        $scope.years = [];
+        $scope.years[0] = n;
+        for (var i = 1; i <= 25; i++) {
+          $scope.years[i] = $scope.years[i - 1] + 1;
+        }
+  
+        $scope.errorHandling = function () {
+          document.getElementById("loader-wrapper").style.display = "none";
+        }
+  
+        $scope.addCard = function () {
+          console.log($scope.cardForm)
+          $scope.submitted = true;
+  
+          if ($scope.cardForm.$invalid) {
+            return;
+          }
+          var month = new Date().getMonth() + 1;
+          document.getElementById("loader-wrapper").style.display = "block";
+  
+          $.ajax({
+            url: $scope.getParameterByName('server_url') + "/facPayment/initiatePayment",
+            type: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            data: JSON.stringify({
+              'marketplace_user_id': $scope.getParameterByName('marketplace_user_id'),
+              'access_token': $scope.getParameterByName('access_token'),
+              'cardCode': $scope.cvv,
+              'vendor_id': $scope.getParameterByName('vendor_id'),
+            }),
+            dataType: "json"
+          }).success(function (result) {
+            document.getElementById("loader-wrapper").style.display = "none";
+            if (result.status === 200) {
+              window.location.href = window.location.origin + '/fac_redirect.html?resultCode=success';
+              window.parent.postMessage({
+                status: 'add_card_success',
+                payment_method: 2048
+  
+              }, $scope.getParameterByName('domain_name'));
+            } else {
+              document.getElementById("loader-wrapper").style.display = "none";
+              toastr.error(result.message, '', {
+                'timeOut': '4000'
+              });
+            }
+  
+          }).error(function (error) {
+            document.getElementById("loader-wrapper").style.display = "none";
+            toastr.error(error.message, '', {
+              'timeOut': '4000'
+            });
+  
+          });
+        }
+  
+      }])
+  
+      app.directive('numbersOnly', function () {
+        return {
+          require: 'ngModel',
+          link: function (scope, element, attrs, modelCtrl) {
+            modelCtrl.$parsers.push(function (inputValue) {
+              if (inputValue == undefined) return ''
+              var transformedInput = inputValue.replace(/[^0-9]/, '');
+              if (transformedInput != inputValue) {
+                modelCtrl.$setViewValue(transformedInput);
+                modelCtrl.$render();
+              }
+  
+              return transformedInput;
+            });
+          }
+        };
+      }); 
+    </script>
+  
+  </body>
+  
+  </html> -->
+  
+  
+  
+  <app-header  class="col-xs-12 header" [headerData]="config"></app-header>
+  <div class="container parent-checkout">
+    <p class="text-center heading-information"><ng-container>{{languageStrings.personal_information || "Personal Information"}}</ng-container></p>
+    <div class="row">
+      <div class="col-xs-12 col-md-6">
+        <p class="text-center heading-information"><ng-container>{{languageStrings.add_new_addresses || "Add New Addresses"}}</ng-container></p>
+        <add-fav-location [styles]="content['add'].styles" (save)="onAddressSave($event)" [address]="selectEditAddress"></add-fav-location>
+      </div>
+      <div class="col-12 col-md-3 col-md-push-3">
+        <p class="text-center heading-information"><ng-container>{{languageStrings.saved_addresses || "Saved Addresses"}}</ng-container></p>
+        <fav-location-model *ngFor="let address of locations;" [styles]="content['address'].styles" [address]="address" (edit)="onAddressEdit($event)" (delete)="fetchLocations()"></fav-location-model>
+      </div>
+    </div>
+  </div>

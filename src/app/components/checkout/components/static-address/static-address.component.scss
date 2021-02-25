@@ -1,0 +1,158 @@
+@import '~assets/css/variables';
+
+:host {
+  --address_desc_color: #afafaf;
+  --address_title_color: #333;
+  // --address_bg_color:white;
+  --address_bg_color: white;
+}
+
+//scss variables
+$address-desc-color: var(--address_desc_color, #afafaf);
+$address-title-color: var(--address_title_color, #333);
+$address-bg-color: var(--address_bg_color, white);
+
+.btn-deliver-here {
+  background-color: $color-blue;
+  color: white;
+  text-transform: uppercase;
+  font-family: $proxima-semi-bold;
+  margin-bottom: 5px;
+}
+
+.model-container {
+  background: $address_bg_color;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #f7f7f7;
+  /* border-radius: 5px; */
+  min-height: 18rem;
+  max-width: 30rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.content-inner {
+  max-height: 10rem;
+  height: 10rem;
+}
+
+.chk_form {
+  min-height: 250px;
+}
+
+.model-container:hover {
+  -webkit-transition: ease .5s;
+  -moz-transition: ease .5s;
+  -ms-transition: ease .5s;
+  -o-transition: ease .5s;
+  transition: ease .3s;
+  border: 1px solid $color-theme;
+}
+
+.address-action {
+  margin-left: 10px;
+  text-decoration: none;
+  cursor: pointer;
+
+  img {
+    height: 20px;
+    width: 20px;
+  }
+}
+
+.complete-address {
+  color: $address-desc-color
+}
+
+.action-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.loc-type-img {
+  margin-right: 10px;
+  height: 16px;
+  width: 16px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+p.title {
+  color: $address-title-color;
+  display: flex;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/deep/.signup-input {
+  height: 4rem !important;
+}
+
+.selected-address {
+  padding: 20px 40px;
+}
+
+.address {
+  border-radius: 5px;
+  padding: 10px 0px;
+}
+
+p.title {
+  display: flex;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.complete-address {
+  color: #afafaf
+}
+
+.img-checked {
+  height: 18px;
+  width: 18px;
+}
+
+.chk_inr_hdng {
+  display: flex;
+  justify-content: space-between;
+
+  .heading-btn {
+    margin: auto 20px;
+    justify-content: flex-end;
+
+    button {
+      color: $color-blue;
+      font-family: $proxima-semi-bold;
+      border: 2px solid $color-blue;
+    }
+  }
+}
+
+.scrollData {
+  max-height: 275px;
+  overflow-y: auto;
+}
+
+.icon {
+  cursor: pointer;
+  flex: 1;
+  max-width: 6rem;
+  font-size: 4rem;
+}
+
+.widthSearch {
+  width: 200px;
+}
+
+@media only screen and (max-width:650px) {
+  .heading-btn {
+    margin: auto 10px !important;
+  }
+
+  .widthSearch {
+    width: 125px !important;
+  }
+}

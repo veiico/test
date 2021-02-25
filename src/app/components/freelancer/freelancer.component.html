@@ -1,0 +1,16 @@
+<div id="global_loader" class="glb-ldr-prt">
+  <div class="gl-ldr-cld">
+    <div class="gl-ldr-ctr">
+      <div class="loader" id="loader" [ngStyle]="{'border-bottom-color': data.color,'border-left-color': data.color}"></div>
+    </div>
+  </div>
+</div>
+<div class="layout_parentFreelancer">
+  <app-header *ngIf="mobileView" class="col-xs-12" style="height: 85px;padding: 0px;" [headerData]="data" [showAddressBarOnlyRestaurant]="showAddress"></app-header>
+  <!-- <app-freelancer-header [headerData]="data"></app-freelancer-header> -->
+
+  <router-outlet></router-outlet>
+  <!--<app-footer></app-footer>-->
+  <!-- <app-cookie-footer *ngIf="!data.is_demo && !data.hide_gdpr"></app-cookie-footer> -->
+  <!--domain != 'food.yelo.red' && domain != 'rentals.yelo.red' && domain != 'cannabis.yelo.red'-->
+</div>

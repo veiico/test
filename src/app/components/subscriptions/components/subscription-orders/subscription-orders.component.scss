@@ -1,0 +1,313 @@
+@import '../../../../../assets/css/variables';
+@import '../../../../../assets/css/custom-datepicker';
+
+.order-wrapper {
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+
+
+.cards {
+    margin: 10px;
+    height: 100%;
+    //padding: 20px;
+    background-color: #ffffff;
+    cursor: pointer;
+    box-shadow: 0 2px 35px 0 rgba(0, 0, 0, 0.05);
+    border: 1px solid #979797;
+
+    &:hover {
+        box-shadow: 0 7px 5px 0 rgba(0, 0, 0, 0.1);
+        transition: .5s;
+    }
+
+    font-family: $proxima-reg;
+}
+
+.charge-heading{
+    font-family: "ProximaNova-Semibold";
+    font-size: 14px;
+    letter-spacing: 0.8px;
+    color: #464646;
+    font-weight: bold;
+}
+
+.padBtm10{
+    padding-bottom: 10px;
+}
+.p-0{
+    padding: 0;
+}
+.head-color{
+    color: #000;
+}
+
+.orderIDDiv {
+    font-family: $proxima-reg;
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 20px;
+
+    div.orderIdOnly {
+        line-height: 50px;
+
+        .idText {
+            font-family: $proxima-reg;
+            font-size: 14px;
+            line-height: 1;
+            letter-spacing: normal;
+            color: #333;
+        }
+
+        .idNumber {
+            font-family: $proxima-reg;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            color: #333333;
+            margin-left: 15px;
+        }
+    }
+
+    .orderStatusOnly {
+        line-height: 50px;
+
+        .statusText {
+            font-family: $proxima-reg;
+            font-size: 14px;
+            line-height: 1;
+            padding-top: 5px;
+        }
+    }
+}
+
+.productHeight {
+    min-height: 240px;
+}
+
+.otherDetailsDiv {
+    position: relative;
+    background-color: #e5e5e5;
+    padding: 25px 20px;
+
+    .orderAmount {
+        .orderAmountText {
+            font-family: $proxima-reg;
+            font-size: 14px;
+            font-weight: normal;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: normal;
+            letter-spacing: -0.1px;
+            text-align: left;
+            color: #333333;
+        }
+
+        .orderAmountNumber {
+            font-family: $proxima-reg;
+            font-size: 14px;
+            font-weight: normal;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: normal;
+            letter-spacing: -0.1px;
+            text-align: right;
+            color: #333333;
+        }
+    }
+}
+
+.subsc-action-btn {
+    display: flex;
+    width: 100%;
+    height: 33px;
+
+    &>.view-btn {
+        width: 50%;
+        font-size: 1.5rem;
+        color: $color-theme;
+        height: 5.2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &>.pause-btn {
+        height: 5.2rem;
+        width: 50%;
+        color: #191919;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.5rem;
+        border-right: 1px solid #cbcbcb;
+
+        &>img {
+            margin-right: 10px;
+        }
+
+        &.selected {
+
+            background-color: $color-theme;
+            color: $color-white;
+        }
+    }
+
+
+}
+
+#orderDetails {
+
+    .headerBgColor {
+        background-color: #4c4b4b;
+
+        .titleColor {
+            font-family: $proxima-reg;
+            font-size: 18px;
+            font-weight: normal;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            text-align: left;
+            color: #ffffff;
+            padding: 0px !important;
+        }
+    }
+
+    .content>div {
+        margin-top: 10px;
+    }
+
+    .textStyle {
+        font-family: $proxima-reg;
+        font-size: 14px;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: #333333;
+    }
+
+    .heading {
+        font-family: $proxima-reg;
+        font-size: 14px;
+        color: #000000;
+        opacity: 0.6;
+        margin-top: 10px;
+    }
+
+    .details {
+        font-family: $proxima-reg;
+        font-size: 14px;
+        color: #000000;
+        // margin-top: 10px;
+
+    }
+
+    .date-input {
+        .input-group {
+            position: relative;
+        }
+    }
+}
+
+.text-right {
+    text-align: right;
+}
+
+
+.calendar-container {
+    position: absolute;
+    z-index: 1000;
+    top: 34px;
+    left: 0px;
+    width: 100%;
+    background-color: white;
+    border: 1px solid #b3b3b3;
+}
+
+.confirmation-header {
+
+    background-color: #4c4b4b;
+    padding: 15px 10px;
+    position: relative;
+    color: white;
+    font-size: 18px;
+
+    .heading {
+        font-size: 16px;
+        color: $color-white;
+    }
+
+    .close {
+        position: absolute;
+        z-index: 100;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+}
+
+.confirmation-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .submit-btn {
+        background-color: $color-theme;
+        border-color: $color-theme;
+        margin-right: 10px;
+    }
+
+    .cancel-btn {
+        border: solid 1px #b2b2b2;
+        font-family: "$proxima-reg";
+        font-size: 15px;
+        font-weight: bold;
+        text-align: center;
+        color: #b2b2b2;
+        background: transparent;
+    }
+}
+
+.no-orders {
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-c {
+    height: auto;
+    padding-bottom: 20px;
+    min-height: auto !important;
+}
+
+.heading {
+    text-align: center;
+    padding: 40px 0;
+}
+
+.title {
+    text-align: center;
+    color: #858585;
+    display: inline-block;
+    font-family: ProximaNova;
+    font-size: 25px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #333333;
+}
+
+
+.line {
+    margin: 0 auto;
+    width: 50px;
+}

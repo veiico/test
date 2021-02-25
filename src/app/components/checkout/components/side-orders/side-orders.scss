@@ -1,0 +1,95 @@
+
+@import '~assets/css/variables';
+.side-order-wrapper{
+    overflow: hidden;
+  }
+  .sideorder-section {
+    background-color: #fbfbfb;
+    padding: 15px;
+    position: relative;
+    .heading {
+      font-family: $proxima-reg;
+      font-size: 18px;
+      letter-spacing: 0.7px;
+      color: #464646;
+      margin-bottom: 20px;
+    }
+    .side-orders{
+      transition: transform .5s ease,-webkit-transform .5s ease;
+      white-space: nowrap;
+    }
+    .product-div {
+      position: relative;
+      display: inline-block;
+      margin-right: 20px;
+      .add-btn{
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        height: 15px;
+        cursor: pointer;
+      }
+      .veg-img{
+          display: inline-block;
+          vertical-align: top;
+          margin-right: 7px;
+      }
+      .prdct-img{
+        display: inline-block;
+        width: 80px;
+        height: 80px;
+        img{
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+    
+      }
+      .prdct-name{
+        font-family: $proxima-reg;
+        font-size: 10px;
+        color: #4c4c4c;
+        margin: 10px 0px;
+      }
+  
+      .prdct-price{
+        font-family: $proxima-reg;
+        font-size: 14px;
+        color: #565656;
+      }
+     
+    }
+  }
+  
+  
+  
+  .right-btn {
+    position: absolute;
+    z-index: 100;
+    right: -20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 104px;
+    width: 40px;
+    top: calc(50% - 52px);
+    cursor: pointer;
+    transform: rotate(-180);
+    
+  }
+  
+  .left-btn {
+    position: absolute;
+    z-index: 100;
+    left: -20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 104px;
+    top: calc(50% - 52px);
+    width: 40px;
+    cursor: pointer;
+  
+  
+  }
+  

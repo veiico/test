@@ -1,0 +1,21 @@
+<div class="lastLevelCat">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" [hidden]="categoryData && categoryData.length == 0">
+      <div class="categoryView">
+        <div class="parent">
+          <div id="leftArrow" class="inactive"></div>
+          <div class="catList">
+            <div class="catItemList" id="tslshow">
+              <div class="spanImg" role="button" aria-label="Select pizza" title="{{cat.name}}" *ngFor="let cat of categoryData; let i = index;"
+                   (click)="getMerchantProductAcc(cat,i)">
+                <img class="" [src]="cat.thumb_url?cat.thumb_url:'assets/img/image-placeholder.svg'" alt="{{cat.name + ' image'}}">
+                <div [ngStyle]="{'color': cat.selected ? config.color : '#333'}">{{cat.name}}</div>
+              </div>
+            </div>
+          </div>
+          <div id="rightArrow"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

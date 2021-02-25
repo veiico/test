@@ -1,0 +1,63 @@
+
+<app-modal [modalType]="modalType" (esc)="onClose()" (onClose)="onClose()">
+    <div body>
+        <div class="text-right">
+            <span (click)="onClose()" class="close-x sotreOpen">&times;</span>
+        </div>
+
+        <div class="schedule-delivery">
+            <p class="schedule-delivery-heading">{{languageStrings.select_location || 'Select Location'}}</p>
+            <!-- <hr class="head-sep" *ngIf="!storeData || storeData.available"/> -->
+            <div class="date-time-picker">
+                <div class="row">
+                    <!-- <form [formGroup]="fetchLocationForm"> -->
+                      <app-autocomplete (locationAutoFilled)="locationAutoFilled()"></app-autocomplete>
+                    <!-- </form> -->
+                </div>
+            </div>
+        </div>
+
+        <hr class="seperator" />
+
+        <div class="text-right btn-box">
+            <!-- <button type="button" class="btn accept cancelButton" (click)="close()">
+                <ng-container i18n>Cancel </ng-container>
+            </button> -->
+            <button type="button" class="btn accept" appColor bg="true" (click)="onSubmit()">
+                <ng-container>{{languageStrings.submit || 'Submit'}} </ng-container>
+            </button>
+        </div>
+    </div>
+</app-modal>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <div class="overlay">
+  <div class="feth-address">
+    <div class="cross">
+      <a>&times;</a>
+    </div>
+    <div>
+      <app-autocomplete></app-autocomplete>
+    </div>
+    <div>
+      <i class=""></i>
+      <div>
+        <p class="get-cut">Get current location</p>
+        <p>Using GPS</p>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+

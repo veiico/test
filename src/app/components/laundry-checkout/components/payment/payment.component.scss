@@ -1,0 +1,125 @@
+@import '~assets/css/variables';
+
+.payment {
+  padding: 20px 85px;
+  .details{
+    font-family: $proxima-reg;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: #8A8888;
+    font-size: 16px;
+  }
+  .heading{
+    h5{
+      font-weight: 500;
+      font-size: 18px;
+      //color: $color-theme;
+      color: #333;
+      font-family: $proxima-reg;
+      margin-bottom: 20px;
+      border-bottom: 1px solid $color-theme;
+      padding: 10px 0px;
+    }
+    h5 img{
+      margin-right: 8px;
+    }
+  }
+  .totalDetailsOther{
+    text-transform: uppercase;
+    hr{
+      margin-top: 10px !important;
+    }
+    .text{
+      font-family: $proxima-reg;
+      font-weight: 600;
+      font-size: 16px;
+      color: black;
+    }
+    .value {
+      font-family: $proxima-reg;
+      font-size: 16px;
+      color: #8A8888;
+      float: right;
+      font-weight: 600;
+    }
+  }
+  .detailsOther{
+    text-transform: capitalize;
+    .text{
+      font-family: $proxima-reg;
+      font-weight: 500;
+      font-size: 15px;
+      color: black;
+    }
+    .value {
+      font-family: $proxima-reg;
+      font-size: 15px;
+      color: #8A8888;
+      float: right;
+    }
+  }
+
+  .mt-10{
+    margin-top: 10px;
+  }
+  .mt-20{
+    margin-top: 20px;
+  }
+  .mt-5{
+    margin-top: 5px;
+  }
+  .p-0{
+    padding: 0px;
+  }
+
+  .promo-enter{
+    margin-top: 15px;
+    position: relative;
+  }
+
+  .continueBtn{
+    background-color: $color-theme;
+    font-family: $proxima-reg;
+    font-size: 16px;
+    color: #fff;
+    border: 1px solid transparent;
+    transition: .5s;
+    &:hover{
+      border: 1px solid $color-theme;
+      background-color: white;
+      color: $color-theme;
+    }
+  }
+}
+
+@media only screen and (max-width: 990px) {
+  .payment{
+    padding: 10px !important;
+  }
+}
+
+
+.auto_promo_div{
+  max-width: 80%;
+  .auto_promo{
+      color: #82c548;   
+      font-size: 12px;
+  }
+}
+
+:host /deep/ app-enabled-payment-methods app-limelight payment-limelight .setWidth {
+  width: 55% !important;
+}
+
+
+.wallet-action-btn{
+  display: flex;
+  justify-content: center;
+  button{
+    background-color: $color-theme;
+    border-color: $color-theme;
+  }
+  .add-now-btn{
+    margin-right: 10px;
+  }
+}

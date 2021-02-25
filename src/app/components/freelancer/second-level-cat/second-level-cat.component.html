@@ -1,0 +1,53 @@
+<div class="second-level-cat">
+    
+    <div *ngIf="config" class="head">
+        <h1 class="main">
+            <ng-container *ngIf="config.category_heading">
+                {{config.category_heading}}
+            </ng-container>
+        </h1>
+        <h3 class="sub">
+            <ng-container *ngIf="config.category_sub_heading">
+                {{ config.category_sub_heading}}
+            </ng-container>
+        </h3>
+    </div>
+
+    <div class="second-cat row">
+
+        <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 breadCrumbList" *ngIf="breadCrumb && breadCrumb.length > 0">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item" *ngFor="let paths of breadCrumb;let j = index"><a (click)="getBreadCrumb(paths, j)">{{paths.name}}</a></li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 catView" *ngFor="let cat of categories; let i = index;">
+            <div class="cat-block" (click)="getSubCat(cat, i)">
+                <div class="image-div" *ngIf="cat.thumb_list && cat.thumb_list['400x400']? true : cat.image_url ? cat.image_url : false">
+                    <img [src]="cat.thumb_list && cat.thumb_list['400x400']?cat.thumb_list['400x400']: cat.image_url ? cat.image_url : 'assets/img/image-placeholder.svg'"
+                    [alt]="cat.name + ' image'" />
+                    <div class="fluid-thumbnail-grid-image-overlay"></div>
+                </div>
+                <div class="text-div">
+                    <div class="name hidden-xs">
+                        <span [tooltip]="cat.name?cat.name:''">{{cat.name | truncate : 25 : '.'}}</span>
+                    </div>
+                    <div class="name visible-xs">
+                        <span [tooltip]="cat.name?cat.name:''">{{cat.name | truncate : 19 : '.'}}</span>
+                    </div>
+                    <div class="description hidden-xs">
+                        {{cat.description | truncate : 105 : '.'}}
+                    </div>
+                    <div class="description visible-xs">
+                        {{cat.description | truncate : 70 : '.'}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<app-footer></app-footer>

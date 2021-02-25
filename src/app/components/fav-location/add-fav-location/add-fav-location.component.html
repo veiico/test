@@ -1,0 +1,163 @@
+<form role="form" [formGroup]="addLocationForm">
+  <div class="row form-group">
+    <!--<div class="col-md-3">-->
+    <!--<label class="label">-->
+    <!--<b><ng-container >Full Name</ng-container> <span style="color: red">*</span></b>-->
+    <!--</label>-->
+    <!--</div>-->
+    <div class="col-md-6 col-xs-6">
+      <label class="label" for="fav-name">
+        <b>
+          <ng-container>{{languageStrings.full_name || 'Full Name' }}</ng-container> <span class="require-star">*</span>
+        </b>
+      </label>
+      <input type="text" id="fav-name" class="form-control"  placeholder="{{ languageStrings.enter_full_name || 'Enter Full Name' }}" formControlName="name" >
+      <app-control-messages [control]="addLocationForm.controls.name"></app-control-messages>
+    </div>
+    <div class="col-md-6 col-xs-6">
+      <label class="label" for="fav-email">
+        <b>
+          <ng-container>{{languageStrings.email || "Email"}}</ng-container> <span *ngIf="mandatory_fields != 1" class="require-star">*</span>
+        </b>
+      </label>
+      <input type="text" id="fav-email" class="form-control"  placeholder="{{ languageStrings.enter_email || 'Enter Email' }}" formControlName="email">
+      <app-control-messages [control]="addLocationForm.controls.email"></app-control-messages>
+    </div>
+    <!-- <div class="col-xs-6 col-md-5">
+      <input type="text" class="form-control" placeholder="Enter last Name" formControlName="last_name">
+      <app-control-messages [control]="addLocationForm.controls.last_name"></app-control-messages>
+    </div> -->
+  </div>
+
+ 
+
+  <div class="row form-group">
+    <!--<div class="col-md-3">-->
+    <!--<label class="label">-->
+    <!--<b><ng-container >Phone</ng-container> <span style="color: red">*</span></b>-->
+    <!--</label>-->
+    <!--</div>-->
+    <div class="col-md-12">
+      <label class="label" aria-hidden="true">
+        <b>
+          <ng-container>{{languageStrings.phone || "Phone"}}</ng-container> <span *ngIf="mandatory_fields != 0" class="require-star">*</span>
+        </b>
+      </label>
+      <app-fugu-tel-input class="phone_style phone-fav-add" formControlName="phone" [value]="addLocationForm.controls.phone.value"
+        [(dialCode)]="country_code"></app-fugu-tel-input>
+      <p class="phoneError" *ngIf="!phoneCheck">{{languageStrings.phone_number_not_valid || "Phone number not valid."}}</p>
+    </div>
+  </div>
+
+<div>
+
+  <div [hidden]="!is_google_map" id="static-address-map"></div>
+  <div [hidden]="is_google_map" id="map"></div>
+</div>
+  <div class="row form-group">
+    <!--<div class="col-md-3">-->
+    <!--<label class="label">-->
+    <!--<b><ng-container >Address</ng-container> <span style="color: red">*</span></b>-->
+    <!--</label>-->
+    <!--</div>-->
+    <div class="col-md-12">
+      <label class="label" aria-hidden="true">
+        <b>
+          <ng-container>{{terminology.ADDRESS || 'Address'}}</ng-container> <span class="require-star">*</span>
+        </b>
+      </label>
+      <div class="address-parent"><i class="glyphicon glyphicon-map-marker map-icon"
+        aria-hidden="true"></i><app-jw-google-autocomplete  #search   placeholder="{{languageStrings.enter_address || 'Enter Address'}}" formControlName="address" (latLng)="onLatLngEvent($event,addLocationForm.controls.address)"
+        (modelChange)="clearLatLng()" (autocomlpeteResultSelect)="onAutocomlpeteResultSelect($event)"></app-jw-google-autocomplete>
+      </div>
+      <!-- <input type="text" class="form-control checkout-input" id="address_autocomplete" #addressAutocomplete
+         placeholder="Enter Address" formControlName="address"> -->
+      <app-control-messages [control]="addLocationForm.controls.address"></app-control-messages>
+      <!-- <div id="map" class="map-view"></div> -->
+    </div>
+  </div>
+  <div class="note">
+    <span class="pin-address">
+      <ng-container>{{languageStrings.please_ensure_you_drop_the_pin_at_the_address_where_the_order_has_to_be_delivered || "Please ensure you drop the pin at the address where the ORDER has to be delivered"}}</ng-container>
+    </span>
+    
+    </div>
+  <div class="row form-group">
+    <!--<div class="col-md-3">-->
+    <!--<label class="label">-->
+    <!--<b><ng-container >Flat No</ng-container> <span style="color: red">*</span></b>-->
+    <!--</label>-->
+    <!--</div>-->
+
+    <div class="col-md-6 col-xs-6">
+      <label class="label" for="fav-flat-name">
+
+        <b>
+          <ng-container>{{terminology.APARTMENT_NO || 'Apartment No.'}}</ng-container> <span *ngIf="config.is_apartment_no_mandatory" class="require-star">*</span>
+        </b>
+
+      </label>
+      <input type="text" id="fav-flat-name" class="form-control"  placeholder=" {{languageStrings.enter_address || 'Enter Apartment No'}}" formControlName="flat_no">
+      <app-control-messages [control]="addLocationForm.controls.flat_no"></app-control-messages>
+    </div>
+    <div class="col-md-6 col-xs-6">
+      <label class="label" for="fav-postal">
+        <b>
+          <ng-container>{{terminology.POSTAL_CODE || 'Postal Code'}}</ng-container> <span *ngIf="config.is_postal_code_mandatory" class="require-star">*</span>
+        </b>
+      </label>
+      <input id="fav-postal" type="text" class="form-control"  placeholder="{{languageStrings.enter_postal_code || 'Enter Postal Code'}}" formControlName="postal">
+      <app-control-messages [control]="addLocationForm.controls.postal"></app-control-messages>
+    </div>
+  </div>
+
+ <div class="row form-group">
+    <!--<div class="col-md-3">-->
+    <!--<label class="label">-->
+    <!--<b><ng-container >Landmark</ng-container></b>-->
+    <!--</label>-->
+    <!--</div>-->
+    <div class="col-md-12">
+      <label class="label" for="fav-landmark">
+        <b>
+          <ng-container>{{terminology.LANDMARK || 'Landmark'}}</ng-container> <span *ngIf="config.is_landmark_mandatory" class="require-star">*</span>
+        </b>
+      </label>
+      <input  id="fav-landmark" type="text" class="form-control"  placeholder="{{languageStrings.enter_landmark || 'Enter Landmark'}}" formControlName="landmark">
+      <app-control-messages [control]="addLocationForm.controls.landmark"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row form-group" *ngIf="!address && showType">
+    <div class="col-md-12">
+      <label class="label">
+        <b>
+          <ng-container>{{languageStrings.label_for_address || "Label for Address"}}</ng-container> <span class="require-star">*</span>
+        </b>
+      </label>
+    </div>
+    <div class="col-md-12">
+      <mat-radio-group [(ngModel)]="locationType" [ngModelOptions]="{standalone: true}">
+        <mat-radio-button class="addressTypes" *ngFor="let loc of locationTypes;let i = index" [value]="loc.value">{{loc.type}}</mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </div>
+
+  <div class="row ">
+    <div class="col-sm-8">
+      <button appColor class="btn btn-block btn-red" [disabled]="!addLocationForm.valid || !phoneCheck " (click)="saveAddress()">
+        <ng-container>{{languageStrings.save || "Save"}}</ng-container>
+      </button>
+    </div>
+    <div class="col-sm-4">
+      <button type="button" class="btn btn-block btn-cancel" (click)="cancelForm()">
+        <ng-container>{{languageStrings.cancel || "Cancel"}}</ng-container>
+      </button>
+    </div>
+  </div>
+</form>
+
+<app-map-popup
+*ngIf="showTemplatePopup"
+[lat]="lat" [lng]="lng" [formattedAddress]="city" (save)="onMapPopupSave($event)"
+(close)="hideTempltePopup($event)"></app-map-popup> 

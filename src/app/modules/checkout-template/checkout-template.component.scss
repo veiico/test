@@ -1,0 +1,27 @@
+.width-adjustment {
+    width: 50%;
+    padding: 12px;
+}
+
+.divs-wrapper {
+    display: flex !important;
+    align-items: stretch !important;
+    flex-wrap: wrap;
+}
+
+:host /deep/app-data-controls .div-wrapper {
+    margin-bottom: 0px !important;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+:host /deep/app-data-controls .div-wrapper .label-wrapper {
+    flex: inherit !important;
+}
+@media only screen and (max-width: 768px) {
+    .width-adjustment {
+        width: 100% !important;
+       
+    }
+  }

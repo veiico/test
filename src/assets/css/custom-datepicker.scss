@@ -1,0 +1,67 @@
+@import '~assets/css/variables';
+
+/deep/ p-calendar {
+  .ui-calendar {
+    width: 100%;
+  }
+
+  .custom-datepicker {
+
+
+    .ui-datepicker-group .ui-datepicker-calendar-container .ui-datepicker-calendar {
+      td {
+        border: 0px;
+        height: 40px;
+        font-family: $proxima-semi-bold;
+
+        // padding: 7px;
+        a {
+          height: 100%;
+          margin: 0 auto;
+          width: 40px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 50%;
+
+        }
+        a:not(.ui-state-diasabled) {
+          background-color: $color-black;
+          color: white
+
+        }
+        
+        //warning do not change order of a:not(.ui-state-diasabled) and a.ui-state-active
+
+        a.ui-state-active {
+          background-color: $color-theme;
+
+        }
+
+      }
+    }
+  }
+}
+
+
+@media screen and (max-width: 767px) {
+
+  /deep/ p-calendar {
+
+    .custom-datepicker {
+
+
+      .ui-datepicker-group .ui-datepicker-calendar-container .ui-datepicker-calendar {
+        td {
+          height: 30px;
+
+          a {
+            width: 30px;
+
+          }
+        }
+      }
+    }
+  }
+
+}

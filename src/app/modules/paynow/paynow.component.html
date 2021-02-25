@@ -1,0 +1,8 @@
+<div class="container-fluid paynow-gateway" *ngIf="showBackground" (click)="focusOnWindow()">
+    <div class="paynow-message">
+        <ng-container>Don’t see the secure paynow browser? We’ll help you re-launch the window to complete your purchase.</ng-container>
+    </div>
+    <div class="paynow-checkout-continue">
+        <u>{{languageStrings.click_to_continue || 'Click to Continue'}}</u>
+    </div>
+</div>

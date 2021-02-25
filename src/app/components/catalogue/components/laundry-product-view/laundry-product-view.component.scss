@@ -1,0 +1,73 @@
+@import '~assets/css/variables';
+
+.unSelectProduct{
+  opacity: 1;
+}
+
+.seletedProduct{
+  opacity: 0.5;
+}
+
+.seletedProduct::before,
+.seletedProduct::after {
+  content: '';
+  position: absolute;
+  top: 25px;
+  left: 25px;
+  border-color: transparent;
+  border-style: solid;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  z-index: 100;
+}
+
+.seletedProduct::after {
+  content: '\2713';
+  font-size: 30px;
+  font-weight: bold;
+  color: white;
+  top: 20px;
+  left: 15px;
+}
+
+.seletedProduct::before {
+  border: 25px solid transparent;
+  border-radius: 0;
+  border-left-color: $color-theme;
+  border-top-color: $color-theme;
+}
+
+.proceedBtn{
+  font-family: $proxima-reg;
+  font-size: 15px;
+  background-color: $color-theme;
+  color: #fff;
+  margin-right: 22px;
+  margin-bottom: 5px;
+  border: 1px solid transparent;
+  &:hover{
+    background-color: #fff;
+    border: 1px solid $color-theme;
+    color: $color-theme;
+  }
+}
+@media (max-width: 425px) {
+  .home-fluid-thumbnail-grid-narrow .home-fluid-thumbnail-grid-item {
+    width:100% !important;
+  }
+}
+.product-cl-data{
+  width: 100% !important;
+}
+.row-eq-height{
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  .row-col-eq{
+      margin-bottom: 20px;
+  }
+}
+
+:host /deep/ .home-fluid-thumbnail-grid-author.laundry {
+  height: auto !important;
+}

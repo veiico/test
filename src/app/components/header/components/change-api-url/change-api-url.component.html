@@ -1,0 +1,22 @@
+<app-modal header="Change Api url" [modalType]="modalType.MEDIUM"  (esc)="hideTempltePopup()" (onClose)="hideTempltePopup()">
+    <div body>
+      <div class="row m0 padding10">
+        <div class="col-lg-12">
+          <form [formGroup]="apiUrlForm" class="fancy-form">
+            <div class="form-group">
+              <label class="control-label" for="change-api-url">
+                <ng-container>Api Url(<span style="text-transform: none;">test-api.yelo.red</span>)</ng-container>
+                <span class="error-star">*</span>
+              </label>
+              <input type="text" id="change-api-url" class="form-control"  formControlName="apiUrl">
+              <app-control-messages [control]="apiUrlForm.controls.apiUrl"></app-control-messages>
+            </div>
+          </form>
+        </div>
+        <div class="col-lg-12 text-right mt10">
+          <button type="button" class="btn accept cancelButton" [ngStyle]="{ 'direction' : direction }" (click)="hideTempltePopup()"><ng-container >Cancel </ng-container></button>
+          <button type="button" class="btn accept" appColor bg="true" [ngStyle]="{ 'direction' : direction }" (click)="onSubmit()"><ng-container >Submit </ng-container></button>
+        </div>
+      </div>
+    </div>
+</app-modal>

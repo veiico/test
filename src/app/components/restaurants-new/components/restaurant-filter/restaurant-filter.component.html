@@ -1,0 +1,91 @@
+<div class="cotainer-elem">
+    <form [formGroup]="filterForm">
+        <div class="col-md-12 filter-header">
+            <span>
+                <span>
+                    <img src="assets/img/cancel.svg" alt="close" (click)="closeComponent()" height="15px" width="15px">
+                </span>
+                <span class="title-head">
+                    <ng-container>{{languageStrings.filters || "Filters"}}</ng-container>
+                </span>
+            </span>
+        </div>
+        <div class="col-md-12 filter-body-area" *ngIf="(defaultFilters && defaultFilters.length>0) || (specificFilters && specificFilters.length>0)">
+            <div class="row">
+                <div class="col-md-10" formArrayName="defaultFilters" *ngFor="let default of filterForm.get('defaultFilters')['controls'];let i = index">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span class="filter-heading"> {{default.controls.display_name.value}} </span>
+                        </div>
+                        <div class="col-md-12 filter-options-div" *ngIf="default.controls.data_type.value === dynamicTemplateDataType.MULTI_SELECT">
+                            <div class="col-md-12">
+                                <span class="clear-text" (click)="clearSelectedFilter(default)" *ngIf="default.controls.selected_values.value &&  default.controls.selected_values.value.length>0">{{languageStrings.clear || "Clear"}}</span>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6" style="padding-left:7px" *ngFor="let options of default.controls.allowed_values.value">
+                                <p-checkbox [name]="default.controls.label.value" [value]="options" [label]="options" [formControl]="default.controls.selected_values"
+                                    (onChange)="checkForEnableClearFilter()"></p-checkbox>
+                            </div>
+
+                        </div>
+                        <div class="col-md-12 filter-options-div" *ngIf="default.controls.data_type.value === dynamicTemplateDataType.SINGLE_SELECT">
+                            <div class="col-md-12">
+                                <span class="clear-text" (click)="clearSelectedFilter(default)" *ngIf="default.controls.selected_values.value && default.controls.selected_values.value?.length>0">{{languageStrings.clear || "Clear"}}</span>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6" style="padding-left:7px" *ngFor="let options of default.controls.allowed_values.value">
+                                <p-radioButton [name]="default.controls.label.value" [value]="options" [label]="options" [formControl]="default.controls.selected_values"
+                                    (click)="checkForEnableClearFilter()"></p-radioButton>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10" formArrayName="specificFilters" *ngFor="let default of filterForm.get('specificFilters')['controls'];let i = index">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span class="filter-heading"> {{default.controls.display_name.value}} </span>
+                        </div>
+                        <div class="col-md-12 filter-options-div" *ngIf="default.controls.data_type.value === dynamicTemplateDataType.MULTI_SELECT">
+                            <div class="col-md-12">
+                                <span class="clear-text" (click)="clearSelectedFilter(default)" *ngIf="default.controls.selected_values.value && default.controls.selected_values.value.length>0">{{languageStrings.clear || "Clear"}}</span>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6" style="padding-left:7px" *ngFor="let options of default.controls.allowed_values.value">
+                                <p-checkbox [name]="default.controls.label.value" [value]="options" [label]="options" [formControl]="default.controls.selected_values"
+                                    (onChange)="checkForEnableClearFilter()"></p-checkbox>
+                            </div>
+
+                        </div>
+                        <div class="col-md-12 filter-options-div" *ngIf="default.controls.data_type.value === dynamicTemplateDataType.SINGLE_SELECT">
+                            <div class="col-md-12">
+                                <span class="clear-text" (click)="clearSelectedFilter(default)" *ngIf="default.controls.selected_values.value && default.controls.selected_values.value?.length>0">{{languageStrings.clear || "Clear"}}</span>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6" style="padding-left:7px" *ngFor="let options of default.controls.allowed_values.value">
+                                <p-radioButton [name]="default.controls.label.value" [value]="options" [label]="options" [formControl]="default.controls.selected_values"
+                                    (click)="checkForEnableClearFilter()"></p-radioButton>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 filter-body-area" *ngIf="!(defaultFilters && defaultFilters.length>0) && !(specificFilters && specificFilters.length>0)">
+            <div class="row text-center">
+                <ng-container>{{languageStrings.no_filters_available || "No filters Available"}}</ng-container>
+            </div>
+        </div>
+
+
+        <div class="col-md-12 filter-actions" *ngIf="(defaultFilters && defaultFilters.length>0) || (specificFilters && specificFilters.length>0)">
+            <div class="row">
+                <div class="col-md-4 col-sm-6 col-xs-6">
+                    <button class="clear-btn btn" (click)="clearFilters()" [disabled]="!enableClearFilter">
+                        <ng-container>{{languageStrings.reset || "Reset"}}</ng-container>
+                    </button>
+                </div>
+                <div class="col-md-7 col-sm-6 col-xs-6">
+                    <button type="butttom" (click)="setFilters()" class="apply-btn btn">
+                        <ng-container>{{languageStrings.apply_filters || "Apply Filters"}}</ng-container>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

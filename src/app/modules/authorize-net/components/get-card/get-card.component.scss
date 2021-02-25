@@ -1,0 +1,110 @@
+@import '~assets/css/variables';
+
+.cardList{
+  margin-bottom: 15px;
+  .head{
+    height: 20px;
+    font-family: Proximanova-Regular;
+    font-size: 16px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.7px;
+    color: #464646;
+    margin-bottom: 15px;
+  }
+  .selectMsg{
+    color: #8a8888!important;
+    font-size: 14px!important;
+    font-weight: 400!important;
+  }
+  .card.selected{
+    border: solid 1px $color-theme;
+  }
+  .card{
+    border: solid 1px #dddddd;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    &:hover {
+      border: solid 1px $color-theme;
+    }
+    .type{
+      padding: 15px 10px;
+      h1{
+        margin: 0;
+        font-weight: bold;
+        font-family: Proximanova-Regular;
+        color: #d2d2d2;
+        font-style: italic;
+        font-size: 27px;
+      }
+    }
+    .details{
+      padding: 15px 10px;
+      .number{
+        font-family: Proximanova-Regular;
+        font-size: 15px;
+        font-weight: 600;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: 0.7px;
+        color: #464646;
+        padding-bottom: 5px;
+      }
+      .valid{
+        font-family: Proximanova-Regular;
+        font-size: 14px;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: 0.6px;
+        color: #464646;
+      }
+    }
+    .delete{
+      color: $color-theme;
+      cursor: pointer;
+      position: absolute;
+      top: 15px;
+      right: 30px;
+      font-size: 16px;
+    }
+  }
+  .enetrCvv{
+    .cvvForm{
+      //padding: 15px;
+      display: flex;
+      align-items: flex-end;
+      .head{
+        text-align: center;
+        font-size: 20px;
+        font-weight: 600;
+      }
+      input{
+        height: 30px;
+        font-family: $proxima-reg;
+        font-size: 16px;
+        padding: 5px 0px;
+        border: 0px;
+        border-bottom: 1px solid #ccc;
+      }
+      .buttonSub{
+        margin-left: 10px;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .type {
+    h1{
+      font-size: 11px !important;
+    }
+  }
+}

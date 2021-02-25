@@ -1,0 +1,189 @@
+@import '~assets/css/variables';
+
+.heading-information{
+    font-size: 20px;
+    font-family: $proxima-semi-bold;
+    letter-spacing: 0.6px;
+    color: #333333;
+  }
+  .form-control{
+    border-radius: 5px !important;
+  }
+ :host /deep/ app-jw-google-autocomplete input{
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    // border-radius:0;
+  }
+  .map-icon{
+    position: absolute;
+    z-index: 1;
+    top: 7px;
+    font-size: 20px;
+    height: 100%;
+    left: 2px;
+    cursor: pointer;
+    color: var(--theme);
+  }
+  .address-parent{
+    display: flex; 
+    position: relative;
+  }
+  app-jw-google-autocomplete{
+    width: 100% !important;
+  }
+  app-jw-google-autocomplete /deep/ #jw-autocomplete{
+    padding-left: 25px;
+  }
+  .label{
+    font-family: $proxima-semi-bold;
+    font-size: 12px;
+    color: #515356;
+    margin-bottom: 0;
+    //padding-left: 12px;
+    padding: 0px;
+  }
+  .btn-cancel{
+    height: 45px;
+    border-radius: 4px;
+    background-color: #fff;
+    font-family: $proxima-thin;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    color: #000;
+    border:2px solid $color-blue;
+  }
+
+  .btn-red{
+    height: 45px;
+    border-radius: 4px;
+    font-family: $proxima-thin;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    background: $color-blue;
+    color: #fff;
+    margin-right: 15px;
+  }
+  .blur-div{
+    filter: blur(3px);
+  }
+  .phone-fav-add{
+    /deep/.fugu-tel-input {
+      height: 34px !important;
+      font-size: 14px !important; 
+    }
+  }
+  .fav-location-actions{
+    position: absolute;
+    top: 0;
+    right: -10em;
+  }
+  [hidden] { display: none !important;}
+  .cursor-hand{
+    cursor: pointer;
+  }
+  .addressTypes{
+    margin: 0px 10px;
+  }
+
+  @media only screen and (max-width:768px) {
+    .btn-cancel{
+      margin-top: 5px;
+    }
+  }
+  #static-address-map{
+    width: 100%;
+    height: 100%;
+    min-height: 250px;
+    @media screen and (max-width: 767px){
+        margin-top: 15px;
+    }
+}
+#map{ 
+    width: 100%;
+    height: 100%;
+    min-height: 250px;
+    @media screen and (max-width: 767px){
+        margin-top: 15px;
+    }
+    position: relative;
+    overflow: hidden;
+}
+:host /deep/ .marker-custom span {
+  top: 0;
+  background-image: url('https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi2.png') !important;
+  left: 0;
+  will-change: transform;
+  background-size: cover;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  width: 20px;
+  height: 31px;
+  color:#fff;
+  cursor: pointer;
+  transform-origin:0 0;
+  }
+  
+  :host /deep/ .marker-custom{
+  position: absolute !important;
+  
+  }
+  :host /deep/ .gm-ui-hover-effect {
+    display: none !important;
+  }
+  :host /deep/ .mapboxgl-popup-close-button {
+    display:none;
+  }
+  :host /deep/ .mapboxgl-popup-content
+  {
+    background: white;
+   
+    padding: 10px;
+    position: absolute;
+    border-radius: 7px;
+    width: auto;
+
+  }
+
+  :host /deep/ .mapboxgl-popup-tip
+  {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid white;
+    margin: 0 auto;
+  }
+  :host /deep/ .mapboxgl-popup-anchor-bottom
+  {
+    position: relative;
+  }
+  .note{
+    display: flex;
+    padding: 2px;
+    margin-bottom: 10px;
+    label{
+      font-family: $proxima-semi-bold;
+    }
+  }
+  .pin-address
+  {
+    font-size: 12px;
+    background: #48484821;
+    text-align: center;
+    color: black;
+    padding: 0px 5px;
+  }

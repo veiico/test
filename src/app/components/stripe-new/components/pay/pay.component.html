@@ -1,0 +1,50 @@
+<div class="auth-make-payment-container">
+  
+    <!-- logo -->
+      <div class="col-12">
+        <img class="logo-image" src="assets/images/jungle-blue-2.svg" />   </div>
+      <ng-container *ngIf="showIntentDialog">
+        <div id="formContainer">
+          <div class="div-form">
+            <div class="col-12">
+                <div class="heading">
+                    <b>{{intent.name}}</b>  - Payment Authorization
+                </div>
+                <div class="description">
+                  Kindly provide your consent to deduct 
+                  {{intent.currency_symbol}}{{intent.amount}} amount from your card xxxx xxxx xxxx {{intent.last4_digits}}
+                </div>
+            </div>
+           
+            <div class="col-12 text-center">
+              
+    <!-- <p>Amount : {{intent.currency_symbol}} {{intent.amount}}</p> -->
+              <button class="btn btn-primary" (click)="makePayment()">Pay {{intent.currency_symbol}}
+                {{intent.amount}}</button>
+            </div>
+          </div>
+          </div>
+      </ng-container>
+      <ng-container *ngIf="showPaymentSuccess">
+        <div class="payment-success-container">
+        <div class="payment-success">
+          <div class="success-img">
+            <img src="assets/images/checked.svg">       </div>       <div class="success-text">
+            Success! Your payment was successful
+            </div>
+            <div class="redirection-text">
+              You will be redirected in few seconds.
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <div class="payment-error" *ngIf="showError" [@enterAnimation]="showError">
+      {{showError}}
+    </div>
+    <!-- loader -->
+    <div id="loader" *ngIf="showLoader | async">
+      <span class="bg-color">
+        <span class="btn-loading"></span>
+      </span>
+    </div>

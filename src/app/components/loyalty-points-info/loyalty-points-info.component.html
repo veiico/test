@@ -1,0 +1,107 @@
+<app-header style="height:85px;padding: 0px;" class="col-xs-12" [headerData]="appConfig"></app-header>
+<div class="refer row">
+    <div class="col-xs-12">
+        <div class="heading">
+            <p class="title" [ngStyle]="{ 'direction' : direction }">
+                <ng-container>{{terminology.LOYALTY_POINTS}}</ng-container>
+            </p>
+            <hr class="line" [style.border-top-color]="appConfig.color" />
+        </div>
+    </div>
+
+
+    <div class="container center-p-p" *ngIf="loyaltyCriteria">
+        <div class="col-xs-12 col-sm-8 col-md-8 card-p">
+            <div class="col-xs-12 col-sm-12 col-md-12 current_balance">
+                <span class="points">{{loyaltyCriteria.points}} {{terminology.LOYALTY_POINTS}}</span>
+                <hr class="line" [style.border-top-color]="appConfig.color" />
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+                <div class="col-md-push-2 col-md-8 col-xs-12 gift_box">
+                    <div class="col-md-12">
+                        <img src="assets/img/gift-box.svg" alt="gift box" />
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 get_point_box">
+                        <ng-container >{{ languageStrings.get || "Get"}}</ng-container> 10
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 terminology_box">
+                        <div>
+                            {{loyalityText}}
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 min_order_box">
+                        <div>
+                           <ng-container >{{languageStrings.on_purchase_of || "on purchase of"}}</ng-container> {{currency}} {{minimum_criteria |decimalConfig}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 coversion_box">
+                <div class="col-md-push-2 col-md-8 col-xs-12">
+                    <div class="col-md-5 col-xs-5 coin_box">
+                        <div class="col-md-12">
+                            {{loyaltyCriteria.value_point}}
+                        </div>
+                        <div class="col-md-12" style="padding:0px">
+                            <img src="assets/img/coins.svg"  alt="coins"  height="40px"/>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-xs-2 equal_box" >
+                        <div>=</div>
+                    </div>
+                    <div class="col-md-5 col-xs-5 cart_box">
+                        <div class="col-md-12">
+                            {{currency}} {{loyaltyCriteria.value_criteria |decimalConfig}}
+
+                        </div>
+                        <div class="col-md-12">
+                            <img src="assets/img/cart-loyaty.svg" alt="loyality points" />
+                        </div>
+
+                    </div>
+                    <div class="col-md-12 col-xs-12 min_order_box" style="font-size: 15px;">
+                       <ng-container>{{useLoyalityPoints}}</ng-container>
+                    </div>
+
+                    <div class="col-xs-12" class="col-md-12 col-xs-12 min_order_box" style="font-size: 14px;" *ngIf="loyaltyCriteria && loyaltyCriteria.points && loyaltyPointsHistory && loyaltyPointsHistory.available_points">
+                       {{loyaltyPointsHistory.available_points}} {{loyalitySmallText}} <ng-container >{{ languageStrings.expiring_on || "expiring on"}}</ng-container> {{loyaltyPointsHistory.expiry_date| dateTimeFormat }}
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 reward_conditions">
+                <div class="col-md-12 text-center" style="padding: 25px;">
+                    <ng-container >{{terminology.REWARD_CONDITION}}</ng-container>
+                </div>
+                <div class="col-md-push-3 col-md-7 col-xs-12">
+                    <div class="contents">
+                        1. <ng-container>{{minimumOrderAmount}}</ng-container> {{currency}} {{loyaltyCriteria.min_amount |decimalConfig}}.
+                     </div>
+                     <div class="contents">
+                        2. <ng-container>{{minimumOrderEarning}}</ng-container> {{currency}} {{loyaltyCriteria.min_earning_criteria |decimalConfig}} .
+                     </div>
+                     <div class="contents">
+                        3. <ng-container>{{loyalityPointExpire}}</ng-container> {{loyaltyCriteria.expiry_limit}} <ng-container >{{ languageStrings.days || "days"}}.</ng-container>
+                     </div>
+                     <div class="contents">
+                        4. <ng-container >{{ languageStrings.maximum || "Maximum"}}</ng-container> {{loyaltyCriteria.max_earning}} {{loyalityPointsText}} <ng-container >{{ languageStrings.can_be_earned || "can be earned per"}}</ng-container> {{OrderText}}.
+                     </div>
+                     <div class="contents">
+                        5. <ng-container >{{ languageStrings.maximum || "Maximum"}}</ng-container> {{loyaltyCriteria.max_usable}}% <ng-container >{{ languageStrings.of_cart_value_paid || "of cart value can be paid with"}}</ng-container> {{loyalityPointsText}}.
+                     </div>
+                     <div class="contents">
+                        6.<ng-container>{{loyalityPointOffer}}</ng-container>
+                     </div>
+                     <div class="contents">
+                        7. <ng-container >{{ languageStrings.all_term_and_conditions_subject_to || "All terms & conditions are subject to change without prior information."}}</ng-container>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<app-footer></app-footer>

@@ -1,0 +1,44 @@
+@import '~assets/css/variables';
+
+.breadcrumb{
+    //done to prevent .less from over riding it
+    background-color: transparent !important;
+    padding: 8px 0px;
+    margin-bottom: 0px !important;
+    .breadcrumb-item{
+      a{
+        font-family: 'ProximaNova-Regular';
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 600;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: #474747;
+      }
+    }
+    li + li{
+      &:before{
+        font-size:0px !important;
+        content: "";
+        }
+    }
+  }
+  .fa-caret-right{
+    font-size:16px !important;
+    color: $color-theme!important;
+    padding: 0 7px;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .breadcrumb-item {
+      a {
+        font-size: 14px !important;
+      }
+    }
+
+  }
+  .breadCrumbList{
+    z-index: 20;
+  }

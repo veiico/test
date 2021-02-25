@@ -1,0 +1,293 @@
+@import '~assets/css/variables';
+@import '~assets/css/checkbox';
+.p-0{
+  padding:0
+}
+ label{
+  font-family: ProximaNova;
+  font-size: 15px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #000000;
+ }
+
+app-control-messages {
+  display: block;
+}
+.data-control{
+
+  .checkboxes{
+    margin-bottom: 10px;
+  }
+}
+.image-container{
+  display: flex;
+  img{
+    margin-right: 15px;
+    margin-bottom: 10px;
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    cursor: pointer;
+    background-image: linear-gradient(45deg, rgba(85, 77, 86, 0.2) 25%, transparent 25%, transparent 75%, rgba(85, 77, 86, 0.2) 75%, rgba(85, 77, 86, 0.2)), linear-gradient(45deg, rgba(85, 77, 86, 0.2) 25%, transparent 25%, transparent 75%, rgba(85, 77, 86, 0.2) 75%, rgba(85, 77, 86, 0.2));
+    background-size: 4px 4px;
+    background-position: 0 0, 2px 2px;
+  }
+  .label-for-btn{
+    height: fit-content;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  .btn-upload{
+    border: 2px solid $color-theme;
+    background-color: $color-theme;
+    color: white;
+    pointer-events: none;
+    &:hover{
+      background-color: transparent;
+      color: $color-theme;
+    }
+  }
+  .uploaded-image{
+    position: relative;
+    i{
+      position: absolute;
+      right: 15px;
+      top: 0;
+      background: white;
+      padding: 2px;
+      cursor: pointer;
+    }
+  }
+}
+app-control-messages{
+  position: absolute;
+}
+//dropdown
+:host /deep/ p-calendar {
+  .ui-calendar.ui-calendar-w-btn{
+    width: calc(100% - 30px) !important;
+  }
+  .ui-datepicker-trigger{
+    background-color: $color-theme!important;
+    color: white;
+    /* height: 30px; */
+    width: auto;
+    border: 0;
+  }
+  input{
+
+    width: 100%;
+  }
+}
+
+//dropdown
+:host /deep/ p-dropdown{
+  .ui-dropdown{
+    width: 100%!important;
+  }
+  .ui-dropdown-trigger{
+    border:0;
+    color: $color-theme;
+  }
+  label.ui-dropdown-label{
+    padding: 6px 12px;
+    padding-right: 2.5rem !important;
+  }
+}
+.image-label-images-container{
+  display: flex;
+  flex-direction: column
+}
+.d-flex{
+  display: flex;
+  flex-wrap: wrap;
+}
+@media (min-width:768px){
+  .image-label-images-container{
+    flex-direction: row
+  }
+}
+.full-wd{
+  width: 100% !important;
+}
+:host /deep/.intl-tel-input{
+  width: 100% !important;
+}
+
+.err-star{
+  color: red;
+  margin-left: 2px;
+}
+
+input.form-control.ng-dirty.ng-invalid{
+  border-bottom-color: #f44336;
+}
+
+
+input {
+  font-family: ProximaNova;
+  font-size: 15px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #000000;
+  padding: 6px 12px;
+  height: 40px !important;
+
+}
+
+:host /deep/p-calendar .ui-inputtext {
+  padding: 6px 12px !important;
+}
+:host /deep/p-calendar span.ui-calendar {
+  width: 100% !important;
+}
+.singleSelectLabel , .multiSelectLabel {
+  // font-family: Poppins;
+  font-size: 18px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: 0.14px;
+  color: #707070;
+  margin-bottom: 12px;
+}
+
+.fieldLabel {
+  opacity: 0.6;
+  // font-family: ProximaNovaA;
+  font-size: 12px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: 1.2px;
+  color: #000000;
+}
+
+.unselectedItemsLabel {
+  // font-family: Poppins;
+  font-size: 15px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #c1c1c1;
+}
+
+
+
+.selectedItemsLabel{
+  // font-family: Poppins;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: $color-theme;
+}
+
+.boxDesign {
+  width: 100%;
+  border: solid 1px;
+}
+
+.uploadedImageBox {
+  padding: 6px;
+  width: 100%;
+  border: 1px solid #ccc;
+
+}
+.newCheckBox {
+  position: absolute; // take it out of document flow
+  opacity: 0; // hide it
+
+  & + label {
+    position: relative;
+    cursor: pointer;
+    padding: 0;
+    user-select: none;
+  }
+
+  // Box.
+  & + label:before {
+    content: '';
+    margin-right: 10px;
+    display: inline-block;
+    vertical-align: text-top;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border: 2px solid #b4b4b4;
+    border-radius: 3px;
+    transition: all 0.32 ease;
+  }
+
+  // Box hover
+  &:hover + label:before {
+    // background: $color-theme;
+    border-color: #848484;
+  }
+
+  // Box focus
+  // &:focus + label:before {
+  //   box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
+  // }
+
+  // Box checked
+  &:checked + label:before {
+    background: $color-theme;
+    // background : white;
+    border:0;
+  }
+
+  // Disabled state label.
+  &:disabled + label {
+    color: #b8b8b8;
+    cursor: auto;
+  }
+
+  // Disabled box.
+  &:disabled + label:before {
+    box-shadow: none;
+    background: #ddd;
+  }
+
+  // Checkmark. Could be replaced with an image
+  &:checked + label:after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    width: 16px;
+    height: 16px;
+    mask-image: url('/assets/images/filled.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    border: 2px solid $color-theme;
+    background-color: white;
+    // background-color: $color-theme;
+  }
+}
+.div-wrapper[style*="ltr"]{
+  .newCheckBox{
+   &:checked + label:after {
+    left: 1px;
+   }
+  }
+}
+.div-wrapper[style*="rtl"]{
+  .newCheckBox{
+   &:checked + label:after {
+    right: 12px;
+   }
+  }
+}

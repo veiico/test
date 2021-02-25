@@ -1,0 +1,515 @@
+<app-header style="height:85px;padding: 0px;" class="col-xs-12" [headerData]="headerData"></app-header>
+
+<div class="wallet row">
+  <div class="col-xs-12">
+    <div class="heading">
+      <p class="title" [ngStyle]="{ 'direction' : direction }">
+        <ng-container>{{terminology.WALLET}}</ng-container>
+      </p>
+      <hr class="line" [style.border-top-color]="config.color" />
+    </div>
+  </div>
+  <div class="container center-p-p">
+    <div class="col-xs-12 col-sm-8 col-md-8 card-p">
+      <div class="col-xs-12 col-sm-12 col-md-12 current_balance">
+        <span class="points">
+          <ng-container>{{languageStrings.wallet_balance || 'Wallet Balance'}}</ng-container>:
+          {{config.payment_settings[0].symbol}}{{wallet_balance || 0 | decimalConfig}}
+        </span>
+        <span class="pull-right" (click)="addMoney()">
+          <i class="addMoney yfn yfn-addWallet"></i>
+        </span>
+        <hr class="line_1" [style.border-top-color]="config.color" />
+      </div>
+      <div class="clearfix"></div>
+      <div class="col-xs-12 col-sm-12 col-md-12 history-1 mt-10" *ngIf="history && history.length">
+        <p class="transactions">
+          <ng-container>{{languageStrings.latest_transactions || 'Latest Transactions'}}</ng-container>
+        </p>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-12 history mt-10" *ngIf="history && history.length">
+        <!-- *ngIf="history && history.length" -->
+        <!--<p-dataScroller [value]="history" [rows]="4" [inline]="true" [lazy]="true" (onLazyLoad)="loadData($event)" [totalRecords]="totalRecords"> &lt;!&ndash; [lazy]="true" (onLazyLoad)="loadData($event)" [totalRecords]="totalRecords"&ndash;&gt;-->
+        <!--<ng-template let-x pTemplate="item" let-i="index">-->
+        <div class="list" *ngFor="let x of history;let i = index;">
+          <div class="addedFrom">
+            <div class="icon">
+              <div class="view" *ngIf="x.type === walletStatus.FAIL"><i class="yfn yfn-failedTran"></i></div>
+              <div class="view" *ngIf="x.type === walletStatus.ADD"><i class="yfn yfn-addMoney"></i></div>
+              <div class="view"
+                *ngIf="x.type === walletStatus.CREDIT || x.type === walletStatus.GIFT_CARD_REDEEM || x.type === walletStatus.REFUND || x.type === walletStatus.REWARD_CASHBACK">
+                <i class="yfn yfn-receiveMoney"></i></div>
+              <div class="view"
+                *ngIf="x.type === walletStatus.DEDUCTION || x.type === walletStatus.REWARD_BUY || x.type === walletStatus.GIFT_CARD_PURCHASE || x.type == walletStatus.ADMIN_DEDUCTION">
+                <i class="yfn yfn-sendWallet"></i></div>
+            </div>
+            <div class="addedFromL">
+              <p class="added">
+                <span
+                  *ngIf="x.type === walletStatus.FAIL">{{languageStrings.transaction_failed || 'Transaction Failed'}}</span>
+                <span
+                  *ngIf="x.type === walletStatus.ADD">{{languageStrings.added_to_wallet || 'Added to Wallet'}}</span>
+                <span
+                  *ngIf="x.type === walletStatus.CREDIT">{{languageStrings.credited_by_admin || 'Credited by admin'}}</span>
+                <span *ngIf="x.type === walletStatus.REFUND">{{languageStrings.refunded_back ||'Refunded Back'}}</span>
+                <span *ngIf="x.type === walletStatus.DEDUCTION">
+                  <ng-container>{{languageStrings.paid_for_order || 'Paid for order'}}</ng-container> #{{x.job_id}}
+                </span>
+                <span *ngIf="x.type === walletStatus.REWARD_BUY">
+                  <ng-container>{{languageStrings.paid_for_reward || 'Paid for Reward'}}</ng-container>
+                </span>
+                <span
+                  *ngIf="x.type === walletStatus.GIFT_CARD_PURCHASE">{{languageStrings.gift_card_purchased || 'Gift Card Purchased'}}</span>
+                <span *ngIf="x.type === walletStatus.GIFT_CARD_REDEEM">{{terminology.GIFT_CARD_REDEEEM}}</span>
+                <span
+                  *ngIf="x.type === walletStatus.ADMIN_DEDUCTION">{{languageStrings.deducted_by_admin|| 'Deducted by admin'}}</span>
+                <span *ngIf="x.type === walletStatus.REWARD_CASHBACK">
+                  <ng-container>{{languageStrings.cashback_for_order || 'Cashback for Order'}}</ng-container>
+                  #{{x.job_id}}
+                </span>
+              </p>
+              <p class="info">
+                <span class="time">{{x.creation_datetime | dateTimeFormat: 'hh:mm a'}}</span>
+                <span class="balance">
+                  <ng-container>{{languageStrings.closing_balance ||'Closing Balance'}}</ng-container>:
+                  {{config.payment_settings[0].symbol}}{{x.wallet_balance_after_txn}}
+                </span>
+              </p>
+            </div>
+          </div>
+          <div class="transAmount">
+            <p class="amount text-right">
+              <span *ngIf="x.type === walletStatus.FAIL">!
+                {{config.payment_settings[0].symbol}}{{x.transacting_amount | decimalConfig}}</span>
+              <span
+                *ngIf="x.type === walletStatus.DEDUCTION || x.type == walletStatus.GIFT_CARD_PURCHASE || x.type == walletStatus.ADMIN_DEDUCTION || x.type == walletStatus.REWARD_BUY">-
+                {{config.payment_settings[0].symbol}}{{x.transacting_amount |decimalConfig}}</span>
+              <span
+                *ngIf="x.type === walletStatus.ADD || x.type === walletStatus.REFUND || x.type === walletStatus.CREDIT || x.type == walletStatus.GIFT_CARD_REDEEM || x.type === walletStatus.REWARD_CASHBACK">+
+                {{config.payment_settings[0].symbol}}{{x.transacting_amount | decimalConfig}}</span>
+            </p>
+            <p class="date text-right">
+              <span class="time">{{x.creation_datetime | dateTimeFormat: 'MMM, dd'}}</span>
+            </p>
+          </div>
+        </div>
+
+        <!--</ng-template>-->
+        <!--</p-dataScroller>-->
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>
+
+
+<app-modal *ngIf="showModal" [modalType]="modalType.MEDIUM" (esc)="showModal = false" (onClose)="showModal = false">
+  <div body>
+    <div class="container-fluid modal-padding">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <span class="text">{{languageStrings.add_money || 'Add Money'}}</span>
+          <span (click)="hidePaymentModal()" class="fa fa-times pull-right" [ngStyle]="{'direction':direction}"></span>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-12 mt-10" *ngIf="!amountAdded">
+          <form [formGroup]="addMoneyForm">
+            <div class="form-group">
+              <label>
+                <ng-container>{{languageStrings.amount || 'Amount'}}</ng-container><span style="color:red">*</span>
+              </label>
+              <input type="text" class="form-control" formControlName="amount"
+                placeholder="{{languageStrings.amount || 'Amount'}}" />
+              <app-control-messages [control]="addMoneyForm.controls.amount"></app-control-messages>
+            </div>
+            <div class="form-group text-center">
+              <button class="btn addMoney" (click)="onSubmit()">{{languageStrings.submit || 'Submit'}}</button>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-12 mt-10 showProcess" *ngIf="showProcessing">
+          <p>
+            <ng-container>
+              {{languageStrings.processing_your_request_please_dont_leave_window || "Processing your request please don't leave window"}}.......
+            </ng-container>
+          </p>
+        </div>
+        <div class="col-md-12 mt-10">
+          <app-stripe [loginResponse]="loginData" [deleteButton]="'false'"
+            (paymentMadeResponse)="addCardResponse($event)" (onload)="getLoad($event)"
+            *ngIf="paymentMethod === paymentMode.STRIPE && amountAdded"></app-stripe>
+          <app-vista [loginResponse]="loginData" [deleteButton]="'false'"
+            (paymentMadeResponse)="addCardResponse($event)" (onload)="getLoad($event)"
+            *ngIf="paymentMethod === paymentMode.VISTA && amountAdded"></app-vista>
+          <app-billplz [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value" [triggerPayment]="triggerPayment"
+            [loginResponse]="loginData" [paymentFor]="'2'" (onload)="getLoad($event)"
+            (paymentMadeResponse)="addCardResponse($event)"
+            *ngIf="paymentMethod === paymentMode.BILLPLZ && amountAdded"></app-billplz>
+          <app-razor-pay [loginResponse]="loginData" [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            [paymentFor]="'2'" [triggerPayment]="triggerPayment" (onload)="getLoad($event)"
+            (paymentMadeResponse)="addCardResponse($event)"
+            *ngIf="paymentMethod === paymentMode.RAZORPAY && amountAdded"
+            [getOrderCreationPayload]="getOrderCreationPayload"></app-razor-pay>
+          <app-payfort [loginResponse]="loginData" [deleteButton]="'false'"
+            [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value" (paymentMadeResponse)="addCardResponse($event)"
+            (onload)="getLoad($event)" *ngIf="paymentMethod === paymentMode.PAYFORT && amountAdded"></app-payfort>
+          <app-paypal [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.PAYPAL && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-paypal>
+          
+          <app-telr [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+          (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+          (onload)="getLoad($event)" [loginResponse]="loginData"
+          *ngIf="paymentMethod === paymentMode.TELR && amountAdded" [dataofCart]="getOrderCreationPayload">
+        </app-telr>
+
+          <app-paymob [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.PAY_MOB && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-paymob>
+
+          <app-paystack [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.PAYSTACK && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-paystack>
+          <app-mpaisa [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.MPAISA && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-mpaisa>
+          <!-- <app-wirecard [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+                      (paymentMadeResponse)="addCardResponse($event)"
+                      [triggerPayment]="triggerPayment"
+                      [paymentFor]="'2'"
+                      (onload)="getLoad($event)"
+                      [loginResponse]="loginData"
+                      *ngIf="paymentMethod === paymentMode.WIRE_CARD && amountAdded"></app-wirecard>      -->
+          <app-sslCommerz [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.SSL_COMMERZ && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-sslCommerz>
+          <app-onepay [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.ONEPAY && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-onepay>
+          <app-fac3d [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.FAC_3D && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-fac3d>
+          <app-checkout-com [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.CHECKOUT_COM && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-checkout-com>
+          <app-payhere [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.PAYHERE && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-payhere>
+          <app-azul [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.AZUL && amountAdded" [dataofCart]="getOrderCreationPayload"></app-azul>
+          <app-hyperpay [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.HYPERPAY && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-hyperpay>
+          <app-credimax [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.CREDIMAX && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-credimax>
+          <app-my-fatoora [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.MY_FATOORAH && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-my-fatoora>
+          <app-paynet [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.PAYNET && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-paynet>
+          <app-tap [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.TAP && amountAdded" [dataofCart]="getOrderCreationPayload"></app-tap>
+          <app-curlec [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.CURLEC && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-curlec>
+          <app-wipay [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.WIPAY && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-wipay>
+          <app-pagar [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.PAGAR && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-pagar>
+          <app-wechat [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.WECHAT && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-wechat>
+          <app-mybillpayment [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.MYBILLPAYMENT && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-mybillpayment>
+          <app-valitor [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.VALITOR && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-valitor>
+          <app-bankopen [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.BANKOPEN && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-bankopen>
+          <app-etisalat [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.ETISALAT && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-etisalat>
+          <app-gocardless [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.GOCARDLESS && amountAdded"></app-gocardless>
+          <app-suncash [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.SUNCASH && amountAdded"></app-suncash>
+          <app-truevo [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.TRUEVO && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-truevo>
+          <app-payzen [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.PAYZEN && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-payzen>
+          <app-firstdata [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.FIRSTDATA && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-firstdata>
+          <app-square [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.SQUARE && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-square>
+          <app-whoosh [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.WHOOSH && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-whoosh>
+          <app-mtn [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.MTN && amountAdded" [dataofCart]="getOrderCreationPayload"></app-mtn>
+          <app-pagoplux [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.PAGOPLUX && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-pagoplux>
+          <app-theteller [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.THETELLER && amountAdded"></app-theteller>
+          <app-paynow [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.PAYNOW && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-paynow>
+          <app-limelight [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.LIME_LIGHT && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-limelight>
+          <app-two-checkout [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.TWO_CHECKOUT && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-two-checkout>
+          <app-stripeideal [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.STRIPE_IDEAL && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-stripeideal>
+          <app-viva [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.VIVA && amountAdded" [dataofCart]="getOrderCreationPayload"></app-viva>
+
+          <app-ath [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.ATH && amountAdded" [dataofCart]="getOrderCreationPayload"></app-ath>
+
+          <app-ipay88 [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.IPAY88 && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-ipay88>
+
+          <app-proxypay [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.PROXYPAY && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-proxypay>
+
+          <app-cybersource [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.CYBERSOURCE && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-cybersource>
+
+          <app-alfalah [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.ALFALAH && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-alfalah>
+
+          <app-culqi [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.CULQI && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-culqi>
+
+          <app-nmi [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.NMI && amountAdded" [dataofCart]="getOrderCreationPayload"></app-nmi>
+
+          <app-flutterwave [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.FLUTTERWAVE && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-flutterwave>
+
+          <app-mpesa [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.MPESA && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-mpesa>
+
+          <app-adyen [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.ADYEN && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-adyen>
+
+          <app-paymark [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.PAYMARK && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-paymark>
+          <app-hypur [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.HYPUR && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-hypur>
+
+          <app-paytm [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.PAYTMV3 && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-paytm>
+
+          <app-pixelpay [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.PIXELPAY && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-pixelpay>
+
+          <app-doku [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.DOKU && amountAdded" [dataofCart]="getOrderCreationPayload"></app-doku>
+
+          <app-peach [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.PEACH && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-peach>
+
+          <app-paguelofacil [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.PAGUELOFACIL && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-paguelofacil>
+
+          <app-noqoody [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.NOQOODY && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-noqoody>
+
+          <app-gtbank [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.GTBANK && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-gtbank>
+          <app-urway [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.URWAY && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-urway>
+
+          <app-vuka [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.VUKA && amountAdded" [dataofCart]="getOrderCreationPayload"></app-vuka>
+
+          <app-vpos [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.VPOS && amountAdded" [dataofCart]="getOrderCreationPayload"></app-vpos>
+
+          <app-cxpay [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+            (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+            (onload)="getLoad($event)" [loginResponse]="loginData"
+            *ngIf="paymentMethod === paymentMode.CXPAY && amountAdded" [dataofCart]="getOrderCreationPayload">
+          </app-cxpay>
+
+          <app-payku [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+          (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+          (onload)="getLoad($event)" [loginResponse]="loginData"
+          *ngIf="paymentMethod === paymentMode.PAYKU && amountAdded" [dataofCart]="getOrderCreationPayload">
+        </app-payku>
+
+        <app-bambora [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+          (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+          (onload)="getLoad($event)" [loginResponse]="loginData"
+          *ngIf="paymentMethod === paymentMode.BAMBORA && amountAdded" [dataofCart]="getOrderCreationPayload">
+        </app-bambora>
+
+        <app-paywayone [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+          (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+          (onload)="getLoad($event)" [loginResponse]="loginData"
+          *ngIf="paymentMethod === paymentMode.PAYWAYONE && amountAdded" [dataofCart]="getOrderCreationPayload">
+        </app-paywayone>
+
+        <app-placetopay [NET_PAYABLE_AMOUNT]="addMoneyForm.controls.amount.value"
+          (paymentMadeResponse)="addCardResponse($event)" [triggerPayment]="triggerPayment" [paymentFor]="'2'"
+          (onload)="getLoad($event)" [loginResponse]="loginData"
+          *ngIf="paymentMethod === paymentMode.PLACETOPAY && amountAdded" [dataofCart]="getOrderCreationPayload">
+        </app-placetopay>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</app-modal>

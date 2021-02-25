@@ -1,0 +1,96 @@
+@import '~assets/css/variables';
+
+:host {
+  --address_desc_color: #afafaf;
+  --address_title_color: #333;
+  // --address_bg_color:white;
+  --address_bg_color: white;
+}
+
+//scss variables
+$address-desc-color: var(--address_desc_color, #afafaf);
+$address-title-color: var(--address_title_color, #333);
+$address-bg-color: var(--address_bg_color, white);
+
+.delete-icon{
+  cursor: pointer;
+  margin-left: 5px;
+  font-size: 1.1em;
+  vertical-align: -15%;
+}
+
+.btn-deliver-here {
+  background-color: $color-blue;
+  color: white;
+  text-transform: uppercase;
+  font-family: $proxima-semi-bold;
+  margin-bottom: 5px;
+}
+
+.content-wrapper {
+  display: flex;
+}
+
+.content-inner {
+  max-height: 10rem;
+  height: 10rem;
+}
+
+.model-container {
+  background: $address_bg_color;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #f7f7f7;
+  /* border-radius: 5px; */
+  min-height: 18rem;
+  // max-width: 30rem;
+
+  display: flex;
+  flex-direction: column;
+  margin-left: 0px;
+}
+
+.model-container:hover {
+  -webkit-transition: ease .5s;
+  -moz-transition: ease .5s;
+  -ms-transition: ease .5s;
+  -o-transition: ease .5s;
+  transition: ease .3s;
+  border: 1px solid $color-theme;
+}
+
+.address-action {
+  margin-left: 10px;
+  text-decoration: none;
+  cursor: pointer;
+
+  img {
+    height: 20px;
+    width: 20px;
+  }
+}
+
+.complete-address {
+  color: $address-desc-color;
+  word-break: break-word;
+}
+
+.action-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.loc-type-img {
+  margin-right: 10px;
+  height: 16px;
+  width: 16px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+p.title {
+  color: $address-title-color;
+  display: flex;
+  font-size: 16px;
+  font-weight: bold;
+}

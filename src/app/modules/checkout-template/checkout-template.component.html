@@ -1,0 +1,10 @@
+<div class="controls-container">
+  <form class="row" *ngIf="templateForm" [formGroup]="templateForm">
+    <div class="divs-wrapper">
+      <ng-container formArrayName="templates" 
+        *ngFor="let template of templateForm.controls['templates']['controls'];let i=index">
+        <app-data-controls class="width-adjustment" [template]="template" [currency]="currencySymbol"></app-data-controls>
+      </ng-container>
+    </div>
+  </form>
+</div>

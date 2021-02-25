@@ -1,0 +1,639 @@
+<app-header style="height:85px;padding: 0px;" class="col-xs-12" [headerData]="appConfig">
+</app-header>
+<div class="main-c row">
+  <div class="col-xs-12">
+    <div class="heading">
+      <p class="title text-capitalize">{{terminology.SUBSCRIPTIONS || 'Subscriptions'}}</p>
+      <hr class="line" [style.border-top-color]="appConfig.color" />
+    </div>
+  </div>
+
+  <div class="order-wrapper center-c d">
+    <div class="row-eq-height">
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 row-col-eq"
+        *ngFor="let order of subscriptionTasks; let i =index;">
+        <div class="cards"
+          [ngClass]="{'servicesHeight': order.business_type == 2, 'productHeight':order.business_type == 1}">
+
+          <div class="orderIDDiv">
+            <div class="orderIdOnly">
+              <span class="idText text-capitalize">{{languageStrings.order_id || 'Order Id'}}</span>
+              <span class="idNumber">{{order.rule_id}}</span>
+            </div>
+            <div class="orderStatusOnly">
+              <ng-container *ngIf="order.status == recurringOrderStatus.ACCEPTED">{{languageStrings.accepted ||'Accepted'}}</ng-container>
+              <ng-container *ngIf="order.status == recurringOrderStatus.REJECTED">{{languageStrings.rejected ||'Rejected'}}</ng-container>
+            </div>
+
+          </div>
+
+          <div class="otherDetailsDiv" style="min-height:140px;">
+
+            <div class="orderAmount">
+              <div class="row">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <span class="orderAmountText text-capitalize"
+                    *ngIf="appConfig.show_product_price == 1 || (order && (order.amount > 0))">
+                    {{languageStrings.order_amount || 'Order Amount'}}</span>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6 text-right">
+                  <span class="orderAmountNumber"
+                    *ngIf="appConfig.show_product_price == 1 || (order && (order.amount > 0))">
+                    {{currency+''}}
+                    {{order ? (order.amount|decimalConfig) : ''}}</span>
+                </div>
+                <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12"
+                  *ngIf="appConfig.show_product_price == 1 || order.total_amount > 0">
+                  <hr style="border-color: #dddddd;margin-top: 5px;" />
+                </div>
+              </div>
+            </div>
+
+            <div class="orderDateTime orderAmount">
+              <div class="row">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <span class="text-capitalize orderAmountText">{{languageStrings.start_date || 'Start Date'}}</span>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6 text-right">
+                  <span class="orderAmountNumber">{{order.start_schedule | dateTimeFormat:'MMM d, y'}}</span>
+                </div>
+              </div>
+              <div class="row" *ngIf="order.schedule_type == 1">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <span class="text-capitalize orderAmountText">{{languageStrings.end_date || 'End Date'}}</span>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6 text-right">
+                  <span class="orderAmountNumber">{{order.end_schedule | dateTimeFormat:'MMM d, y'}}</span>
+                </div>
+              </div>
+              <div class="row" *ngIf="order.schedule_type == 2">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <span class="text-capitalize orderAmountText">{{languageStrings.occurrences ||'Occurrences'}}</span>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6 text-right">
+                  <span class="orderAmountNumber">{{order.occurrence_count}}</span>
+                </div>
+              </div>
+              <div class="row" *ngIf="order.enable_start_time_end_time">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <span class="text-capitalize orderAmountText">{{terminology.START_TIME}}</span>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6 text-right">
+                  <span class="orderAmountNumber">{{order.schedule_time}}</span>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="subsc-action-btn">
+
+            <div class="pause-btn" [ngClass]="{'selected': order.remaining_occurrence_count && order.is_paused}">
+              <div (click)="showConfirmDialog(order,i)" 
+                *ngIf="order.remaining_occurrence_count  && order.status != recurringOrderStatus.REJECTED">
+                <img src="assets/images/icon-pause.svg" height="14" *ngIf="!order.is_paused">
+                <span *ngIf="!order.is_paused">{{languageStrings.pause_order ||'Pause Order'}}</span>
+                <img src="assets/images/resume.svg" height="14" *ngIf="order.is_paused">
+                <span *ngIf="order.is_paused">{{languageStrings.resume_order ||  'Resume Order'}}</span>
+              </div>
+            </div>
+            <div class="view-btn" (click)="openDetails(order)">
+              <ng-container>{{languageStrings.view_details ||'View Details'}}</ng-container>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div *ngIf="showPaginating" class="pg-ldr-prt">
+      <div class="pg-ldr-cld">
+        <div class="pg-ldr-ctr">
+          <div class="pg-loader"
+            [ngStyle]="{'border-bottom-color': appConfig.color,'border-left-color': appConfig.color}"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="no-orders" *ngIf="ordersLoading && !subscriptionTasks.length">
+  <h3 class="text-center">{{languageStrings.no_subscriptions_to_display || "No Subscription to display." }}</h3>
+</div>
+
+<div id="main"></div>
+
+
+
+
+<div class="modal fade" id="orderDetails" role="dialog" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content topMargin" *ngIf="orderDetails">
+      <div class="modal-header headerBgColor">
+        <button type="button" class="close" data-dismiss="modal">
+          <img src="assets/img/close.svg" alt="close" />
+        </button>
+        <h4 class="modal-title titleColor text-capitalize">{{terminology.ORDER}} / #{{orderDetails.rule_id}} </h4>
+      </div>
+
+      <div class="modal-body orderScroll content" id="orderScroll">
+        <div class="row">
+          <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+            <span class="heading">
+              {{terminology.DELIVERY_FROM || 'Delivery From'}} :
+            </span>
+            <span class="details">
+              {{orderDetails.merchant_name}}
+            </span>
+          </div>
+          <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12 text-right">
+            <span class="heading">
+              {{languageStrings.order_time || 'Order Time'}} :
+            </span>
+            <span class="details">
+              {{orderDetails.creation_datetime | dateTimeFormat:'MMM d, y, h:mm'}}
+            </span>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12 col-xs-12">
+            <span class="heading">
+              {{terminology.START_DATE || 'Start Date'}} :
+            </span>
+            <span class="details">
+              {{orderDetails.start_schedule | dateTimeFormat: 'MMM d, y'}}
+            </span>
+          </div>
+
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-xs-12">
+            <span class="heading">
+              {{languageStrings.scheduled_time || 'Scheduled Time' }} :
+            </span>
+            <span class="details">
+              {{orderDetails.schedule_time}}
+            </span>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+            <span class="heading">
+              {{terminology.START_DATE || 'End Date / Occurrences'}} :
+            </span>
+            <span class="details">
+              {{(orderDetails.end_schedule | dateTimeFormat: 'MMM d, y' )|| orderDetails.occurrence_count }}
+            </span>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12 col-xs-12">
+            <span class="heading">
+              {{terminology.DELIVER_TO || 'Deliver To'}} :
+            </span>
+            <span class="details">
+              {{orderDetails.job_pickup_address}}
+            </span>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12 col-xs-12">
+            <span class="heading">
+              {{terminology.SELECTED_DAYS || 'Selected Days'}} :
+            </span>
+            <span class="details">
+              <span class="">{{daysString}}</span>
+            </span>
+          </div>
+        </div>
+        <div class="row" *ngIf="orderDetails.total_recurring_amount">
+            <div class="col-sm-12">
+              <span class="heading" [ngStyle]="{ 'direction' : direction }">
+                {{languageStrings.subscribed || 'Subscribed'}} {{orderDetails.occurrence_count}} {{terminology.ORDERS}}
+                ({{currency+''}}{{orderDetails.total_amount |decimalConfig}} {{languageStrings.will_deducted_creation_of_each_order  || 'will be deducted on the creation of each order'}} :
+              </span>
+              <span class="details" *ngIf="currency?.symbol && orderDetails">
+                {{currency+''}}
+                {{orderDetails.total_recurring_amount |decimalConfig}}
+              </span>
+            </div>
+          </div>
+
+        <div class="row">
+          <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12">
+            <h4 class="summary">
+              <ul class="nav nav-tabs">
+                <li [ngClass]="{'active' : !showAdditonalInfo}" (click)="showAdditonalInfo = false;"><a >{{languageStrings.summary || 'Summary'}}</a>
+                </li>
+                <li [ngClass]="{'active' : showAdditonalInfo}" (click)="showAdditonalInfo = true;"
+                  *ngIf="this.orderDetails.checkout_template && this.orderDetails.checkout_template.length>0">
+                  <a>{{terminology.CHECKOUT_TEMPLATE}}</a></li>
+              </ul>
+            </h4>
+          </div>
+
+          <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12" *ngIf="deliveryChargeDetails && deliveryChargeDetails.length">
+            <div class="repeatProduct">
+              <div class="row">
+                <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 padBtm10">
+                  <div class="charge-heading">
+                    <ng-container > {{ languageStrings.order_pricing_details || "Order Pricing Details"}}</ng-container>
+                  </div>
+                </div>
+                <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 p-0 head-color">
+                  <div class="col-lg-3 col-sm-3 col-xs-3 col-md-3 padBtm10">
+                    <div>
+                      {{ languageStrings.day || "Day"}}
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-sm-3 col-xs-3 col-md-3 padBtm10">
+                    <div>
+                      {{ languageStrings.amount || "Amount"}}
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-sm-3 col-xs-3 col-md-3 padBtm10">
+                    <div class="text-center">
+                      {{ languageStrings.no_of_occurrences || "No. of Occurrences"}}
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-sm-3 col-xs-3 col-md-3 padBtm10">
+                    <div class="text-right">
+                      {{ languageStrings.total_amount || "Total Amount"}}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 p-0" *ngFor="let data of deliveryChargeDetails">
+                  <div class="col-lg-3 col-sm-3 col-xs-3 col-md-3 padBtm10">
+                    <div>
+                      {{data.day}}
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-sm-3 col-xs-3 col-md-3 padBtm10">
+                    <div>
+                      {{currency +''}} {{data.amount | decimalConfig}}
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-sm-3 col-xs-3 col-md-3 padBtm10">
+                    <div class="text-center">
+                      {{data.occurances}}
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-sm-3 col-xs-3 col-md-3 padBtm10">
+                    <div class="text-right">
+                      {{currency +''}} {{data.total_amount | decimalConfig}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12" *ngIf="!showAdditonalInfo">
+            <div *ngFor="let item of orderDetails.products" class="repeatProduct">
+              <div class="row">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6" style="word-break: break-all;">
+                  <p class="text-capitalize">
+                    <span>{{item.product.product_name}}</span>
+                  </p>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6" *ngIf="item.product.quantity > 1">
+                  <p class="showText">
+                    <span class="quantityDiv">{{item.product.quantity}}</span>
+                  </p>
+                </div>
+                <div class="col-xs-12 col-lg-12 col-sm-12 col-md-12"
+                  *ngIf="item.product.unit_type == 1 && (!item.product.multiPrice || appConfig.business_model_type !== 'RENTAL')">
+                  <p class="textStyle"
+                    *ngIf="appConfig.show_product_price == 1 || item.product.unit_price > 0 || isLaundryFlow">
+                    <span>
+                      <b>{{currency +''}} {{item.product.unit_price|decimalConfig}} </b>
+                    </span>
+                  </p>
+                </div>
+                <div class="col-xs-12 col-lg-12 col-sm-12 col-md-12"
+                  *ngIf="item.product.unit_type != 1  && (!item.product.multiPrice || appConfig.business_model_type !== 'RENTAL')">
+                  <p class="textStyle" *ngIf="appConfig.show_product_price == 1 || item.product.unit_price > 0">
+                    <span>
+                      <b>{{currency +''}} {{(item.product.unit_price * item.product.unit_count) |decimalConfig}}
+                        {{isLaundryFlow ? ('/ '+priceTypeConst[item.product.unit_type].name || ''):''}}</b>
+                    </span>
+                  </p>
+                </div>
+
+              </div>
+
+
+              <div class="row" *ngIf="item.product.task_start_time">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <p class="text-capitalize textStyle">{{terminology.START_TIME}}</p>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <p class="text-capitalize textStyle text-right">{{item.product.task_start_time | dateTimeFormat:'MMM d, y, h:mm'}}</p>
+                </div>
+              </div>
+              <div class="row"
+                *ngIf="(item.product.task_end_time && orderDetails.pd_or_appointment == 1 && item.product.unit_type != 1)">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <p class="text-capitalize textStyle">{{terminology.END_TIME}}</p>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <p class="text-capitalize textStyle text-right">{{item.product.task_end_time | dateTimeFormat:'MMM d, y, h:mm'}}</p>
+                </div>
+              </div>
+
+              <div class="row"
+                *ngIf="(item.product.task_end_time && orderDetails.pd_or_appointment == 1 && item.product.unit_type == 1 && item.product.enable_tookan_agent)">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <p class="text-capitalize textStyle">{{terminology.END_TIME}}</p>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <p class="text-capitalize textStyle text-right">{{item.product.task_end_time | dateTimeFormat:'MMM d, y, h:mm'}}</p>
+                </div>
+              </div>
+              <div class="row" *ngIf="(item.product.task_end_time && orderDetails.pd_or_appointment != 1)">
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <p class="text-capitalize textStyle">{{terminology.END_TIME}}</p>
+                </div>
+                <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6">
+                  <p class="text-capitalize textStyle text-right">{{item.product.task_end_time | dateTimeFormat:'MMM d, y, h:mm'}}</p>
+                </div>
+              </div>
+
+              <div class="row" *ngIf="item.customizations" class="mainCus">
+                <div class="makeCustom">
+                  <div *ngFor="let c of item.customizations" class="makeCustomWidth">
+                    <div class="side-card">
+                      <div class="col-xs-12 textStyle" style="word-break: break-all;">
+                        <p>
+                          <ng-container >{{ languageStrings.customization || "Customization"}}</ng-container>
+                          :
+                          <span>{{c.name}}</span>
+                        </p>
+                      </div>
+                      <div class="col-xs-12 textStyle" *ngIf="c.quantity > 1">
+                        <p>
+                          <ng-container >{{ languageStrings.quantity || "Quantity"}}</ng-container>
+                          :
+                          <span>{{c.quantity}}</span>
+                        </p>
+                      </div>
+                      <div class="col-xs-12 textStyle" *ngIf="item.product.unit_type == 1 && c.unit_price > 0">
+                        <p>
+                          <ng-container >{{ languageStrings.price || "Price"}}</ng-container>
+                          :
+                          <span>{{currency +''}} {{c.unit_price|decimalConfig}}</span>
+                        </p>
+                      </div>
+                      <div class="col-xs-12 textStyle" *ngIf="item.product.unit_type != 1 && c.unit_price > 0">
+                        <p>
+                          <ng-container >{{ languageStrings.price || "Price"}}</ng-container>
+                          :
+                          <span>{{currency +''}} {{(c.unit_price) |decimalConfig}}</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row" style="padding-top: 8px;"
+                *ngIf="(appConfig.show_product_price == 1 || item.product.productWiseTotal > 0 ) && !(isLaundryFlow && orderDetails.task_type === 1)">
+                <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6">
+                  <p class="textStyle">
+                    <b>
+                      <ng-container >{{ languageStrings.total_price || "Total Price" }}</ng-container>
+                    </b>
+                  </p>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6 text-right">
+                  <p class="textStyle text-right">{{currency +''}} {{item.product.productWiseTotal|decimalConfig}}</p>
+                </div>
+
+                <div *ngIf="item.product.taxes && item.product.taxes.length">
+
+                  <div *ngFor="let tax of item.product.taxes">
+                    <p class="col-lg-6 col-md-6 col-sm-6 col-xs-6" [ngStyle]="{ 'direction' : direction }">
+                      {{tax.tax_name}}
+                      <span class="tax-percantage" *ngIf="!tax.tax_type">@ {{tax.tax_percentage}}%</span>
+                    </p>
+                    <p class="text-right col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                      {{currency +''}} {{tax.tax_amount|decimalConfig}}
+                    </p>
+                  </div>
+
+                  <div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" [ngStyle]="{ 'direction' : direction }">
+                      <p class="textStyle">
+                        <b>
+                          <ng-container >{{ languageStrings.total_price_with_tax || "Total Price (with tax)"}}</ng-container>
+                        </b>
+                      </p>
+                    </div>
+                    <div class="text-right col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                      <p class="textStyle text-right">{{currency +''}}
+                        {{item.product.productWiseTotalWithTax|decimalConfig}}</p>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12">
+                  <div *ngIf="item.product.unit_type && item.product.unit_type > 1 && item.product.unit_type < 8">
+                    <p class="pull-left" style="padding-top: 0px;"
+                      *ngIf="(appConfig.show_product_price == 1 || item.product.productWiseTotal > 0) && appConfig.business_model_type != 'RENTAL'">
+                      <span style="font-size: 13px;float:none;">
+                        <span style="float:none;">
+                          <ng-container >{{ languageStrings.charge || "Charge"}}</ng-container> @ {{orderDetails.orderDetails[0].product.unit}}
+                        </span>
+                        <span style="float:none;" *ngIf="item.product.unit_type == 2">
+                          <ng-container >{{ languageStrings.minute_s || "minute(s)"}}</ng-container> x {{item.product.unit_count}}
+                        </span>
+                        <span style="float:none;" *ngIf="item.product.unit_type == 3">
+                          <ng-container >{{ languageStrings.hour_s || "hour(s)"}}</ng-container> x {{item.product.unit_count}}
+                        </span>
+                        <span style="float:none;"
+                          *ngIf="item.product.unit_type == 4 && appConfig.business_model_type != 'RENTAL'">
+                          <ng-container >{{ languageStrings.day_s || "day(s)"}}</ng-container> x {{item.product.unit_count}}
+                        </span>
+                        <span style="float:none;"
+                          *ngIf="item.product.unit_type == 4 && appConfig.business_model_type == 'RENTAL'">
+                          <ng-container >{{ languageStrings.night_s || "night(s)"}}</ng-container> x {{item.product.unit_count}}
+                        </span>
+                        <span style="float:none;" *ngIf="item.product.unit_type == 5">
+                          <ng-container >{{ languageStrings.week_s || "weeks(s)"}}</ng-container> x {{item.product.unit_count}}
+                        </span>
+                        <span style="float:none;" *ngIf="item.product.unit_type == 6">
+                          <ng-container >{{ languageStrings.month_s || "month(s)"}}</ng-container> x {{item.product.unit_count}}
+                        </span>
+                        <span style="float:none;" *ngIf="item.product.unit_type == 7">
+                          <ng-container >{{ languageStrings.year_s || "year(s)"}}</ng-container> x {{item.product.unit_count}}
+                        </span>
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+        <app-show-order-additonal-info [additionalInformation]="orderDetails.checkout_template"
+          *ngIf="showAdditonalInfo">
+        </app-show-order-additonal-info>
+        <div class="row total-card m0" *ngIf="!showAdditonalInfo">
+          <div class="col-xs-12" *ngIf="subtotal">
+            <p class="textStyle">
+              <ng-container >{{ languageStrings.subtotal || "Subtotal" }}</ng-container>
+              :
+              <span>{{currency +''}} {{subtotal|decimalConfig}}</span>
+            </p>
+          </div>
+          <div class="col-xs-12" *ngIf="orderDetails.coupon_discount">
+            <p class="textStyle" [ngClass]="{'mb-0': orderDetails.promoOnSubtotal}">
+              <ng-container >{{ languageStrings.discount || "Discount"}}</ng-container>
+              :
+              <span>-{{currency +''}} {{orderDetails.coupon_discount|decimalConfig}}</span>
+            </p>
+          </div>
+          <div class="col-xs-12" *ngIf="orderDetails.promoOnSubtotal">
+            <div class="promo-applied">
+              (
+              <ng-container >{{ languageStrings.promo_applied || "Promo Applied"}}</ng-container>
+              :
+              <span>{{orderDetails.promoOnSubtotal.promo_code}}</span>
+              )
+            </div>
+          </div>
+
+          <div class="col-xs-12" *ngIf="(orderDetails.delivery_charge || orderDetails.promoOnDelivery) && terminology">
+            <p class="text-capitalize textStyle" [ngClass]="{'mb-0': orderDetails.promoOnSubtotal}">
+              {{terminology.DELIVERY_CHARGE}} :
+              <span>{{currency +''}} {{(orderDetails.delivery_charge || 0) |decimalConfig}}</span>
+            </p>
+          </div>
+          <div class="col-xs-12" *ngIf="orderDetails.promoOnDelivery">
+            <div class="promo-applied">
+              (
+              <ng-container >{{ languageStrings.promo_applied || "Promo Applied"}}</ng-container>
+              :
+              <span>{{orderDetails.promoOnDelivery.promo_code}}</span>
+              )
+            </div>
+          </div>
+
+
+          <div class="col-xs-12" *ngFor="let tax of orderDetails.user_taxes">
+            <p class="textStyle" *ngIf="tax.tax_type">
+              {{tax.tax_name}} :
+              <span *ngIf="tax.tax_amount">{{currency+''}} {{tax.tax_amount|decimalConfig}}</span>
+            </p>
+            <p class="textStyle" *ngIf="!tax.tax_type">
+              {{tax.tax_name+' @ '+tax.tax_percentage+'%'}} :
+              <span *ngIf="tax.tax_amount">{{currency+''}} {{tax.tax_amount|decimalConfig}}</span>
+            </p>
+          </div>
+          <div class="col-xs-12" *ngIf="orderDetails.tip > 0">
+            <p class="textStyle">
+              <ng-container>{{terminology.TIP}}</ng-container>
+              :
+              <span>{{currency +''}} {{orderDetails.tip|decimalConfig}}</span>
+            </p>
+          </div>
+          <div class="col-xs-12"
+            *ngIf="this.orderDetails.checkout_template && this.orderDetails.checkout_template.length>0">
+            <div class="textStyle" (click)="showAdditonalInfo = true" style="cursor:pointer">
+              <span >{{ languageStrings.additonal_amount || "Additional Amount"}}</span>
+              (<a  class="view_additional">{{ languageStrings.view_details || "View details"}}</a>)
+              :
+              <span style="float:right">{{currency +''}} {{additionalPrice|decimalConfig}}</span>
+            </div>
+          </div>
+          <div class="col-xs-12"
+            *ngIf="orderDetails.loyalty_points && orderDetails.loyalty_points.loyalty_points_redeem">
+            <p class="textStyle">
+              {{terminology.LOYALTY_POINTS}} <ng-container >{{ languageStrings.used || "Used"}}</ng-container>
+              ({{orderDetails.loyalty_points.loyalty_points_redeem}})
+              :
+              <span>- {{currency +''}} {{orderDetails.loyalty_points.discount_amount|decimalConfig}}</span>
+            </p>
+          </div>
+          <div class="col-xs-12" *ngIf="orderDetails.refunded_amount > 0">
+            <p class="textStyle">
+              <ng-container >{{ languageStrings.refund_amount || "Refund Amount"}}</ng-container>
+              :
+              <span>- {{currency +''}} {{orderDetails.refunded_amount|decimalConfig}}</span>
+            </p>
+          </div>
+          <div class="col-xs-12" *ngIf="appConfig.show_product_price == 1 || orderDetails.total_amount > 0">
+            <hr />
+          </div>
+          <div class="col-xs-12" *ngIf="appConfig.show_product_price == 1 || orderDetails.total_amount > 0">
+            <p>
+              <b>
+                <ng-container >{{ languageStrings.total_amount || "Total Amount"}}</ng-container> :
+              </b>
+              <span>{{currency +''}} {{orderDetails.total_amount|decimalConfig}}</span>
+            </p>
+          </div>
+          <div class="col-xs-12" *ngIf="appConfig.show_product_price == 1 || orderDetails.total_amount > 0">
+            <hr />
+          </div>
+
+        </div>
+
+        <div class="row" *ngIf="orderDetails.remaining_occurrence_count && orderDetails.status != recurringOrderStatus.REJECTED">
+          <div class="col-xs-12">
+            <div class="date-input">
+              <div class="input-group" (click)="toggleCalendar()">
+                <input class="form-control" readonly placeholder="{{languageStrings.select_dates_you_want_to_skip || 'Select dates you want to skip'}}">
+                <div class="input-group-addon"><img src="assets/images/calendar.svg" height="20"></div>
+              </div>
+              <app-subscription-calendar *ngIf="calendarPopup" (closeCalendar)="toggleCalendar()"
+                [subscriptionDetail]="orderDetails"></app-subscription-calendar>
+
+
+            </div>
+
+
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<app-modal *ngIf="confirmationModal" [modalType]="'modal-sm'">
+  <div body>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="confirmation-header">
+          <div class="text-center text-capitalize">{{!this.orderDetails.is_paused ? 'pause' :'resume'}} {{terminology.ORDER}}</div>
+          <button type="button" class="close" (click)="hideDialog()">
+            <img src="assets/img/close.svg" alt="close" />
+          </button>
+        </div>
+      </div>
+      <div class="col-md-12 text-center">
+        <h4>
+          <ng-container>{{ orderConfirmString || "Are you sure you want to pause/resume the order ?" }}
+          </ng-container>
+        </h4>
+      </div>
+      <div class="col-md-12 confirmation-btn" style="padding: 17px">
+        <button class="btn btn-primary submit-btn" (click)="pauseResumeOrder()">{{languageStrings.submit || 'Submit'}}</button>
+        <button class="btn btn-primary cancel-btn" (click)="hideDialog()">{{languageStrings.cancel || 'Cancel'}}</button>
+      </div>
+    </div>
+  </div>
+</app-modal>

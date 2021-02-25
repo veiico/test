@@ -1,0 +1,391 @@
+@import '~assets/css/variables';
+
+.heading{
+  text-align: center;
+  padding: 20px 0;
+}
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  display: inline-block;
+
+  font-family: Poppins;
+  font-size: 25px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #333333;
+
+}
+.line{
+  margin: 0 auto;
+  width: 50px;
+}
+
+.card-p{
+  background-color: #ffffff;
+
+  padding: 20px;
+  box-shadow: 0 13px 25px 0 rgba(0, 0, 0, 0.1);
+  overflow-y: scroll;
+}
+
+.center-p{
+  display: flex;
+  display: -webkit-flex;
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+.fg{
+  font-size: 16px;
+  padding: 15px;
+}
+/deep/.signup-input {
+  height: auto !important;
+  font-size: 14px !important;
+}
+/deep/.flagInput{
+  background-color: white !important;
+  width: 18px !important;
+  text-align: center !important;
+  button {
+    outline: none;
+  }
+}
+
+.profileContainer {
+  //height: calc(100vh - 173px); nhi
+  //overflow-x: hidden;
+  //overflow-y: hidden;
+}
+
+.minheightft{
+  min-height:40px;
+  line-height: 40px;
+  font-family: "Poppins";
+  font-size: 14px;
+  font-weight: 600;
+  span{
+    font-weight: normal;
+  }
+}
+
+.profilePage{
+  padding-bottom: 20px;
+  height: auto;
+  min-height: calc(100vh - 180px);
+}
+
+.profileStyle{
+  width: 600px;
+  height: auto;
+  .profileP{
+    background-color: #fff;
+    box-shadow: 0 2px 35px 0 rgba(0, 0, 0, 0.05);
+    padding-bottom: 10px;
+  }
+  .profileEditView{
+    padding: 55px 60px;
+    label{
+      font-family: "Poppins";
+      font-size: 12px;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      text-align: left;
+      color: #9c9c9c;
+    }
+    input{
+      font-family: "Poppins";
+      width: 100%;
+      height: 50px;
+      opacity: 1;
+      border-radius: 2px;
+      background-color: #ffffff;
+      border: solid 1px #d2d2d2;
+      padding: 10px;
+      font-size: 18px;
+      &::-webkit-input-placeholder,
+      &::-moz-placeholder,
+      &:-ms-input-placeholder,
+      &:-moz-placeholder {
+        opacity: 0.5;
+        font-size: 18px;
+        text-align: left;
+      }
+      &:focus {
+        outline: none;
+      }
+    }
+    select{
+      font-family: "Poppins";
+      width: 100%;
+      height: 50px;
+      opacity: 1;
+      border-radius: 2px;
+      background-color: #ffffff;
+      border: solid 1px #d2d2d2;
+      padding: 10px;
+      font-size: 18px;
+      &::-webkit-input-placeholder,
+      &::-moz-placeholder,
+      &:-ms-input-placeholder,
+      &:-moz-placeholder {
+        opacity: 0.5;
+        font-size: 18px;
+        text-align: left;
+      }
+      &:focus {
+        outline: none;
+      }
+    }
+    .saveButton{
+      padding: 15px 0px;
+      .backButton{
+        font-family: "Poppins";
+        min-width: 100px;
+        color: #333 !important;
+        background-color: #fff !important;
+        border: 1px solid #ccc !important;
+        border-radius: 4.8px !important;
+      }
+      .okButton{
+        font-family: "Poppins";
+        min-width: 100px;
+        border: 1px solid transparent !important;
+        border-radius: 4.8px;
+        margin-left: 10px;
+      }
+    }
+  }
+  .profileViewOnly{
+    padding: 55px 60px;
+    .profileNameHeading{
+      font-family: Poppins;
+      font-size: 22px;
+      font-weight: 600;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      color: #333333;
+      text-align: center;
+    }
+    .profileNumberDiv{
+      font-family: Poppins;
+      font-size: 20px;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      color: #333333;
+      padding-top:46px;
+      text-align: center;
+      span{
+        padding-left: 22px;
+      }
+    }
+    .profileEmailDiv{
+      font-family: Poppins;
+      font-size: 20px;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      color: #333333;
+      padding-top:36px;
+      text-align: center;
+      span{
+        padding-left: 22px;
+      }
+    }
+
+    .editButton{
+      text-align: center;
+      padding-top:46px;
+      display: flex;
+      justify-content: space-evenly;
+      button{
+        min-width: 180px;
+        height: 40px;
+        padding:8px;
+        font-family: Poppins;
+        font-size: 17px;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: center;
+        border-radius: 4.8px;
+      }
+    }
+  }
+
+  .additionalInformation{
+    background: #dddddd8a;
+    .additionalText{
+      padding: 13px;
+      font-family: Poppins;
+      font-size: 17px;
+    }
+  }
+  .additionalData{
+    padding-top:10px;
+    font-family: Poppins;
+    font-size: 17px;
+  }
+}
+.input-group {
+  width: 100%;
+}
+
+
+/deep/ p-dropdown .ui-dropdown , /deep/ p-multiSelect .ui-multiselect {
+  width: 100% !important;
+}
+
+ :host /deep/ p-dropdown label {
+  height: 95% !important;
+  margin: auto;
+}
+.displayBlock {
+  display: block;
+}
+//.input-group #fugu-phone{
+.input-group .fugu-tel-input{
+  font-family: "Poppins";
+  width: 100%;
+  height: 50px !important;
+  opacity: 1;
+  border-radius: 2px;
+  background-color: #ffffff;
+  border: solid 1px #d2d2d2;
+  padding: 10px;
+  font-size: 18px;
+  &::-webkit-input-placeholder,
+  &::-moz-placeholder,
+  &:-ms-input-placeholder,
+  &:-moz-placeholder {
+    opacity: 0.5;
+    font-size: 18px;
+    text-align: left;
+  }
+  &:focus {
+    outline: none;
+  }
+}
+.input-group .flagInput{
+  height: 50px !important;
+}
+/deep/.signup-input {
+  height: 50px !important;
+  font-size: 18px !important;
+  font-family: "Poppins";
+}
+/deep/.flagInput{
+  font-family: "Poppins";
+  background-color: white !important;
+  width: 57px !important;
+  text-align: center !important;
+  button {
+    outline: none
+  }
+}
+
+@media only screen and (max-width:650px) {
+  .profileStyle{
+    width:90%;
+    margin: auto;
+    overflow: hidden;
+    margin-right: 20px !important;
+    .profileViewOnly{
+      padding: 25px;
+      .profileNameHeading{
+        font-size: 16px;
+      }
+      .profileNumberDiv{
+        font-size: 16px;
+        padding-top: 25px;
+        span{
+          padding-left: 8px;
+        }
+      }
+      .profileEmailDiv{
+        font-size: 16px;
+        padding-top: 25px;
+        span{
+          padding-left: 8px;
+        }
+      }
+      .editButton{
+        padding-top: 25px;
+      }
+    }
+    .profileEditView{
+      padding: 25px;
+    }
+  }
+  // .edit-margin{
+  //   margin-bottom: 15px;
+  // }
+}
+
+@media only screen and (max-width: 463px){
+  .changePassword{
+    margin-top: 10px;
+  }
+  .editButton{
+    flex-direction: column;
+  }
+}
+@media only screen and (max-width: 375px){
+  .profileStyle{
+    margin-right: 17px !important;
+  }
+}
+@media only screen and (max-width: 320px){
+  .profileStyle{
+    margin-right: 12px !important;
+  }
+}
+
+.changePassword{
+  background-color: $color-theme;
+  font-family: 'Poppins';
+  color: white;
+}
+
+.uploadIcon{
+  margin-left: 89px;
+  background: gainsboro;
+  border: 1px solid darkslategrey;
+  border-radius: 50%;
+  i{
+      padding: 5px;
+      color: black;
+      font-size: 18px;
+  }
+}
+.profilePage{
+  /deep/.ui-calendar{
+    font-family: $proxima-reg;
+    width: 100%;
+    height: 50px;
+    opacity: 1;
+    border-radius: 2px;
+    background-color: #ffffff;
+    border: solid 1px #d2d2d2;
+    /* padding: 10px; */
+    font-size: 18px;
+    .ui-inputtext{
+      width: 100%;
+      height: 100%;
+    }
+  }
+}

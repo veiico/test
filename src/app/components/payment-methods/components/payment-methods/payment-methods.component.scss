@@ -1,0 +1,123 @@
+@import '~assets/css/variables';
+
+.methods{
+  .listMethods{
+    .method{
+      display: flex;
+      align-items: center;
+      margin-top: 8px;
+      .radioCheck{
+        width: 70px;
+        cursor: pointer;
+      }
+      .main{
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        .img{
+          img{
+            width: 70px;
+            max-width: 70px;
+            max-height: 50px;
+          }
+        }
+        .text {
+          //float: right;
+          .name {
+            margin-bottom: 3px;
+            font-family: $proxima-reg;
+            font-weight: 500;
+            font-size: 16px;
+            color: $color-theme;
+            font-style: italic;
+          }
+        }
+        .link{
+          .name{
+            margin-bottom: 3px;
+            font-family: $proxima-reg;
+            font-weight: 500;
+            font-size: 16px;
+            color: $color-theme;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            user-select: none;
+            span {
+              -webkit-transform: perspective(1px) translateZ(0);
+              transform: perspective(1px) translateZ(0);
+              display: inline-block;
+              vertical-align: middle;
+              cursor: pointer;
+              &:before {
+                content: "";
+                position: absolute;
+                z-index: -1;
+                left: 0;
+                right: 100%;
+                bottom: 0;
+                background: $color-theme;
+                height: 2px;
+                -webkit-transition-property: right;
+                transition-property: right;
+                -webkit-transition-duration: 0.3s;
+                transition-duration: 0.3s;
+                -webkit-transition-timing-function: ease-out;
+                transition-timing-function: ease-out;
+              }
+              &:hover:before {
+                right: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .openAddCard{
+      // padding-left: 60px;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    .openAddCard{
+      padding-left: 0px !important;
+    }
+  }
+}
+.btn-primary{
+  background-color: $color-theme;
+}
+
+:host /deep/ app-limelight .message-content-payment.setWidth {
+  width: 75%;
+  box-shadow: none !important;
+}
+
+:host /deep/ app-limelight .message-modal-payment.d-flex.justify-content-center.align-items-center.flex-column.h-100.w-100 {
+  position: inherit;
+}
+
+:host /deep/ app-two-checkout .message-content-payment.setWidth {
+  width: 25%;
+}
+:host /deep/ app-stripe .cardList .card.selected{
+  border-color: rgb(130, 197, 72) !important;
+}
+:host /deep/ app-stripe .cardList .card.selected::before{
+  height: 22px;
+  width: 22px;
+  position: absolute;
+  content: '\f00c';
+  font-family: FontAwesome;
+  display: inline-block;
+  font-size: 12px;
+  text-align: center;
+  line-height: 21px;
+  top: 10px;
+  border-radius: 15px;
+  color: white;
+  background: rgb(130, 197, 72);
+}

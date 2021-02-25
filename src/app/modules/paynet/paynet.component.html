@@ -1,0 +1,12 @@
+<div class="gateway" *ngIf="showBackground" (click)="focusOnWindow()">
+  <div class="message">
+      <ng-container>Don’t see the secure Paynet browser? We’ll help you re-launch the window to complete your
+          purchase.</ng-container>
+  </div>
+  <div class="checkout-continue" *ngIf="sessionVar && !sessionVar.closed">
+      <u>{{languageStrings.click_to_continue || 'Click to Continue'}}</u>
+  </div>
+  <div class="checkout-continue" *ngIf="sessionVar && sessionVar.closed && allowPopUp" (click)="openUrl()">
+      <u>{{languageStrings.click_to_continue || 'Click to Continue'}}</u>
+  </div>
+</div>

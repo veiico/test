@@ -1,0 +1,20 @@
+<div class="subscription" *ngIf="appConfig.is_subscription_enabled && profileData.vendor_details.paid">
+  <div class="row">
+    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 additionalInformation">
+      <div class="additionalText text-center" [ngStyle]="{ 'direction' : direction }">
+        <ng-container>{{languageStrings.subscription_plans || 'Subscription Plan'}}</ng-container>
+      </div>
+    </div>
+
+    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+      <div class="description">
+        <h3>{{languageStrings.you_have_paid_below_amount_for_registration || 'You have paid below amount for registration.'}}</h3>
+      </div>
+      <div class="col-lg-12 payStyle">
+        <div>
+          <span>{{curreny}}{{subscription.plan_amount | decimalConfig}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

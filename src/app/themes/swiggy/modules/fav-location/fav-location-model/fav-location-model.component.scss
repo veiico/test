@@ -1,0 +1,16 @@
+@import '~assets/css/variables';
+.btn-deliver-here{
+  background-color: $color-blue;
+  color: white;
+  text-transform: uppercase;
+  font-family: $proxima-semi-bold;
+  margin-bottom: 5px;
+}
+.yf-ic-create{
+  margin-top: 1px;
+}
+.model-container{
+  &:hover{
+    box-shadow: 0 2px 8px #d4d5d9;
+  }
+}

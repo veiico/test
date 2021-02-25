@@ -1,0 +1,12 @@
+<div class="container-fluid paypal">
+  <div class="row" *ngIf="paypalPaymentUrl" style="padding: 10px">
+    <div class="col-md-12 text-center">
+      <h4>
+        <ng-container>Paypal</ng-container>
+      </h4>
+    </div>
+    <div class="col-md-12">
+      <iframe id="paypalIFrame" style="border: none" #paypalIFrame [src]="paypalPaymentUrl" height="610px" width="100%" (load)="getContentPaypal(paypalIFrame)"></iframe>
+    </div>
+  </div>
+</div>

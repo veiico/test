@@ -1,0 +1,926 @@
+<div class="container-fluid productTiming" *ngIf="product && selectAgentModal == 1">
+  <div class="row">
+    <div class="col-xs-12 card-timing">
+      <p class="main-heading text-capitalize" *ngIf="terminology">{{terminology.SCHEDULE_ORDER}}</p>
+      <hr class="line" [style.border-top-color]="profile_color" />
+    </div>
+    <form role="form" [formGroup]="timingForm" autocomplete="off" style="padding-top:30px">
+      <div class="schedule_order">
+        <div style="padding: 14px 40px;" *ngIf="formSetting.business_model_type == 'RENTAL'&& product.unit_type >= 4">
+          <div class="col-xs-12 col-sm-6" style="padding-right: 70px;">
+            <label for="checkin" [ngStyle]="{ 'direction' : direction }">{{terminology.CHECK_IN}} <ng-container >{{ languageStrings.date || "Date"}}</ng-container></label>
+            <br />
+            <p-calendar id="checkin" formControlName="startDate" [showIcon]="true" [(ngModel)]="bsStartValue" dateFormat="M dd, yy" [minDate]="minStartDate"
+              [maxDate]="maxStartDate" [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2050" [disabledDates]="invalidDatesGot"
+              (onFocus)="getDisableDate()" (onValueChange)="startDateChanged()"></p-calendar>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <label for="checkout" [ngStyle]="{ 'direction' : direction }">{{terminology.CHECK_OUT}} <ng-container >{{ languageStrings.date || "Date"}}</ng-container></label>
+            <br />
+            <p-calendar id="checkout" formControlName="endDate" [showIcon]="true" [(ngModel)]="bsEndValue" dateFormat="M dd, yy" [minDate]="minEndDate"
+              [maxDate]="maxEndDate" [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2050" [disabledDates]="invalidDatesGot"
+              (onFocus)="getDisableDateEnd()" (onValueChange)="endDateChanged()"></p-calendar>
+          </div>
+        </div>
+
+        <div *ngIf="(product.enable_tookan_agent || product.is_agents_on_product_tags_enabled) && formSetting.business_model_type != 'RENTAL' && formSetting.business_model_type != 'ECOM'" style="padding: 14px 40px;">
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group" style="margin-bottom: 0">
+              <div class="input-group m-auto" style="margin-bottom: 0" (click)="openStartSlots = false;openEndSlots = false">
+                <label for="strt_dt" [ngStyle]="{ 'direction' : direction }">
+                  <ng-container>{{languageStrings.start_date || 'Start Date'}}</ng-container>
+                </label>
+                <div class="input-group addon">
+                  <input id="strt_dt" type="text" class="form-control" [minDate]="minDate" [maxDate]="maxStartDate" [ngStyle]="{ 'direction' : direction }"
+                    #dp="bsDatepicker" (onHidden)="dateAgentStartChanged()" (onShown)="onDatePickerShown()" formControlName="startDate"
+                    [value]=" bsStartValue | dateTimeFormat: 'mediumDate' " bsDatepicker [(ngModel)]="bsStartValue" placement="bottom"
+                    readonly style="color: #333333" [bsConfig]="bsConfig">
+                  <span class="input-group-addon no-border-fa" id="basic-addon5" (click)="dp.toggle()" [attr.aria-expanded]="dp.isOpen">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group" style="margin-bottom: 0">
+              <div class="input-group m-auto" style="margin-bottom: 0" (click)="openStartSlots = !openStartSlots;openEndSlots = false">
+                <label for="strt_tm">{{terminology.START_TIME}}</label>
+                <div class="input-group addon" style="margin-bottom: 0">
+                  <input id="strt_tm" type="text" placeholder="--:--" class="form-control" [(ngModel)]="startTime" formControlName="startTime" readonly
+                    style="color: #333333" [value]="startTime ? startTime : ''">
+                  <span class="input-group-addon no-border-fa" id="basic-addon6">
+                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+              <div class="slots" [hidden]="!openStartSlots">
+                <div>
+                  <p class="slot-heading" (click)="morningSBool = !morningSBool">
+                    <ng-container>{{languageStrings.morning || 'Morning'}}</ng-container>
+                    <span class="col-arrow" [ngClass]="{'col-arrow-up':morningSBool ? true:false}" *ngIf="agentStartSlots.morning.size">
+                      <svg viewBox="0 0 129 129" enable-background="new 0 0 129 129">
+                        <g>
+                          <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
+                            fill="#333333" />
+                        </g>
+                      </svg>
+                    </span>
+                  </p>
+                  <div class="slot-parent" [hidden]="!morningSBool">
+                    <div *ngFor="let slot of agentStartSlots.morning" class="slot-ui" (click)="startTime = slot;endTime = '';openStartSlots = false;highlightSlot($event,slot)">
+                      {{slot}}
+                    </div>
+                  </div>
+                  <div *ngIf="!agentStartSlots.morning.size" style="margin: auto">
+                    <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.no_slot_avail || 'No Slots Available'}}</ng-container>
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <p class="slot-heading" (click)="afterNoonSBool = !afterNoonSBool">
+                    <ng-container>{{languageStrings.afternoon || 'Afternoon'}}</ng-container>
+                    <span class="col-arrow" [ngClass]="{'col-arrow-up':afterNoonSBool ? true:false}"
+                      *ngIf="agentStartSlots.afternoon.size">
+                      <svg viewBox="0 0 129 129" enable-background="new 0 0 129 129">
+                        <g>
+                          <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
+                            fill="#333333" />
+                        </g>
+                      </svg>
+                    </span>
+                  </p>
+                  <div class="slot-parent" [hidden]="!afterNoonSBool">
+                    <div *ngFor="let slot of agentStartSlots.afternoon" class="slot-ui" (click)="startTime = slot;endTime = '';openStartSlots = false;highlightSlot($event,slot)">
+                      {{slot}}
+                    </div>
+                  </div>
+                  <div *ngIf="!agentStartSlots.afternoon.size" style="margin: auto">
+                    <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.no_slot_avail || 'No Slots Available'}}</ng-container>
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <p class="slot-heading" (click)="eveningSBool = !eveningSBool">
+                    <ng-container>{{languageStrings.evening || 'Evening'}}</ng-container>
+                    <span class="col-arrow" [ngClass]="{'col-arrow-up':eveningSBool ? true:false}" *ngIf="agentStartSlots.evening.size">
+                      <svg viewBox="0 0 129 129" enable-background="new 0 0 129 129">
+                        <g>
+                          <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
+                            fill="#333333" />
+                        </g>
+                      </svg>
+                    </span>
+                  </p>
+                  <div class="slot-parent" [hidden]="!eveningSBool">
+                    <div *ngFor="let slot of agentStartSlots.evening" class="slot-ui" (click)="startTime = slot;endTime = '';openStartSlots = false;highlightSlot($event,slot)">
+                      {{slot}}
+                    </div>
+                  </div>
+                  <div *ngIf="!agentStartSlots.evening.size" style="margin: auto">
+                    <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.no_slot_avail || 'No Slots Available'}}</ng-container>
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xs-12 col-sm-6" *ngIf="!product.service_time">
+            <div class="form-group" style="margin-bottom: 0">
+              <div class="input-group m-auto" style="margin-bottom: 0" (click)="openEndSlots = false;openStartSlots = false">
+                <label for="edt" [ngStyle]="{ 'direction' : direction }">
+                  <ng-container>{{languageStrings.end_date || 'End Date'}}</ng-container>
+                </label>
+                <div class="input-group addon">
+                  <input id="edt" type="text" class="form-control" [minDate]="minDateAgent" [maxDate]="maxEndDate" [ngStyle]="{ 'direction' : direction }"
+                    #dpE="bsDatepicker" (onHidden)="dateAgentEndChanged()" (onShown)="onDatePickerShown()" formControlName="endDate"
+                    [value]=" bsEndValue | dateTimeFormat: 'mediumDate' " bsDatepicker [(ngModel)]="bsEndValue" placement="{{languageStrings.bottom || 'bottom'}}" readonly
+                    style="color: #333333" [bsConfig]="bsConfig">
+                  <span class="input-group-addon no-border-fa" id="basic-addon8" (click)="dpE.toggle()" [attr.aria-expanded]="dpE.isOpen">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6" *ngIf="!product.service_time">
+            <div class="form-group" style="margin-bottom: 0">
+              <div class="input-group m-auto" style="margin-bottom: 0" (click)="checkIfStartSelected();">
+                <label for="end_tm">{{terminology.END_TIME}}</label>
+                <div class="input-group addon" style="margin-bottom: 0">
+                  <input id="end_tm" type="text" placeholder="--:--" class="form-control" [(ngModel)]="endTime" formControlName="endTime" readonly
+                    style="color: #333333" [value]="endTime ? endTime : ''">
+                  <span class="input-group-addon no-border-fa" id="basic-addon7">
+                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+              <div class="slots" [hidden]="!openEndSlots">
+                <div>
+                  <p class="slot-heading" (click)="morningEBool = !morningEBool">
+                    <ng-container>{{languageStrings.morning || 'Morning'}}</ng-container>
+                    <span class="col-arrow" [ngClass]="{'col-arrow-up':morningEBool ? true:false}" *ngIf="agentEndSlots.morning.size">
+                      <svg viewBox="0 0 129 129" enable-background="new 0 0 129 129">
+                        <g>
+                          <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
+                            fill="#333333" />
+                        </g>
+                      </svg>
+                    </span>
+                  </p>
+                  <div class="slot-parent" [hidden]="!morningEBool">
+                    <div *ngFor="let slot of agentEndSlots.morning" class="slot-ui" (click)="endTime = slot;openEndSlots = false;highlightSlot($event,slot)">
+                      {{slot}}
+                    </div>
+                  </div>
+                  <div *ngIf="!agentEndSlots.morning.size" style="margin: auto">
+                    <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.no_slot_avail || 'No Slots Available'}}</ng-container>
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <p class="slot-heading" (click)="afterNoonEBool = !afterNoonEBool">
+                    <ng-container>{{languageStrings.afternoon || 'Afternoon'}}</ng-container>
+                    <span class="col-arrow" [ngClass]="{'col-arrow-up':afterNoonEBool ? true:false}"
+                      *ngIf="agentEndSlots.afternoon.size">
+                      <svg viewBox="0 0 129 129" enable-background="new 0 0 129 129">
+                        <g>
+                          <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
+                            fill="#333333" />
+                        </g>
+                      </svg>
+                    </span>
+                  </p>
+                  <div class="slot-parent" [hidden]="!afterNoonEBool">
+                    <div *ngFor="let slot of agentEndSlots.afternoon" class="slot-ui" (click)="endTime = slot;openEndSlots = false;highlightSlot($event,slot)">
+                      {{slot}}
+                    </div>
+                  </div>
+                  <div *ngIf="!agentEndSlots.afternoon.size" style="margin: auto">
+                    <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.no_slot_avail || 'No Slots Available'}}</ng-container>
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <p class="slot-heading" (click)="eveningEBool = !eveningEBool">
+                    <ng-container>{{languageStrings.evening || 'Evening'}}</ng-container>
+                    <span class="col-arrow" [ngClass]="{'col-arrow-up':eveningEBool ? true:false}" *ngIf="agentEndSlots.evening.size">
+                      <svg viewBox="0 0 129 129" enable-background="new 0 0 129 129">
+                        <g>
+                          <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
+                            fill="#333333" />
+                        </g>
+                      </svg>
+                    </span>
+                  </p>
+                  <div class="slot-parent" [hidden]="!eveningEBool">
+                    <div *ngFor="let slot of agentEndSlots.evening" class="slot-ui" (click)="endTime = slot;openEndSlots = false;highlightSlot($event,slot)">
+                      {{slot}}
+                    </div>
+                  </div>
+                  <div *ngIf="!agentEndSlots.evening.size" style="margin: auto">
+                    <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.no_slot_avail || 'No Slots Available'}}</ng-container>
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!product.enable_tookan_agent && !product.is_agents_on_product_tags_enabled &&product.unit_type == 1 && restaurantInfo.pd_or_appointment == 1 && formSetting.business_model_type != 'ECOM'" style="padding: 14px 40px;">
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group" style="margin-bottom: 0">
+              <div class="input-group m-auto" style="margin-bottom: 0" (click)="openSlots = false">
+                <label for="dt" [ngStyle]="{ 'direction' : direction }">
+                  <ng-container>{{languageStrings.select_date || 'Select Date'}}</ng-container>
+                </label>
+                <div class="input-group addon">
+                  <input id="dt" class="form-control" [owlDateTimeTrigger]="dt3" formControlName="startDate" [ngStyle]="{ 'direction' : direction }"
+                    [min]="minStartDate" [max]="maxStartDate" [(ngModel)]="bsStartValue" style="color: #333333" [owlDateTime]="dt3">
+                  <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
+                  <span class="input-group-addon no-border-fa" id="basic-addon11" [owlDateTimeTrigger]="dt3">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group" style="margin-bottom: 0">
+              <div class="input-group m-auto" style="margin-bottom: 0" (click)="openSlots = false">
+                <label for="tm_only" [ngStyle]="{ 'direction' : direction }">
+                  <ng-container>{{languageStrings.select_time || 'Select Time'}}</ng-container>
+                </label>
+                <div class="input-group addon">
+                  <input id="tm_only" class="form-control" [owlDateTimeTrigger]="dt4" placeholder="--:--" formControlName="startTime" [(ngModel)]="startTime"
+                    style="color: #333333" [owlDateTime]="dt4">
+                  <owl-date-time [pickerType]="'timer'" #dt4></owl-date-time>
+                  <span class="input-group-addon no-border-fa" id="basic-addon1_2" [owlDateTimeTrigger]="dt4">
+                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!product.enable_tookan_agent && !product.is_agents_on_product_tags_enabled &&product.unit_type == 1 && restaurantInfo.pd_or_appointment == 2 && formSetting.business_model_type != 'ECOM'"
+          style="padding: 14px 40px;">
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group" style="margin-bottom: 0">
+              <div class="input-group m-auto" style="margin-bottom: 0" (click)="openSlots = false">
+                <label for="start_dt" [ngStyle]="{ 'direction' : direction }">
+                  <ng-container>{{languageStrings.start_date || 'Start Date'}}</ng-container>
+                </label>
+                <div class="input-group addon">
+                  <input id="start_dt" type="text" class="form-control" [minDate]="minStartDate" [maxDate]="maxStartDate" [ngStyle]="{ 'direction' : direction }"
+                    #dpS="bsDatepicker" (onHidden)="dateStartChanged()" (onShown)="onDatePickerShown()" formControlName="startDate"
+                    [value]=" bsStartValue | dateTimeFormat: 'mediumDate'" bsDatepicker [(ngModel)]="bsStartValue" placement="bottom"
+                    readonly style="color: #333333" [bsConfig]="bsConfig">
+                  <span class="input-group-addon no-border-fa" id="basic-addon10" (click)="dpS.toggle()" [attr.aria-expanded]="dpS.isOpen">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group" style="margin-bottom: 0">
+              <div class="input-group m-auto" style="margin-bottom: 0" (click)="openStartSlots = !openStartSlots;openEndSlots = false;">
+                <label for="start_tm" class="text-capitalize">{{terminology.START_TIME}}</label>
+                <div class="input-group addon" style="margin-bottom: 0">
+                  <input id="start_tm" type="text" placeholder="--:--" class="form-control" [(ngModel)]="startTime" formControlName="time" readonly style="color: #333333"
+                    [value]="startTime ? startTime + ' ' + tStartFormat: ''">
+                  <span class="input-group-addon no-border-fa" id="basic-addon2">
+                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+              <div class="slots" [hidden]="!openStartSlots" *ngIf="showTimeSlots">
+                <div>
+                  <p class="slot-heading" (click)="morningSBool = !morningSBool">
+                    <ng-container>{{languageStrings.morning || 'Morning'}}</ng-container>
+                    <span class="col-arrow" [ngClass]="{'col-arrow-up':morningSBool ? true:false}" *ngIf="startSlots.morning.size">
+                      <svg viewBox="0 0 129 129" enable-background="new 0 0 129 129">
+                        <g>
+                          <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
+                            fill="#333333" />
+                        </g>
+                      </svg>
+                    </span>
+                  </p>
+                  <div class="slot-parent" [hidden]="!morningSBool">
+                    <div *ngFor="let slot of startSlots.morning" class="slot-ui" (click)="startTime = slot;openStartSlots = false;setTimeFormat('start', 'AM');highlightSlot($event,slot)">
+                      {{slot}}
+                    </div>
+                  </div>
+                  <div *ngIf="!startSlots.morning.size" style="margin: auto">
+                    <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.no_slot_avail || 'No Slots Available'}}</ng-container>
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <p class="slot-heading" (click)="afterNoonSBool = !afterNoonSBool">
+                    <ng-container>{{languageStrings.afternoon || 'Afternoon'}}</ng-container>
+                    <span class="col-arrow" [ngClass]="{'col-arrow-up':afterNoonSBool ? true:false}"
+                      *ngIf="startSlots.afternoon.size">
+                      <svg viewBox="0 0 129 129" enable-background="new 0 0 129 129">
+                        <g>
+                          <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
+                            fill="#333333" />
+                        </g>
+                      </svg>
+                    </span>
+                  </p>
+                  <div class="slot-parent" [hidden]="!afterNoonSBool">
+                    <div *ngFor="let slot of startSlots.afternoon" class="slot-ui" (click)="startTime = slot;openStartSlots = false;setTimeFormat('start', 'PM');highlightSlot($event,slot)">
+                      {{slot}}
+                    </div>
+                  </div>
+                  <div *ngIf="!startSlots.afternoon.size" style="margin: auto">
+                    <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.no_slot_avail || 'No Slots Available'}}</ng-container>
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <p class="slot-heading" (click)="eveningSBool = !eveningSBool">
+                    <ng-container>{{languageStrings.evening || 'Evening'}}</ng-container>
+                    <span class="col-arrow" [ngClass]="{'col-arrow-up':eveningSBool ? true:false}" *ngIf="startSlots.evening.size">
+                      <svg viewBox="0 0 129 129" enable-background="new 0 0 129 129">
+                        <g>
+                          <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
+                            fill="#333333" />
+                        </g>
+                      </svg>
+                    </span>
+                  </p>
+                  <div class="slot-parent" [hidden]="!eveningSBool">
+                    <div *ngFor="let slot of startSlots.evening" class="slot-ui" (click)="startTime = slot;openStartSlots = false;setTimeFormat('start', 'PM');highlightSlot($event,slot)">
+                      {{slot}}
+                    </div>
+                  </div>
+                  <div *ngIf="!startSlots.evening.size" style="margin: auto">
+                    <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.no_slot_avail || 'No Slots Available'}}</ng-container>
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6" *ngIf="!product.service_time">
+            <div class="form-group" style="margin-bottom: 0">
+              <div class="input-group m-auto" style="margin-bottom: 0" (click)="openSlots = false">
+                <label for="end_date" [ngStyle]="{ 'direction' : direction }">
+                  <ng-container>{{languageStrings.end_date || 'End Date'}}</ng-container>
+                </label>
+                <div class="input-group addon">
+                  <input id="end_date" type="text" class="form-control" [minDate]="minEndDate" [maxDate]="maxEndDate" [ngStyle]="{ 'direction' : direction }"
+                    #dpE="bsDatepicker" (onHidden)="dateEndChanged()" (onShown)="onDatePickerShown()" formControlName="endDate"
+                    [value]=" bsEndValue | dateTimeFormat: 'mediumDate' " bsDatepicker [(ngModel)]="bsEndValue" placement="bottom" readonly
+                    style="color: #333333" [bsConfig]="bsConfig">
+                  <span class="input-group-addon no-border-fa" id="basic-addon1" (click)="dpE.toggle()" [attr.aria-expanded]="dpE.isOpen">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6" *ngIf="!product.service_time">
+            <div class="form-group" style="margin-bottom: 0">
+              <div class="input-group m-auto" style="margin-bottom: 0" (click)="openEndSlots = !openEndSlots;openStartSlots = false">
+                <label for="end_time" class="text-capitalize">{{terminology.END_TIME}}</label>
+                <div class="input-group addon" style="margin-bottom: 0">
+                  <input id="end_time" type="text" placeholder="--:--" class="form-control" [(ngModel)]="endTime" formControlName="endTime" readonly style="color: #333333"
+                    [value]="endTime ? endTime + ' ' + tEndFormat: ''">
+                  <span class="input-group-addon no-border-fa" id="basic-addon2">
+                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+              <div class="slots" [hidden]="!openEndSlots" *ngIf="showTimeSlots">
+                <div>
+                  <p class="slot-heading" (click)="morningEBool = !morningEBool">
+                    <ng-container>{{languageStrings.morning || 'Morning'}}</ng-container>
+                    <span class="col-arrow" [ngClass]="{'col-arrow-up':morningEBool ? true:false}" *ngIf="slots.morning.size">
+                      <svg viewBox="0 0 129 129" enable-background="new 0 0 129 129">
+                        <g>
+                          <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
+                            fill="#333333" />
+                        </g>
+                      </svg>
+                    </span>
+                  </p>
+                  <div class="slot-parent" [hidden]="!morningEBool">
+                    <div *ngFor="let slot of slots.morning" class="slot-ui" (click)="endTime = slot;openEndSlots = false;setTimeFormat('end', 'AM');highlightSlot($event,slot)">
+                      {{slot}}
+                    </div>
+                  </div>
+                  <div *ngIf="!slots.morning.size" style="margin: auto">
+                    <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.no_slot_avail || 'No Slots Available'}}</ng-container>
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <p class="slot-heading" (click)="afterNoonEBool = !afterNoonEBool">
+                    <ng-container>{{languageStrings.afternoon || 'Afternoon'}}</ng-container>
+                    <span class="col-arrow" [ngClass]="{'col-arrow-up':afterNoonEBool ? true:false}"
+                      *ngIf="slots.afternoon.size">
+                      <svg viewBox="0 0 129 129" enable-background="new 0 0 129 129">
+                        <g>
+                          <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
+                            fill="#333333" />
+                        </g>
+                      </svg>
+                    </span>
+                  </p>
+                  <div class="slot-parent" [hidden]="!afterNoonEBool">
+                    <div *ngFor="let slot of slots.afternoon" class="slot-ui" (click)="endTime = slot;openEndSlots = false;setTimeFormat('end', 'PM');highlightSlot($event,slot)">
+                      {{slot}}
+                    </div>
+                  </div>
+                  <div *ngIf="!slots.afternoon.size" style="margin: auto">
+                    <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.no_slot_avail || 'No Slots Available'}}</ng-container>
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <p class="slot-heading" (click)="eveningEBool = !eveningEBool">
+                    <ng-container>{{languageStrings.evening || 'Evening'}}</ng-container>
+                    <span class="col-arrow" [ngClass]="{'col-arrow-up':eveningEBool ? true:false}" *ngIf="slots.evening.size">
+                      <svg viewBox="0 0 129 129" enable-background="new 0 0 129 129">
+                        <g>
+                          <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
+                            fill="#333333" />
+                        </g>
+                      </svg>
+                    </span>
+                  </p>
+                  <div class="slot-parent" [hidden]="!eveningEBool">
+                    <div *ngFor="let slot of slots.evening" class="slot-ui" (click)="endTime = slot;openEndSlots = false;setTimeFormat('end', 'PM');highlightSlot($event,slot)">
+                      {{slot}}
+                    </div>
+                  </div>
+                  <div *ngIf="!slots.evening.size" style="margin: auto">
+                    <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.no_slot_avail || 'No Slots Available'}}</ng-container>
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!product.enable_tookan_agent && !product.is_agents_on_product_tags_enabled &&((product.unit_type != 1 && formSetting.business_model_type != 'ECOM'  && formSetting.business_model_type != 'RENTAL') || product.unit_type == 2 || product.unit_type == 3 && formSetting.business_model_type == 'RENTAL')"
+          style="padding: 14px 40px;">
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group" style="margin-bottom: 0">
+              <div class="input-group m-auto" style="margin-bottom: 0" (click)="openSlots = false">
+                <label for="prod-start-date" [ngStyle]="{ 'direction' : direction }">
+                  <ng-container>{{languageStrings.start_date || 'Start Date'}}</ng-container>
+                </label>
+                <div class="input-group addon">
+                  <input id="prod-start-date" type="text" class="form-control" [minDate]="minStartDate" [maxDate]="maxStartDate" [ngStyle]="{ 'direction' : direction }"
+                    #dpS="bsDatepicker" (onHidden)="dateStartChanged()" (onShown)="onDatePickerShown()" formControlName="startDate"
+                    [value]=" bsStartValue | dateTimeFormat: 'mediumDate'" bsDatepicker [(ngModel)]="bsStartValue" placement="bottom"
+                    readonly style="color: #333333" [bsConfig]="bsConfig">
+                  <span class="input-group-addon no-border-fa" id="basic-addon10" (click)="dpS.toggle()" [attr.aria-expanded]="dpS.isOpen">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group" style="margin-bottom: 0">
+              <div class="input-group m-auto" style="margin-bottom: 0" (click)="openStartSlots = !openStartSlots;openEndSlots = false;">
+                <label for="prod-start-time" class='text-capitalize'>{{terminology.START_TIME}}</label>
+                <div class="input-group addon" style="margin-bottom: 0">
+                  <input id="prod-start-time" type="text" placeholder="--:--" class="form-control" [(ngModel)]="startTime" formControlName="time" readonly style="color: #333333"
+                    [value]="startTime ? startTime + ' ' + tStartFormat: ''">
+                  <span class="input-group-addon no-border-fa" id="basic-addon2">
+                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+              <div class="slots" [hidden]="!openStartSlots" *ngIf="showTimeSlots">
+                <div>
+                  <p class="slot-heading" (click)="morningSBool = !morningSBool">
+                    <ng-container>{{languageStrings.morning || 'Morning'}}</ng-container>
+                    <span class="col-arrow" [ngClass]="{'col-arrow-up':morningSBool ? true:false}" *ngIf="startSlots.morning.size">
+                      <svg viewBox="0 0 129 129" enable-background="new 0 0 129 129">
+                        <g>
+                          <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
+                            fill="#333333" />
+                        </g>
+                      </svg>
+                    </span>
+                  </p>
+                  <div class="slot-parent" [hidden]="!morningSBool">
+                    <div *ngFor="let slot of startSlots.morning" class="slot-ui" (click)="startTime = slot;openStartSlots = false;setTimeFormat('start', 'AM');highlightSlot($event,slot)">
+                      {{slot}}
+                    </div>
+                  </div>
+                  <div *ngIf="!startSlots.morning.size" style="margin: auto">
+                    <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.no_slot_avail || 'No Slots Available'}}</ng-container>
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <p class="slot-heading" (click)="afterNoonSBool = !afterNoonSBool">
+                    <ng-container>{{languageStrings.afternoon || 'Afternoon'}}</ng-container>
+                    <span class="col-arrow" [ngClass]="{'col-arrow-up':afterNoonSBool ? true:false}"
+                      *ngIf="startSlots.afternoon.size">
+                      <svg viewBox="0 0 129 129" enable-background="new 0 0 129 129">
+                        <g>
+                          <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
+                            fill="#333333" />
+                        </g>
+                      </svg>
+                    </span>
+                  </p>
+                  <div class="slot-parent" [hidden]="!afterNoonSBool">
+                    <div *ngFor="let slot of startSlots.afternoon" class="slot-ui" (click)="startTime = slot;openStartSlots = false;setTimeFormat('start', 'PM');highlightSlot($event,slot)">
+                      {{slot}}
+                    </div>
+                  </div>
+                  <div *ngIf="!startSlots.afternoon.size" style="margin: auto">
+                    <p style="text-align: center">
+                      <ng-container>{{languageStrings.no_slot_avail || 'No Slots Available'}}</ng-container>
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <p class="slot-heading" (click)="eveningSBool = !eveningSBool">
+                    <ng-container>{{languageStrings.evening || 'Evening'}}</ng-container>
+                    <span class="col-arrow" [ngClass]="{'col-arrow-up':eveningSBool ? true:false}" *ngIf="startSlots.evening.size">
+                      <svg viewBox="0 0 129 129" enable-background="new 0 0 129 129">
+                        <g>
+                          <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
+                            fill="#333333" />
+                        </g>
+                      </svg>
+                    </span>
+                  </p>
+                  <div class="slot-parent" [hidden]="!eveningSBool">
+                    <div *ngFor="let slot of startSlots.evening" class="slot-ui" (click)="startTime = slot;openStartSlots = false;setTimeFormat('start', 'PM');highlightSlot($event,slot)">
+                      {{slot}}
+                    </div>
+                  </div>
+                  <div *ngIf="!startSlots.evening.size" style="margin: auto">
+                    <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.no_slot_avail || 'No Slots Available'}}</ng-container>
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6" *ngIf="!product.service_time">
+            <div class="form-group" style="margin-bottom: 0">
+              <div class="input-group m-auto" style="margin-bottom: 0" (click)="openSlots = false">
+                <label for="prod-end-date" [ngStyle]="{ 'direction' : direction }">
+                  <ng-container>{{languageStrings.end_date || 'End Date'}}</ng-container>
+                </label>
+                <div class="input-group addon">
+                  <input id="prod-end-date" type="text" class="form-control" [minDate]="minEndDate" [maxDate]="maxEndDate" [ngStyle]="{ 'direction' : direction }"
+                    #dpE="bsDatepicker" (onHidden)="dateEndChanged()" (onShown)="onDatePickerShown()" formControlName="endDate"
+                    [value]=" bsEndValue | dateTimeFormat: 'mediumDate' " bsDatepicker [(ngModel)]="bsEndValue" placement="bottom" readonly
+                    style="color: #333333" [bsConfig]="bsConfig">
+                  <span class="input-group-addon no-border-fa" id="basic-addon1" (click)="dpE.toggle()" [attr.aria-expanded]="dpE.isOpen">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6" *ngIf="!product.service_time">
+            <div class="form-group" style="margin-bottom: 0">
+              <div class="input-group m-auto" style="margin-bottom: 0" (click)="openEndSlots = !openEndSlots;openStartSlots = false">
+                <label for="prod-end-time" class="text-capitalize">{{terminology.END_TIME}}</label>
+                <div class="input-group addon" style="margin-bottom: 0">
+                  <input id="prod-end-time" type="text" placeholder="--:--" class="form-control" [(ngModel)]="endTime" formControlName="endTime" readonly style="color: #333333"
+                    [value]="endTime ? endTime + ' ' + tEndFormat: ''">
+                  <span class="input-group-addon no-border-fa" id="basic-addon2">
+                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+              <div class="slots" [hidden]="!openEndSlots" *ngIf="showTimeSlots">
+                <div>
+                  <p class="slot-heading" (click)="morningEBool = !morningEBool">
+                    <ng-container>{{languageStrings.morning || 'Morning'}}</ng-container>
+                    <span class="col-arrow" [ngClass]="{'col-arrow-up':morningEBool ? true:false}" *ngIf="slots.morning.size">
+                      <svg viewBox="0 0 129 129" enable-background="new 0 0 129 129">
+                        <g>
+                          <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
+                            fill="#333333" />
+                        </g>
+                      </svg>
+                    </span>
+                  </p>
+                  <div class="slot-parent" [hidden]="!morningEBool">
+                    <div *ngFor="let slot of slots.morning" class="slot-ui" (click)="endTime = slot;openEndSlots = false;setTimeFormat('end', 'AM');highlightSlot($event,slot)">
+                      {{slot}}
+                    </div>
+                  </div>
+                  <div *ngIf="!slots.morning.size" style="margin: auto">
+                    <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.no_slot_avail || 'No Slots Available'}}</ng-container>
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <p class="slot-heading" (click)="afterNoonEBool = !afterNoonEBool">
+                    <ng-container>{{languageStrings.afternoon || 'Afternoon'}}</ng-container>
+                    <span class="col-arrow" [ngClass]="{'col-arrow-up':afterNoonEBool ? true:false}"
+                      *ngIf="slots.afternoon.size">
+                      <svg viewBox="0 0 129 129" enable-background="new 0 0 129 129">
+                        <g>
+                          <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
+                            fill="#333333" />
+                        </g>
+                      </svg>
+                    </span>
+                  </p>
+                  <div class="slot-parent" [hidden]="!afterNoonEBool">
+                    <div *ngFor="let slot of slots.afternoon" class="slot-ui" (click)="endTime = slot;openEndSlots = false;setTimeFormat('end', 'PM');highlightSlot($event,slot)">
+                      {{slot}}
+                    </div>
+                  </div>
+                  <div *ngIf="!slots.afternoon.size" style="margin: auto">
+                    <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.no_slot_avail || 'No Slots Available'}}</ng-container>
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <p class="slot-heading" (click)="eveningEBool = !eveningEBool">
+                    <ng-container>{{languageStrings.evening || 'Evening'}}</ng-container>
+                    <span class="col-arrow" [ngClass]="{'col-arrow-up':eveningEBool ? true:false}" *ngIf="slots.evening.size">
+                      <svg viewBox="0 0 129 129" enable-background="new 0 0 129 129">
+                        <g>
+                          <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
+                            fill="#333333" />
+                        </g>
+                      </svg>
+                    </span>
+                  </p>
+                  <div class="slot-parent" [hidden]="!eveningEBool">
+                    <div *ngFor="let slot of slots.evening" class="slot-ui" (click)="endTime = slot;openEndSlots = false;setTimeFormat('end', 'PM');highlightSlot($event,slot)">
+                      {{slot}}
+                    </div>
+                  </div>
+                  <div *ngIf="!slots.evening.size" style="margin: auto">
+                    <p style="text-align: center" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.no_slot_avail || 'No Slots Available'}}</ng-container>
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 buttonDiv">
+        <button class="dialog-cancel btn" (click)="resetDialog()" mat-button appBs [ngStyle]="{ 'direction' : direction }">
+          <ng-container>{{languageStrings.cancel || 'Cancel'}}</ng-container>
+        </button>
+        <button class="dialog-ok btn text-capitalize btn-color" (click)="addTimings()" mat-button [disabled]="buttonDisabled" [ngStyle]="{ 'direction' : direction }">
+          <ng-container>{{languageStrings.save || 'Save'}}</ng-container>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<div id="selectAgent">
+  <ng-container *ngIf="selectAgentModal == 2 && product">
+    <div class="container-fluid productTiming product-timing-agent">
+      <div style="width: 100%;">
+        <div class="col-xs-12 card-timing">
+          <p class="main-heading text-capitalize">
+            <ng-container>{{languageStrings.select || 'Select'}}</ng-container>{{' ' + terminology.AGENT || 'Agent'}}
+          </p>
+          <hr class="line" [style.border-top-color]="profile_color" />
+        </div>
+        <div class="agent-listing" *ngIf="!isPlatformServer" else serverShimmer>
+          <ng-container *ngIf="agentList && agentList.length > 0">
+            <ng-container *ngFor="let agent of agentList;index as i">
+              <div class="col-xs-12 agent-card" [ngClass]="{'selected-agent-card' : i == selectedAgentIndex}">
+                <div class="image-div">
+                  <img [src]="agent.fleet_thumb_image || 'assets/img/name-icon.svg'">
+                </div>
+                <div class="agent-detail">
+                  <label class="agent-name">{{agent.username}}</label>
+                  <label class="agent-label d-flex" *ngIf="agent.phone">
+                    <ng-container>{{languageStrings.phone_number || 'Phone Number'}}</ng-container>: <span class="agent-value">{{agent.phone}}</span>
+                  </label>
+                  <label class="agent-label d-flex" *ngIf="agent.email">
+                    <ng-container>{{languageStrings.email || 'Email'}}</ng-container>: <span class="agent-value">{{agent.email}}</span>
+                  </label>
+                  <label class="agent-label" *ngIf="agent.ratings" style="display: flex;"><span style="padding-right: 10px;">
+                      <ng-container>{{languageStrings.rating || 'Rating'}}</ng-container>:
+                    </span>
+                    <span>
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <ul class="list-inline" [ngClass]="{'rating-list' : !readOnly, 'read-only' : readOnly}"
+                            *ngFor="let star of stars" style="display: inline-block">
+                            <li
+                              [ngClass]="{'selected': (star <= agent.ratings)}">
+                              <i class="fa fa-star"></i>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </span>
+                  </label>
+                  <div class = "AgentInfo">
+                  <label class="agent-label d-flex" *ngIf = "agent.signup_data && agent.signup_data.length && agent.signup_data.length > 0">
+                    <a *ngIf = "!agent.show"  style = "z-index: 100000;"(click) = "onViewMore(agent)">{{languageStrings.view_more || 'View More'}}</a>
+                    <a *ngIf = "agent.show"  style = "z-index: 100000;"(click) = "onhideViewMore(agent)">{{languageStrings.hide || 'Hide'}}</a>
+                  </label>
+                  <span class="go-to-btn" (click)="onSelectAgent(agent, i)">
+                      <svg width="36" height="36" viewBox="0 0 56 56">
+                        <defs>
+                          <path
+                            id="a"
+                            d="M7.993 14.119c.395.432.4 1.127.007 1.558a.936.936 0 0 1-1.418-.004L.297 8.779a1.173 1.173 0 0 1 0-1.56L6.582.326A.94.94 0 0 1 8 .32c.39.428.392 1.121-.007 1.559L3.414 6.902h13.584C17.55 6.902 18 7.39 18 8c0 .606-.452 1.097-1.002 1.097H3.414l4.58 5.023z" />
+                        </defs>
+                        <g fill="none" fill-rule="evenodd" transform="translate(1 1)">
+                          <g transform="translate(2 2)">
+                            <rect width="50" height="50" fill="#2396FF" rx="25" />
+                            <use
+                              fill="#FFF"
+                              transform="matrix(-1 0 0 1 34 17)"
+                              xlink:href="#a" />
+                          </g>
+                          <rect width="54" height="54" stroke="#2396FF" rx="27" />
+                        </g>
+                      </svg>
+                    </span>
+                  </div>
+                  <div id="agentval">
+                    <div *ngIf="agent.show" id="agentdataVal">
+                      <div *ngFor="let data of agent.signup_data" [ngSwitch]="data.data_type">
+                        <div class="parentDiv">
+                          <div class = "datadiv" *ngSwitchCase="'Text'">
+                            <div class="displayName">
+                              <span>
+                                {{data.display_name}}
+                              </span>
+                            </div>
+                            <div>
+                              <span>
+                                {{data.data}}
+                              </span>
+                            </div>
+                          </div>
+                          <div class = "datadiv" *ngSwitchCase="'Number'">
+                            <div class="displayName">
+                              <span>
+                                {{data.display_name}}
+                              </span>
+                            </div>
+                            <div>
+                              <span>
+                                {{data.data}}
+                              </span>
+                            </div>
+                          </div>
+                          <div class = "datadiv datadivUrl" *ngSwitchCase="'URL'">
+                              <div class="displayName">
+                                <span>
+                                  {{data.display_name}}
+                                </span>
+                              </div>
+                              <div>
+                                <a href = {{data.data}} target = "_blank">
+                                  {{data.data}}
+                                </a>
+                              </div>
+                            </div>
+                            <div class = "datadiv" *ngSwitchCase="'Date'">
+                                <div class="displayName">
+                                  <span>
+                                    {{data.display_name}}
+                                  </span>
+                                </div>
+                                <div>
+                                  <span>
+                                      {{parseDateTime(data.data, "Date")}}
+                                  </span>
+                                </div>
+                              </div>
+                              <div class = "datadiv" *ngSwitchCase="'Date-Time'">
+                                  <div class="displayName">
+                                    <span>
+                                      {{data.display_name}}
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <span>
+                                      {{parseDateTime(data.data, "Date-Time")}}
+                                    </span>
+                                  </div>
+                                </div>
+                                <div class = "datadiv datadivImage" *ngSwitchCase="'Image'">
+                                 <div class = "ImagemainDiv" *ngFor= "let dataValue of data.data">
+                                   <div class = "ImageDiv">
+                                    <div class="displayName">
+                                      <span>
+                                        {{data.display_name}}
+                                      </span>
+                                    </div>
+                                    <div class = "displayValue">
+                                        <a class = "ImageDivLink" href = {{dataValue}} target = "_blank">
+                                        <img class = "Image" src = {{dataValue}}/>
+                                          </a>
+                                    </div>
+                                    </div>
+                                  </div>
+                                  </div>
+                                  <div class = "datadiv datadivImage" *ngSwitchCase="'Document'">
+                                      <div class = "ImagemainDiv" *ngFor= "let dataValue of data.data">
+                                        <div class = "ImageDiv">
+                                         <div class="displayName">
+                                           <span>
+                                             {{data.display_name}}
+                                           </span>
+                                         </div>
+                                         <div class = "displayValue">
+                                             <a class = "ImageDivLink" href = {{dataValue}} target = "_blank">
+                                             <img class = "Image" src = "assets/img/download.svg"/>
+                                               </a>
+                                         </div>
+                                         </div>
+                                       </div>
+                                       </div>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="agentList && agentList.length == 0">
+            <label class="no-data" [ngStyle]="{ 'direction' : direction }">{{languageStrings.no_agent_available || 'No Agent Available'}}</label>
+          </ng-container>
+        </div>
+        <ng-template #serverShimmer>
+          <ng-container *ngIf="isPlatformServer">
+            <div class="select-agent-popup">
+              <div class="row-eq-height">
+                <ng-container *ngFor="let list of [1,2]">
+                  <div class="row-col-eq">
+                    <div class="grid-item">
+                      <div class="image_div">
+                        <div class="image-cat pulsate block">
+                        </div>
+                      </div>
+                      <div class="info-row">
+                        <div class="new-row-type-1 pulsate block"></div>
+                        <div class="new-row-type-2 pulsate block"></div>
+                        <div class="new-row-type-1 pulsate block"></div>
+                        <div class="new-row-type-2 pulsate block"></div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </ng-container>
+        </ng-template>
+        <div class="col-xs-12 buttonDiv">
+          <button class="dialog-cancel btn" (click)="resetDialog()" mat-button appBs [ngStyle]="{ 'direction' : direction }">
+            <ng-container>{{languageStrings.cancel || 'Cancel'}}</ng-container>
+          </button>
+          <!-- <button class="dialog-ok btn text-capitalize btn-color" (click)="getProductTimeSlots('Agent')" mat-button [disabled]="selectedAgentIndex == -1" *ngIf="agentList && agentList.length > 0" [ngStyle]="{ 'direction' : direction }">
+            <ng-container >{{  languageStrings.next || "Next"}}</ng-container>
+          </button> -->
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

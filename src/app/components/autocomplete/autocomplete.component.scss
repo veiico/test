@@ -1,0 +1,256 @@
+@import '~assets/css/variables';
+
+.autoCompleteGoogle {
+  /deep/.autoComplete {
+    padding: 0;
+    margin: auto;
+    display: inline-flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .preorder-popover{
+    position: absolute;
+    top: 0px;
+    right: -165px;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 1px 15px 0 rgba(0, 0, 0, 0.13);
+    z-index: 5;
+    width: 200px;
+    padding: 10px 15px;
+    @media screen and (max-width:1300px){
+      top: 40px;
+      left: -50px;
+    }
+
+    p.preorder-time{
+      margin-bottom: 5px;
+    }
+    p.instant{
+      margin-bottom: 0;
+      a{
+        color: $color-theme;
+        cursor: pointer;
+      }
+    }
+    .caret-icon{
+      top: 0px;
+      left: -15px;
+      position: absolute;
+      font-size: 30px;
+      color: #fff;
+      transform: rotate(-90deg);
+      @media screen and (max-width:1300px){
+        top: -18px;
+        left: 85px;
+        transform: rotate(0deg);
+      }
+    }
+  }
+
+  .auto-detect {
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    background: #f7f7f7;
+    color: #535665;
+    position: relative;
+    font-weight: 500;
+
+
+    i {
+      font-size: 2rem;
+      left: 0.5rem;
+      top: 0px;
+      z-index: 100;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      color: var(--theme);
+    }
+  }
+
+  form {
+    .input-group app-jw-google-autocomplete {
+      height: 40px;
+      background: #f7f7f7;
+      border: 0;
+      box-shadow: none;
+
+      /deep/ input {
+        border: 0;
+        outline: none;
+        height: 30px !important;
+        background: transparent;
+        padding-left: 4rem;
+      }
+    }
+
+    .input-group-addon {
+      font-size: 24px;
+      background: #fff;
+      border-right: 0px;
+      cursor: pointer;
+      border-radius: 0px;
+    }
+
+    input {
+      border-left: 0px;
+
+      border-radius: 0px;
+    }
+  }
+}
+
+.autoCompleteGoogleForm {
+  >div:not(.errorpop):not(.infopop) {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    position: relative;
+
+    i {
+      left: 1rem;
+      top: -0.1rem;
+      z-index: 100;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      color: var(--theme);
+    }
+
+    input {
+      padding-left: 4rem;
+    }
+  }
+}
+
+agm-map {
+  height: 500px;
+}
+
+.autoSearch {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+
+  input {
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+    height: 45px;
+  }
+}
+
+.buttonAccept {
+  position: absolute;
+  width: 100%;
+
+  .accept {
+    height: 40px;
+    font-size: 16px;
+    width: 100%;
+    border-radius: 0px;
+  }
+}
+
+.auto-detect {
+  i {
+    margin-right: 0.3rem;
+  }
+
+  width:12%;
+  display:inline;
+  cursor: pointer;
+}
+
+.autocompleteWrapper {
+  width: 88%;
+  height: 100%;
+  display: inline-block;
+}
+
+@media only screen and (min-width: 768px) {
+  .auto-detect {
+    i {
+      margin-right: 0.3rem;
+      left: 0;
+    }
+    width: 160px;
+    height: 46px !important;
+    display:inline;
+    cursor: pointer;
+  }
+
+  .autocompleteWrapper {
+    width: 73%;
+    height: 100%;
+    display: inline-block;
+  }
+
+  .autoCompleteGoogle {
+    form {
+      .input-group app-jw-google-autocomplete {
+        height: 46px;
+      }
+    }
+  }
+}
+
+.errorpop{
+  color: #842029;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+    position: relative;
+    padding: 1rem 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid;
+    border-radius: 4px;
+    margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .dFlex{
+    display: flex;
+    align-items: center;
+  }
+  .times{
+    cursor: pointer;
+    float: right;
+  }
+}
+
+.infopop{
+  color:#fff;
+  font-size: 14px;
+  background-color: #cfe2ff;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .dFlex{
+    display: flex;
+    align-items: center;
+  }
+  .times{
+    cursor: pointer;
+    float: right;
+  }
+}
+
+@media only screen and (max-width: 470px) {
+  .autoCompleteGoogleForm > div:not(.errorpop):not(.infopop) i {
+    position: absolute !important;
+  }
+  .autoCompleteGoogle .auto-detect i {
+    color: $color-theme !important;
+  }
+}
+
+.autoCompleteGoogleForm > div:not(.errorpop):not(.infopop) i {
+  position: absolute !important;
+}

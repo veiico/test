@@ -1,0 +1,114 @@
+// radio button as checkbox
+@import '~assets/css/variables';
+
+.menu-box {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  .menu-list {
+    justify-content: center;
+    position: absolute;
+    border: 1px solid $color-white;
+    z-index: 5;
+    background: $color-white;
+    width: 150px;
+    margin-top: 4px;
+    padding-left: 0px;
+    //padding-top: 5px;
+    //padding-bottom: 5px;
+    list-style: none;
+    box-shadow: rgba(69, 65, 78, 0.08) 0px 1px 15px 1px;
+    //box-shadow: 0 6px 12px $color-gray;
+    //display: none;
+    visibility: hidden;
+    opacity: 0;
+    text-align: center;
+    min-width: 150px;
+    right: 0;
+    left: auto;
+    top: 100%;
+    margin: 2px 0 0;
+    font-size: 14px;
+    background-clip: padding-box;
+    //border-radius: 4px;
+    transform: translateY(-1em);
+    z-index: -1;
+    transition: all 0.3s ease-in-out 0s, visibility 0s linear 0.3s, z-index 0s linear 0.01s;
+    li{
+      cursor: pointer;
+      color: $color-black;
+      a{
+        color: $color-black;
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 10px;
+        height: 35px;
+        border-left: 3px solid transparent;
+        border: 0px solid transparent;
+        line-height: 1;
+        clear: both;
+        font-weight: 400;
+        font-size: 14px;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-wrap: break-word;
+        max-width: 150px;
+        white-space: nowrap;
+        i{
+          float: right;
+        }
+        i.yf{
+          font-size: px;
+        }
+        &:hover{
+          color: $color-white;
+          background-color: $color-theme !important;
+          //border-left: 3px solid $color-blue;
+        }
+      }
+    }
+  }
+  &:hover .menu-list {
+    //display: block;
+    visibility: visible; /* shows sub-menu */
+    opacity: 1;
+    z-index: 1;
+    transform: translateY(0%);
+    transition-delay: 0s, 0s, 0.3s;
+  }
+}
+
+.menu-list {
+  &::before{
+    content: " ";
+    border: 9px solid transparent;
+    position: absolute;
+    bottom: 100%;
+    border-bottom: 7px solid $color-white;
+    right: 10px;
+  }
+  &::after{
+    content: " ";
+    border: 9px solid transparent;
+    position: absolute;
+    bottom: 100%;
+    border-bottom: 7px solid transparent;
+    right: 0;
+    width: 100%;
+  }
+  &::hover{
+    border-left: 3px solid $color-blue;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .menu-list{
+    left: 0px !important;
+    &::before{
+      left: 10px !important;
+      right: unset !important;
+    }
+  }
+}

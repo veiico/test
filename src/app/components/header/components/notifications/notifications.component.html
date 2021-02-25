@@ -1,0 +1,53 @@
+<div class="notifications">
+<a appClickOutside  (click)="toggleContainer();"  title="{{languageStrings.notification || 'Notification'}}"
+  class="notification-icon" id="notificationLink">
+  <span id="notification_count" *ngIf="count" [ngStyle]="{ 'direction' : direction }">
+    <!-- <span *ngIf="count <= 99">{{count}}</span>
+    <span *ngIf="count > 99" [ngStyle]="{ 'direction' : direction }">
+      <ng-container >99</ng-container>
+      <sup>+</sup>
+    </span> -->
+  </span>
+  <!-- <i class="fa fa-bell" aria-hidden="true"></i> -->
+  <!-- <img src="assets/images/bell.svg"> -->
+  <svg width="20px" height="20px" style="margin-bottom:-7px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="approved" stroke="none" stroke-width="1" fill-rule="evenodd">
+      <g id="2-List-Page-1" transform="translate(-1268.000000, -18.000000)" fill="var(--header_font_color)" fill-rule="nonzero">
+          <g id="bell" transform="translate(1268.000000, 18.000000)">
+              <path d="M23.64275,16.8188 C23.6207,16.67835 23.58695,16.53995 23.5419,16.40505 C23.11085,15.2055 21.88175,14.48775 20.6252,14.7018 C20.20955,14.76725 19.8195,14.4834 19.75395,14.06775 L19.12165,10.0221 C18.6027,6.59915 16.1299,3.796 12.79845,2.8541 C12.49545,0.9997 10.74655,-0.258 8.8921,0.045 C7.0622,0.344 5.80865,2.05315 6.0733,3.88835 C3.2017,5.70565 1.6859,9.0566 2.2171,12.41315 L2.89465,16.71905 C2.9567,17.1339 2.6744,17.52175 2.26065,17.5903 C0.99895,17.77235 0.04935,18.83275 0.00686061961,20.1068 C-0.0076,21.52055 1.12665,22.6785 2.5404,22.6931 C2.54925,22.6932 2.55815,22.69325 2.567,22.69325 C2.70045,22.69315 2.83365,22.6829 2.9655,22.66255 L5.59205,22.24955 C6.50575,23.88065 8.5687,24.46225 10.1998,23.54855 C11.06135,23.06595 11.6692,22.2312 11.86405,21.2631 L21.511,19.745 C22.9077,19.52565 23.86215,18.21555 23.64275,16.8188 Z M9.18885,1.81565 C9.2778,1.8018 9.36765,1.79465 9.45765,1.7943 C10.0297,1.79735 10.56255,2.0854 10.87845,2.5623 L10.8375,2.5623 C10.51925,2.5527 10.20065,2.56185 9.88345,2.5896 C9.5494,2.6215 9.21745,2.6728 8.8893,2.7432 C8.81845,2.7577 8.7485,2.7782 8.6785,2.79525 C8.4097,2.8584 8.146,2.93265 7.88745,3.02055 C7.86185,3.02825 7.8354,3.0325 7.8098,3.0419 C7.98985,2.39845 8.5288,1.9192 9.18885,1.81565 Z M8.5403,22.2743021 C8.17865,22.2747 7.82645,22.1586 7.53595,21.9432 L9.9253,21.5686 C9.60375,22.0126 9.0885,22.27515 8.5403,22.2743021 Z M21.8412,17.66035 C21.71055,17.8749 21.49205,18.021 21.24385,18.0597 L10.9655,19.6759 L5.97095,20.4618 L2.7027,20.9738 C2.4551,21.0142 2.2024,20.9423 2.0132,20.77755 C1.8201,20.6129 1.71035,20.3708 1.71362548,20.11705 C1.75065,19.6794 2.09,19.32795 2.52605,19.27565 C3.87005,19.0602 4.78775,17.79975 4.58,16.45455 L3.9033,12.14865 C3.4601,9.30795 4.83945,6.4931 7.3559,5.1027 C7.3707,5.09775 7.3852,5.09205 7.3994,5.08565 C8.2161,4.64315 9.1145,4.3719 10.0396,4.28865 C10.31995,4.264 10.6016,4.2586 10.8827,4.27245 L11.02265,4.2793 C11.31345,4.2969 11.60275,4.33335 11.8888,4.38855 C11.8982,4.38855 11.9067,4.38855 11.9161,4.38855 C14.8035,5.0132 17.00115,7.3625 17.43205,10.2851 L18.06865,14.33075 C18.28025,15.6773 19.54315,16.59755 20.88975,16.38645 C21.32015,16.3024 21.75045,16.5318 21.9206,16.936 C22.00375,17.17705 21.97465,17.44285 21.8412,17.66035 Z" id="Shape"></path>
+          </g>
+      </g>
+  </g>
+</svg>
+
+  <!-- <img src="assets/img/notification-white.svg" class="notification-bell" *ngIf="bg_color != '#ffffff' && bg_color != '#fff' && bg_color != 'white' && bg_color != '#FFFFFF' && bg_color != '#FFF' && bg_color != 'rgb(255, 255, 255)'" />
+  <img src="assets/img/notification-black.svg" class="notification-bell" *ngIf="bg_color == '#ffffff' || bg_color == '#fff' || bg_color == 'white' || bg_color == '#FFFFFF' || bg_color == '#FFF' || bg_color == 'rgb(255, 255, 255)'" /> -->
+</a>
+
+<div id="notificationContainer" [@fadeInOutDOM] (click)="toggleContainer();" class="notificationContainer" *ngIf="isNotificationPopupOpen">
+  <div class="notif-overlay"> </div>
+  <div id="notificationTitle" *ngIf="terminology" class="text-capitalize notificationTitle" [ngStyle]="{ 'direction' : direction }">
+    {{terminology.NOTIFICATIONS}}
+    <a *ngIf="!notifyFlag || notificationData.length" class="clearAllLink" (click)="clearAllNotification()" style="cursor:pointer">
+      <ng-container>{{languageStrings.clear_all || "Clear All"}}</ng-container>
+    </a>
+  </div>
+  <div id="notificationsBody" class="notifications noti-body">
+    <div>
+      <div *ngFor="let column of notificationData" [class]="['notificationParent',{'unread':column.is_read==false},{'ydeleting':column.dashboard_notif_id==delete_noti_id}]">
+        <div (click)="read(column)" class="notification-bar">
+          <span style="padding: 0;margin: 0;font-size: 14px">
+          <ng-container *ngIf="column.job_id != -1 && column.job_id != 0">{{column.job_id}} :</ng-container> {{column.body}}
+          </span>
+          <br>
+          <span style="font-size: 12px">
+            {{column.creation_datetime|dateTimeFormat:"dd MMM, yyyy 'at' h:mm a"}}
+          </span>
+        </div>
+      </div>
+      <div *ngIf="notifyFlag && !notificationData.length && terminology" class="notification-bar" style="width:100%;cursor:default !important">{{languageStrings.no_notifications_are_available || "No notifications are available."}}
+    </div>
+  </div>
+
+</div>
+</div>

@@ -1,0 +1,159 @@
+<form role="form" [formGroup]="addLocationForm">
+  <div class="row form-group">
+    <!--<div class="col-md-3">-->
+    <!--<label class="label">-->
+    <!--<b><ng-container >Full Name</ng-container> <span style="color: red">*</span></b>-->
+    <!--</label>-->
+    <!--</div>-->
+    <div class="col-md-12">
+      <label class="label">
+        <b>
+          <ng-container >{{ languageStrings.full_name || "Full Name" }</ng-container> <span style="color: red">*</span>
+        </b>
+      </label>
+      <input type="text" class="form-control"  placeholder="{{ languageStrings.enter_full_name || 'Enter Full Name'}}" formControlName="name">
+      <app-control-messages [control]="addLocationForm.controls.name"></app-control-messages>
+    </div>
+    <!-- <div class="col-xs-6 col-md-5">
+      <input type="text" class="form-control" placeholder="Enter last Name" formControlName="last_name">
+      <app-control-messages [control]="addLocationForm.controls.last_name"></app-control-messages>
+    </div> -->
+  </div>
+
+  <div class="row form-group">
+    <!--<div class="col-md-3">-->
+    <!--<label class="label">-->
+    <!--<b><ng-container >Email</ng-container> <span style="color: red">*</span></b>-->
+    <!--</label>-->
+    <!--</div>-->
+    <div class="col-md-12">
+      <label class="label">
+        <b>
+          <ng-container >{{ languageStrings.email || "Email"}}</ng-container> <span style="color: red">*</span>
+        </b>
+      </label>
+      <input type="text" class="form-control"  placeholder="{{ languageStrings.enter_email || 'Enter Email'}}" formControlName="email">
+      <app-control-messages [control]="addLocationForm.controls.email"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <!--<div class="col-md-3">-->
+    <!--<label class="label">-->
+    <!--<b><ng-container >Phone</ng-container> <span style="color: red">*</span></b>-->
+    <!--</label>-->
+    <!--</div>-->
+    <div class="col-md-12">
+      <label class="label">
+        <b>
+          <ng-container >{{languageStrings.phone || 'Phone' }}</ng-container> <span style="color: red">*</span>
+        </b>
+      </label>
+      <app-fugu-tel-input class="phone_style phone-fav-add" formControlName="phone" [value]="addLocationForm.controls.phone.value"
+        [(dialCode)]="country_code"></app-fugu-tel-input>
+      <p class="phoneError" *ngIf="!phoneCheck">{{ languageStrings.phone_number_not_valid || "Phone number not valid."}}</p>
+    </div>
+  </div>
+  <div class="row form-group">
+    <!--<div class="col-md-3">-->
+    <!--<label class="label">-->
+    <!--<b><ng-container >Flat No</ng-container> <span style="color: red">*</span></b>-->
+    <!--</label>-->
+    <!--</div>-->
+
+    <div class="col-md-12">
+      <label class="label">
+
+        <b>
+          <ng-container >{{ languageStrings.apartment_no || "Apartment No."}}</ng-container>
+        </b>
+
+      </label>
+      <input type="text" class="form-control"  placeholder="{{ languageStrings.enter_apartment_no  || 'Enter Apartment No'}}" formControlName="flat_no">
+      <app-control-messages [control]="addLocationForm.controls.flat_no"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <!--<div class="col-md-3">-->
+    <!--<label class="label">-->
+    <!--<b><ng-container >Address</ng-container> <span style="color: red">*</span></b>-->
+    <!--</label>-->
+    <!--</div>-->
+    <div class="col-md-12">
+      <label class="label">
+        <b>
+          <ng-container >{{ languageStrings.address || "Address"}}</ng-container> <span style="color: red">*</span>
+        </b>
+      </label>
+      <app-jw-google-autocomplete  placeholder="{{ languageStrings.enter_address || 'Enter Address'}}" formControlName="address" (latLng)="onLatLngEvent($event,addLocationForm.controls.address)"
+        (modelChange)="clearLatLng()" (autocomlpeteResultSelect)="onAutocomlpeteResultSelect($event)"></app-jw-google-autocomplete>
+      <!-- <input type="text" class="form-control checkout-input" id="address_autocomplete" #addressAutocomplete
+         placeholder="Enter Address" formControlName="address"> -->
+      <app-control-messages [control]="addLocationForm.controls.address"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <!--<div class="col-md-3">-->
+    <!--<label class="label">-->
+    <!--<b><ng-container >Postal Code</ng-container> <span style="color: red">*</span></b>-->
+    <!--</label>-->
+    <!--</div>-->
+    <div class="col-md-12">
+      <label class="label">
+        <b>
+          <ng-container >{{ languageStrings.postal_code || "Postal Code"}}</ng-container>
+        </b>
+      </label>
+      <input type="text" class="form-control"  placeholder="{{ languageStrings.enter_postal_code || 'Enter Postal Code'}}" formControlName="postal">
+      <app-control-messages [control]="addLocationForm.controls.postal"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <!--<div class="col-md-3">-->
+    <!--<label class="label">-->
+    <!--<b><ng-container >Landmark</ng-container></b>-->
+    <!--</label>-->
+    <!--</div>-->
+    <div class="col-md-12">
+      <label class="label">
+        <b>
+          <ng-container >{{ languageStrings.landmark || "Landmark"}}</ng-container>
+        </b>
+      </label>
+      <input type="text" class="form-control"  placeholder="{{ languageStrings.enter_landmark || 'Enter Landmark'}}" formControlName="landmark">
+      <app-control-messages [control]="addLocationForm.controls.landmark"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row form-group" *ngIf="!address && showType">
+    <div class="col-md-12">
+      <label class="label">
+        <b>
+          <ng-container >{{ languageStrings.label_for_address || "Label for Address"}}</ng-container> <span style="color: red">*</span>
+        </b>
+      </label>
+    </div>
+    <div class="col-md-12">
+      <mat-radio-group [(ngModel)]="locationType" [ngModelOptions]="{standalone: true}">
+        <mat-radio-button class="addressTypes" *ngFor="let loc of locationTypes;let i = index" [value]="loc.value">{{loc.type}}</mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </div>
+
+  <div class="row ">
+    <div class="col-sm-8">
+      <button appColor class="btn btn-block btn-red" [disabled]="!addLocationForm.valid || !phoneCheck"
+        (click)="saveAddress()">
+        <ng-container >{{ languageStrings.save || "Save"}}</ng-container>
+      </button>
+    </div>
+    <div class="col-sm-4">
+      <button type="button" class="btn btn-block btn-cancel" (click)="cancelForm()">
+        <ng-container >{{ languageStrings.cancel || "Cancel"}}</ng-container>
+      </button>
+    </div>
+  </div>
+</form>

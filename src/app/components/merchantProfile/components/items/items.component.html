@@ -1,0 +1,59 @@
+<ng-container *ngFor="let data of fields; let i =index;">
+  <div class="col-lg-4 col-sm-6 col-md-4 col-xs-12 profileViewOnly" style="height: auto;">
+    <div class="dataHeading">
+      <p>{{data.display_name}}</p>
+    </div>
+    <div [ngSwitch]="data.data_type">
+
+
+      <div class="dataValue" *ngSwitchCase="'Date'">
+        <p>
+          <span>{{data.value ? (data.value | dateTimeFormat : mediumDate ) : '--'}}</span>
+        </p>
+      </div>
+      <div class="dataValue" *ngSwitchCase="'Date-Future'">
+        <p>
+          <span>{{data.value ? (data.value | dateTimeFormat : mediumDate ) : '--'}}</span>
+        </p>
+      </div>
+      <div class="dataValue" *ngSwitchCase="'Date-Past'">
+        <p>
+          <span>{{data.value ? (data.value | dateTimeFormat : mediumDate ) : '--'}}</span>
+        </p>
+      </div>
+      <div class="dataValue" *ngSwitchCase="'Datetime-Future'">
+        <p>
+          <span>{{data.value ? (data.value | dateTimeFormat : 'MMM d, y h:mm a') : '--'}}</span>
+        </p>
+      </div>
+      <div class="dataValue" *ngSwitchCase="'Date-Time'">
+        <p>
+          <span>{{data.value ? (data.value | dateTimeFormat : 'MMM d, y h:mm a') : '--'}}</span>
+        </p>
+      </div>
+      <div class="dataValue" *ngSwitchCase="'Datetime-Past'">
+        <p>
+          <span>{{data.value ? (data.value | dateTimeFormat : 'MMM d, y h:mm a') : '--'}}</span>
+        </p>
+      </div>
+      <div class="dataValue" *ngSwitchCase="'Image'">
+        <img [src]="data.value || 'assets/img/image-placeholder.svg'" height="80" width="100" (click)="openImagePopup(data)">
+      </div>
+      <div class="dataValue urlValue" *ngSwitchCase="'URL'">
+          <a [href] = "data.value" target = "_blank"> {{data.value}} </a>
+      </div>
+      <div class="dataValue urlValue" *ngSwitchCase="'Document'">
+          <a [href] = "data.value" target = "_blank"> {{data.value}} </a>
+      </div>
+      <div class="dataValue" *ngSwitchDefault>
+        <p>
+          <span>{{data.value ? data.value : '--'}}</span>
+        </p>
+      </div>
+    </div>
+
+  </div>
+  <div *ngIf="(i+1)%2 ==0" class="clearfix visible-sm"></div>
+  <div *ngIf="(i+1)%3 ==0" class="clearfix visible-md"></div>
+  <div *ngIf="(i+1)%3 ==0" class="clearfix visible-lg"></div>
+</ng-container>

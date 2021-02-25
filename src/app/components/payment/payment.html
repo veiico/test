@@ -1,0 +1,2329 @@
+<app-header style="height:85px;padding: 0px;" class="col-xs-12" [headerData]="appConfig" *ngIf="!ecomView"></app-header>
+<div class="general_background_color select_category row">
+  <!-- style="margin-top:0px;height:100vh;" -->
+  <div class="payment_wrapper col-xs-12">
+    <div class="payment_heading">
+      <p class="pmnt_title text-capitalize">{{terminology.PAYMENT}}</p>
+      <hr class="pmnt_title_bar" [style.border-top-color]="appConfig.color" />
+    </div>
+    <div class="login-form">
+      <div class="payment_card">
+
+        <!-- ====================== cart ====================== -->
+        <div class="pmnt_inr_hdng tp">
+          <img src="assets/img/bill-icon.svg" alt="bill icon" />
+          <p class="pmnt_inr_hdng_txt text-capitalize">{{terminology.BILL_SUMMARY}}</p>
+          <!-- <div class="pmnt_clr ripple" tap-effect ripplecolor="rgba(0,0,0,0.2)" (click)="showDialog(false)" appBs>
+              <p class="pmnt_clear_txt" [style.color]="appConfig.color">Clear</p>
+          </div> -->
+        </div>
+        <div class="pmnt_cnt_div pmnt_cart">
+          <div *ngIf="userPaymentData.INITIAL_AMOUNT" class="pmnt_crt_div">
+            <div class="pt_name text-capitalize">{{languageStrings.initial_amount || 'Initial Amount'}}</div>
+            <div class="pt_val">
+              <span>{{currency.symbol+' '}}{{userPaymentData.INITIAL_AMOUNT|decimalConfig}}</span>
+            </div>
+          </div>
+          <div class="pmnt_crt_div" *ngFor="let tax of catalogueTaxes">
+            <div class="pt_name" *ngIf="!tax.tax_type">{{tax.tax_name+' @ '+tax.tax_percentage+'%'}}</div>
+            <div class="pt_name" *ngIf="tax.tax_type">{{tax.tax_name}}</div>
+            <div class="pt_val" *ngIf="currency&&tax.tax_amount">{{currency.symbol+''}}
+              {{tax.tax_amount|decimalConfig}}
+            </div>
+          </div>
+          <div class="pmnt_crt_div"
+            *ngIf="!customOrderFlow || (customOrderFlow && userPaymentData && (userPaymentData.SURGE_AMOUNT > 0 || userPaymentData.ACTUAL_AMOUNT > 0))">
+            <div class="pt_name">
+              <ng-container>{{languageStrings.subtotal || 'Subtotal'}}</ng-container>
+              <div class="auto_promo_div" style="color: red;" *ngIf="userPaymentData && userPaymentData.SURGE_AMOUNT">
+                <p class="auto_promo" style="color: red;"> (
+                  <ng-container>{{terminology.SURGE || 'Surge'}}</ng-container>
+                  <span>{{currency.symbol+''}} {{userPaymentData.SURGE_AMOUNT|decimalConfig}} </span>
+                  )
+                  <span style="font-size: 16px;">&uarr;</span>
+                </p>
+              </div>
+              <div class="pt_name" *ngIf="restaurantInfo && restaurantInfo.business_type == 2" style="font-size: 13px;">
+                <span [ngStyle]="{ 'direction' : direction }" *ngIf="unitType > 1">
+                  <ng-container>{{languageStrings.charge || 'Charge'}}</ng-container> @ {{unitValue}}
+                  <span *ngIf="unitType == 2">
+                    <ng-container>{{ languageStrings.minute_s || 'minute'}}</ng-container> x {{unitCount}}
+                  </span>
+                  <span *ngIf="unitType == 3">
+                    <ng-container>{{ languageStrings.hour_s || 'hour(s)'}}</ng-container> x {{unitCount}}
+                  </span>
+                  <span *ngIf="unitType == 4">
+                    <ng-container>{{ languageStrings.day_s || 'day(s)'}}</ng-container> x {{unitCount}}
+                  </span>
+                  <span *ngIf="unitType == 5">
+                    <ng-container>{{ languageStrings.week_s || 'week(s)'}}</ng-container> x {{unitCount}}
+                  </span>
+                  <span *ngIf="unitType == 6">
+                    <ng-container>{{ languageStrings.month_s || 'month(s)'}}</ng-container> x {{unitCount}}
+                  </span>
+                  <span *ngIf="unitType == 7">
+                    <ng-container>{{ languageStrings.year_s || 'year(s)'}}</ng-container> x {{unitCount}}
+                  </span>
+                </span>
+              </div>
+            </div>
+            <!-- <div class="pt_coln">:</div> -->
+            <div class="pt_val" *ngIf="currency && userPaymentData">{{currency.symbol+''}}
+              {{userPaymentData.ACTUAL_AMOUNT| decimalConfig}}
+            </div>
+          </div>
+          <div class="pmnt_crt_div_bb" *ngIf="userPaymentData && (userPaymentData.DELIVERY_CHARGE ||
+          (userPaymentData.autoAppliedPromoOnDelivery && userPaymentData.autoAppliedPromoOnDelivery.length))">
+            <div class="pmnt_crt_div without-border">
+              <div class="pt_name text-capitalize" *ngIf="terminology">
+                {{terminology.DELIVERY_CHARGE || 'Delivery Charge'}}</div>
+              <!-- <div class="pt_coln">:</div> -->
+              <div class="pt_val" *ngIf="currency">
+                <i class="fa fa-angle-up set-icon"
+                  *ngIf="!recurringEnabled && restaurantInfo.is_delivery_charge_surge_active && userPaymentData.DELIVERY_CHARGE_SURGE_AMOUNT"
+                  tooltip="{{languageStrings.delivery_charges_rises_due_to_high_demand || 'Delivery charges rises due to high demand.' }}"></i>
+                <span
+                  *ngIf="userPaymentData.DELIVERY_CHARGE_AFTER_DISCOUNT !== undefined ;else dcWithoutDiscount">{{currency.symbol+'
+                  '}}{{userPaymentData.DELIVERY_CHARGE_AFTER_DISCOUNT|decimalConfig}}</span>
+                <ng-template #dcWithoutDiscount>{{currency.symbol+' '}}{{userPaymentData.DELIVERY_CHARGE|decimalConfig}}
+                </ng-template>
+              </div>
+            </div>
+            <div class="auto_promo_div"
+              *ngIf="userPaymentData.autoAppliedPromoOnDelivery && userPaymentData.autoAppliedPromoOnDelivery.length">
+              <p class="auto_promo" *ngFor="let promo of userPaymentData.autoAppliedPromoOnDelivery">
+                {{'('+promo.description+')'}}</p>
+            </div>
+          </div>
+          <div
+            *ngIf="!repaymentTransaction && !((loginResponse.vendor_details.debt_amount > 0) && appConfig.is_debt_payment_compulsory) && !debtAmountCheck">
+            <div class="pmnt_crt_div_bb" *ngIf="transactional_amount && mpaisa_transaction">
+              <div class="pmnt_crt_div">
+                <div class="pt_name text-capitalize">{{terminology.TRANSACTION_CHARGE || 'Transaction Charge'}}</div>
+                <div class="pt_val">
+                  <span>{{currency.symbol+'
+                    '}}{{userPaymentData.TRANSACTIONAL_CHARGES_INFO.MPAISA.transaction_charges|decimalConfig}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="pmnt_crt_div_bb" *ngIf="transactional_amount && stripe_transaction">
+              <div class="pmnt_crt_div">
+                <div class="pt_name text-capitalize">{{terminology.TRANSACTION_CHARGE || 'Transaction Charge'}}</div>
+                <div class="pt_val">
+                  <span>{{currency.symbol+'
+                    '}}{{userPaymentData.TRANSACTIONAL_CHARGES_INFO.STRIPE.transaction_charges|decimalConfig}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="pmnt_crt_div_bb" *ngIf="transactional_amount && paylater_transaction">
+              <div class="pmnt_crt_div">
+                <div class="pt_name text-capitalize">{{terminology.TRANSACTION_CHARGE || 'Transaction Charge'}}</div>
+                <div class="pt_val">
+                  <span>{{currency.symbol+'
+                    '}}{{userPaymentData.TRANSACTIONAL_CHARGES_INFO.PAYLATER.transaction_charges|decimalConfig}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="paymentInfo.is_custom_order !== 1">
+            <div class="pmnt_crt_div" *ngFor="let tax of userTaxes">
+              <div class="pt_name" *ngIf="!tax.tax_type">{{tax.tax_name+' @ '+tax.tax_percentage+'%'}}</div>
+              <div class="pt_name" *ngIf="tax.tax_type">{{tax.tax_name}}</div>
+              <!-- <div class="pt_coln">:</div> -->
+              <div class="pt_val" *ngIf="currency&&tax.tax_amount">{{currency.symbol+''}}
+                {{tax.tax_amount|decimalConfig}}
+              </div>
+            </div>
+          </div>
+          <div class="pmnt_crt_div_bb" *ngIf="userPaymentData && userPaymentData.discount">
+            <div class="pmnt_crt_div without-border">
+              <div class="pt_name" [ngStyle]="{ 'direction' : direction }">
+                <ng-container>{{languageStrings.discount || 'Discount'}}</ng-container>
+              </div>
+              <!-- <div class="pt_coln">:</div> -->
+              <div class="pt_val" *ngIf="currency && userPaymentData">-{{currency.symbol+''}}
+                {{userPaymentData.discount |decimalConfig}}
+              </div>
+            </div>
+            <div class="auto_promo_div"
+              *ngIf="userPaymentData && userPaymentData.autoAppliedPromoOnSubtotal && userPaymentData.autoAppliedPromoOnSubtotal.length">
+              <p class="auto_promo" *ngFor="let promo of userPaymentData.autoAppliedPromoOnSubtotal">
+                {{'('+promo.description+')'}}</p>
+            </div>
+          </div>
+
+          <div class="pmnt_crt_div" *ngIf="userPaymentData && userPaymentData.TIP > 0">
+            <div class="pt_name" [ngStyle]="{ 'direction' : direction }">
+              <ng-container>{{terminology.TIP}}</ng-container>
+            </div>
+            <!-- <div class="pt_coln">:</div> -->
+            <div class="pt_val" *ngIf="currency && userPaymentData">{{currency.symbol+''}}
+              {{userPaymentData.TIP|decimalConfig}}
+            </div>
+          </div>
+          <div class="pmnt_crt_div" *ngIf="userPaymentData && userPaymentData.ADDITIONAL_AMOUNT">
+            <div class="pt_name">
+              <ng-container>{{languageStrings.additional_amount || 'Additional Amount'}}</ng-container>
+            </div>
+            <!-- <div class="pt_coln">:</div> -->
+            <div class="pt_val" *ngIf="currency && userPaymentData">{{currency.symbol+''}}
+              {{userPaymentData.ADDITIONAL_AMOUNT| decimalConfig}}
+            </div>
+          </div>
+          <div class="pmnt_crt_div" *ngIf="userPaymentData && userPaymentData.LOYALTY_POINT_USED">
+            <div class="pt_name" [ngStyle]="{ 'direction' : direction }">
+              {{terminology.LOYALTY_POINT}} <ng-container>{{languageStrings.redeemed || 'Redeemed'}}</ng-container>
+              ({{userPaymentData.LOYALTY_POINT_USED}})
+            </div>
+            <!-- <div class="pt_coln">:</div> -->
+            <div class="pt_val" *ngIf="currency && userPaymentData">-{{currency.symbol+''}}
+              {{userPaymentData.LOYALTY_POINT_DISCOUNT |decimalConfig}}
+            </div>
+          </div>
+
+          <hr class="pmnt_sub_sep" />
+          <div class="pmnt_subtl_div">
+            <p class="pmnt_subtl_txt" [ngStyle]="{ 'direction' : direction }">
+              <ng-container>{{languageStrings.total ||'TOTAL'}}</ng-container>
+            </p>
+            <p class="pmnt_subtl_val" [style.color]="appConfig.color"
+              *ngIf="currency?.symbol && userPaymentData && !transactional_amount">
+              {{currency.symbol+''}} {{NET_PAYABLE_AMOUNT |decimalConfig}}
+            </p>
+            <p class="pmnt_subtl_val" [style.color]="appConfig.color"
+              *ngIf="currency?.symbol && userPaymentData && transactional_amount && mpaisa_transaction">
+              {{currency.symbol+''}} {{userPaymentData.TRANSACTIONAL_CHARGES_INFO.MPAISA.total_charges |decimalConfig}}
+            </p>
+            <p class="pmnt_subtl_val" [style.color]="appConfig.color"
+              *ngIf="currency?.symbol && userPaymentData && transactional_amount && stripe_transaction">
+              {{currency.symbol+''}} {{userPaymentData.TRANSACTIONAL_CHARGES_INFO.STRIPE.total_charges |decimalConfig}}
+            </p>
+            <p class="pmnt_subtl_val" [style.color]="appConfig.color"
+              *ngIf="currency?.symbol && userPaymentData && transactional_amount && paylater_transaction">
+              {{currency.symbol+''}}
+              {{userPaymentData.TRANSACTIONAL_CHARGES_INFO.PAYLATER.total_charges |decimalConfig}}
+            </p>
+            <div class="clearfix"></div>
+          </div>
+          <hr class="pmnt_sub_sep" *ngIf="userPaymentData && userPaymentData.TOTAL_RECURRING_AMOUNT" />
+          <div class="pmnt_subtl_div" *ngIf="userPaymentData && userPaymentData.TOTAL_RECURRING_AMOUNT">
+            <p class="pmnt_subtl_txt" [ngStyle]="{ 'direction' : direction }">
+              <ng-container>{{languageStrings.subscribed || 'Subscribed'}}</ng-container>
+              {{userPaymentData.OCCURRENCE_COUNT}} {{terminology.ORDERS}}
+              ({{currency.symbol+''}}
+              <span
+                *ngIf="paylater_transaction_recurring">{{userPaymentData.TRANSACTIONAL_CHARGES_INFO.PAYLATER.total_charges
+                |decimalConfig}}</span>
+              <span *ngIf="!paylater_transaction_recurring"> {{NET_PAYABLE_AMOUNT |decimalConfig}}</span>
+              <ng-container>
+                {{languageStrings.will_deducted_creation_of_each_order || 'will be deducted on the creation of each'}}
+              </ng-container>
+            </p>
+            <p class="pmnt_subtl_val" *ngIf="currency?.symbol && userPaymentData">
+              <i class="fa fa-angle-up set-icon" *ngIf="restaurantInfo.is_delivery_charge_surge_active"
+                (click)="openDeliveryChargePopup()"></i>
+              {{currency.symbol+''}}
+              <span *ngIf="!paylater_transaction_recurring">{{userPaymentData.TOTAL_RECURRING_AMOUNT
+                |decimalConfig}}</span>
+              <span
+                *ngIf="paylater_transaction_recurring">{{userPaymentData.TRANSACTIONAL_CHARGES_INFO.PAYLATER.PAYLATER_TOTAL_RECURRING_AMOUNT
+                |decimalConfig}}</span>
+            </p>
+            <div class="clearfix"></div>
+          </div>
+
+        </div>
+        <!-- ====================== only tip ====================== -->
+        <div *ngIf="deliveryMethod != 2 || appConfig.show_tip_in_pickup == 1">
+          <div
+            *ngIf="(userPaymentData && userPaymentData.TIP_ENABLE_DISABLE) && !repaymentTransaction &&  !recurringEnabled">
+            <div class="pmnt_inr_hdng ">
+              <div class="col-xs-12 col-sm-12 p0">
+                <img src="assets/img/icon_tip.svg" alt="tip icon" width="20px" />
+                <p class="pmnt_inr_hdng_txt" [ngStyle]="{ 'direction' : direction }">
+                  <ng-container>{{terminology.TIP}}</ng-container>
+                </p>
+              </div>
+            </div>
+
+            <div class="pmnt_cnt_div pmnt_tip row m0">
+              <div
+                *ngIf="userPaymentData && (userPaymentData.TIP_OPTION_ENABLE == 2 || userPaymentData.TIP_OPTION_ENABLE == 1) && userPaymentData.TIP_OPTION_LIST && userPaymentData.TIP_OPTION_LIST.length > 0">
+                <div class="col-xs-6 col-sm-4 col-lg-2 promo-col mb-5"
+                  *ngFor="let tipOption of userPaymentData.TIP_OPTION_LIST; let i = index;">
+                  <div class="tipOption" (click)="chooseTipOption(i)"
+                    [ngClass]="{'selectedTipOption': tipOption.selected, 'nonSelectedTipOption': !tipOption.selected}">
+                    <span *ngIf="userPaymentData.TIP_TYPE == 2">{{currency.symbol}}</span>
+                    {{tipOption.value |decimalConfig}}
+                    <span *ngIf="userPaymentData.TIP_TYPE == 1">%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-12 col-sm-12 col-xs-12 mt10" *ngIf="userPaymentData">
+                <div class="row">
+                  <form role="form" [formGroup]="tipForm" autocomplete="off" (ngSubmit)="makeTipHit(tipForm)">
+
+                    <div class="col-lg-8 col-sm-8 col-xs-7 pd-rt0">
+                      <input type="text" class="form-control tipInput" (change)="changeTipValue()"
+                        [attr.disabled]="userPaymentData.TIP_OPTION_ENABLE == 1 ? '' : null" formControlName="tip_value"
+                        placeholder="{{languageStrings.enter_tip_amount || 'Enter Tip Amount'}}"
+                        aria-label="Enter Tip Amount" />
+                      <app-control-messages [control]="tipForm.controls.tip_value"></app-control-messages>
+
+                    </div>
+                    <div class="col-lg-4 col-sm-4 col-xs-4 pd-lt8">
+                      <button type="submit" class="btn loyaty_btn">
+                        <ng-container>{{languageStrings.submit || 'Submit'}}</ng-container>
+                      </button>
+                    </div>
+                  </form>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====================== only tip ====================== -->
+
+
+        <!-- ====================== promotion and tip ====================== -->
+        <div
+          *ngIf="!customOrderFlow && !recurringEnabled && (showPromoLink || (appConfig?.is_tip_enabled && !appConfig?.payment_step) || showReferral) && !repaymentTransaction && !((loginResponse.vendor_details.debt_amount > 0 ) && appConfig.is_debt_payment_compulsory) && !debtAmountCheck">
+          <div class="pmnt_inr_hdng ">
+            <div class="col-xs-12; col-sm-12 p0" *ngIf="showPromoLink || showReferral">
+              <img src="assets/img/promotions-icon.svg" alt="promotion icon" />
+              <p class="pmnt_inr_hdng_txt" [ngStyle]="{ 'direction' : direction }">
+                <ng-container>{{languageStrings.promotion ||'Promotion'}}</ng-container>
+              </p>
+              <p class="hidden-xs visible-sm visible-md visible-lg promo_p" appTapEffect appColor onlyColor="true"
+                (click)="showPromoDialog('Promo')" [ngStyle]="{ 'direction' : direction }"
+                *ngIf="showReferral || showPromoLink">
+                <!-- <ng-container >Add a Promo/Referral Code</ng-container> -->
+                {{terminology.ADD_A_PROMO_REFERRAL_CODE}}
+              </p>
+            </div>
+          </div>
+
+          <div class="pmnt_cnt_div pmnt_tip row m0">
+
+            <div class="col-xs-12 col-sm-12 promo-col paddingZero" *ngIf="showPromoLink || showReferral">
+
+              <!-- important component to disselect all button initially -->
+              <input type="radio" class="option-input radio" name="promoCode" aria-label="promocode" checked
+                style="display:none; visibility:hidden" />
+              <div class="promo-pay-div">
+                <div *ngFor="let promo of promoList; let i=index;">
+                  <div class="promotion_div">
+                    <div class="table_div">
+                      <div class="table_cell_div radioB">
+
+                        <!-- <input type="radio" class="option-input radio" name="promoCode"  /> -->
+                        <div *ngIf="billPromo.id !== promo.id" (click)="setPromoId(promo)" style="text-align: left;">
+                          <svg width="22" height="22" viewBox="0 0 22 22">
+                            <path fill="#000" fill-rule="nonzero"
+                              d="M11 22C4.925 22 0 17.075 0 11S4.925 0 11 0s11 4.925 11 11-4.925 11-11 11zm0-.846c5.608 0 10.154-4.546 10.154-10.154S16.608.846 11 .846.846 5.392.846 11 5.392 21.154 11 21.154z"
+                              opacity=".3" />
+                          </svg>
+                        </div>
+                        <div *ngIf="billPromo?.id === promo.id" (click)="removePromoId()" style="text-align: left;">
+                          <svg width="22" height="22" viewBox="0 0 22 22">
+                            <g fill="none" fill-rule="nonzero">
+                              <path fill="#82C548"
+                                d="M11 22C4.925 22 0 17.075 0 11S4.925 0 11 0s11 4.925 11 11-4.925 11-11 11z" />
+                              <path fill="#FFF"
+                                d="M14.993 7.742a.805.805 0 0 1 1.151 0 .818.818 0 0 1 0 1.146l-5.852 5.939a.803.803 0 0 1-1.147 0l-3.193-3.28a.813.813 0 0 1-.012-1.155.805.805 0 0 1 1.152 0l2.625 2.702 5.276-5.352z" />
+                            </g>
+                          </svg>
+                        </div>
+
+                      </div>
+                      <div class="table_cell_div">
+                        <p class="discount_text">{{promo.code}}</p>
+                        <p class="discount_text_description" *ngIf="promo.isPromo">{{promo.description}}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <hr *ngIf="i != (promoList.length - 1)" class="seperation_line" />
+                </div>
+                <hr *ngIf="promoList && promoList.coupons && promoList.coupons.length" class="seperation_line" />
+                <div *ngFor="let coupon of promoList.coupons">
+                  <input type="radio" class="option-input radio" name="promoCode" aria-label="promocode" checked
+                    style="display:none; visibility:hidden" />
+                  <div class="promotion_div">
+                    <div class="table_div">
+                      <div class="table_cell_div radioB">
+
+                        <!-- <input type="radio" class="option-input radio" name="promoCode"  /> -->
+                        <div *ngIf="billPromo.id !== coupon.id" (click)="setPromoId(coupon)" style="text-align: left;">
+                          <svg width="22" height="22" viewBox="0 0 22 22">
+                            <path fill="#000" fill-rule="nonzero"
+                              d="M11 22C4.925 22 0 17.075 0 11S4.925 0 11 0s11 4.925 11 11-4.925 11-11 11zm0-.846c5.608 0 10.154-4.546 10.154-10.154S16.608.846 11 .846.846 5.392.846 11 5.392 21.154 11 21.154z"
+                              opacity=".3" />
+                          </svg>
+                        </div>
+                        <div *ngIf="billPromo?.id === coupon.id" (click)="removePromoId()" style="text-align: left;">
+                          <svg width="22" height="22" viewBox="0 0 22 22">
+                            <g fill="none" fill-rule="nonzero">
+                              <path fill="#82C548"
+                                d="M11 22C4.925 22 0 17.075 0 11S4.925 0 11 0s11 4.925 11 11-4.925 11-11 11z" />
+                              <path fill="#FFF"
+                                d="M14.993 7.742a.805.805 0 0 1 1.151 0 .818.818 0 0 1 0 1.146l-5.852 5.939a.803.803 0 0 1-1.147 0l-3.193-3.28a.813.813 0 0 1-.012-1.155.805.805 0 0 1 1.152 0l2.625 2.702 5.276-5.352z" />
+                            </g>
+                          </svg>
+                        </div>
+                      </div>
+                      <div class="table_cell_div">
+                        <p class="discount_text_description">{{coupon.description}}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <hr class="seperation_line" />
+                </div>
+              </div>
+              <button appBs class="hidden-lg hidden-md hidden-sm visible-xs ripple p-btn add-pro" mat-button appColor
+                hoverbgSimple='true' (click)="showPromoDialog('Promo')" *ngIf="showReferral || showPromoLink">
+                <span [ngStyle]="{ 'direction' : direction }">
+                  <!-- <ng-container >Add a Promo/Referral Code</ng-container> -->
+                  {{terminology.ADD_A_PROMO_REFERRAL_CODE}}
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <app-apply-loyalty-points
+          *ngIf="paymentInfo.is_custom_order !== 1 && appConfig.is_loyalty_point_enabled && (restaurantInfo && !restaurantInfo.loyalty_point_benefit_blocked) && +userPaymentData.ACTUAL_AMOUNT && !repaymentTransaction && !((loginResponse.vendor_details.debt_amount > 0) && appConfig.is_debt_payment_compulsory) && !debtAmountCheck && !recurringEnabled"
+          [originalPoints]="userPaymentData.LOYALTY_POINTS" [maxRedemptionPoints]="userPaymentData.MAX_USABLE_POINT"
+          (applyPointsEvent)="applyLoyaltyPoints($event)"></app-apply-loyalty-points>
+
+
+
+        <!-- ====================== promotion and tip ====================== -->
+        <div class="pmnt_inr_hdng" *ngIf="!editJobId">
+          <img style="margin-top:18px;" src="assets/img/payment-icon.svg" alt="payment icon" />
+          <p class="pmnt_inr_hdng_txt text-capitalize">{{terminology.PAYMENT_METHOD}}</p>
+          <p class="visible-xs visible-sm visible-md visible-lg promo_p hide-div"
+            [ngStyle]="{ 'direction' : direction }" appTapEffect appColor onlyColor="true" *ngIf="cardEnabled"
+            (click)="showAddCard()">
+            <span *ngIf="paymentType == 32">
+              <ng-container>{{languageStrings.add_credit_card ||'Add Credit Card'}}</ng-container>
+            </span>
+            <span *ngIf="paymentType != 32">
+              <ng-container>{{languageStrings.add_card || 'Add Card'}}</ng-container>
+            </span>
+          </p>
+        </div>
+        <!-- cash on delivery -->
+        <div class="pay-option" [ngClass]="{'center-align':(paymentOptions && paymentOptions.length <= 1)}"
+          *ngIf="!editJobId">
+          <div class="row">
+            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 card-parent">
+              <div class="repeatProcess" *ngIf="cardEnabled">
+                <button mat-button (click)="showAddCard()" style="margin-top:19px" class="pay_btn pay_cash repeatStyle">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/addCard.png">
+                    <div class="payByCash text-capitalize" *ngIf="paymentType == 32"
+                      [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.add_credit_card || 'Add Credit Card'}}</ng-container>
+                    </div>
+                    <div class="payByCash text-capitalize" *ngIf="paymentType != 32"
+                      [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.add_card || 'Add Card'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div class="repeatProcess" *ngFor="let option of paymentOptions;let last = last;let first = first;"
+                [ngClass]="{'m-lt-0':([paymentModes.AUTHORIZE_NET,paymentModes.VISTA,paymentModes.FAC,paymentModes.PAYFORT,paymentModes.STRIPE].includes(option.value)&& cards && cards.length < 1)}">
+                <button mat-button
+                  *ngIf="option.value === paymentModes.CASH && option.enabled && !debtAmountCheck && !customerPlanId && !(formSettings.is_guest_checkout_enabled && (sessionService.get('appData') && sessionService.get('appData').vendor_details.is_guest_account && !formSettings.is_COD_enabled_for_guest_checkout))"
+                  style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || cards.length || paymentType != paymentModes.CASH, 'selectedMethod':paymentType == paymentModes.CASH}"
+                  class="pay_btn pay_cash" (click)="setPaymentType(paymentModes.CASH.toString())">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/cash.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{ languageStrings.pay_by_cash || 'Pay by Cash' }}</ng-container>
+                    </div>
+                  </div>
+                </button>
+
+                <button mat-button
+                  *ngIf="option.value === paymentModes.PAY_LATER && option.enabled && !debtAmountCheck && !customerPlanId"
+                  style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || cards.length || paymentType != paymentModes.PAY_LATER, 'selectedMethod':paymentType == paymentModes.PAY_LATER}"
+                  class="pay_btn pay_cash" (click)="setPaymentType(paymentModes.PAY_LATER.toString())">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/payLater.png">
+                    <div class="payByCash payByPayLater text-capitalize" [ngStyle]="{ 'direction' : direction }"
+                      [tooltip]="terminology.PAY_LATER || 'Pay Later'">
+                      {{terminology.PAY_LATER || 'Pay Later'}}
+                    </div>
+                  </div>
+                </button>
+
+                <!-- <button mat-button *ngIf="option.value == paymentModes.PAYTM_LINK && option.enabled && !debtAmountCheck"
+                  style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || cards.length || paymentType != paymentModes.PAYTM_LINK, 'selectedMethod':paymentType == paymentModes.PAYTM_LINK}"
+                  class="pay_btn pay_cash" (click)="setPaymentType(paymentModes.PAYTM_LINK.toString())">
+                  <div class="pay_btn card_btn pg-card">
+                      <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      {{terminology.PAY}}
+                      <ng-container>via Paytm</ng-container>
+                    </div>
+                  </div>
+                </button> -->
+
+                <button mat-button style="margin-top:19px" *ngIf="option.value === 512 && option.enabled"
+                  class="pay_btn pay_cash"
+                  [ngClass]="{'repeatStyle': !first || cards.length || paymentType != 512, 'selectedMethod':paymentType == 512}"
+                  (click)="setPaymentType('512')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.bill_plz || 'BILL PLZ'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value === 128 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || cards.length || paymentType != 128, 'selectedMethod':paymentType == 128}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('128', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_card_netbanking || 'Pay via Card/ Net Banking'}}
+                      </ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value === 8192 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 8192, 'selectedMethod':paymentType == 8192}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('8192', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_card || 'Pay via Card'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+
+                <button mat-button *ngIf="option.value == 131072 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 131072, 'selectedMethod':paymentType == 131072}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('131072', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_paymob || 'Pay via PayMob'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <!-- <button mat-button *ngIf="option.value == 33554432 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 33554432, 'selectedMethod':paymentType == 33554432}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('33554432', 'init')">
+                  
+                  <div class="pay_btn card_btn pg-card">
+                      <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>Pay via Wirecard</ng-container>
+                    </div>
+                  </div>
+                </button> -->
+                <button mat-button *ngIf="option.value == 67108864 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 67108864, 'selectedMethod':paymentType == 67108864}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('67108864', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_sslcommerz || 'Pay via SSLCOMMERZ'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 1073741824 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 1073741824, 'selectedMethod':paymentType == 1073741824}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('1073741824', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_fac_3ds || 'Pay via FAC 3DS'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 536870912 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 536870912, 'selectedMethod':paymentType == 536870912}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('536870912', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_checkout_com || 'Pay via Checkout.com'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 4194304 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 4194304, 'selectedMethod':paymentType == 4194304}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('4194304', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_payhere || 'Pay via PayHere' }}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 2147483648 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 2147483648, 'selectedMethod':paymentType == 2147483648}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('2147483648', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_azul || 'Pay via Azul'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 4294967296 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 4294967296, 'selectedMethod':paymentType == 4294967296}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('4294967296', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_hyper_pay || 'Pay via HyperPay'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 33554432 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 33554432, 'selectedMethod':paymentType == 33554432}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('33554432', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_credimax || 'Pay via Credimax'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 8589934592 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 8589934592, 'selectedMethod':paymentType == 8589934592}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('8589934592', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_fatoorah || 'Pay via My Fatoorah'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 34359738368 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 34359738368, 'selectedMethod':paymentType == 34359738368}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('34359738368', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_paynet || 'Pay via Paynet'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 68719476736 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 68719476736, 'selectedMethod':paymentType == 68719476736}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('68719476736', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_tap || 'Pay via Tap'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 137438953472 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 137438953472, 'selectedMethod':paymentType == 137438953472}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('137438953472', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_curlec || 'Pay via Curlec'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 274877906944 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 274877906944, 'selectedMethod':paymentType == 274877906944}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('274877906944', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_wipay || 'Pay via WiPay'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 549755813888 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 549755813888, 'selectedMethod':paymentType == 549755813888}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('549755813888', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_pagar_dot_me || 'Pay via Pagar.me'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 4398046511104 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 4398046511104, 'selectedMethod':paymentType == 4398046511104}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('4398046511104', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_wechat_pay || 'Pay via WeChat Pay'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 35184372088832 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 35184372088832, 'selectedMethod':paymentType == 35184372088832}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('35184372088832', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_mybillpayment || 'Pay via MyBillPayment'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 140737488355328 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 140737488355328, 'selectedMethod':paymentType == 140737488355328}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('140737488355328', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_valitor || 'Pay via Valitor'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 562949953421312 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 562949953421312, 'selectedMethod':paymentType == 562949953421312}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('562949953421312', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_truevo || 'Pay via Truevo'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 1125899906842624 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 1125899906842624, 'selectedMethod':paymentType == 1125899906842624}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('1125899906842624', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_payzen || 'Pay via Payzen'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 2251799813685248 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 2251799813685248, 'selectedMethod':paymentType == 2251799813685248}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('2251799813685248', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_first_data || 'Pay via First Data'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 70368744177664 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 70368744177664, 'selectedMethod':paymentType == 70368744177664}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('70368744177664', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_bankopen || 'Pay via bankOpen'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 4503599627370496 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 4503599627370496, 'selectedMethod':paymentType == 4503599627370496}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('4503599627370496', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_square || 'Pay via Square'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 257 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 257, 'selectedMethod':paymentType == 257}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('257', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_online || 'Pay Online'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 259 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 259, 'selectedMethod':paymentType == 259}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('259', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_gocardless || 'Pay via GoCardless'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 261 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 261, 'selectedMethod':paymentType == 261}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('261', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_ipay88 || 'Pay via ipay88'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 262 && option.enabled"
+                  style="margin-top:19px;max-width: 26rem;"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 262, 'selectedMethod':paymentType == 262}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('262', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_multicaixa_reference || 'Pay via Multicaixa Reference'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 263 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 263, 'selectedMethod':paymentType == 263}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('263', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_cybersource || 'Pay via CyberSource'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 264 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 264, 'selectedMethod':paymentType == 264}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('264', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_bank_alfalah || 'Pay via Bank Alfalah'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 265 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 265, 'selectedMethod':paymentType == 265}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('265', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_culqi || 'Pay via Culqi'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 266 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 266, 'selectedMethod':paymentType == 266}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('266', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_nmi || 'Pay via NMI'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 267 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 267, 'selectedMethod':paymentType == 267}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('267', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_flutterwave || 'Pay via Flutterwave'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 268 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 268, 'selectedMethod':paymentType == 268}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('268', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_mpesa || 'Pay via Mpesa'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 269 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 269, 'selectedMethod':paymentType == 269}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('269', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_adyen || 'Pay via Adyen'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 272 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 272, 'selectedMethod':paymentType == 272}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('272', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_paytm || 'Pay via Paytm'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 271 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 271, 'selectedMethod':paymentType == 271}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('271', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_paymark || 'Pay via Paymark'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 1099511627776 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 1099511627776, 'selectedMethod':paymentType == 1099511627776}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('1099511627776', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_whoosh || 'Pay via Whoosh'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 2199023255552 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 2199023255552, 'selectedMethod':paymentType == 2199023255552}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('2199023255552', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_mtn || 'Pay via MTN'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 8796093022208 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 8796093022208, 'selectedMethod':paymentType == 8796093022208}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('8796093022208', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_onepay || 'Pay via Onepay'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 17592186044416 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 17592186044416, 'selectedMethod':paymentType == 17592186044416}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('17592186044416', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_pagoplux || 'Pay via PagoPlux'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 17179869184 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 17179869184, 'selectedMethod':paymentType == 17179869184}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('17179869184', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_theteller || 'Pay via TheTeller'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value === 1048576 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 1048576, 'selectedMethod':paymentType == 1048576}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('1048576', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_paynow || 'Pay via Paynow'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 8388608 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 8388608, 'selectedMethod':paymentType == 8388608}"
+                  class="pay_btn pay_cash" (click)="setPaymentType(8388608, 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_mpaisa || 'Pay via MPaisa'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 258 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 258, 'selectedMethod':paymentType == 258}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('258', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_suncash || 'Pay via SunCash'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 260 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 260, 'selectedMethod':paymentType == 260}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('260', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_ath_movil || 'Pay via ATH Movil'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == 270 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 270, 'selectedMethod':paymentType == 270}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('270', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_hypur || 'Pay via Hypur'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == paymentModes.PIXELPAY && option.enabled"
+                  style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != paymentModes.PIXELPAY, 'selectedMethod':paymentType == paymentModes.PIXELPAY}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('273', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_pixelpay || 'Pay via PixelPay'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == paymentModes.DOKU && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != paymentModes.DOKU, 'selectedMethod':paymentType == paymentModes.DOKU}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('274', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_doku || 'Pay via Doku'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == paymentModes.PEACH && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != paymentModes.PEACH, 'selectedMethod':paymentType == paymentModes.PEACH}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('275', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_peach || 'Pay via Peach'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == paymentModes.PAGUELOFACIL && option.enabled"
+                  style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != paymentModes.PAGUELOFACIL, 'selectedMethod':paymentType == paymentModes.PAGUELOFACIL}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('276', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_paguelofacil || 'Pay via Paguelofacil'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == paymentModes.NOQOODY && option.enabled"
+                  style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != paymentModes.NOQOODY, 'selectedMethod':paymentType == paymentModes.NOQOODY}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('277', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_noqoody_pay || 'Pay via Noqoody Pay'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == paymentModes.GTBANK && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != paymentModes.GTBANK, 'selectedMethod':paymentType == paymentModes.GTBANK}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('279', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_gtbank || 'Pay via GTBank'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == paymentModes.URWAY && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != paymentModes.URWAY, 'selectedMethod':paymentType == paymentModes.URWAY}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('278', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_urway || 'Pay via Urway'}}</ng-container>
+
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == paymentModes.VUKA && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != paymentModes.VUKA, 'selectedMethod':paymentType == paymentModes.VUKA}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('282', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container i18n>{{languageStrings.pay_via_vuka || 'Pay via Vuka'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == paymentModes.VPOS && option.enabled"
+                  style="margin-top:19px;max-width: 25rem;"
+                  [ngClass]="{'repeatStyle': !first || paymentType != paymentModes.VPOS, 'selectedMethod':paymentType == paymentModes.VPOS}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('281', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container i18n>{{languageStrings.pay_via_multicaixa_express || 'Pay via Multicaixa Express'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == paymentModes.CXPAY && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != paymentModes.CXPAY, 'selectedMethod':paymentType == paymentModes.CXPAY}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('280', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container i18n>{{languageStrings.pay_via_cx_pay || 'Pay via CX Pay'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == paymentModes.PAYKU && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != paymentModes.PAYKU, 'selectedMethod':paymentType == paymentModes.PAYKU}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('283', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container i18n>{{languageStrings.pay_via_payku || 'Pay via Payku'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == paymentModes.BAMBORA && option.enabled"
+                  style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != paymentModes.BAMBORA, 'selectedMethod':paymentType == paymentModes.BAMBORA}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('285', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container i18n>{{languageStrings.pay_via_bambora || 'Pay via Bambora'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == paymentModes.PAYWAYONE && option.enabled"
+                  style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != paymentModes.PAYWAYONE, 'selectedMethod':paymentType == paymentModes.PAYWAYONE}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('286', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container i18n>{{languageStrings.pay_via_paywayone || 'Pay via PayWayOne'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value == paymentModes.PLACETOPAY && option.enabled"
+                  style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != paymentModes.PLACETOPAY, 'selectedMethod':paymentType == paymentModes.PLACETOPAY}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('297', 'init')">
+
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container i18n>{{languageStrings.pay_via_placetopay || 'Pay via PlaceToPay'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value === paymentModes.WALLET && option.enabled"
+                  style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || cards.length || paymentType != 16384, 'selectedMethod':paymentType == 16384}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('16384', 'init')">
+                  <div class="pay_btn card_btn  pg-card" *ngIf="walletDetails">
+                    <img src="assets/images/wallet.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <span class="elipses" [tooltip]="languageStrings.pay_via_wallet || 'Pay Via Wallet'">
+                        <ng-container>{{languageStrings.pay_via_wallet || 'Pay Via Wallet'}}</ng-container>
+                      </span>
+                      <span style="font-size: 11px;">
+                        <ng-container>{{languageStrings.wallet_balance || 'Wallet Balance'}}</ng-container>:
+                        {{currency?.symbol}}{{(walletDetails.wallet_balance | decimalConfig)}}
+                      </span>
+                      <!-- <span style="font-size: 12px; display : block;">
+                        {{currency?.symbol}}{{(walletDetails.wallet_balance | decimalConfig)}}
+                      </span> -->
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value ===  paymentModes.STRIPE_IDEAL && option.enabled"
+                  style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 524288, 'selectedMethod':paymentType == 524288}"
+                  class="pay_btn pay_cash" (click)="setPaymentType(524288, 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_stripe_ideal || 'Pay via Stripe Ideal'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value ===  paymentModes.LIME_LIGHT && option.enabled"
+                  style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 134217728, 'selectedMethod':paymentType == 134217728}"
+                  class="pay_btn pay_cash" (click)="setPaymentType(134217728, 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_limelight || 'Pay via Limelight'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value ===  paymentModes.TWO_CHECKOUT && option.enabled"
+                  style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 268435456, 'selectedMethod':paymentType == 268435456}"
+                  class="pay_btn pay_cash" (click)="setPaymentType(268435456, 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_2checkout || 'Pay via 2checkout'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+
+
+                <button mat-button *ngIf="option.value === 64 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || cards.length || paymentType != 64, 'selectedMethod':paymentType == 64}"
+                  class="pay_btn pay_cash" (click)="setPaymentType('64', 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.paytm || 'Paytm' }}</ng-container><br />
+                      <span style="font-size: 11px;"
+                        *ngIf="paytmData && paytmData.wallet_balance >= 0 && paytmData.paytm_verified">
+                        <ng-container>{{languageStrings.wallet_balance || 'Wallet Balance'}}</ng-container>:
+                        {{currency?.symbol}}{{(paytmData.wallet_balance |decimalConfig)}}
+                      </span>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value === 4 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 4, 'selectedMethod':paymentType == 4}"
+                  class="pay_btn pay_cash" (click)="setPaymentType(4, 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_paypal || 'Pay via Paypal'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+
+                <button mat-button *ngIf="option.value === 287 && option.enabled" style="margin-top:19px"
+                [ngClass]="{'repeatStyle': !first || paymentType != 287, 'selectedMethod':paymentType == 287}"
+                class="pay_btn pay_cash" (click)="setPaymentType(287, 'init')">
+                <div class="pay_btn card_btn pg-card">
+                  <img src="assets/images/netBanking.png">
+                  <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                    <ng-container>{{languageStrings.pay_via_telr || 'Pay via Credit/Debit Card'}}</ng-container>
+                  </div>
+                </div>
+              </button>
+
+                <button mat-button *ngIf="option.value === 256 && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 256, 'selectedMethod':paymentType == 256}"
+                  class="pay_btn pay_cash" (click)="setPaymentType(256, 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_paystack || 'Pay via Paystack'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value === paymentModes.INNSTAPAY && option.enabled"
+                  style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != paymentModes.INNSTAPAY, 'selectedMethod':paymentType == paymentModes.INNSTAPAY}"
+                  class="pay_btn pay_cash" (click)="setPaymentType(paymentModes.INNSTAPAY, 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_card || 'Pay via Card'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+                <button mat-button *ngIf="option.value === paymentModes.PAYFAST && option.enabled"
+                  style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != paymentModes.PAYFAST, 'selectedMethod':paymentType == paymentModes.PAYFAST}"
+                  class="pay_btn pay_cash" (click)="setPaymentType(paymentModes.PAYFAST, 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_card || 'Pay via Card'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+
+                <button mat-button *ngIf="option.value ===  paymentModes.VIVA && option.enabled" style="margin-top:19px"
+                  [ngClass]="{'repeatStyle': !first || paymentType != 2097152, 'selectedMethod':paymentType == 2097152}"
+                  class="pay_btn pay_cash" (click)="setPaymentType(2097152, 'init')">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.pay_via_viva || 'Pay via Viva'}}</ng-container>
+                    </div>
+                  </div>
+                </button>
+
+                <button mat-button
+                  *ngIf="option.value === 64 && option.enabled && paytmData && paytmData.paytm_verified"
+                  style="margin-top:19px;margin-left: 20px;"
+                  [ngClass]="{'repeatStyle': !first || cards.length || paymentType != 64, 'selectedMethod':paymentType == 64}"
+                  class="pay_btn pay_cash" (click)="addPaytmMoney(paytmData.paytm_add_money_url)">
+                  <div class="pay_btn card_btn pg-card">
+                    <img src="assets/images/netBanking.png">
+                    <div class="payByCash mar-box-20 text-capitalize" [ngStyle]="{ 'direction' : direction }">
+                      <ng-container>{{languageStrings.add_paytm_money || 'Add Paytm money'}}</ng-container><br />
+                      <span style="font-size: 12px;"
+                        *ngIf="paytmData && paytmData.wallet_balance >= 0 && paytmData.paytm_verified">
+                        <ng-container>{{languageStrings.wallet_balance || 'Wallet Balance'}}</ng-container>
+                      </span>
+                    </div>
+                  </div>
+                </button>
+                <div *ngIf="(option.value == paymentModes.FAC) && option.enabled && fac_cards && fac_cards.length > 0">
+                  <div class="repeatProcess cards-div" *ngFor="let card of fac_cards; let first = first;">
+                    <div class="removeCard">
+                      <!--<img src="assets/img/delete.svg" (click)="removeCard(card.card_id)">-->
+                      <i class="fa fa-trash-o fa-lg" aria-hidden="true" style="cursor: pointer;"
+                        (click)="removeCard(card, option.value)"></i>
+                    </div>
+                    <button mat-button
+                      [ngClass]="{'repeatStyle': paymentType != 2 || selectedCardId != card.card_id, 'selectedMethod': ((paymentType == paymentModes.FAC) && selectedCardId == card.card_id)}"
+                      (click)="selectedCard(card.card_id);setPaymentType(option.value,'init');">
+                      <div class="pay_btn card_btn pg-card">
+                        <img class="credit-img" src="assets/images/creditCard.png">
+                        <div class="cardText">
+                          <span class="cnt_dot">XXXX</span> {{card.last4_digits}}
+                        </div>
+
+                      </div>
+                    </button>
+                  </div>
+                </div>
+                <div
+                  *ngIf="(option.value === 2 || option.value===32 || option.value == paymentModes.AUTHORIZE_NET || option.value == paymentModes.VISTA) && option.enabled && cards.length > 0">
+                  <div class="repeatProcess cards-div" *ngFor="let card of cards; let first = first;">
+                    <div class="removeCard">
+                      <!--<img src="assets/img/delete.svg" (click)="removeCard(card.card_id)">-->
+                      <i class="fa fa-trash-o fa-lg" aria-hidden="true" style="cursor: pointer;"
+                        (click)="removeCard(card, option.value)"></i>
+                    </div>
+                    <button mat-button
+                      [ngClass]="{'repeatStyle': paymentType != 2 || selectedCardId != card.card_id, 'selectedMethod': ((paymentType == 2||paymentType==32 || paymentType == paymentModes.AUTHORIZE_NET  || paymentType == paymentModes.VISTA) && selectedCardId == card.card_id)}"
+                      (click)="selectedCard(card.card_id);setPaymentType(option.value,'init');">
+                      <div class="pay_btn card_btn pg-card">
+                        <img class="credit-img" src="assets/images/creditCard.png">
+                        <div class="cardText">
+                          <span class="cnt_dot">XXXX</span> {{card.last4_digits}}
+                        </div>
+
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+
+        <div class="pmnt_cnt_div pmnt_cart customCss" *ngIf="editJobId && amt_diff != 0">
+          <div class="notesDiv">
+            <div class="pt_name fullWidth">
+              <ng-container *ngIf="amt_diff > 0">
+                <ng-container>
+                  {{languageStrings.note_order_amount_increased_from_original_amount || 'Note: The order amount has
+                  increased from the original amount.'}}
+                </ng-container>
+                {{' '+ currency.symbol+' '}}{{amt_diff|decimalConfig}} <ng-container>
+                  {{languageStrings.would_added_an_outstanding_amount_which_can_paid_after_placing_the_order || 'would
+                  be added as an outstanding amount which can be paid after placing the order.'}}
+                </ng-container>
+              </ng-container>
+              <ng-container *ngIf="amt_diff < 0">
+                <ng-container>
+                  {{languageStrings.note_order_amount_decreased_from_original_amount || 'Note: The order amount has
+                  decreased from the original amount.'}}
+                </ng-container>
+                {{' '+ currency.symbol+' '}}{{(-1*amt_diff)|decimalConfig}} <ng-container>
+                  {{languageStrings.would_refunded_back_to_your_wallet || 'would be refunded back to your wallet.'}}
+                </ng-container>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ====================== submit button ====================== -->
+      <!-- <button (click)="onSubmit()" appBs class="pmnt_proceed_pay ripple" tap-effect [style.background-color]="appConfig.color"
+          *ngIf="billInfo?.NET_PAYABLE_AMOUNT">
+          Pay {{currency?.symbol+' '+billInfo?.NET_PAYABLE_AMOUNT}}
+      </button> -->
+      <button (click)="taskViaPayment()" appBs class="pmnt_proceed_pay ripple text-capitalize " mat-button
+        [style.background-color]="appConfig.color" *ngIf="!isPlatformServer && !transactional_amount && !paymentfor">
+        <ng-container *ngIf="!recurringEnabled && !editJobId">
+          {{terminology.PAY}}
+          <ng-container *ngIf="userPaymentData">{{currency?.symbol+''}} {{NET_PAYABLE_AMOUNT |decimalConfig}}
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="recurringEnabled">
+          <ng-container>{{languageStrings.order_subscription || 'Order Subscription'}}</ng-container>
+        </ng-container>
+        <ng-container *ngIf="!recurringEnabled && editJobId">
+          <ng-container>{{languageStrings.confirm || 'Confirm'}}</ng-container>
+        </ng-container>
+      </button>
+      <button (click)="taskViaPayment()" appBs class="pmnt_proceed_pay ripple text-capitalize" mat-button
+        [style.background-color]="appConfig.color"
+        *ngIf="!isPlatformServer && transactional_amount && mpaisa_transaction">
+        <ng-container *ngIf="!editJobId">
+          {{terminology.PAY}}
+          <ng-container *ngIf="userPaymentData">{{currency?.symbol+''}}
+            {{userPaymentData.TRANSACTIONAL_CHARGES_INFO.MPAISA.total_charges |decimalConfig}}</ng-container>
+        </ng-container>
+        <ng-container *ngIf="editJobId">
+          <ng-container>{{languageStrings.confirm || 'Confirm'}}</ng-container>
+        </ng-container>
+      </button>
+
+      <button (click)="taskViaPayment()" appBs class="pmnt_proceed_pay ripple text-capitalize" mat-button
+        [style.background-color]="appConfig.color"
+        *ngIf="!isPlatformServer && transactional_amount && stripe_transaction">
+        <ng-container *ngIf="!editJobId">
+          {{terminology.PAY}}
+          <ng-container *ngIf="userPaymentData">{{currency?.symbol+''}}
+            {{userPaymentData.TRANSACTIONAL_CHARGES_INFO.STRIPE.total_charges |decimalConfig}}</ng-container>
+        </ng-container>
+        <ng-container *ngIf="editJobId">
+          <ng-container>{{languageStrings.confirm || 'Confirm'}}</ng-container>
+        </ng-container>
+      </button>
+
+      <button (click)="taskViaPayment()" appBs class="pmnt_proceed_pay ripple text-capitalize" mat-button
+        [style.background-color]="appConfig.color"
+        *ngIf="!isPlatformServer && transactional_amount && paylater_transaction">
+        <ng-container *ngIf="!editJobId">
+          {{terminology.PAY}}
+          <ng-container *ngIf="userPaymentData">{{currency?.symbol+''}}
+            {{userPaymentData.TRANSACTIONAL_CHARGES_INFO.PAYLATER.total_charges |decimalConfig}}</ng-container>
+        </ng-container>
+        <ng-container *ngIf="editJobId">
+          <ng-container>{{languageStrings.confirm || 'Confirm'}}</ng-container>
+        </ng-container>
+      </button>
+      <button (click)="taskViaPayment(paymentfor)" appBs class="pmnt_proceed_pay ripple text-capitalize" mat-button
+        [style.background-color]="appConfig.color" *ngIf="!isPlatformServer && paymentfor">
+        <ng-container *ngIf="!editJobId">
+          {{terminology.PAY}}
+          <ng-container *ngIf="userPaymentData">{{currency?.symbol+''}} {{NET_PAYABLE_AMOUNT |decimalConfig}}
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="editJobId">
+          <ng-container>{{languageStrings.confirm || 'Confirm'}}</ng-container>
+        </ng-container>
+      </button>
+
+    </div>
+  </div>
+</div>
+
+
+<!--<app-dialog *ngIf="dialogStatus" [actionBool]="actionBool" [message]="message" [color]="appConfig.color" (updateStatus)="showDialog($event)"></app-dialog>-->
+<div class="parent-dialog" *ngIf="dialog?.show">
+  <div class="content-dialog">
+    <div class="dialog-title">
+      <span>{{dialog?.title}}</span>
+    </div>
+    <div class="dialog-msg">
+
+      <!-- <label class="control-label" [ngStyle]="{ 'direction' : direction }">
+          <ng-container >Enter promocode</ng-container><span style="color:red">*</span>
+      </label> -->
+      <input type="text" [(ngModel)]="dialog.value" *ngIf="dialog.key=='Promo'" class="form-control"
+        placeholder="{{languageStrings.enter_promocode || 'Enter a promocode' }}"
+        [class.has-error]="dialog.error && !dialog.value" [ngClass]="{'cls-upcase':dialog.value}"
+        aria-label='Enter a promocode' />
+      <div class="error-msg" style="font-size: 14px;color: red;letter-spacing: 0.5px;line-height: 24px;"
+        *ngIf="dialog.error && !dialog.value">
+        <ng-container>{{languageStrings.this_field_required || 'This field is required'}}</ng-container>
+      </div>
+    </div>
+    <hr class="p-hr">
+    <div class="dialog-action">
+      <button mat-button class="dialog-cancel btn btn-default" (click)="hideDialog()"
+        [ngStyle]="{ 'direction' : direction }">
+        <ng-container>{{languageStrings.cancel || 'Cancel'}}</ng-container>
+      </button>
+      <button mat-button class="dialog-ok btn btn-default" (click)="saveDialogData()"
+        [ngStyle]="{ 'direction' : direction }" appColor bg="'true'">
+        <ng-container>{{languageStrings.submit || 'Submit'}}</ng-container>
+      </button>
+    </div>
+  </div>
+  <div class="back-dialog"></div>
+</div>
+
+<div class="card-dialog d-flex" [ngStyle]="{'display':cardBool ? 'block':'none'}"
+  style="padding-top: 100px;justify-content: center;overflow: scroll;">
+  <form #cardForm="ngForm" class="checkout">
+    <div class="form-row f-c d-flex" style="font-family: sans-serif;">
+      <label for="card-info" class="card_info" [ngStyle]="{ 'direction' : direction }" style="margin-bottom: 2rem;">
+        <ng-container>{{languageStrings.card_information || 'Card Information'}}</ng-container>
+      </label>
+      <input id="billing" type="text" [(ngModel)]="cardHolderName"
+        placeholder="{{languageStrings.card_holder_name || 'Card Holder Name'}}" name="name" style="margin: 0;"
+        #name="ngModel" />
+      <span id="mandatory"
+        *ngIf="(name.invalid && (name.dirty || name.touched)) || (!cardHolderName && showerror)">{{languageStrings.this_field_mandatory||
+        'This field is mandatory'}}</span>
+      <ng-container *ngIf="userId == 198298 || userId == 283747">
+        <input id="billing" type="email" [(ngModel)]="customerEmail" placeholder="{{languageStrings.email || 'Email'}}"
+          name="email" style="margin: 0;margin-top: 1rem;" #email="ngModel"
+          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required />
+        <ng-container *ngIf="email.invalid && (email.dirty || email.touched) || (!customerEmail && showerror)">
+          <span id="mandatory" *ngIf="email.errors.required">{{languageStrings.this_field_mandatory|| 'This field is
+            mandatory'}}</span>
+          <span id="mandatory" *ngIf="email.errors?.pattern">{{languageStrings.email_invalid || 'Email is
+            invalid'}}</span>
+        </ng-container>
+      </ng-container>
+
+      <div id="card-info" #cardInfo></div>
+      <ng-container *ngIf="userId == 198298 || userId == 283747">
+        <label style="margin-top: 1.5rem;" for="card-info" [ngStyle]="{ 'direction' : direction }">
+          <ng-container>{{languageStrings.billing_information || 'Billing Information'}}</ng-container>
+        </label>
+        <div class="f-c d-flex">
+          <input style="margin-top: 0;" id="billing" type="text" [(ngModel)]="line1"
+            placeholder="{{languageStrings.line1 || 'Line1'}}" name="billingLine1" #billingLine1="ngModel" />
+          <span id="mandatory"
+            *ngIf="billingLine1 && (billingLine1.invalid && (billingLine1.dirty || billingLine1.touched)) || (!line1 && showerror)">{{languageStrings.this_field_mandatory
+            || "This field is mandatory"}}</span>
+          <input id="billing" type="text" [(ngModel)]="line2" placeholder="{{languageStrings.line2 || 'Line2'}}"
+            name="billingLine2" #billingLine2="ngModel" />
+          <!-- <span id="mandatory"
+            *ngIf="billingLine2 && (billingLine2.invalid && (billingLine2.dirty || billingLine2.touched)) || (!line2 && showerror)"
+            >This field is mandatory</span> -->
+          <input id="billing" type="text" [(ngModel)]="city" placeholder="{{languageStrings.city || 'City'}}"
+            name="billingInfoCity" #billingInfoCity="ngModel" r />
+          <span id="mandatory"
+            *ngIf="billingInfoCity && (billingInfoCity.invalid && (billingInfoCity.dirty || billingInfoCity.touched)) || (!city && showerror)">{{languageStrings.this_field_mandatory
+            || "This field is mandatory" }}</span>
+          <!-- <div id="cityDiv">     
+                 
+                  <div style="display: flex;flex-direction: column;width: 45%;">
+                    <input id="billing" type="text" [(ngModel)]="city" placeholder="City" name="billingInfoCity"
+                      #billingInfoCity="ngModel" style="margin: 0;"  />
+                    <span id="mandatory"
+                      *ngIf="billingInfoCity && (billingInfoCity.invalid && (billingInfoCity.dirty || billingInfoCity.touched)) || (!city && showerror)"
+                      >This field is mandatory</span>
+                  </div> -->
+          <!-- <div style="display: flex;flex-direction: column;width: 45%;">
+                          <input id="billing" type="text" [(ngModel)]="country" size="2" minlength="2" maxlength="2"
+                            placeholder="Two-letter Country Code" name="billingInfoCountry" #billingInfoCountry="ngModel"
+                            style="margin: 0;" pattern="[a-zA-Z]+" required  />
+                          <ng-container
+                            *ngIf="billingInfoCountry.invalid && (billingInfoCountry.dirty || billingInfoCountry.touched) || (!country && showerror)">
+                            <span id="mandatory" *ngIf="billingInfoCountry.errors.required" >This field is mandatory</span>
+                            <span id="mandatory" *ngIf="billingInfoCountry.errors?.pattern" >Country Code is invalid</span>
+                          </ng-container>
+                        </div> -->
+          <!-- </div> -->
+          <input id="billing" type="text" [(ngModel)]="state" placeholder="State" name="billingInfoState"
+            #billingInfoState="ngModel" />
+          <span id="mandatory"
+            *ngIf="billingInfoState && (billingInfoState.invalid && (billingInfoState.dirty || billingInfoState.touched)) || (!state && showerror)">{{languageStrings.this_field_mandatory
+            || 'This field is mandatory'}}</span>
+        </div>
+      </ng-container>
+      <div id="card-errors" role="alert" *ngIf="error" style="margin-top: 5px">{{ error }}</div>
+    </div>
+    <div class="pay-btn-div">
+      <button mat-button class="pay-btn ripple pt-13 cancel-btn" [ngStyle]="{ 'direction' : direction }"
+        style="margin-top: 10px" (click)="resetCard()">
+        <ng-container>{{languageStrings.cancel || 'Cancel'}}</ng-container>
+      </button>
+      <button mat-button class="pay-btn ripple add-card" style="color:white;margin-top: 10px"
+        [class.half-opacity]="!cardForm.valid" appColor bg="'true'" (click)="getCardToken(cardForm.value,$event)">
+        <span class="login_continue_text" [ngStyle]="{ 'direction' : direction }">
+          <ng-container>{{languageStrings.add_card || 'Add Card'}}</ng-container>
+        </span>
+      </button>
+    </div>
+  </form>
+</div>
+
+<app-modal *ngIf="showDeliveryChargeDetails" [modalType]="modalType" (onClose)="showDeliveryChargeDetails = false"
+  (esc)="showDeliveryChargeDetails = false">
+  <div body>
+    <div class="row surgeDialog">
+      <div class="col-md-12 text-right p-0">
+        <span class="fa fa-times close-icon" (click)="hideDeliveryChargePopup()"></span>
+      </div>
+      <div class="col-md-12">
+        <div class="heading">{{languageStrings.delivery_surge_charge_details || 'Delivery Surge Charge Details'}}</div>
+      </div>
+      <div class="col-md-12 list-head p-0">
+        <div class="col-md-3">
+          <ng-container>{{languageStrings.day || 'Day'}}</ng-container>
+        </div>
+        <div class="col-md-2 p-0">
+          <ng-container>{{languageStrings.time || 'Time'}}</ng-container>
+        </div>
+        <div class="col-md-3">
+          <ng-container>{{languageStrings.amount_inc_of_delivery_charge || 'Amount (inc. of Delivery Charge)'}}
+          </ng-container>
+        </div>
+        <div class="col-md-2 p-0">
+          <ng-container>{{languageStrings.no_of_occurrences || 'No. of Occurrences'}}</ng-container>
+        </div>
+        <div class="col-md-2">
+          <ng-container>{{languageStrings.total_amount || 'Total Amount'}}</ng-container>
+        </div>
+      </div>
+      <div class="col-md-12 list-data p-0" *ngFor="let data of deliveryChargeList; let i = index;">
+        <div class="col-md-3">
+          <ng-container>{{data.day}}</ng-container>
+        </div>
+        <div class="col-md-2 p-0">
+          <ng-container>{{schedule_time}}</ng-container>
+        </div>
+        <div class="col-md-3">
+          <ng-container>{{currency.symbol + '' + (data.amount|decimalConfig)}}</ng-container>
+        </div>
+        <div class="col-md-2 p-0">
+          <ng-container>{{data.occurances}}</ng-container>
+        </div>
+        <div class="col-md-2">
+          <ng-container>{{currency.symbol + '' + (data.total_amount|decimalConfig)}}</ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-modal>
+
+<app-modal *ngIf="payfortBool" [modalType]="modalType" (esc)="hidePayFortPopup()" (onClose)="hidePayFortPopup()">
+  <div body>
+    <div class="row" style="padding: 10px">
+      <div class="col-md-12 text-right">
+        <span (click)="hidePayFortPopup()" class="fa fa-times" [ngStyle]="{'direction':direction}"></span>
+      </div>
+      <div class="col-md-12 text-center">
+        <h4>
+          <ng-container>{{languageStrings.add_card || 'Add Card'}}</ng-container>
+        </h4>
+      </div>
+      <div class="col-md-12">
+        <iframe id="payfortIframe" style="border: none" #payfortIframe [src]="payfortlink" height="610px" width="100%"
+          (load)="getContentPayfort(payfortIframe)"></iframe>
+      </div>
+    </div>
+  </div>
+</app-modal>
+
+<app-modal *ngIf="cvvPayfort" [modalType]="'modal-sm'" (onClose)="cvvPayfort = false" (esc)="cvvPayfort = false">
+  <div body>
+    <div class="row" style="padding: 10px">
+      <form validate="" (ngSubmit)="cvvPayfortSubmit()">
+        <div class="col-md-12 text-right">
+          <span (click)="hideCvvPopup()" class="fa fa-times" [ngStyle]="{'direction':direction}"></span>
+        </div>
+        <div class="col-md-12 text-center">
+          <h4>
+            <ng-container>{{languageStrings.enter_cvv || 'Enter CVV'}}</ng-container>
+          </h4>
+        </div>
+        <div class="col-md-12">
+          <input type="number" class="form-control" [(ngModel)]="cvvPay" [ngModelOptions]="{standalone: true}"
+            placeholder="{{languageStrings.enter_cvv || 'Enter CVV'}}" aria-label="Enter CVV" required>
+        </div>
+        <div class="col-md-12 text-right" style="padding: 17px">
+          <button class="btn btn-primary">{{languageStrings.submit || 'Submit'}}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</app-modal>
+<!-- <app-modal *ngIf="faccvvmodal" [modalType]="'modal-sm'" (onClose)="faccvvmodal = false" (esc)="faccvvmodal = false">
+  <div body>
+    <div class="row" style="padding: 10px">
+      <form validate="" (ngSubmit)="cvvFacPaySubmit()">
+        <div class="col-md-12 text-right">
+          <span (click)="hideFacCvvPopup()" class="fa fa-times" [ngStyle]="{'direction':direction}"></span>
+        </div>
+        <div class="col-md-12 text-center">
+          <h4>
+            <ng-container >Enter CVV</ng-container>
+          </h4>
+        </div>
+        <div class="col-md-12">
+          <input type="number" class="form-control" [(ngModel)]="cvvFac" [ngModelOptions]="{standalone: true}"
+             placeholder="Enter CVV" aria-label="Enter CVV" maxlength="3" required>
+        </div>
+        <div class="col-md-12 text-right" style="padding: 17px">
+          <button class="btn btn-primary" >Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</app-modal> -->
+
+<app-modal *ngIf="razorPayModal" [modalType]="modalType" (onClose)="razorPayModal = false"
+  (esc)="razorPayModal = false">
+  <div body>
+    <div class="row" style="padding: 10px">
+      <div class="col-md-12 text-right">
+        <span (click)="close3dver()" class="fa fa-times" [ngStyle]="{'direction':direction}"></span>
+      </div>
+      <div class="col-md-12">
+        <iframe id="razorPayPop" style="border: none" #razorPayPop [src]="razorPayUrl" height="610px" width="100%"
+          (load)="getContentPayfort(payfortIframe)"></iframe>
+      </div>
+
+    </div>
+  </div>
+</app-modal>
+
+<app-modal *ngIf="paytmOtpPop" [modalType]="'modal-sm'" (onClose)="paytmOtpPop = false" (esc)="paytmOtpPop = false">
+  <div body>
+    <div class="row" style="padding: 10px">
+      <form [formGroup]="paytmForm" (ngSubmit)="paytmOtpSubmit()">
+        <div class="col-md-12 text-right">
+          <span (click)="hidePaytmPopup()" style="cursor: pointer;" class="fa fa-times"
+            [ngStyle]="{'direction':direction}"></span>
+        </div>
+        <div class="col-md-12 text-center">
+          <h4>
+            <ng-container>{{languageStrings.enter_otp || 'Enter OTP'}}</ng-container>
+          </h4>
+        </div>
+        <div class="col-md-12">
+          <input type="text" class="form-control" appNumberOnly formControlName="otp"
+            placeholder="{{languageStrings.enter_otp  || 'Enter OTP'}}" aria-label="Enter OTP" maxlength="6">
+          <app-control-messages [control]="paytmForm.controls.otp"></app-control-messages>
+        </div>
+        <div class="col-md-12 text-right" style="padding: 17px">
+          <button class="btn btn-primary" mat-button appColor hoverbgSimple="true">{{languageStrings.submit ||
+            'Submit'}}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</app-modal>
+<!-- add paytm money -->
+<app-modal *ngIf="paytmAddMoneyPopup" [modalType]="'modal-lg'" (esc)="hidePaytmMoneyPopup()"
+  (onClose)="hidePaytmMoneyPopup()">
+  <div body>
+    <div class="row" style="padding: 10px">
+      <div class="col-md-12 text-right">
+        <span (click)="hidePaytmMoneyPopup()" class="fa fa-times" [ngStyle]="{'direction':direction}"></span>
+      </div>
+      <div class="col-md-12 text-center">
+        <h4>
+          <ng-container>{{languageStrings.add_card || 'Add Card'}}</ng-container>
+        </h4>
+      </div>
+      <div class="col-md-12">
+        <iframe id="paytmAddMoney" style="border: none" #paytmAddMoney [src]="paytmAddMoneylink" height="610px"
+          width="100%" (load)="getContentPayfort(paytmAddMoney)"></iframe>
+      </div>
+    </div>
+  </div>
+</app-modal>
+
+<!-- billplz -->
+<app-modal *ngIf="billPlzModal" header="Enter Description" [modalType]="'modal-sm'" (onClose)="billPlzModal = false"
+  (esc)="billPlzModal = false">
+  <div body>
+    <div class="row" style="padding: 10px">
+      <form [formGroup]="billPlzForm" (ngSubmit)="payViaBillPlz()">
+        <div class="col-md-12">
+          <input type="text" class="form-control" formControlName="billPlzMsgInput" placeholder="Enter message"
+            aria-label="Enter message" minlength="3">
+        </div>
+        <div class="col-md-12 text-right" style="padding: 17px">
+          <button class="btn btn-primary" mat-button appColor hoverbgSimple="true">{{languageStrings.submit ||
+            'Submit'}}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</app-modal>
+<app-modal *ngIf="facModal" [modalType]="modalType" (onClose)="facModal = false" (esc)="facModal = false">
+  <div body>
+    <!-- <div class="container-fluid fac-modal"> -->
+    <div class="row" style="padding: 10px">
+      <div class="col-md-12 text-right">
+        <span (click)="hideFacPopUp()" class="fa fa-times" [ngStyle]="{'direction':direction}"></span>
+      </div>
+      <div class="col-md-12 text-center">
+        <h4>
+          <ng-container>{{languageStrings.add_card || 'Add Card'}}</ng-container>
+        </h4>
+      </div>
+      <div class="col-md-12">
+        <iframe id="facIframe" style="border: none" #facIframe [src]="facUrl" height="610px" width="100%"
+          (load)="getContentFac(facIframe)"></iframe>
+      </div>
+      <!--- <app-fac [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+                             [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')"></app-fac>-->
+    </div>
+    <!-- </div> -->
+
+  </div>
+</app-modal>
+<app-modal *ngIf="mpaisaModal" [modalType]="modalType" (onClose)="mpaisaModal = false" (esc)="mpaisaModal = false">
+  <div body>
+    <div class="container-fluid fac-modal">
+      <div class="row" style="padding: 10px">
+        <div class="col-md-12 text-right">
+          <span (click)="hideMPaisaPopup()" class="fa fa-times" [ngStyle]="{'direction':direction}"></span>
+        </div>
+        <app-mpaisa [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+          [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')"
+          [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck"
+          [customerPlanId]="customerPlanId"></app-mpaisa>
+      </div>
+    </div>
+
+  </div>
+</app-modal>
+<!--
+<app-modal *ngIf="paypalBtnModal" [modalType]="'modal-md'">
+    <div body>
+        <div class="row" style="padding: 20px; text-align: center;">
+            <div class="paypal-heading">Click on below button to proceed to gateway</div>
+            <div class="paypal-pay-btn" id="paypal-button"></div>
+            <button class="btn btn-primary" mat-button appColor hoverbgSimple="true"  (click)="paypalBtnModal = false;">Close</button>
+        </div>
+    </div>
+</app-modal> -->
+
+<app-modal *ngIf="paypalModal" [modalType]="modalType" (onClose)="paypalModal = false" (esc)="paypalModal = false">
+  <div body>
+    <div class="container-fluid paypal-modal">
+      <div class="row" style="padding: 10px">
+        <div class="col-md-12 text-right">
+          <span (click)="hidePaypalPopup()" class="fa fa-times" [ngStyle]="{'direction':direction}"></span>
+        </div>
+        <app-paypal [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" [paymentFor]="'0'"
+          (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+          [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+          [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId">
+        </app-paypal>
+      </div>
+    </div>
+
+  </div>
+</app-modal>
+<!-- telr -->
+<app-modal *ngIf="telrModal" [modalType]="modalType" (onClose)="telrModal = false" (esc)="telrModal = false">
+  <div body>
+    <div class="container-fluid paypal-modal">
+      <div class="row" style="padding: 10px">
+        <div class="col-md-12 text-right">
+          <span (click)="hideTelrPopup()" class="fa fa-times" [ngStyle]="{'direction':direction}"></span>
+        </div>
+        <app-telr [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" [paymentFor]="'0'"
+          (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+          [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+          [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId">
+        </app-telr>
+      </div>
+    </div>
+
+  </div>
+</app-modal>
+<!-- new gateways -->
+<app-modal *ngIf="paystackModal" [modalType]="modalType" (onClose)="paystackModal = false"
+  (esc)="paystackModal = false">
+  <div body>
+    <div class="container-fluid paypal-modal">
+      <div class="row" style="padding: 10px">
+        <div class="col-md-12 text-right">
+          <span (click)="hidePaystackPopup()" class="fa fa-times" [ngStyle]="{'direction':direction}"></span>
+        </div>
+        <app-paystack [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" [paymentFor]="'0'"
+          (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+          [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+          [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId">
+        </app-paystack>
+      </div>
+    </div>
+
+  </div>
+</app-modal>
+
+<app-payu *ngIf="payuModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+  [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+  [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-payu>
+
+<app-paymob *ngIf="payMobModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-paymob>
+<!-- <app-wirecard *ngIf="wirecardModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')"></app-wirecard> -->
+<app-sslCommerz *ngIf="sslCommerzModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-sslCommerz>
+<app-fac3d *ngIf="fac3dModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+  [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+  [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-fac3d>
+<app-checkout-com *ngIf="checkoutComModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-checkout-com>
+<app-viva *ngIf="vivaModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" [paymentFor]="'0'"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-viva>
+<app-payhere *ngIf="payHereModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-payhere>
+<app-azul *ngIf="azulModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+  [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+  [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-azul>
+<app-credimax *ngIf="credimaxModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-credimax>
+<app-my-fatoora *ngIf="fatoorahModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-my-fatoora>
+<app-paynet *ngIf="paynetModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-paynet>
+<app-tap *ngIf="tapModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+  [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+  [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-tap>
+<app-theteller *ngIf="thetellerModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')"></app-theteller>
+<app-curlec *ngIf="curlecModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-curlec>
+<app-wipay *ngIf="wipayModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+  [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+  [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-wipay>
+<app-pagar *ngIf="pagarModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+  [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+  [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-pagar>
+<app-wechat *ngIf="wechatModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-wechat>
+<app-whoosh *ngIf="whooshModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-whoosh>
+<app-mtn *ngIf="mtnModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+  [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+  [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-mtn>
+<app-onepay *ngIf="onepayModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-onepay>
+<app-pagoplux *ngIf="pagopluxModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-pagoplux>
+<app-mybillpayment *ngIf="mybillpaymentModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-mybillpayment>
+<app-valitor *ngIf="valitorModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-valitor>
+<app-truevo *ngIf="truevoModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-truevo>
+<app-payzen *ngIf="payzenModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-payzen>
+<app-firstdata *ngIf="firstdataModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-firstdata>
+<app-bankopen *ngIf="bankOpenModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-bankopen>
+<app-etisalat *ngIf="etisalatModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-etisalat>
+<app-square *ngIf="squareModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-square>
+<app-hyperpay *ngIf="hyperPayModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" [paymentFor]="'0'"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-hyperpay>
+<app-paynow *ngIf="paynowModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-paynow>
+<app-limelight *ngIf="showLimeLightPopup" (paymentMadeResponse)="customDetailEvent($event)"
+  [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-limelight>
+<app-suncash *ngIf="suncashModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')"></app-suncash>
+<app-gocardless *ngIf="gocardlessModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')"></app-gocardless>
+<app-ath *ngIf="athModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+  [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+  [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-ath>
+<app-ipay88 *ngIf="ipayModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+  [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+  [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-ipay88>
+<app-proxypay *ngIf="proxypayModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-proxypay>
+<app-cybersource *ngIf="cybersourceModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-cybersource>
+<app-alfalah *ngIf="alfalahModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-alfalah>
+<app-culqi *ngIf="culqiModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+  [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+  [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-culqi>
+<app-nmi *ngIf="nmiModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+  [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+  [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-nmi>
+<app-flutterwave *ngIf="flutterwaveModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-flutterwave>
+<app-mpesa *ngIf="mpesaModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+  [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+  [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-mpesa>
+<app-adyen *ngIf="adyenModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+  [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+  [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-adyen>
+<app-paymark *ngIf="paymarkModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-paymark>
+<app-hypur *ngIf="hypurModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+  [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+  [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-hypur>
+<app-paytm *ngIf="paytmModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+  [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+  [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-paytm>
+<app-pixelpay *ngIf="pixelpayModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-pixelpay>
+<app-doku *ngIf="dokuModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+  [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+  [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-doku>
+<app-peach *ngIf="peachModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+  [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+  [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-peach>
+<app-paguelofacil *ngIf="paguelofacilModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-paguelofacil>
+<app-noqoody *ngIf="noqoodyModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-noqoody>
+<app-gtbank *ngIf="gtbankModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-gtbank>
+
+<app-vuka *ngIf="vukaModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+  [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+  [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-vuka>
+<app-vpos *ngIf="vposModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+  [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+  [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-vpos>
+
+<app-urway *ngIf="urwayModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+  [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+  [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-urway>
+<app-cxpay *ngIf="cxpayModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+  [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+  [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-cxpay>
+<app-payku *ngIf="paykuModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+  [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+  [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-payku>
+<app-bambora *ngIf="bamboraModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-bambora>
+<app-paywayone *ngIf="paywayoneModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-paywayone>
+  <app-placetopay *ngIf="placetopayModal" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+  (paymentMadeResponse)="paymentResponse($event)" [triggerPayment]="triggerPayment"
+  [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom"
+  [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId"></app-placetopay>
+
+<app-modal *ngIf="showTwoCheckoutPopup" [modalType]="modalType" (onClose)="showTwoCheckoutPopup = false"
+  (esc)="showTwoCheckoutPopup = false">
+  <div body>
+    <div class="container-fluid innstapay-modal">
+      <div class="row" style="padding: 10px">
+        <div class="col-md-12 text-right">
+          <span (click)="hideTwoCheckoutPopup()" class="fa fa-times" [ngStyle]="{'direction':direction}"></span>
+        </div>
+        <app-two-checkout *ngIf="showTwoCheckoutPopup" (paymentMadeResponse)="customDetailEvent($event)"
+          [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" [triggerPayment]="triggerPayment"
+          [loginResponse]="sessionService.get('appData')" [dataofCart]="orderCreationPayload"
+          [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck" [customerPlanId]="customerPlanId">
+        </app-two-checkout>
+      </div>
+    </div>
+  </div>
+</app-modal>
+
+
+<app-modal *ngIf="innstapayModal" [modalType]="modalType" (onClose)="innstapayModal = false"
+  (esc)="innstapayModal = false">
+  <div body>
+    <div class="container-fluid innstapay-modal">
+      <div class="row" style="padding: 10px">
+        <div class="col-md-12 text-right">
+          <span (click)="hideInnstapayPopup()" class="fa fa-times" [ngStyle]="{'direction':direction}"></span>
+        </div>
+        <app-innstapay [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+          [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')"
+          [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck"
+          [customerPlanId]="customerPlanId"></app-innstapay>
+      </div>
+    </div>
+
+  </div>
+</app-modal>
+
+
+<app-modal *ngIf="payFastModal" [modalType]="modalType" (onClose)="payFastModal = false" (esc)="payFastModal = false">
+  <div body style="min-height: 500px;">
+    <div class="container-fluid payfast-modal">
+      <div class="row" style="padding: 10px">
+        <div class="col-md-12 text-right">
+          <span (click)="hidePayFastPopup()" class="fa fa-times" [ngStyle]="{'direction':direction}"></span>
+        </div>
+        <app-payfast [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+          [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')"
+          [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck"
+          [customerPlanId]="customerPlanId"></app-payfast>
+      </div>
+    </div>
+
+  </div>
+</app-modal>
+
+
+<app-modal *ngIf="authorizeNetModal" [modalType]="modalType" (esc)="hideAuthorizeNetPopup()"
+  (onClose)="hideAuthorizeNetPopup()">
+  <div body>
+    <div class="row" style="padding: 10px">
+      <div class="col-md-12 text-right">
+        <span (click)="hideAuthorizeNetPopup()" class="fa fa-times" [ngStyle]="{'direction':direction}"></span>
+      </div>
+      <div class="col-md-12 text-center">
+        <h4>
+          <ng-container>{{languageStrings.add_card || 'Add Card'}}</ng-container>
+        </h4>
+      </div>
+      <div class="col-md-12">
+        <iframe id="authorizeNetIframe" style="border: none" #authorizeNetIframe [src]="authorizeNetUrl" height="610px"
+          width="100%" (load)="getContentAuthorize(authorizeNetIframe)"></iframe>
+      </div>
+    </div>
+  </div>
+</app-modal>
+<app-modal *ngIf="vistaModal" [modalType]="modalType" (onClose)="vistaModal = false" (esc)="vistaModal = false">
+  <div body>
+    <div class="row" style="padding: 10px">
+      <div class="col-md-12 text-right">
+        <span (click)="hideVistaPopup()" class="fa fa-times" [ngStyle]="{'direction':direction}"></span>
+      </div>
+      <div class="col-md-12 text-center">
+        <h4>
+          <ng-container>{{languageStrings.add_card || 'Add Card'}}</ng-container>
+        </h4>
+      </div>
+      <div class="col-md-12">
+        <iframe id="vistaIframe" style="border: none" #vistaIframe [src]="vistaUrl" height="610px" width="100%"
+          (load)="getContentVista(vistaIframe)"></iframe>
+      </div>
+    </div>
+  </div>
+</app-modal>
+<app-modal *ngIf="stripeIdealModal" [modalType]="modalType" (onClose)="stripeIdealModal = false"
+  (esc)="stripeIdealModal = false">
+  <div body>
+    <div class="container-fluid fac-modal">
+      <div class="row" style="padding: 10px">
+        <div class="col-md-12 text-right">
+          <span (click)="hideStripeIdealPopup()" class="fa fa-times" [ngStyle]="{'direction':direction}"></span>
+        </div>
+        <app-stripeideal [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT" (paymentMadeResponse)="paymentResponse($event)"
+          [triggerPayment]="triggerPayment" [loginResponse]="sessionService.get('appData')"
+          [dataofCart]="orderCreationPayload" [isSourceCustom]="isSourceCustom" [debtAmountCheck]="debtAmountCheck"
+          [customerPlanId]="customerPlanId"></app-stripeideal>
+      </div>
+    </div>
+
+  </div>
+</app-modal>
+
+<!-- new gateways -->
+<app-modal *ngIf="showPhoneNumberPopupForPaytm"
+  [header]="languageStrings.confirm_payment_via_paytm || 'Confirm Payment via Paytm' " [modalType]="modalType"
+  (esc)="hidePaytmPhoneNumberPopup()" (onClose)="hidePaytmPhoneNumberPopup()">
+  <div body style="padding: 15px 30px;">
+    <form [formGroup]="paytmNumberForm">
+      <label
+        class="popup-text">{{languageStrings.please_confirm_your_mobile_number_to_proceed_your_order_placed_right_away_but_will_be_fulfilled_subject_payment_confirmation
+        || 'Please confirm your mobile number to proceed. Your order will be placed right away, but
+        will be fulfilled subject to payment confirmation.'}}</label>
+      <app-fugu-tel-input class="phone_style" formControlName="phone_number" [(ngModel)]="phoneCopy"
+        [(dialCode)]="country_code"></app-fugu-tel-input>
+      <app-control-messages [control]="paytmNumberForm.controls.phone_number"></app-control-messages>
+      <div class="col-12 text-right wallet-action-btn paytm-btn" style="padding-top: 25px">
+        <button class="btn btn-primary add-now-btn" (click)="savePaytmNumber()">{{languageStrings.save ||
+          'Save'}}</button>
+        <button class="btn btn-primary" (click)="hidePaytmPhoneNumberPopup()">{{languageStrings.cancel ||
+          'Cancel'}}</button>
+      </div>
+    </form>
+  </div>
+</app-modal>
+
+<app-hold-overlay *ngIf="holdPaymentCheck && !transactional_check" (gotItEvent)="gotItEvent($event)"
+  [clickedFrom]="holdType" [list]="userPaymentData"></app-hold-overlay>
+
+<app-modal *ngIf="walletAddMoneyPopup" [modalType]="'modal-sm'">
+  <div body>
+    <div class="row" style="padding: 10px">
+      <div class="col-md-12 text-right">
+        <span (click)="hideWalletAddMoneyPopup()" class="fa fa-times" [ngStyle]="{'direction':direction}"></span>
+      </div>
+      <div class="col-md-12 text-center">
+        <h4>
+          <ng-container>{{languageStrings.do_you_want_to_add_money_now || 'Do you want to add money now'}} ?
+          </ng-container>
+        </h4>
+      </div>
+      <div class="col-md-12 text-right wallet-action-btn" style="padding: 17px">
+        <button class="btn btn-primary add-now-btn" (click)="addNow()">{{languageStrings.add_now || 'Add Now'}}</button>
+        <button class="btn btn-primary" (click)="addLater()">{{languageStrings.add_later || 'Add Later'}}</button>
+
+      </div>
+    </div>
+  </div>
+</app-modal>
+<app-modal *ngIf="transactional_check" [modalType]="'modal-sm'">
+  <div body>
+    <div class="row" style="padding: 10px">
+      <div class="col-md-12 text-center">
+        <h4>
+          <ng-container>{{terminology.TRANSACTION_CHARGE || 'Transaction Charge'}}
+            {{languageStrings.will_added_for_this_payment || 'will be added for this payment'}}</ng-container>
+        </h4>
+      </div>
+      <div class="col-md-12 text-right wallet-action-btn" style="padding: 17px">
+        <button class="btn btn-primary add-now-btn" (click)="addTransactional()">{{languageStrings.add_to_continue ||
+          'Add to Continue'}}</button>
+      </div>
+    </div>
+  </div>
+</app-modal>
+<app-modal [modalType]="modalType" *ngIf="show_unavailable_products">
+  <div body>
+    <div class="row product-not-available" style="padding: 10px">
+      <div class="col-md-12 text-center">
+        <h4 [ngStyle]="{ 'direction' : direction }">
+          <ng-container>
+            <span *ngIf="unavailable_products.length > 1">{{terminology.PRODUCTS}}</span>
+            <span *ngIf="unavailable_products.length == 1">{{terminology.PRODUCT}}</span>
+          </ng-container>
+          <ng-container class="low-case">{{languageStrings.not_available || 'Not available'}}</ng-container>
+        </h4>
+      </div>
+      <div class="col-sm-12">
+        <table class="table table-bordered">
+          <thead>
+            <tr [ngStyle]="{ 'direction' : direction }">
+              <th scope="col" class="border-bttm-none">{{terminology.PRODUCT}} <ng-container>
+                  {{languageStrings.name || 'Name'}}</ng-container>
+              </th>
+              <th scope="col" class="border-bttm-none">{{languageStrings.availability || 'Availability'}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr [ngStyle]="{ 'direction' : direction }" *ngFor="let product of unavailable_products">
+              <td scope="row">{{product.product_name}}</td>
+              <td>
+                <span *ngIf="!product.is_enabled" class="require-star">{{languageStrings.not_available || 'Not
+                  available'}}</span>
+                <span *ngIf="product.is_enabled">
+                  <span *ngIf="product.quantity == 0" class="require-star">{{languageStrings.out_of_stock || 'Out of
+                    Stock'}}</span>
+                  <span *ngIf="product.quantity > 0">{{languageStrings.only || 'Only'}} {{product.quantity}}
+                    {{languageStrings.available || 'available'}}</span>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-12 text-right wallet-action-btn" style="padding: 10px" [ngStyle]="{ 'direction' : direction }">
+        <button class="btn-primary add-now-btn" (click)="goBack()">{{languageStrings.back ||'Back'}}</button>
+      </div>
+    </div>
+  </div>
+</app-modal>
+<app-footer></app-footer>

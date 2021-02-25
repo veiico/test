@@ -1,0 +1,49 @@
+<div class="deliveryModes" *ngIf="showMode && method === 1">
+  <button class="btn delivery_mode_button delivery" [ngClass]="{'selected': selectedMethod == 1, 'unselect': selectedMethod != 1}"
+    (click)="selectDeliveryMode(1)">
+    <div>
+      <span class="yf yf-group-25"></span>
+      <span [pTooltip]="terminology.HOME_DELIVERY || 'Home Delivery'" tooltipPosition="bottom" class="ellipses">{{terminology.HOME_DELIVERY || 'Home Delivery'}}</span>
+    </div>
+  </button>
+  <button class="btn delivery_mode_button pick" (click)="selectDeliveryMode(2)" [ngClass]="{'selected': selectedMethod == 2, 'unselect': selectedMethod != 2}">
+    <div>
+      <span class="yf yf-group-24"></span>
+      <span [pTooltip]="terminology.SELF_PICKUP || 'Take Away'" tooltipPosition="bottom" class="ellipses">{{terminology.SELF_PICKUP || 'Take Away'}}</span>
+    </div>
+  </button>
+</div>
+
+<div class="newDeliveryModes" *ngIf="showMode && method === 2">
+  <div class="delivery-mode-heading">
+    <a class="delivery-name text-uppercase dropdown-toggle" data-toggle="dropdown">
+      <span class="del-name" *ngIf="selectedMethod == 1">{{terminology.HOME_DELIVERY || 'Home Delivery'}}</span>
+      <span class="del-name" *ngIf="selectedMethod == 2">{{terminology.SELF_PICKUP || 'Take Away'}}</span>
+      <span class="del-name" *ngIf="selectedMethod == 8">{{terminology.PICKUP_AND_DROP || 'Pick and Drop'}}</span>
+      <span class="caret ml-10"></span>
+    </a>
+    <ul class="dropdown-menu">
+      <li *ngIf="config.admin_home_delivery">
+        <a (click)="selectDeliveryMode(1)"
+          [pTooltip]="terminology.HOME_DELIVERY.length > 13 ? terminology.HOME_DELIVERY || 'Home Delivery' : ''"
+           class="btn">
+          {{terminology.HOME_DELIVERY || 'Home Delivery'}}
+        </a>
+      </li>
+      <li *ngIf="config.admin_self_pickup">
+        <a (click)="selectDeliveryMode(2)"
+          [pTooltip]="terminology.SELF_PICKUP.length > 13 ? terminology.SELF_PICKUP || 'Take Away' : ''"
+           class="btn">
+          {{terminology.SELF_PICKUP || 'Take Away'}}
+        </a>
+      </li>
+      <li *ngIf="config.admin_pick_and_drop">
+        <a (click)="selectDeliveryMode(8)"
+          [pTooltip]="terminology.PICKUP_AND_DROP.length > 13 ? terminology.PICKUP_AND_DROP || 'Pick and Drop' : ''"
+           class="btn">
+          {{terminology.PICKUP_AND_DROP || 'Pick and Drop'}}
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

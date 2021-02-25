@@ -1,0 +1,176 @@
+@import '~assets/css/variables';
+.parent{
+  height: 100%;
+  display: flex;
+  display: -webkit-flex;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+.card-login{
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 0px 10px;
+  padding-bottom: 0;
+}
+.fs16 {
+  font-size: 16px;
+  font-weight: 300;
+  margin-bottom: 10px;
+  color: #cccccc;
+}
+.close {
+  font-size: 44px !important;
+  font-weight: 100 !important;
+}
+.add-on-set{
+  padding: 12px 15px;
+  color: #cccccc;
+  font-size: 20px;
+  background-color: #fff;
+  height: 50px;
+}
+.btn-red{
+  background-color: #e13d36;
+  color: white !important;
+  font-size: 18px;
+  border-radius: 5px !important;
+}
+
+#fbSignin{
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.card-login {
+  .line {
+    margin: 10px auto;
+    width: 60px;
+    float: left;
+  }
+}
+.conwith{
+  margin-top: -30px;
+  background-color: #fff;
+  width: 40%;
+  margin-left: 30%;
+  margin-right: 30%;
+  margin-bottom: 20px;
+}
+.social-btn{
+  .img{
+    display: inline-block;
+    padding-right: 10px;
+    margin-right: 6px;
+
+  }
+  width: 100%;
+  background: #fff;
+  border: 1px solid #eeeeee;
+  color: #1b1b1b;
+  font-size:16px;
+
+}
+
+.mt-10{
+  margin-top: 10px;
+}
+
+.instaButton{
+  background-color: #5258cf;
+  background: radial-gradient(circle farthest-corner at 35% 90%, #fec564, transparent 50%),
+  radial-gradient(circle farthest-corner at 0 140%, #fec564, transparent 50%),
+  radial-gradient(ellipse farthest-corner at 0 -25%, #5258cf, transparent 50%),
+  radial-gradient(ellipse farthest-corner at 20% -50%, #5258cf, transparent 50%),
+  radial-gradient(ellipse farthest-corner at 100% 0, #893dc2, transparent 50%),
+  radial-gradient(ellipse farthest-corner at 60% -20%, #893dc2, transparent 50%),
+  radial-gradient(ellipse farthest-corner at 100% 100%, #d9317a, transparent),
+  linear-gradient(#6559ca, #bc318f 30%, #e33f5f 50%, #f77638 70%, #fec66d 100%);
+  border: 0px !important;
+}
+.main-sub-heading{
+  font-size: 16px;
+  margin: 0;
+  margin-bottom: 1.5rem;
+}
+
+:host /deep/ app-phone-email-hybrid {
+  .flagInput{
+    border-radius: 5px 0 0 5px !important;
+  }
+}
+#siPassword{
+  border-radius: 0 5px 5px 0 !important;
+}
+.otpFormStyle {
+ padding-top: 15px;
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+  }
+
+  a {
+    cursor: pointer;
+  }
+}
+.otpWidth {
+  text-align: center;
+  text-align: -webkit-center;
+
+  input {
+    width: 100%;
+  }
+
+  .form-group {
+    width: 100%;
+  }
+
+  app-control-messages {
+    width: 100%;
+    display: block;
+    text-align: left !important;
+  }
+}
+.fontSize {
+  font-size: 20px;
+  margin-bottom: 9px!important;
+  margin-top: 15px;
+}
+.otpOption {
+  font-size: 18px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: 0.7px;
+  text-align: left;
+  color: #06aed5;
+  padding: 0;
+  a{
+    color:none;
+    cursor: pointer;
+  }
+}
+
+.guest-login
+{
+  cursor: pointer;
+  color: #4286f4;
+  justify-content: space-between;
+  font-size:18px;
+  padding-top: 7px;
+
+}
+.guest-checkout-flow
+{
+
+}
+.already_text {
+  opacity: 0.8;
+  text-align: center;
+  color: #7f8388 !important;
+}

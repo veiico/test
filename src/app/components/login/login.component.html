@@ -1,0 +1,204 @@
+<div class='container-fluid' id="signinPopup">
+  <!-- Parent FLow -->
+  <div class="row">
+    <div class="col-xs-12 card-login">
+      <div class="guest-checkout-flow">
+      <p class="main-heading" [ngStyle]="{ 'direction' : direction }" *ngIf="!showOtpPopUp && !showGuestCheckoutflow" >
+        <ng-container>{{themeData.heading || (languageStrings.sign_in_to_continue ? languageStrings.sign_in_to_continue : 'Sign in to continue')}}</ng-container>
+      </p>
+      <p class="main-heading" [ngStyle]="{ 'direction' : direction }" *ngIf="!showOtpPopUp && showGuestCheckoutflow" >
+        <ng-container>{{languageStrings.continue_as_guest || 'Continue as Guest'}}</ng-container>
+      </p>
+</div>
+      <hr *ngIf="!showOtpPopUp" [ngStyle]="{ 'direction' : direction }" />
+      <div class="c-b"></div>
+      <p class="main-sub-heading" *ngIf="themeData.sub_heading &&!showOtpPopUp" [ngStyle]="{ 'direction' : direction }">
+          <ng-container >{{themeData.sub_heading}}</ng-container>
+      </p>
+
+      <!-- Login Form -->
+      <form role="form" [hidden]="showFbSignIn" *ngIf="!showOtpPopUp  && !showGuestCheckoutflow" [formGroup]="loginForm" (keydown)="keyDownFunction($event)" autocomplete="off">
+        <div class="form-group frm-grp-set">
+          <app-phone-email-hybrid formControlName="phone_email" [dialCode]="country_code"></app-phone-email-hybrid>
+          <app-control-messages [control]="loginForm.controls.phone_email"></app-control-messages>
+        </div>
+        <div class="form-group frm-grp-set"  *ngIf=!loginViaOtpFlow>
+          <label class="control-label fs16" for="siPassword" [ngStyle]="{ 'direction' : direction }">
+            <ng-container>{{languageStrings.password || "Password"}}</ng-container> <span class="c-red">*</span>
+          </label>
+          <div class="input-group">
+            <span class="input-group-addon add-on-set">
+              <i class="glyphicon glyphicon-lock" aria-hidden="true"></i>
+            </span>
+            <input id="siPassword" type="password" autocomplete="off" required="required" formControlName="password" [ngStyle]="{ 'direction' : direction }"
+              class="input-style focusable form-control custom_register_form-control"  placeholder="{{languageStrings.password || 'Password'}}"
+              data-parsley-minlength="6" />
+          </div>
+          <app-control-messages [control]="loginForm.controls.password"></app-control-messages>
+        </div>
+        <div [ngClass]="{'guest-checkout-flow':(appConfig.is_guest_checkout_enabled && !showOtpPopUp && !(sessionService.get('appData') && sessionService.get('appData').vendor_details.is_guest_account))}">
+          <p class="main-heading guest-login"  [ngStyle]="{ 'direction' : direction }" (click)="showGuestCheckout()" *ngIf="appConfig.is_guest_checkout_enabled && !showOtpPopUp && !(sessionService.get('appData') && sessionService.get('appData').vendor_details.is_guest_account)">
+            <ng-container>{{languageStrings.continue_as_guest || 'Continue as Guest'}}</ng-container>
+          </p>
+        <div class=" text-right p-b-20"  *ngIf="loginViaOtpFlow">
+          <button type="submit" (click)="verifyLoginOtp(0)" class="btn btn-primary-1 w-100" name="login" [ngStyle]="{ 'direction' : direction }"  [disabled]="!loginForm.valid">
+            <ng-container>{{languageStrings.send_otp || "Send OTP"}}</ng-container>
+          </button>
+        </div>
+      </div>
+      <div class=" text-right" *ngIf="!loginViaOtpFlow">
+        <button type="submit" (click)="loginCheck()" class="btn btn-primary-1 w-100 m-t-5"  name="login" [ngStyle]="{ 'direction' : direction }" [disabled]="!loginForm.valid">
+          <ng-container>{{languageStrings.sign_in || "Sign In"}}</ng-container>
+        </button>
+      </div>
+    
+        <div class="form-group text-center">
+          <div class="form-group text-center">
+            <div class="col-xs-6 text-left"  [hidden]="!signupShown">
+              <p [ngStyle]="{ 'direction' : direction }">
+                <ng-container>{{languageStrings.not_signed_up || "Not signed up"}}?</ng-container>
+                <a class="pointer" [style.color]="profile_color" (click)="closeLoginPopup()">
+                  <ng-container>{{languageStrings.signup_here || "Sign Up Here"}}</ng-container>
+                </a>
+              </p>
+            </div>
+            <div [ngClass]="{'col-xs-6 right-align': signupShown, 'col-xs-12 center-align': !signupShown}" *ngIf="!loginViaOtpFlow">
+              <p>
+                <a class="pointer" [ngStyle]="{ 'direction' : direction }" [style.color]="profile_color" (click)="openForgotPopup()">
+                  <ng-container>{{languageStrings.forgot_password || "Forgot Password"}}?</ng-container>
+                </a>
+              </p>
+            </div>
+            <div *ngIf="appConfig?(appConfig.is_fb_required && (appConfig.facebook_app_id?appConfig.facebook_app_id.length : 0)):0" class="col-xs-12 text-center p-0"
+              >
+              <hr>
+              <ng-container
+                *ngIf="appConfig && (appConfig.is_fb_required || appConfig.is_instagram_required || appConfig.is_google_required)">
+                <p class="conwith">Or connect with</p>
+                <div class="row">
+                  <div
+                    *ngIf="appConfig?(appConfig.is_fb_required && (appConfig.facebook_app_id?appConfig.facebook_app_id.length : 0)):0"
+                    class="img social-icon" (click)="loginWithFacebook()">
+                    <img src="assets/images/Fb.png" alt="facebook logo" height="30">
+                  </div>
+                  <div
+                    *ngIf="appConfig?(appConfig.is_instagram_required && (appConfig.instagram_app_id?appConfig.instagram_app_id.length : 0)):0"
+                    class="img social-icon" (click)="loginWithInstagram()">
+                    <img src="assets/img/insta-icon-new.png" alt="insta logo" height="30">
+                  </div>
+                  <app-google-login
+                    *ngIf="appConfig?(appConfig.is_google_required && (appConfig.google_client_app_id?appConfig.google_client_app_id.length : 0)):0"
+                    (googleInfoEvent)="getGoogleLoginInfo($event)"></app-google-login>
+                  </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </form>
+
+       <!-- ========= New Otp form start =========== -->
+       <form role="form" class="otpFormStyle" *ngIf="showOtpPopUp" [formGroup]="otpForm" autocomplete="off" >
+        <div class="formHeading">
+          <p class="fs-10 m-0" [ngStyle]="{ 'direction' : direction }" *ngIf="emailMessage">
+            <ng-container>{{languageStrings.enter_the_otp_that_you_have_recieved_on_your_phone_number || "Enter the OTP that you’ve recieved on your phone number"}}</ng-container>
+          </p>
+          <p class="fs-10 m-0 text-center" [ngStyle]="{ 'direction' : direction }" *ngIf="!emailMessage">
+            <ng-container>{{languageStrings.enter_the_otp_that_you_have_recieved_on_your_email || "Enter the OTP that you’ve recieved on your email"}}</ng-container>
+          </p>
+        </div>
+        <div class="otpWidth">
+        <label for="OTP" class="fontSize" [ngStyle]="{ 'direction' : direction }">
+          <ng-container>{{languageStrings.enter_otp || "Enter OTP"}}</ng-container><span class="c-red">*</span>
+        </label>
+          <input  type="text" maxlength="6" appNumberOnly autocomplete="off" formControlName="otpValue" class="focusable form-control custom_register_form-control input-style"
+             placeholder="6 {{languageStrings.digit_otp ||'digit OTP'}}" />
+          <app-control-messages [control]="otpForm.controls.otpValue"></app-control-messages>
+          <div class=" text-center p-b-20 m-t-10">
+          <button type="submit" class="btn btn-primary-1 w-100" name="OTP" (click)="checkForOtpVerification()"
+            [disabled]="!otpForm.valid"><ng-container>{{languageStrings.submit || "Submit"}}</ng-container></button>
+          </div>
+          <div class="form-group frm-grp-set p-b-20" >
+            <div class="col-xs-12 otpOption text-center"  [ngStyle]="{ 'direction' : direction }">
+              <a (click)="verifyLoginOtp(1)">
+                <ng-container>{{languageStrings.resend_otp || "Resend OTP"}}</ng-container>
+              </a>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <!-- Form -->
+      <form role="form" [hidden]="!showFbSignIn" [formGroup]="fbloginForm" autocomplete="off" class="p-t-30">
+        <div class="form-group frm-grp-set">
+
+          <label for="fbEmail1" class="control-label fs16" [ngStyle]="{ 'direction' : direction }">
+            <ng-container>{{languageStrings.email || "Email"}}</ng-container><span class="c-red">*</span>
+          </label>
+
+          <div class="input-group">
+            <span class="input-group-addon add-on-set">
+              <i class="glyphicon glyphicon-envelope" aria-hidden="true"></i>
+            </span>
+            <input id="fbEmail1" type="email" autocomplete="off" required="required" formControlName="email" class="focusable form-control custom_register_form-control input-style"
+               placeholder="{{languageStrings.email || 'Email'}}" [readonly]="emailDisabled" />
+          </div>
+          <app-control-messages [control]="fbloginForm.controls.email"></app-control-messages>
+        </div>
+
+        <div id="SignUpformTelephone" class="form-group frm-grp-set">
+          <app-fugu-tel-input class="phone_style" formControlName="phone" [(ngModel)]="phone" [(dialCode)]="country_code"></app-fugu-tel-input>
+        </div>
+
+        <div class=" text-right p-b-20">
+          <button type="submit" class="btn btn-primary-1 w-100" name="Register" *ngIf="socialLoginType.FACEBOOK == socialLogin"
+            (click)="signInWithFb()" [disabled]="!fbloginForm.valid">
+            <ng-container>{{languageStrings.sign_in || "Sign In"}}</ng-container>
+          </button>
+        </div>
+      </form>
+      <form role="form" [hidden]="!showGuestCheckoutflow" *ngIf="showGuestCheckoutflow" [formGroup]="guestCheckoutForm" autocomplete="off" style="padding-top:30px">
+
+        <div class="form-group frm-grp-set">
+
+          <label class="control-label fs18" [ngStyle]="{ 'direction' : direction }">
+            <ng-container>{{languageStrings.email || "Email"}}</ng-container><span style="color:red" *ngIf="appConfig.email_config_for_guest_checkout">*</span>
+          </label>
+
+          <div class="input-group">
+            <span class="input-group-addon add-on-set">
+              <i class="glyphicon glyphicon-envelope" aria-hidden="true"></i>
+            </span>
+            <input  type="email" autocomplete="off" formControlName="email" class="focusable form-control custom_register_form-control input-style"
+               placeholder="{{languageStrings.email || 'Email'}}" [readonly]="emailDisabled" />
+          </div>
+          <app-control-messages [control]="guestCheckoutForm.controls.email"></app-control-messages>
+        </div>
+
+        <div  class="form-group frm-grp-set">
+            <label class="fontSize" aria-hidden="true" [ngStyle]="{ 'direction' : direction }">
+                <ng-container>{{languageStrings.phone_no || 'Phone No.'}}</ng-container><span *ngIf="appConfig.phone_config_for_guest_checkout" style="color:red">*</span>
+              </label>
+          <app-fugu-tel-input class="phone_style" formControlName="phone"  [(dialCode)]="country_code"></app-fugu-tel-input>
+        </div>
+
+        <div class=" text-right" style="padding-bottom:20px;">
+          <button type="submit" class="btn btn-red" name="Register"  [style.background-color]="profile_color"
+            (click)="registerAsGuest()" [disabled]="!guestCheckoutForm.valid">
+            <ng-container>{{languageStrings.continue || "Continue"}}</ng-container>
+          </button>
+        </div>
+        <div class="form-group text-center">
+          <div class="form-group text-center" style="border-top: 2px dashed #bcbcbc;
+                            padding-top: 10px;">
+            <p class="already_text" [ngStyle]="{ 'direction' : direction }">
+              <ng-container>{{languageStrings.already_have_an_account || "Already have an account?"}}</ng-container>
+              <a style="cursor: pointer" [style.color]="profile_color" (click)="openLoginModal()">
+                <ng-container>{{languageStrings.sign_in_here || "Sign In Here"}}</ng-container>
+              </a>
+            </p>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

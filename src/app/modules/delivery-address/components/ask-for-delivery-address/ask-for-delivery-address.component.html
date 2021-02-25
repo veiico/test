@@ -1,0 +1,20 @@
+
+
+<div class="overlay">
+  <div class="ask-popup">
+    <div class="ask-popup-text">
+      <div class="heading">
+        <h1 class="text-capitalize">{{languageStrings.add_your_delivery_address_proceed || 'add your delivery address to proceed'}}</h1>
+      </div>
+      <div class="sub-heading">
+        <h6 class="text-capitalize">{{languageStrings.proceed_further_please_set_your_delivery_location || 'to proceed further, please set your delivery location'}}</h6>
+      </div>
+    </div>
+
+    <div class="ask-popup-buttons">
+      <button type="button" class="cancel-btn text-uppercase" (click)="cancel()">{{languageStrings.cancel || 'cancel'}}</button>
+      <button type="submit" class="success-btn text-uppercase" (click)="fetchLocation()">{{languageStrings.set_location|| 'set location'}}</button>
+    </div>
+  
+  </div>
+</div>

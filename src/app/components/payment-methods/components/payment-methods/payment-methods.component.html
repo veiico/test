@@ -1,0 +1,990 @@
+<div class="methods">
+  <div class="listMethods">
+    <!-- for cash -->
+    <div *ngFor="let cash of filteredPaymentMethods.cash;let i = index;">
+      <div class="method" *ngIf="!_hideCash || _hideCash == 'false'">
+        <div class="radioCheck">
+          <div *ngIf="!cash.selected" class="text-left" (click)="selectPaymentMethod(i, 'cash')">
+            <svg width="22" height="22" viewBox="0 0 22 22">
+              <path fill="#000" fill-rule="nonzero"
+                d="M11 22C4.925 22 0 17.075 0 11S4.925 0 11 0s11 4.925 11 11-4.925 11-11 11zm0-.846c5.608 0 10.154-4.546 10.154-10.154S16.608.846 11 .846.846 5.392.846 11 5.392 21.154 11 21.154z"
+                opacity=".3" />
+            </svg>
+          </div>
+          <div *ngIf="cash.selected" (click)="removePaymentMethod(i, 'cash')" class="text-left">
+            <svg width="22" height="22" viewBox="0 0 22 22">
+              <g fill="none" fill-rule="nonzero">
+                <path fill="#82C548" d="M11 22C4.925 22 0 17.075 0 11S4.925 0 11 0s11 4.925 11 11-4.925 11-11 11z" />
+                <path fill="#FFF"
+                  d="M14.993 7.742a.805.805 0 0 1 1.151 0 .818.818 0 0 1 0 1.146l-5.852 5.939a.803.803 0 0 1-1.147 0l-3.193-3.28a.813.813 0 0 1-.012-1.155.805.805 0 0 1 1.152 0l2.625 2.702 5.276-5.352z" />
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div class="main">
+          <div class="text">
+            <p class="name">
+              <ng-container>{{languageStrings.pay_via_cash || 'Pay via Cash'}}</ng-container>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- for paytm -->
+    <div *ngFor="let cash of filteredPaymentMethods.paytm;let i = index;">
+      <div class="method" *ngIf="!_hidePaytm || _hidePaytm == 'false'">
+        <div class="radioCheck">
+          <div *ngIf="!cash.selected" class="text-left" (click)="selectPaymentMethod(i, 'paytm')">
+            <svg width="22" height="22" viewBox="0 0 22 22">
+              <path fill="#000" fill-rule="nonzero"
+                d="M11 22C4.925 22 0 17.075 0 11S4.925 0 11 0s11 4.925 11 11-4.925 11-11 11zm0-.846c5.608 0 10.154-4.546 10.154-10.154S16.608.846 11 .846.846 5.392.846 11 5.392 21.154 11 21.154z"
+                opacity=".3" />
+            </svg>
+          </div>
+          <div *ngIf="cash.selected" (click)="removePaymentMethod(i, 'paytm')" class="text-left">
+            <svg width="22" height="22" viewBox="0 0 22 22">
+              <g fill="none" fill-rule="nonzero">
+                <path fill="#82C548" d="M11 22C4.925 22 0 17.075 0 11S4.925 0 11 0s11 4.925 11 11-4.925 11-11 11z" />
+                <path fill="#FFF"
+                  d="M14.993 7.742a.805.805 0 0 1 1.151 0 .818.818 0 0 1 0 1.146l-5.852 5.939a.803.803 0 0 1-1.147 0l-3.193-3.28a.813.813 0 0 1-.012-1.155.805.805 0 0 1 1.152 0l2.625 2.702 5.276-5.352z" />
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div class="main">
+          <div class="text">
+            <p class="name">
+              <ng-container>{{languageStrings.pay_via_paytm || 'Pay via Paytm'}}</ng-container>
+              <!-- <img src="assets/img/Paytm_logo.png" /> -->
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- for paylater -->
+    <div *ngFor="let payLater of filteredPaymentMethods.payLater;let i = index;">
+      <div class="method" *ngIf="!_hidePayLater || _hidePayLater == 'false'">
+        <div class="radioCheck">
+          <div *ngIf="!payLater.selected" class="text-left" (click)="selectPaymentMethod(i, 'payLater')">
+            <svg width="22" height="22" viewBox="0 0 22 22">
+              <path fill="#000" fill-rule="nonzero"
+                d="M11 22C4.925 22 0 17.075 0 11S4.925 0 11 0s11 4.925 11 11-4.925 11-11 11zm0-.846c5.608 0 10.154-4.546 10.154-10.154S16.608.846 11 .846.846 5.392.846 11 5.392 21.154 11 21.154z"
+                opacity=".3" />
+            </svg>
+          </div>
+          <div *ngIf="payLater.selected" (click)="removePaymentMethod(i, 'payLater')" class="text-left">
+            <svg width="22" height="22" viewBox="0 0 22 22">
+              <g fill="none" fill-rule="nonzero">
+                <path fill="#82C548" d="M11 22C4.925 22 0 17.075 0 11S4.925 0 11 0s11 4.925 11 11-4.925 11-11 11z" />
+                <path fill="#FFF"
+                  d="M14.993 7.742a.805.805 0 0 1 1.151 0 .818.818 0 0 1 0 1.146l-5.852 5.939a.803.803 0 0 1-1.147 0l-3.193-3.28a.813.813 0 0 1-.012-1.155.805.805 0 0 1 1.152 0l2.625 2.702 5.276-5.352z" />
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div class="main">
+          <div class="text">
+            <p class="name">
+              <ng-container>{{terminology.PAY_LATER || 'Pay Later'}}</ng-container>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- for wallet -->
+    <div *ngFor="let wallet of filteredPaymentMethods.wallets;let m = index;">
+      <div class="method">
+        <div class="radioCheck">
+          <div *ngIf="!wallet.selected" class="text-left" (click)="selectPaymentMethod(m, 'wallets')">
+            <svg width="22" height="22" viewBox="0 0 22 22">
+              <path fill="#000" fill-rule="nonzero"
+                d="M11 22C4.925 22 0 17.075 0 11S4.925 0 11 0s11 4.925 11 11-4.925 11-11 11zm0-.846c5.608 0 10.154-4.546 10.154-10.154S16.608.846 11 .846.846 5.392.846 11 5.392 21.154 11 21.154z"
+                opacity=".3" />
+            </svg>
+          </div>
+          <div *ngIf="wallet.selected" (click)="removePaymentMethod(m, 'wallets')" class="text-left">
+            <svg width="22" height="22" viewBox="0 0 22 22">
+              <g fill="none" fill-rule="nonzero">
+                <path fill="#82C548" d="M11 22C4.925 22 0 17.075 0 11S4.925 0 11 0s11 4.925 11 11-4.925 11-11 11z" />
+                <path fill="#FFF"
+                  d="M14.993 7.742a.805.805 0 0 1 1.151 0 .818.818 0 0 1 0 1.146l-5.852 5.939a.803.803 0 0 1-1.147 0l-3.193-3.28a.813.813 0 0 1-.012-1.155.805.805 0 0 1 1.152 0l2.625 2.702 5.276-5.352z" />
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div class="main">
+          <div class="text">
+            <p class="name">
+              <ng-container>{{languageStrings.pay_via_wallet || 'Pay via Wallet'}}</ng-container>
+            </p>
+          </div>
+          <div class="link" *ngIf="_walletDetails">
+            <p class="name"><span>
+                <ng-container>{{languageStrings.balance || 'Balance'}}:</ng-container>
+                {{currency}}{{_walletDetails.wallet_balance | decimalConfig}}
+              </span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- for cards -->
+    <div *ngFor="let card of filteredPaymentMethods.card;let j = index;">
+      <div class="method">
+        <div class="radioCheck">
+          <div *ngIf="!card.selected" class="text-left" (click)="selectPaymentMethod(j, 'card')">
+            <svg width="22" height="22" viewBox="0 0 22 22">
+              <path fill="#000" fill-rule="nonzero"
+                d="M11 22C4.925 22 0 17.075 0 11S4.925 0 11 0s11 4.925 11 11-4.925 11-11 11zm0-.846c5.608 0 10.154-4.546 10.154-10.154S16.608.846 11 .846.846 5.392.846 11 5.392 21.154 11 21.154z"
+                opacity=".3" />
+            </svg>
+          </div>
+          <div *ngIf="card.selected" (click)="removePaymentMethod(j, 'card')" class="text-left">
+            <svg width="22" height="22" viewBox="0 0 22 22">
+              <g fill="none" fill-rule="nonzero">
+                <path fill="#82C548" d="M11 22C4.925 22 0 17.075 0 11S4.925 0 11 0s11 4.925 11 11-4.925 11-11 11z" />
+                <path fill="#FFF"
+                  d="M14.993 7.742a.805.805 0 0 1 1.151 0 .818.818 0 0 1 0 1.146l-5.852 5.939a.803.803 0 0 1-1.147 0l-3.193-3.28a.813.813 0 0 1-.012-1.155.805.805 0 0 1 1.152 0l2.625 2.702 5.276-5.352z" />
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div class="main">
+          <div class="text" *ngIf="filteredPaymentMethods.card.length == 1">
+            <p class="name">
+              <ng-container>{{languageStrings.pay_via_card || 'Pay via Card'}}</ng-container>
+            </p>
+          </div>
+          <div class="img" *ngIf="filteredPaymentMethods.card.length > 1" [ngSwitch]="card.value">
+            <ng-container *ngSwitchCase="paymentMode.STRIPE">
+              <img src="assets/img/stripe_logo.svg" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.PAYFORT">
+              <img src="assets/img/payfort_logo.jpg" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.VISTA">
+              <img src="assets/img/payfort_logo.jpg" />
+            </ng-container>
+          </div>
+          <!--<div class="link" *ngIf="!((card.value == paymentMode.STRIPE || card.value == paymentMode.PAYFORT) && card.selected)">-->
+          <!--<p class="name" (click)="selectPaymentMethod(j, 'card')"><span><ng-container i18n>Add Card</ng-container></span></p>-->
+          <!--</div>-->
+        </div>
+      </div>
+      <div class="openAddCard" [ngSwitch]="card.value">
+        <ng-container *ngSwitchCase="paymentMode.STRIPE">
+          <app-stripe [loginResponse]="loginData" [deleteButton]="'true'" [paymentFor]="_paymentFor"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" (paymentMadeResponse)="addCardResponse($event)"
+            *ngIf="card.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"></app-stripe>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.PAYFORT">
+          <app-payfort [loginResponse]="loginData" [paymentFor]="_paymentFor" [deleteButton]="'true'"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" (paymentMadeResponse)="addCardResponse($event)"
+            *ngIf="card.selected && !holdPaymentCheck && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)">
+          </app-payfort>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.VISTA">
+          <app-vista [loginResponse]="loginData" [paymentFor]="_paymentFor" [deleteButton]="'true'"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" (paymentMadeResponse)="addCardResponse($event)"
+            *ngIf="card.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"></app-vista>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.AUTHORIZE_NET">
+          <app-authorize-net [loginResponse]="loginData" [deleteButton]="'true'" [paymentFor]="_paymentFor"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" (paymentMadeResponse)="addCardResponse($event)"
+            *ngIf="card.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)">
+          </app-authorize-net>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.FAC">
+          <app-fac *ngIf="card.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [deleteButton]="'true'" [paymentFor]="_paymentFor"
+            [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"></app-fac>
+        </ng-container>
+      </div>
+    </div>
+
+
+    <!-- for without cards -->
+    <div *ngFor="let withoutCard of filteredPaymentMethods.withoutCard;let k = index;">
+      <div class="method">
+        <div class="radioCheck">
+          <div *ngIf="!withoutCard.selected" class="text-left" (click)="selectPaymentMethod(k, 'withoutCard')">
+            <svg width="22" height="22" viewBox="0 0 22 22">
+              <path fill="#000" fill-rule="nonzero"
+                d="M11 22C4.925 22 0 17.075 0 11S4.925 0 11 0s11 4.925 11 11-4.925 11-11 11zm0-.846c5.608 0 10.154-4.546 10.154-10.154S16.608.846 11 .846.846 5.392.846 11 5.392 21.154 11 21.154z"
+                opacity=".3" />
+            </svg>
+          </div>
+          <div *ngIf="withoutCard.selected" (click)="removePaymentMethod(k, 'withoutCard')" class="text-left">
+            <svg width="22" height="22" viewBox="0 0 22 22">
+              <g fill="none" fill-rule="nonzero">
+                <path fill="#82C548" d="M11 22C4.925 22 0 17.075 0 11S4.925 0 11 0s11 4.925 11 11-4.925 11-11 11z" />
+                <path fill="#FFF"
+                  d="M14.993 7.742a.805.805 0 0 1 1.151 0 .818.818 0 0 1 0 1.146l-5.852 5.939a.803.803 0 0 1-1.147 0l-3.193-3.28a.813.813 0 0 1-.012-1.155.805.805 0 0 1 1.152 0l2.625 2.702 5.276-5.352z" />
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div class="main">
+          <div class="text" *ngIf="filteredPaymentMethods.withoutCard.length == 1">
+            <p class="name">
+              <ng-container>{{languageStrings.pay_via_card_netbanking || 'Pay via Card/ Net Banking'}}</ng-container>
+            </p>
+          </div>
+          <div class="img" *ngIf="filteredPaymentMethods.withoutCard.length > 1" [ngSwitch]="withoutCard.value">
+            <ng-container *ngSwitchCase="paymentMode.PAYPAL">
+              <img src="assets/img/paypal-logo.svg" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.TELR">
+              <img src="assets/img/telr.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.STRIPE_IDEAL">
+              <img src="assets/images/stripe_logo.svg" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.RAZORPAY">
+              <img src="assets/img/razorpay-logo.svg" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.PAYSTACK">
+              <img src="assets/images/paystack2.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.BILLPLZ">
+              <img src="assets/img/billplz.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.MPAISA">
+              <img src="assets/img/mpaisa.png" />
+            </ng-container>
+            <!-- <ng-container *ngSwitchCase="paymentMode.WIRE_CARD">
+              <img src="assets/img/mpaisa.png" />
+            </ng-container> -->
+            <ng-container *ngSwitchCase="paymentMode.SSL_COMMERZ">
+              <img src="assets/img/mpaisa.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.FAC_3D">
+              <img src="assets/img/fac-logo.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.CHECKOUT_COM">
+              <img src="assets/img/checkoutcom.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.PAYHERE">
+              <img src="assets/img/payhere.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.AZUL">
+              <img src="assets/img/Azul.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.HYPERPAY">
+              <img src="assets/img/hyperpay.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.CREDIMAX">
+              <img src="assets/img/credimax.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.MY_FATOORAH">
+              <img src="assets/img/fatoora.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.PAYNET">
+              <img src="assets/img/paynet-logo.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.TAP">
+              <img src="assets/img/tap.png" width="28px" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.CURLEC">
+              <img src="assets/img/curlec_image.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.WIPAY">
+              <img src="assets/img/Wipay.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.PAGAR">
+              <img src="assets/img/pagar.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.WECHAT">
+              <img style="width: 5rem;" src="assets/img/wechat.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.MYBILLPAYMENT">
+              <img src="assets/img/mybill.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.VALITOR">
+              <img src="assets/img/valitor.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.TRUEVO">
+              <img src="assets/img/truevo2.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.PAYZEN">
+              <img src="assets/img/payzen.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.FIRSTDATA">
+              <img src="assets/img/firstdata.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.BANKOPEN">
+              <img src="assets/img/bankopen.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.ETISALAT">
+              <img src="assets/img/etisalt.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.GOCARDLESS">
+              <img src="assets/img/gocardless1.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.SQUARE">
+              <img src="assets/img/squareup.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.WHOOSH">
+              <img src="assets/img/whoosh.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.MTN">
+              <img src="assets/img/mtn.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.ONEPAY">
+              <img src="assets/img/onepay.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.PAGOPLUX">
+              <img src="assets/img/pagoplux.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.THETELLER">
+              <img src="assets/img/theteller.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.INNSTAPAY">
+              <img src="assets/img/innstapay-logo.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.PAYFAST">
+              <img src="assets/img/payfast-logo.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.PAYU">
+              <img src="assets/img/payu.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.PAY_MOB">
+              <img src="assets/img/accept-paymob.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.PAYNOW">
+              <img src="assets/images/paynow_logo.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.VIVA">
+              <img src="assets/images/viva-wallet.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.TWO_CHECKOUT">
+              <img src="assets/img/2checkout.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.LIME_LIGHT">
+              <img src="assets/img/limelight.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.SUNCASH">
+              <img src="assets/img/suncash-logo.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.ATH">
+              <img src="assets/img/ath.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.IPAY88">
+              <img src="assets/img/ipay88.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.PROXYPAY">
+              <img style="width: 52px;max-width: 70px;max-height: 47px;" src="assets/img/proxypay1.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.CYBERSOURCE">
+              <img src="assets/img/cybersource1.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.ALFALAH">
+              <img src="assets/img/alfalah.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.CULQI">
+              <img src="assets/img/culqi.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.NMI">
+              <img src="assets/img/nmi.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.FLUTTERWAVE">
+              <img src="assets/img/flutterwave.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.MPESA">
+              <img src="assets/img/mpesa1.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.ADYEN">
+              <img src="assets/img/adyen.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.PAYMARK">
+              <img src="assets/img/paymark1.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.HYPUR">
+              <img src="assets/img/hypur1.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.PAYTMV3">
+              <img src="assets/images/Paytm_logo.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.PIXELPAY">
+              <img src="assets/img/pixelpay.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.DOKU">
+              <img style="width: 3rem;" src="assets/img/doku.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.PEACH">
+              <img src="assets/img/peach.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.PAGUELOFACIL">
+              <img src="assets/img/paguelofacil.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.NOQOODY">
+              <img src="assets/img/noqoody.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.GTBANK">
+              <img src="assets/img/gtbank.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.URWAY">
+              <img src="assets/img/cxpay.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.VUKA">
+              <img src="assets/img/vuka.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.VPOS">
+              <img src="assets/img/express.jpg" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.PAYKU">
+              <img src="assets/img/payku.jpg" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.BAMBORA">
+              <img src="assets/img/bambora.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.PAYWAYONE">
+              <img src="assets/img/payway.png" />
+            </ng-container>
+            <ng-container *ngSwitchCase="paymentMode.PLACETOPAY">
+              <img src="assets/img/placetopay.png" />
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="openAddCard" [ngSwitch]="withoutCard.value">
+        <ng-container *ngSwitchCase="paymentMode.RAZORPAY">
+          <app-razor-pay [loginResponse]="loginData" [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT"
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [paymentFor]="_paymentFor" [triggerPayment]="_triggerPayment"
+            (paymentMadeResponse)="addCardResponse($event)" [getOrderCreationPayload]="getOrderCreationPayload">
+          </app-razor-pay>
+        </ng-container>
+        <!-- <ng-container *ngSwitchCase="paymentMode.VISTA">
+          <app-vista *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+                   [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT"
+                   [triggerPayment]="_triggerPayment"
+                   [loginResponse]="loginData"
+                   [paymentFor]="_paymentFor"
+                   (paymentMadeResponse)="addCardResponse($event)"></app-vista>
+        </ng-container> -->
+        <ng-container *ngSwitchCase="paymentMode.MPAISA">
+          <app-mpaisa
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [loginResponse]="loginData" [paymentFor]="_paymentFor" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload">
+          </app-mpaisa>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.INNSTAPAY">
+          <app-innstapay
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [loginResponse]="loginData" [paymentFor]="_paymentFor" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-innstapay>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.PAYPAL">
+          <app-paypal
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-paypal>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.TELR">
+          <app-telr
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-telr>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.PAYFAST">
+          <app-payfast
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [loginResponse]="loginData" [paymentFor]="_paymentFor" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-payfast>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.BILLPLZ">
+          <app-billplz
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [loginResponse]="loginData" [paymentFor]="_paymentFor" (paymentMadeResponse)="addCardResponse($event)">
+          </app-billplz>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.PAYU">
+          <app-payu *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [loginResponse]="loginData" [paymentFor]="_paymentFor" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-payu>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="paymentMode.PAY_MOB">
+          <app-paymob
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-paymob>
+        </ng-container>
+        <!-- <ng-container *ngSwitchCase="paymentMode.WIRE_CARD">
+          <app-wirecard *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+                       [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT"
+                       [triggerPayment]="_triggerPayment"
+                       [paymentFor]="_paymentFor"
+                       [loginResponse]="loginData"
+                       (paymentMadeResponse)="addCardResponse($event)"></app-wirecard>
+        </ng-container> -->
+        <ng-container *ngSwitchCase="paymentMode.SSL_COMMERZ">
+          <app-sslCommerz
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-sslCommerz>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.FAC_3D">
+          <app-fac3d
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-fac3d>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.CHECKOUT_COM">
+          <app-checkout-com
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload">
+          </app-checkout-com>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.HYPERPAY">
+          <app-hyperpay
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-hyperpay>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.VIVA">
+          <app-viva *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-viva>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.PAYHERE">
+          <app-payhere
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-payhere>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.AZUL">
+          <app-azul *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-azul>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.CREDIMAX">
+          <app-credimax
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-credimax>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.MY_FATOORAH">
+          <app-my-fatoora
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-my-fatoora>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.PAYNET">
+          <app-paynet
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-paynet>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.TAP">
+          <app-tap *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-tap>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.CURLEC">
+          <app-curlec
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-curlec>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.WIPAY">
+          <app-wipay
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload">
+          </app-wipay>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.PAGAR">
+          <app-pagar
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-pagar>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.WECHAT">
+          <app-wechat
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-wechat>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.MYBILLPAYMENT">
+          <app-mybillpayment
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-mybillpayment>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.VALITOR">
+          <app-valitor
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-valitor>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.TRUEVO">
+          <app-truevo
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-truevo>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.PAYZEN">
+          <app-payzen
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" [paymentFor]="_paymentFor"
+            (paymentMadeResponse)="addCardResponse($event)" [dataofCart]="getOrderCreationPayload"></app-payzen>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.FIRSTDATA">
+          <app-firstdata
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-firstdata>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.BANKOPEN">
+          <app-bankopen
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload">
+          </app-bankopen>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.ETISALAT">
+          <app-etisalat
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload">
+          </app-etisalat>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.GOCARDLESS">
+          <app-gocardless
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)">
+          </app-gocardless>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.SUNCASH">
+          <app-suncash
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)">
+          </app-suncash>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.SQUARE">
+          <app-square
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-square>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.WHOOSH">
+          <app-whoosh
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-whoosh>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.MTN">
+          <app-mtn *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-mtn>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.ONEPAY">
+          <app-onepay
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-onepay>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.PAGOPLUX">
+          <app-pagoplux
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-pagoplux>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.THETELLER">
+          <app-theteller
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)">
+          </app-theteller>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.PAYSTACK">
+          <app-paystack
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [loginResponse]="loginData" [paymentFor]="_paymentFor" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload">
+          </app-paystack>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.PAYNOW">
+          <app-paynow
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload">
+          </app-paynow>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.LIME_LIGHT">
+          <app-limelight
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-limelight>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.TWO_CHECKOUT">
+          <app-two-checkout
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-two-checkout>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.ATH">
+          <app-ath *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-ath>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.STRIPE_IDEAL">
+          <app-stripeideal
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-stripeideal>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.IPAY88">
+          <app-ipay88
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-ipay88>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.PROXYPAY">
+          <app-proxypay
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-proxypay>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.CYBERSOURCE">
+          <app-cybersource
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-cybersource>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.ALFALAH">
+          <app-alfalah
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-alfalah>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.CULQI">
+          <app-culqi
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-culqi>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.NMI">
+          <app-nmi *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-nmi>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.FLUTTERWAVE">
+          <app-flutterwave
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-flutterwave>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.MPESA">
+          <app-mpesa
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-mpesa>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.ADYEN">
+          <app-adyen
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-adyen>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.PAYTMV3">
+          <app-paytm
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-paytm>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.PAYMARK">
+          <app-paymark
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-paymark>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.HYPUR">
+          <app-hypur
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-hypur>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.PIXELPAY">
+          <app-pixelpay
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-pixelpay>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.DOKU">
+          <app-doku *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-doku>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.PEACH">
+          <app-peach
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-peach>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.PAGUELOFACIL">
+          <app-paguelofacil
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-paguelofacil>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.NOQOODY">
+          <app-noqoody
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-noqoody>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.GTBANK">
+          <app-gtbank
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-gtbank>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.URWAY">
+          <app-urway
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-urway>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.VUKA">
+          <app-vuka *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-vuka>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.VPOS">
+          <app-vpos *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-vpos>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.CXPAY">
+          <app-cxpay
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-cxpay>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.PAYKU">
+          <app-payku
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-payku>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.BAMBORA">
+          <app-bambora
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-bambora>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.PAYWAYONE">
+          <app-paywayone
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-paywayone>
+        </ng-container>
+        <ng-container *ngSwitchCase="paymentMode.PLACETOPAY">
+          <app-placetopay
+            *ngIf="withoutCard.selected && (_list.NET_PAYABLE_AMOUNT > 0 || formSettings.is_hold_amount_active)"
+            [NET_PAYABLE_AMOUNT]="_list.NET_PAYABLE_AMOUNT" [triggerPayment]="_triggerPayment"
+            [paymentFor]="_paymentFor" [loginResponse]="loginData" (paymentMadeResponse)="addCardResponse($event)"
+            [dataofCart]="getOrderCreationPayload"></app-placetopay>
+        </ng-container>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<app-hold-overlay *ngIf="holdPaymentCheck" (gotItEvent)="gotItEvent($event)" [list]="_list"></app-hold-overlay>
+
+<app-modal *ngIf="showPhoneNumberPopupForPaytm" header="Confirm Payment via Paytm" [modalType]="modalType"
+  (esc)="hidePaytmPhoneNumberPopup()" (onClose)="hidePaytmPhoneNumberPopup()">
+  <div body style="padding: 15px 30px;">
+    <form [formGroup]="paytmNumberForm">
+      <label class="popup-text">{{languageStrings.please_confirm_your_mobile_number_to_proceed_your_order_placed_right_away_but_will_be_fulfilled_subject_payment_confirmation || 'Please confirm your mobile number to proceed. Your order will be placed right away, but
+        will be fulfilled subject to payment confirmation.'}}</label>
+      <app-fugu-tel-input class="phone_style" formControlName="phone_number" [(ngModel)]="phoneCopy"
+        [(dialCode)]="country_code"></app-fugu-tel-input>
+      <app-control-messages [control]="paytmNumberForm.controls.phone_number"></app-control-messages>
+      <div class="col-12 text-right wallet-action-btn paytm-btn" style="padding-top: 25px">
+        <button class="btn btn-primary add-now-btn"
+          (click)="savePaytmNumber()">{{languageStrings.save || 'Save'}}</button>
+        <button class="btn btn-primary"
+          (click)="hidePaytmPhoneNumberPopup()">{{languageStrings.cancel || 'Cancel'}}</button>
+      </div>
+    </form>
+  </div>
+</app-modal>

@@ -1,0 +1,9 @@
+@import '~assets/css/variables';
+
+:host /deep/.mat-radio-button.mat-accent .mat-radio-inner-circle{
+    background: $color-theme !important;
+}
+// :host /deep/.mat-ripple-element{
+//     opacity: 0.2;
+//     background: $color-theme !important;
+//   }

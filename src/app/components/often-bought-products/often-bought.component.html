@@ -1,0 +1,24 @@
+<app-header class="col-xs-12 paddingHeader" [headerData]="headerData"
+  [showAddressBarOnlyRestaurant]="showAddressBar"></app-header>
+<div class="col-xs-12 col-lg-12 col-md-12 col-sm-12 paddingClass">
+  <h3>
+    {{languageStrings.often_bought_together || "Often Bought Together" }}
+  </h3>
+</div>
+<div class="cls-home-cat" id="animateScrollDiv" [ngClass]="{'locEnable':showAddressBarOnlyRestaurant}"
+  [ngStyle]="{'grid-template-columns':!dataBool ? '700px 250px':'250px 700px 250px','width':'100%'}">
+  <div style=" display: flex;width: 100%;" class="scrollDiv" [ngStyle]="{'margin-top': dataBool ? '0px' : '0px'}"
+  *ngIf="productList && productList.length>0">
+    <app-product-often-bought class="product-app"
+      [ngClass]="{'product-app': productList && productList.length, 'product-app_without_product': productList &&  !productList.length}"
+      [productData]="productList" [cardInfo]="cardInfo" [searchProducts]="searchOn" [paginating]="paginating"
+      [hasImages]="product_has_images" [isRestaurantActive]="restaurantInfo.available || restaurantInfo.scheduled_task"
+      [layout_type]="product_layout_type"></app-product-often-bought>
+    <app-cart-bought class="cart-app" (askLocation)="askLocation()" [notDeliverable]="showNotDiliverable">
+    </app-cart-bought>
+  </div>
+</div>
+<div class="fixed-bottom visible-xs visible-sm">
+    <app-cart-bought  class="cart-app"
+      (askLocation)="askLocation()" [notDeliverable]="showNotDiliverable"></app-cart-bought>
+  </div>

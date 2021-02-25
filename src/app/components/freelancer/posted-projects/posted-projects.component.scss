@@ -1,0 +1,711 @@
+@import '~assets/css/variables';
+.value{
+    word-break: break-word;
+}
+// .postedProject {
+//     max-width: 1380px;
+//     margin: auto;
+//     padding: 30px 0px;
+//     .head {
+//         h3 {
+//             font-family: $proxima-reg;
+//             font-size: 36px;
+//             font-weight: bold;
+//             font-style: normal;
+//             font-stretch: normal;
+//             line-height: normal;
+//             letter-spacing: normal;
+//             color: #474747;
+//             margin: 0px;
+//         }
+//     }
+//     .no-project {
+//         text-align: center;
+//         font-size: 20px;
+//         font-family: $proxima-reg;
+//         color: #535665;
+//         margin-top: 10%;
+//     }
+//     .maxBidStatus {
+//         text-align: center;
+//         font-size: 18px;
+//         font-family: $proxima-reg;
+//         margin-right: 10px;
+//     }
+//     .roundImage {
+//         width: 130px;
+//         height: 130px;
+//         border-radius: 50%;
+//         border: solid 8.1px #e5e5e5;
+//     }
+//     .list {
+//         margin-top: 50px;
+//         .list-container {
+//             border-radius: 8px;
+//             background-color: #ffffff;
+//             box-shadow: 0 5px 20px 0 rgba(36, 150, 255, 0.27);
+//             padding: 23px;
+//             cursor: pointer;
+//             .first {
+//                 display: -ms-flexbox;
+//                 display: flex;
+//                 -ms-flex-direction: row;
+//                 flex-direction: row;
+//                 align-items: baseline;
+//                 .text {
+//                     font-family: $proxima-reg;
+//                     font-size: 20px;
+//                     font-weight: 600;
+//                     font-style: normal;
+//                     font-stretch: normal;
+//                     line-height: normal;
+//                     letter-spacing: normal;
+//                     color: #474747;
+//                     padding-left: 10px;
+//                     text-overflow: ellipsis;
+//                     overflow: hidden;
+//                     white-space: nowrap;
+//                 }
+//             }
+//             .bton {
+//                 text-align: right;
+//                 .viewBids {
+//                     width: 140px;
+//                     height: 40px;
+//                     border-radius: 8px;
+//                     border: 1px solid #2496ff;
+//                     background-color: #2496ff;
+//                     font-family: $proxima-reg;
+//                     font-size: 14px;
+//                     font-weight: 600;
+//                     font-style: normal;
+//                     font-stretch: normal;
+//                     line-height: normal;
+//                     letter-spacing: normal;
+//                     color: #ffffff;
+//                     transition: .5s all;
+//                     &:hover {
+//                         background-color: #fff;
+//                         border: 1px solid #2496ff;
+//                         color: #2496ff;
+//                     }
+//                 }
+//             }
+//             .category {
+//                 padding-left: 33px;
+//                 font-family: $proxima-reg;
+//                 font-size: 16px;
+//                 font-weight: normal;
+//                 font-style: normal;
+//                 font-stretch: normal;
+//                 line-height: normal;
+//                 letter-spacing: normal;
+//                 color: #838383;
+//                 margin-bottom: 5px !important;
+//             }
+//             .skills {
+//                 padding-left: 33px;
+//                 font-family: $proxima-reg;
+//                 font-size: 16px;
+//                 font-weight: normal;
+//                 font-style: normal;
+//                 font-stretch: normal;
+//                 line-height: normal;
+//                 letter-spacing: normal;
+//                 color: #838383;
+//                 margin-bottom: 5px !important;
+//                 word-break: break-word;
+//             }
+//             .no-required {
+//                 font-family: $proxima-reg;
+//                 font-size: 16px;
+//                 font-weight: normal;
+//                 font-style: normal;
+//                 font-stretch: normal;
+//                 line-height: normal;
+//                 letter-spacing: normal;
+//                 color: #838383;
+//                 padding-left: 17px;
+//             }
+//             .address {
+//                 font-family: $proxima-reg;
+//                 font-size: 16px;
+//                 font-weight: normal;
+//                 font-style: normal;
+//                 font-stretch: normal;
+//                 line-height: normal;
+//                 letter-spacing: normal;
+//                 color: #838383;
+//                 text-align: center;
+//             }
+//             .posted {
+//                 font-family: $proxima-reg;
+//                 font-size: 16px;
+//                 font-weight: normal;
+//                 font-style: normal;
+//                 font-stretch: normal;
+//                 line-height: normal;
+//                 letter-spacing: normal;
+//                 color: #838383;
+//                 display: -ms-flexbox;
+//                 display: flex;
+//                 -ms-flex-direction: row;
+//                 flex-direction: row;
+//                 align-items: center;
+//                 text-align: left;
+//                 padding-left: 17px;
+//                 span {
+//                     color: #00a042;
+//                     padding-left: 10px;
+//                     padding-right: 5px;
+//                 }
+//             }
+//             .cancel {
+//                 font-family: $proxima-reg;
+//                 font-size: 16px;
+//                 font-weight: normal;
+//                 font-style: normal;
+//                 font-stretch: normal;
+//                 line-height: normal;
+//                 letter-spacing: normal;
+//                 user-select: none;
+//                 color: #d0021b;
+//                 text-align: left;
+//                 span {
+//                     -webkit-transform: perspective(1px) translateZ(0);
+//                     transform: perspective(1px) translateZ(0);
+//                     display: inline-block;
+//                     vertical-align: middle;
+//                     cursor: pointer;
+//                     &:before {
+//                         content: "";
+//                         position: absolute;
+//                         z-index: -1;
+//                         left: 0;
+//                         right: 100%;
+//                         bottom: 0;
+//                         background: #d0021b;
+//                         height: 4px;
+//                         -webkit-transition-property: right;
+//                         transition-property: right;
+//                         -webkit-transition-duration: 0.3s;
+//                         transition-duration: 0.3s;
+//                         -webkit-transition-timing-function: ease-out;
+//                         transition-timing-function: ease-out;
+//                     }
+//                     &:hover:before {
+//                         right: 0;
+//                     }
+//                 }
+//             }
+//         }
+//     }
+//     .yl-field-input {
+//         height: 40px;
+
+//         background-color: #ffffff;
+//         font-family: $proxima-reg;
+//         font-size: 16px;
+//         font-weight: normal;
+//         font-style: normal;
+//         font-stretch: normal;
+//         line-height: normal;
+//         letter-spacing: normal;
+//         color: #474747;
+//         border: solid 1px #bec0c2;
+//     }
+//     .width200 {
+//         width: 200px;
+//     }
+//     .mt5 {
+//         margin-top: 5px;
+//     }
+//     .mt45 {
+//         margin-top: 45px;
+//     }
+//     .p-0 {
+//         padding: 0px;
+//     }
+//     .mb10 {
+//         margin-bottom: 10px;
+//     }
+//     /***********************************
+//    **************page loader***********
+//    ***********************************/
+//     .pg-ldr-prt {
+//         position: relative;
+//         //background: rgba(0,0,0,.5) no-repeat;
+//         top: 0;
+//         left: 0;
+//         right: 0;
+//         bottom: 0;
+//         width: 100%;
+//         height: 100%;
+//         z-index: 100000;
+//         text-align: center;
+//     }
+//     .pg-ldr-cld {
+//         height: 100%;
+//         display: flex;
+//         justify-content: center;
+//         align-items: center;
+//     }
+//     .pg-ldr-ctr {
+//         background-color: #f5f5f5;
+//         margin: 0 auto;
+//         border-radius: 10px;
+//     }
+//     .pg-ldr-ctr {
+//         /* width: 80px; */
+//         /* height: 80px; */
+//         padding: 8px;
+//     }
+//     .pg-loader,
+//     .pg-loader:after {
+//         border-radius: 50%;
+//     }
+//     @-webkit-keyframes pg-loader {
+//         from {
+//             -webkit-transform: rotate(0deg);
+//         }
+//         to {
+//             -webkit-transform: rotate(360deg);
+//         }
+//     }
+//     .pg-loader {
+//         -webkit-animation: gl-loader 0.5s linear infinite;
+//     }
+//     .pg-loader {
+//         display: block !important;
+//         border: 16px solid #f3f3f3;
+//         border-radius: 50%;
+//         animation: spin 1s linear infinite;
+//         width: 35px;
+//         height: 35px;
+//         position: relative;
+//         border-top: 5px solid rgba(0, 0, 0, .03);
+//         border-right: 5px solid rgba(0, 0, 0, .03);
+//         border-bottom: 5px solid #c4253a;
+//         border-left: 5px solid #c4253a;
+//         transform: translateZ(0);
+//     }
+    /******************************************
+  **************single select****************
+  ******************************************/
+    /deep/.ui-dropdown {
+        width: 100% !important;
+        // height: 30px !important;
+        border-radius: 4px !important;
+        border: 0px !important;
+        font-family: $proxima-reg !important;
+    }
+    /deep/.ui-dropdown label.ui-dropdown-label {
+        cursor: pointer;
+        // height: 38px !important;
+        line-height: 30px !important;
+        border-radius: 4px !important;
+        padding: 6px 35px 6px 12px !important;
+        width: 120px;
+    }
+    ///deep/.ui-state-default{
+    //  border: 0px !important;
+    //}
+    /deep/.ui-dropdown .ui-dropdown-trigger {
+        width: 2.5em !important;
+        border: 0px !important;
+        // margin-top: 5px !important;
+    }
+// }
+
+
+/*******************************************
+**********project details pop***************
+*******************************************/
+
+.popDetails {
+    margin: 0px;
+    padding: 20px 10px;
+    .images {
+        .img-container {
+            border-radius: 8px;
+            background-color: #f3f3f3;
+            border: solid 1px #cbcaca;
+            height: 320px;
+            .carouselDiv {
+                height: 320px;
+                .slide {
+                    height: 320px;
+                }
+                .carousel-inner {
+                    height: 100%;
+                    .item {
+                        height: 100%;
+                        img {
+                            //height: 100%;
+                            //width: 100%;
+                            object-fit: contain;
+                            height: 320px;
+                            margin: 0 auto;
+                        }
+                    }
+                }
+                .left,
+                .right {
+                    font-family: 'Glyphicons Halflings' !important;
+                }
+            }
+        }
+    }
+    .carousel-indicators li {
+        background-color: #d2d2d2 !important;
+        border-color: #d2d2d2 !important;
+        width: 8px !important;
+        height: 8px !important;
+        margin-left: 10px;
+    }
+    .carousel-indicators .active {
+        background-color: #fff !important;
+        border-color: #fff !important;
+        width: 10px !important;
+        height: 10px !important;
+    }
+    .carousel .carousel-control {
+        visibility: hidden;
+    }
+    .carousel:hover .carousel-control {
+        visibility: visible;
+    }
+    .detailsHead {
+        font-family: $proxima-reg;
+        font-size: 20px;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: #585858;
+    }
+    .details {
+        .name {
+            font-family: 'ProximaNova-Semibold';
+            font-size: 15px;
+            font-weight: bold;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            color: #585858;
+        }
+        .value {
+            font-family: $proxima-reg;
+            font-size: 14px;
+            font-weight: normal;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            color: #585858;
+            word-break: break-all;
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .head {
+        padding: 0 3% !important;
+        h3 {
+            font-size: 28px !important;
+        }
+    }
+    .viewBids {
+        height: 28px !important;
+    }
+    .list {
+        padding: 0 3% !important;
+    }
+    .text {
+        font-size: 16px !important;
+    }
+    .no-required {
+        padding-left: 17px;
+    }
+    .address {
+        padding-left: 17px !important;
+        text-align: left !important;
+    }
+    .posted {
+        padding-left: 17px !important;
+        text-align: left !important;
+    }
+    .cancel {
+        padding-left: 17px !important;
+        text-align: left !important;
+    }
+}
+
+@media only screen and (max-width: 1199px) and (min-width: 1000px) {
+    .no-required {
+        padding-left: 17px;
+    }
+    .address {
+        text-align: right !important;
+    }
+    .posted {
+        padding-left: 17px !important;
+        text-align: left !important;
+    }
+    .cancel {
+        text-align: right !important;
+    }
+}
+
+@media only screen and (max-width: 999px) and (min-width: 769px) {
+    .no-required {
+        padding-left: 17px;
+    }
+    .address {
+        text-align: right !important;
+    }
+    .posted {
+        padding-left: 17px !important;
+        text-align: left !important;
+    }
+    .cancel {
+        text-align: right !important;
+    }
+}
+
+
+.seperator{
+    border-top: solid 1px #979797;
+    margin: 5px 0 10px -10px;
+    width: calc(100% + 20px);
+    color: #d3d3d3;
+}
+
+:host /deep/.ui-breadcrumb ul li .ui-menuitem-link {
+    cursor: default;
+}
+
+:host /deep/.ui-menuitem-text {
+    font-family: $proxima-reg;
+    font-size: 15px;
+    color: #585858;
+}
+
+:host /deep/.ui-breadcrumb {
+    background: #fff;
+    border: 0;
+    padding: 0;
+    margin: 0 0 5px -0.25em;
+    font-family: $proxima-reg;
+    font-size: 15px;
+    color: #585858;
+}
+
+
+.projects-container{
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -15px;
+    .col{
+        flex: 0 0 100%;
+        max-width: 100%;
+        padding: 0 15px;
+    }
+    .breadcrumb-container{
+        flex: 0 0 100%;
+        max-width: 100%;
+        padding: 0 15px;
+    }
+    .project{
+        border: solid 1px #e5e5e5;
+        background-color: #ffffff;
+        width: 100%;
+        margin-bottom: 15px;
+        padding: 5px 20px;
+        .heading{
+            border-bottom: 1px solid #f0f2f7;
+            padding: 20px 0;
+            font-size: 18px;
+            font-family: $proxima-semi-bold;
+            text-transform: capitalize;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .btn-cancel{   
+                color: #e06666;
+                font-family: $proxima-semi-bold;
+                font-size: 14px;
+                border-radius: 3px!important;
+                transition: $transition;
+                background-color: #fff;
+                border: solid 1px #e06666;
+                &:hover{
+                    background-color: #e06666;
+                    color: #fff; 
+                }
+            }
+        }
+        .body{
+            padding: 20px 0 10px;
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -15px;
+            .item{
+                flex: 0 0 50%;
+                max-width: 50%;
+                padding: 0 15px;
+                margin-bottom: 10px;
+                display: flex;
+                flex-direction: column;
+            }
+            .key{
+                font-family: $proxima-semi-bold;
+                color: #6b6b6b;
+                margin-right: 0px;
+            }
+            .value{
+                color:black;
+            }
+        }
+        .footer{
+            padding: 20px 0;
+            border-top: 1px solid #f0f2f7;
+            display: flex;
+            justify-content: space-between;
+            .posted-container{
+                display: flex;
+                align-items: center;
+                justify-content: space-evenly;
+            }
+            .posted-ago{
+                color: #9f9f9f;
+                font-size: 12px;
+                font-family: $proxima-reg;
+                display: flex;
+                align-items: center;
+                .posted-txt{
+                    font-family: $proxima-semi-bold;
+                    color: #3eb732;
+                    margin-right: 3px;
+                }
+                img{
+                    margin-right: 3px;
+                    max-height: 18px;
+                }
+            }
+            .view-details,.view-bids{
+                border: 1px solid $color-blue;
+                font-size: 16px;
+                font-family: $proxima-reg;
+                color: $color-blue;
+                border-radius: 2px!important;
+                cursor: pointer;
+                transition:$transition;
+                background-color: white;
+                &:hover{
+                    background-color: $color-blue;
+                    color:white;
+                }
+                min-width: 125px;
+            }
+            .view-bids{
+                background-color: $color-blue;
+                color:white;
+                &:hover{
+                    background-color: white;
+                    color:$color-blue;
+                }
+            }
+            &.bid-visible{
+                flex-direction: column-reverse;
+                .btn-container{
+                    margin-bottom: 15px;
+                    text-align: center;
+                }
+            }
+        }
+    }
+}
+.posted-project{
+  padding:15px;
+}
+.footer-div{
+  height: 95vh;
+}
+
+@media screen and (min-width:992px){
+    .posted-project{
+        padding:30px;
+    }
+
+    .projects-container{
+        .col{
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+        .project{
+
+            .heading{
+            }
+            .body{
+                .item{
+                    display: flex;
+                    flex-direction: row;
+                }
+                .key{
+                    margin-right: 10px;
+                }
+            }
+            .footer{
+                &.bid-visible{
+                    flex-direction: row;
+                    .btn-container{
+                        margin-bottom: 0;
+                        text-align: unset;
+                    }
+                }
+            }
+        }
+    }
+}
+.img-project-tile{
+    max-height: 80px;
+    max-width: 80px;
+    object-fit: contain;
+}
+.head{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.yes-no-btn{
+    width: 65px !important;
+    border-radius: 6px !important;
+}
+.clear-pop-row{
+    padding: 15px;
+}
+:host /deep/ .popup-Main .modal-content{
+    width: 415px !important;
+    margin:0 auto;
+}
+:host /deep/ .modal-footer{
+    border-top: 0px !important;
+}
+.btns-div{
+    padding: 0px;
+    border-top:solid 1px #e5e5e5;
+}
+.h-m{
+    margin-bottom: 10px;
+}
+:host /deep/ .popup-crumb span.ui-menuitem-text{
+    font-size:23px !important
+}
+.date-div{
+    padding: 0;
+}
+.details{
+    font-size:18px!important;
+}

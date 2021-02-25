@@ -1,0 +1,19 @@
+<div class="enter-promo">
+  <form [formGroup]="promoFrom" class="form">
+    <div class="coupon">
+      <div class="text" [ngStyle]="{ 'direction' : direction }">
+        <p>
+          <img src="assets/img/promotions-icon.svg" alt="bill icon"/>
+          <ng-container>{{languageStrings.have_promo_referral_code || 'Have a Promo/ Referral Code'}}?</ng-container>
+        </p>
+      </div>
+      <div class="inputField">
+        <input type="text" [ngStyle]="{ 'direction' : direction }"
+               formControlName="code"
+               class="inputPromo"  placeholder="{{languageStrings.enter_promo_referral_code || 'Enter Promo/ Referral Code'}}" />
+        <button type="button" (click)="submitPromo()" class="promobtn">{{languageStrings.apply ||'Apply'}}</button>
+      </div>
+      <app-control-messages [control]="promoFrom.controls.code"></app-control-messages>
+    </div>
+  </form>
+</div>

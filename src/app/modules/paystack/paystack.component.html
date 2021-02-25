@@ -1,0 +1,13 @@
+<div class="container-fluid paypal">
+        <div class="row" *ngIf="paystackPayUrl" style="padding: 10px">
+          <div class="col-md-12 text-center">
+            <h4>
+              <ng-container>Paystack</ng-container>
+            </h4>
+          </div>
+          <div class="col-md-12">
+            <iframe id="paystackIFrame" style="border: none" #paystackIFrame [src]="paystackPayUrl" height="610px" width="100%" (load)="getContentPaystack(paystackIFrame)"></iframe>
+          </div>
+        </div>
+      </div>
+      

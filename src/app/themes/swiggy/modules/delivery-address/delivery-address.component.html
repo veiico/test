@@ -1,0 +1,87 @@
+<div class="checkout_card">
+  <div class="chk_inr_hdng">
+    <div>
+
+
+      <!-- <span *ngIf="deliveryOrPickup" class="src_img"> <img  *ngIf="selectedAddress" class="img-checked" src="assets/img/checked.svg" /> <img  src="assets/img/delivery-heading.svg" /></span>
+        <span *ngIf="!deliveryOrPickup" class="src_img"> <img  *ngIf="selectedAddress" class="img-checked" src="assets/img/checked.svg" /><img src="assets/img/pickup-heading.svg" /></span> -->
+      <!--<p class="chk_inr_hdng_txt">-->
+      <!--<span *ngIf="!selectedAddress">Choose a </span>Delivery Address-->
+      <!--</p>-->
+      <p *ngIf="!deliveryOrPickup && terminology" class="chk_inr_hdng_txt">
+        {{langJson['Delivery Details']}}
+      </p>
+      <p *ngIf="deliveryOrPickup && terminology" class="chk_inr_hdng_txt">
+        {{langJson['Delivery Details']}}
+      </p>
+
+    </div>
+    <!-- <div class="heading-btn">
+
+      </div> -->
+  </div>
+  <div class="addr-content">
+    <button type="button" class="btn add-address" *ngIf="!selectedAddress && checkForAllFavType && savedAddresses.length"
+      (click)="openAddAddress()">
+      <i class="fa fa-map-marker" aria-hidden="true"></i>
+      <ng-container >Add Address</ng-container>
+    </button>
+    <ng-container *ngIf="!selectedAddress; else elseTemplate">
+      <ng-container *ngIf="savedAddresses.length; else elseTemplate">
+        <div class="chk_cnt_div chk_form no-gutter m0" *ngIf="content">
+          <fav-location-model *ngFor="let address of savedAddresses;let i = index;" [styles]="content['address'].styles"
+            [readOnly]="true" [address]="address" (click)="onAddressClick(address,i)" (delete)="getDeleteData($event)"
+            (edit)="editAddress($event)"></fav-location-model>
+        </div>
+      </ng-container>
+      <ng-template #elseTemplate>
+        <div style="display:flex;flex-direction:column;margin:auto; justify-content:center;align-items:center;padding:20px;font-size:18px;"
+          class="text-center">
+          <div>
+            <span class="yf yf-no-address color-theme " style="font-size: 48px"> </span>
+          </div>
+          <div>
+            <ng-container >No Saved Addresses</ng-container>
+          </div>
+          <div>
+            <button type="button" class="btn add-address" *ngIf="!savedAddresses.length" (click)="openAddAddress()">
+              <i class="fa fa-map-marker" aria-hidden="true"></i>
+              <ng-container >Add Address</ng-container>
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </ng-container>
+    <ng-template #elseTemplate>
+      <div class="chk_cnt_div selected-address m0" *ngIf="locationTypes">
+        <div class="container-fluid selected-address-inner">
+          <div class="icon"  *ngIf="langJson">
+            <img class="loc-type-img" [src]="locationTypes[selectedAddress.locType].icon" alt="">
+          </div>
+          <div class="content"  *ngIf="langJson">
+            <div class="title">
+
+              {{locationTypes[selectedAddress.locType].label}}
+            </div>
+
+            <div class="row address">
+
+              <div class="col-xs-12">
+                <p class="">{{selectedAddress.name}}</p>
+              </div>
+              <div class="col-xs-12" style="margin: 1rem 0;">
+                <p class="complete-address">{{selectedAddress.house?selectedAddress.house+',
+                  ':''}}{{selectedAddress.address}}</p>
+              </div>
+
+              <button type="button" class="btn change-address" *ngIf="selectedAddress" (click)="onChangeClick()">
+                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                <ng-container > Change Address</ng-container>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

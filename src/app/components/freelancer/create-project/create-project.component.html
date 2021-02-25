@@ -1,0 +1,22 @@
+<div class="yl-create-project" *ngIf="terminology">
+  <div class="yl-main" [ngStyle]="{'background-image': 'url(' + config.background_image + ')'}">
+    <div class="yl-heading">
+      <h3 class="text-center" *ngIf="!config.name"><ng-container>{{languageStrings.post_your_project || 'Post Your Project'}}</ng-container></h3>
+      <h3 class="text-center" *ngIf="config.name">{{config.name}}</h3>
+    </div>
+
+    <div class="yl-formParent">
+      <div class="yl-noData" *ngIf="noData">
+        <ng-container>{{languageStrings.no_data_found || 'No Data Found'}}</ng-container>
+      </div>
+      <div class="yl-data" *ngIf="!noData">
+        <div *ngFor="let template of formTemplatePages; let i = index;">
+          <app-free-lancer-template [templateFields]="template" [index]="i + 1" [totalIndex]="formTemplatePages.length" 
+            [categoryId]="catId" [path]="path" (statusNext)="nextStatus($event)" 
+            (statusBack)="backStatus($event)" *ngIf="template.show"></app-free-lancer-template>
+        </div>
+      </div>
+    </div>
+    <app-footer></app-footer>
+  </div>
+</div>

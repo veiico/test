@@ -1,0 +1,25 @@
+<form class="login-form"  *ngIf="is_custom_required && is_anywhere_required">
+    <div class="checkout_card">
+        <div>
+            <div class="chk_inr_hdng">
+                <img src="assets/img/pickup-heading.svg" aria-hidden="true" alt="pickup"/>
+                <!-- <p class="chk_inr_hdng_txt text-capitalize" >{{langJson['Pickup Options']}}</p> -->
+                <p class="chk_inr_hdng_txt text-capitalize" *ngIf="!isLaundryFlow"><ng-container>{{languageStrings.pickup_options ||'Pickup Options'}}</ng-container></p>
+                <p class="chk_inr_hdng_txt text-capitalize" *ngIf="isLaundryFlow"><ng-container>{{languageStrings.store_options ||'Store Options'}}</ng-container></p>
+            </div>
+            <mat-radio-group [(ngModel)]="pickupOption" name="pickupOption" (change)="onChange()">
+                <div class="chk_cnt_div chk_form no-gutter m0">
+                    <div >
+                        <mat-radio-button [value]="1">{{terminology['ANY_WHERE'] || 'ANY WHERE' }}</mat-radio-button>
+                    </div>
+                    <div >
+                        <mat-radio-button [value]="2">
+                            <ng-container>{{terminology['CUSTOM'] || 'CUSTOM'}}</ng-container>
+                        </mat-radio-button>
+                    </div>
+                </div>
+            </mat-radio-group>
+
+        </div>
+    </div>
+</form>

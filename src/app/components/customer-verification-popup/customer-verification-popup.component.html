@@ -1,0 +1,30 @@
+<app-modal class="container" modalType="'modal-md'" >
+    <div body>
+        <div class="Container">
+            <div class="image-box">
+                    <img src="assets/images/group.png">
+            </div>
+
+            <div class="bold-info-box">
+                 <ng-container>{{ languageStrings.your_account_under_review_for_service_owner_approval || "Your account is under review for service owner's approval."}}</ng-container>
+            </div>
+
+            <div class="info-box">
+                <ng-container>{{ languageStrings.you_will_get_confirmation_email_once_approved ||'You will get a confirmation email once approved.'}}</ng-container>
+
+            </div>
+            
+            <div class="footer">
+
+                <button class="btn btn-primary" (click)="onConfirmClick()" *ngIf="languageStrings"> 
+                    <ng-container>{{languageStrings.confirm || 'Confirm'}}</ng-container>
+                </button>
+
+            </div>
+        </div>
+
+       
+    </div>
+</app-modal>
+
+

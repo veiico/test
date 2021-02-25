@@ -1,0 +1,6 @@
+<app-payment *ngIf="formSettings.onboarding_business_type !== 805
+                    || lastUrl === '/customCheckout'
+                    || isSourceCustom || isEditedTask"></app-payment>
+
+<app-laundry-checkout *ngIf="formSettings.onboarding_business_type === 805
+                             && lastUrl !== '/customCheckout' && !isSourceCustom && !isEditedTask"></app-laundry-checkout>

@@ -1,0 +1,70 @@
+@font-face {
+  font-family: 'yelo-web-font-new';
+  src:  url('fonts/yelo-web-font-new.eot?57hc4l');
+  src:  url('fonts/yelo-web-font-new.eot?57hc4l#iefix') format('embedded-opentype'),
+    url('fonts/yelo-web-font-new.ttf?57hc4l') format('truetype'),
+    url('fonts/yelo-web-font-new.woff?57hc4l') format('woff'),
+    url('fonts/yelo-web-font-new.svg?57hc4l#yelo-web-font-new') format('svg');
+  font-weight: normal;
+  font-display: swap;
+  font-style: normal;
+}
+
+.yfn {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'yelo-web-font-new' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.yfn-controls-1:before {
+  content: "\e90d";
+  color: #9b9b9b;
+}
+.yfn-clock:before {
+  content: "\e90c";
+}
+.yfn-left-arrow:before {
+  content: "\e90b";
+}
+.yfn-reward_icon:before {
+  content: "\e90a";
+}
+.yfn-locationNew:before {
+  content: "\e908";
+}
+.yfn-phoneNew:before {
+  content: "\e909";
+}
+.yfn-group_4:before {
+  content: "\e905";
+}
+.yfn-group_5:before {
+  content: "\e906";
+}
+.yfn-group_copy:before {
+  content: "\e907";
+}
+.yfn-addMoney:before {
+  content: "\e900";
+}
+.yfn-addWallet:before {
+  content: "\e901";
+}
+.yfn-failedTran:before {
+  content: "\e902";
+}
+.yfn-receiveMoney:before {
+  content: "\e903";
+}
+.yfn-sendWallet:before {
+  content: "\e904";
+}

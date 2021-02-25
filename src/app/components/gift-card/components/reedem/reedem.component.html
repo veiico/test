@@ -1,0 +1,16 @@
+<div class="reedem">
+  <form [formGroup]="reedemForm">
+    <div>
+      <h2 class="head">{{terminology.REDEEM_GIFT_CARD}}</h2>
+      <div class="details">
+        <div class="form-group">
+          <input type="text" formControlName="code" placeholder="{{ languageStrings.enter_your_code || 'Enter your code'}}" class="input form-control"/>
+          <app-control-messages [control]="reedemForm.controls.code"></app-control-messages>
+        </div>
+      </div>
+      <div class="form-group text-center">
+        <button class="btn submitBtn" (click)="onSubmit()">{{terminology.REDEEM}}</button>
+      </div>
+    </div>
+  </form>
+</div>

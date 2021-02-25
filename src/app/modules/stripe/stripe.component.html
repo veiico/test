@@ -1,0 +1,9 @@
+<!--<app-stripe [loginResponse]="loginResponse" (paymentMadeResponse)="paymentMadeResponse($event)" *ngIf="paymentMethod === 2"></app-stripe>-->
+<div class="stripe">
+  <app-stripe-card-list *ngIf="cardList && cardList.length > 0"
+                        [cardList]="cardList"
+                        [showDeleteButton]="deleteButton"
+                        (deleteCardEvent)="deleteCard($event)"
+                        (paymentMade)="paymentMade($event)"></app-stripe-card-list>
+  <app-stripe-add-card [addCardLink]="addCardLink" (cardAdded)="cardAdded($event)"></app-stripe-add-card>
+</div>

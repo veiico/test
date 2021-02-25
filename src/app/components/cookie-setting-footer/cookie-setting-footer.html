@@ -1,0 +1,14 @@
+<div class="footer hide-mobile-view" *ngIf="showCookieBar">
+  <div class="dFlex">
+    <div>
+      <p [ngStyle]="{ 'direction' : direction }">
+        <ng-container>{{languageStrings.our_website_uses_cookies_which_helps_us_deliver_best_possible_service_and_customer_experience || 'Our website uses cookies, which helps us to deliver the best possible service and customer experience.'}}</ng-container>
+        <a [routerLink]="['/terms-condition']" [target]="'_blank'" *ngIf="!tnc_url" ><ng-container>{{languageStrings.click_here_for_the_cookie_policy ||'Click here for the cookie policy.'}}</ng-container></a>
+        <a [href]="tnc_url" *ngIf="tnc_url" target="_blank" ><ng-container>{{languageStrings.click_here_for_the_cookie_policy ||'Click here for the cookie policy.'}}</ng-container></a>
+      </p>
+    </div>
+    <div class="" [ngStyle]="{ 'direction' : direction }">
+      <button class="btn gotItButton" (click)="storeCookie()" ><ng-container>{{languageStrings.got_it ||'Got It!'}}</ng-container></button>
+    </div>
+  </div>
+</div>

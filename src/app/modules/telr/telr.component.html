@@ -1,0 +1,12 @@
+<div class="container-fluid paypal">
+  <div class="row" *ngIf="telrPaymentUrl" style="padding: 10px">
+    <div class="col-md-12 text-center">
+      <h4>
+        <ng-container>Telr</ng-container>
+      </h4>
+    </div>
+    <div class="col-md-12">
+      <iframe id="telrIFrame" style="border: none" #telrIFrame [src]="telrPaymentUrl" height="610px" width="100%" (load)="getContentTelr(telrIFrame)"></iframe>
+    </div>
+  </div>
+</div>

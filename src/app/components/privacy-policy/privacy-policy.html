@@ -1,0 +1,20 @@
+<app-header style="height:85px;padding: 0px;" class="col-xs-12" [headerData]="appConfig"></app-header>
+
+<div class="privacyPolicy row">
+  <div class="col-xs-12">
+    <div class="heading col-lg-12 col-sm-12 col-md-12 col-xs-12">
+      <p class="title"  [ngStyle]="{ 'direction' : direction }"><ng-container>{{languageStrings.privacy_policy || 'Privacy Policy'}}</ng-container></p>
+      <hr class="line" style="border-top-color: rgb(34, 150, 255);">
+    </div>
+  </div>
+  <div class="row container">
+    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12" *ngIf="appConfig && appConfig.privacy_policy_text">
+      <p [innerHTML]="appConfig.privacy_policy_text"></p>
+    </div>
+    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12" *ngIf="appConfig && !appConfig.privacy_policy_text">
+      <p class="nothing"  [ngStyle]="{ 'direction' : direction }"><ng-container>{{ languageStrings.nothing_to_display ||'Nothing to display.'}}</ng-container></p>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

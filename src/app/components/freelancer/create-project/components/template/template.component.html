@@ -1,0 +1,229 @@
+<div class="yl-template">
+    <div class="yl-template-head">
+        <h3>{{templateFields.template[0].group_headline || 'Step - ' + index}}</h3>
+    </div>
+
+    <form role="form" class="addForm" [formGroup]="form" autocomplete="off">
+
+        <div class="row" *ngFor="let field of typesWithoutDate; let j = index;">
+            <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 yl-field" *ngIf="field.data_type == 'Single-Select'">
+                <label [for]="field.label" class="control-label yl-label">{{field.display_name}} <span  style="color: red;" *ngIf="field.required != undefined && field.required === 1 "> * </span> </label>
+                <p-dropdown [id]="field.label" autocomplete="off" [ngStyle]="{ 'direction' : direction }" class="form-control yl-field-input p-0" [options]="field.allowed_values_modified" placeholder="{{field.display_name}}" [formControlName]="field.label"></p-dropdown>
+                <app-control-messages [control]="form.controls[field.label]"></app-control-messages>
+            </div>
+            <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 yl-field" *ngIf="field.data_type == 'Multi-Select'">
+                <label [for]="field.label" class="control-label yl-label">{{field.display_name}}<span  style="color: red;" *ngIf="field.required === 1 "> * </span> </label>
+                <!--<ng-multiselect-dropdown  class="form-control yl-field-input p-0" [formControlName]="field.label"-->
+                <!--placeholder="{{field.display_name}}" [data]="field.allowed_values_modified" [settings]="multiSelectSettings" (onSelect)="onItemSelect($event)"-->
+                <!--(onSelectAll)="onSelectAll($event)">-->
+                <!--</ng-multiselect-dropdown>-->
+
+                <p-multiSelect [id]="field.label" class="form-control yl-field-input p-0" [options]="field.allowed_values_modified" [formControlName]="field.label">
+                    <ng-template let-value pTemplate="selectedItems">
+                        <div *ngFor="let val of value" class="ui-multiselected-item-token ui-corner-all">
+                            <span>{{val}}</span>
+                        </div>
+                        <span *ngIf="!value || value.length === 0" class="ui-multiselected-empty-token ui-corner-all placeholder-color"><ng-container >{{languageStrings.choose || 'Choose'}}</ng-container></span>
+                    </ng-template>
+                </p-multiSelect>
+                <app-control-messages [control]="form.controls[field.label]"></app-control-messages>
+            </div>
+            <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 yl-field" *ngIf="field.data_type == 'Text'">
+                <label [for]="field.label" class="control-label yl-label">{{field.display_name}} <span  style="color: red;" *ngIf="field.required != undefined && field.required === 1 "> * </span> </label>
+                <input [id]="field.label" type="text" [ngStyle]="{ 'direction' : direction }" class="form-control yl-field-input" placeholder="{{field.display_name}}" [formControlName]="field.label" />
+                <app-control-messages [control]="form.controls[field.label]"></app-control-messages>
+            </div>
+            <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 yl-field" *ngIf="field.data_type == 'Number' && !field.is_hidden">
+                <label [for]="field.label" class="control-label yl-label">{{field.display_name}} <span  style="color: red;" *ngIf=" field.required != undefined &&  field.required === 1 "> * </span> </label>
+                <input [id]="field.label" type="number" [ngStyle]="{ 'direction' : direction }" class="form-control yl-field-input" placeholder="{{field.display_name}}" [formControlName]="field.label" min="0" />
+                <app-control-messages [control]="form.controls[field.label]"></app-control-messages>
+            </div>
+            <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 yl-field" *ngIf="field.data_type == 'Email'">
+                <label [for]="field.label" class="control-label yl-label">{{field.display_name}} <span  style="color: red;" *ngIf="field.required != undefined &&  field.required === 1 "> * </span></label>
+                <input [id]="field.label" type="email" [ngStyle]="{ 'direction' : direction }" class="form-control yl-field-input" placeholder="{{field.display_name}}" [formControlName]="field.label" />
+                <app-control-messages [control]="form.controls[field.label]"></app-control-messages>
+            </div>
+            <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 yl-field" *ngIf="field.data_type == 'Telephone'">
+                <label  [for]="field.label" class="control-label yl-label">{{field.display_name}}<span  style="color: red;" *ngIf="field.required != undefined &&  field.required === 1 "> * </span> </label>
+                <app-fugu-tel-input [id]="field.label" class="form-control yl-field-input p-0" [formControlName]="field.label" [(ngModel)]="field.value" [(dialCode)]="country_code"></app-fugu-tel-input>
+                <app-control-messages [control]="form.controls[field.label]"></app-control-messages>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6 col-sm-12 col-md-12 col-xs-12" *ngFor="let fieldDate of typesDate;">
+                <div class="yl-field" *ngIf="fieldDate.data_type == 'Date'">
+                    <label [for]="fieldDate.label" class="control-label yl-label">{{fieldDate.display_name}} <span  style="color: red;" *ngIf="fieldDate.required != undefined && fieldDate.required === 1 "> * </span> </label>
+                    <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" [id]="fieldDate.label"  class="form-control yl-field-input p-0" placeholder="{{fieldDate.display_name}}"
+                                [(ngModel)]="fieldDate.value" [formControlName]="fieldDate.label" [showIcon]="true"
+                                [readonlyInput]="true" [yearNavigator]="true" yearRange="1950:2050" [monthNavigator]="true"></p-calendar>
+                    <app-control-messages [control]="form.controls[fieldDate.label]"></app-control-messages>
+                </div>
+                <div class="yl-field" *ngIf="fieldDate.data_type == 'Date-Future'">
+                    <label [for]="fieldDate.label" class="control-label yl-label">{{fieldDate.display_name}} <span  style="color: red;" *ngIf="fieldDate.required != undefined && fieldDate.required === 1 "> * </span></label>
+                    <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" [id]="fieldDate.label"  class="form-control yl-field-input p-0" placeholder="{{fieldDate.display_name}}"
+                                [minDate]="minDateForFutrue" [(ngModel)]="fieldDate.value" [formControlName]="fieldDate.label"
+                                [showIcon]="true" [readonlyInput]="true" [yearNavigator]="true" yearRange="1950:2050" [monthNavigator]="true"></p-calendar>
+                    <app-control-messages [control]="form.controls[fieldDate.label]"></app-control-messages>
+                </div>
+                <div class="yl-field" *ngIf="fieldDate.data_type == 'Date-Past'">
+                    <label [for]="fieldDate.label" class="control-label yl-label">{{fieldDate.display_name}} <span  style="color: red;" *ngIf="fieldDate.required != undefined && fieldDate.required === 1 "> * </span> </label>
+                    <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" [id]="fieldDate.label"  class="form-control yl-field-input p-0" placeholder="{{fieldDate.display_name}}"
+                                [maxDate]="maxDateForPast" [(ngModel)]="fieldDate.value" [formControlName]="fieldDate.label"
+                                [showIcon]="true" [readonlyInput]="true" [yearNavigator]="true" yearRange="1950:2050" [monthNavigator]="true"></p-calendar>
+                    <app-control-messages [control]="form.controls[fieldDate.label]"></app-control-messages>
+                </div>
+                <div class="yl-field" *ngIf="fieldDate.data_type == 'Time'">
+                    <label [for]="fieldDate.label" class="control-label yl-label">{{fieldDate.display_name}} <span  style="color: red;" *ngIf="fieldDate.required != undefined && fieldDate.required === 1 "> * </span> </label>
+                    <p-calendar [id]="fieldDate.label"  class="form-control yl-field-input p-0" [timeOnly]="true"
+                                [hourFormat]="config.time_format === timeFormat.TWELVE_HOURS ? 12 : 24"
+                                placeholder="{{fieldDate.display_name}}" [(ngModel)]="fieldDate.value" [formControlName]="fieldDate.label"
+                                [showIcon]="true" [readonlyInput]="true"></p-calendar>
+                    <app-control-messages [control]="form.controls[fieldDate.label]"></app-control-messages>
+                </div>
+                <div class="yl-field" *ngIf="fieldDate.data_type == 'Date-Time'">
+                    <label [for]="fieldDate.label" class="control-label yl-label">{{fieldDate.display_name}} <span  style="color: red;" *ngIf="fieldDate.required != undefined && fieldDate.required === 1 "> * </span> </label>
+                    <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" [id]="fieldDate.label"  class="form-control yl-field-input p-0" [showTime]="true"
+                                [hourFormat]="config.time_format === timeFormat.TWELVE_HOURS ? 12 : 24"
+                                placeholder="{{fieldDate.display_name}}" [(ngModel)]="fieldDate.value" [formControlName]="fieldDate.label"
+                                [showIcon]="true" [readonlyInput]="true" [yearNavigator]="true" yearRange="1950:2050" [monthNavigator]="true"></p-calendar>
+                    <app-control-messages [control]="form.controls[fieldDate.label]"></app-control-messages>
+                </div>
+                <!--=====================date time future for normal======================-->
+                <div class="yl-field" *ngIf="fieldDate.data_type == 'Datetime-Future' && (fieldDate.label != 'start_date' && fieldDate.label != 'end_date' && fieldDate.label != 'request_start' && fieldDate.label != 'request_end')">
+                    <label [for]="fieldDate.label" class="control-label yl-label">{{fieldDate.display_name}} <span  style="color: red;" *ngIf="fieldDate.required != undefined && fieldDate.required === 1 "> * </span>  </label>
+                    <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" [id]="fieldDate.label"  class="form-control yl-field-input p-0" [showTime]="true"
+                                [hourFormat]="config.time_format === timeFormat.TWELVE_HOURS ? 12 : 24"
+                                placeholder="{{fieldDate.display_name}}" [readonlyInput]="true" [(ngModel)]="fieldDate.value"
+                                [formControlName]="fieldDate.label" [showIcon]="true" [yearNavigator]="true"
+                                yearRange="1950:2050" [monthNavigator]="true" (onSelect)="checkForValidTime('future',fieldDate)"></p-calendar>
+                    <app-control-messages [control]="form.controls[fieldDate.label]"></app-control-messages>
+                </div>
+                <!--=====================date time future for start_date end_date request_start request_end======================-->
+                <div class="yl-field" *ngIf="fieldDate.data_type == 'Datetime-Future' && fieldDate.label == 'start_date'">
+                    <label [for]="fieldDate.label" class="control-label yl-label">{{fieldDate.display_name}} <span  style="color: red;" *ngIf="fieldDate.required != undefined && fieldDate.required === 1 "> * </span> </label>
+                    <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" [id]="fieldDate.label"  class="form-control yl-field-input p-0" [showTime]="true"
+                                [hourFormat]="config.time_format === timeFormat.TWELVE_HOURS ? 12 : 24"
+                                placeholder="{{fieldDate.display_name}}" [readonlyInput]="true" (onSelect)="startEndChanged($event, 'start',fieldDate,'future' )"
+                                [(ngModel)]="fieldDate.value" [formControlName]="fieldDate.label" [showIcon]="true"
+                                [yearNavigator]="true" yearRange="1950:2050" [monthNavigator]="true"></p-calendar>
+                    <app-control-messages [control]="form.controls[fieldDate.label]"></app-control-messages>
+                </div>
+                <div class="yl-field" *ngIf="fieldDate.data_type == 'Datetime-Future' && fieldDate.label == 'end_date'">
+                    <label [for]="fieldDate.label" class="control-label yl-label">{{fieldDate.display_name}} <span  style="color: red;" *ngIf="fieldDate.required != undefined && fieldDate.required === 1 "> * </span> </label>
+                    <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" [id]="fieldDate.label"  class="form-control yl-field-input p-0" [showTime]="true"
+                                [hourFormat]="config.time_format === timeFormat.TWELVE_HOURS ? 12 : 24"
+                                placeholder="{{fieldDate.display_name}}" [readonlyInput]="true" (onSelect)="startEndChanged($event, 'end', fieldDate,'future')"
+                                [(ngModel)]="fieldDate.value" [formControlName]="fieldDate.label" [showIcon]="true"
+                                [yearNavigator]="true" yearRange="1950:2050" [monthNavigator]="true"></p-calendar>
+                    <app-control-messages [control]="form.controls[fieldDate.label]"></app-control-messages>
+                </div>
+                <div class="yl-field" *ngIf="fieldDate.data_type == 'Datetime-Future' && fieldDate.label == 'request_start'">
+                    <label [for]="fieldDate.label" class="control-label yl-label">{{fieldDate.display_name}} <span  style="color: red;" *ngIf="fieldDate.required != undefined && fieldDate.required === 1 "> * </span> </label>
+                    <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" [id]="fieldDate.label"  class="form-control yl-field-input p-0" [showTime]="true"
+                                [hourFormat]="config.time_format === timeFormat.TWELVE_HOURS ? 12 : 24"
+                                placeholder="{{fieldDate.display_name}}" [readonlyInput]="true" (onSelect)="requestStartEndChanged($event, 'start', fieldDate, 'future')"
+                                [(ngModel)]="fieldDate.value" [formControlName]="fieldDate.label"
+                                [showIcon]="true" [yearNavigator]="true" yearRange="1950:2050"
+                                [monthNavigator]="true"></p-calendar>
+                    <app-control-messages [control]="form.controls[fieldDate.label]"></app-control-messages>
+                </div>
+                <div class="yl-field" *ngIf="fieldDate.data_type == 'Datetime-Future' && fieldDate.label == 'request_end'">
+                    <label [for]="fieldDate.label" class="control-label yl-label">{{fieldDate.display_name}} <span  style="color: red;" *ngIf="fieldDate.required != undefined && fieldDate.required === 1 "> * </span> </label>
+                    <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" [id]="fieldDate.label" class="form-control yl-field-input p-0" [showTime]="true"
+                                [hourFormat]="config.time_format === timeFormat.TWELVE_HOURS ? 12 : 24"
+                                placeholder="{{fieldDate.display_name}}" [readonlyInput]="true" (onSelect)="requestStartEndChanged($event, 'end', fieldDate, 'future')"
+                                [(ngModel)]="fieldDate.value" [formControlName]="fieldDate.label"
+                                [showIcon]="true" [yearNavigator]="true" yearRange="1950:2050"
+                                [monthNavigator]="true"></p-calendar>
+                    <app-control-messages [control]="form.controls[fieldDate.label]"></app-control-messages>
+                </div>
+                <div class="yl-field" *ngIf="fieldDate.data_type == 'Datetime-Past'">
+                    <label [for]="fieldDate.label" class="control-label yl-label">{{fieldDate.display_name}} <span  style="color: red;" *ngIf="fieldDate.required != undefined && fieldDate.required === 1 "> * </span> </label>
+                    <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" [id]="fieldDate.label"  class="form-control yl-field-input p-0" [showTime]="true"
+                                [hourFormat]="config.time_format === timeFormat.TWELVE_HOURS ? 12 : 24"
+                                [readonlyInput]="true" placeholder="{{fieldDate.display_name}}" [(ngModel)]="fieldDate.value"
+                                [formControlName]="fieldDate.label" [showIcon]="true" [yearNavigator]="true" yearRange="1950:2050"
+                                [monthNavigator]="true" (onSelect)="checkForValidTime('past',fieldDate)"></p-calendar>
+                    <app-control-messages [control]="form.controls[fieldDate.label]"></app-control-messages>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12 yl-field" *ngFor="let checkField of typesCheckbox;">
+                <!--<label class="control-label yl-label" style="visibility: hidden;">{{field.display_name}}</label><br/>-->
+                <mat-checkbox [formControlName]="checkField.label" [attr.aria-label]="checkField.display_name" [id]="checkField.display_name">{{checkField.display_name}}</mat-checkbox>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12 yl-field" *ngFor="let imageField of typesImages;">
+                <div class="input-group full-width">
+                    <label class="control-label yl-label" [for]="imageField.display_name">{{imageField.display_name}} <span  style="color: red;" *ngIf="imageField.required != undefined && imageField.required === 1 "> * </span> </label>
+                    <div>
+                        <input type="file" [id]="imageField.label" [formControlName]="imageField.label" (change)="onFileChange($event)" #fileInput style="display:none;">
+                        <button class="btn uploadFileButton"  *ngIf="!imageList[imageField.label] || imageList[imageField.label].length < 5" type="button" appColor hoverbgSimple="true" mat-button (click)="fileInput.click()"><ng-container >Upload File</ng-container></button>
+                        <div class="imageListView">
+                            <div class="list" *ngFor="let img of imageList[imageField.label];let i = index">
+                                <img class="imgList" [src]="img" [alt]="imageField.display_name + ' value ' + i">
+                                <span class="spanList" (click)="clearFile(imageField.label,i)">
+                                    <i class="fa fa-times" style="color:red" title="remove"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" *ngFor="let areaField of typesTextArea;">
+            <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 yl-field">
+                <label [for]="areaField.label" class="control-label yl-label">{{areaField.display_name}} <span  style="color: red;" *ngIf="areaField.required != undefined && areaField.required === 1 "> * </span> </label>
+                <textarea [id]="areaField.label" class="form-control yl-field-input" [ngStyle]="{ 'direction' : direction }" placeholder="{{areaField.display_name}}" [formControlName]="areaField.label"></textarea>
+                <app-control-messages [control]="form.controls[areaField.label]"></app-control-messages>
+            </div>
+        </div>
+
+        <div class="row" *ngIf="index === 1 && (config.is_tookan_active || config.show_serving_restriction)">
+           
+            <div class="col-lg-6 col-xs-12 col-md-12 col-sm-12 yl-field" *ngIf="index === 1 && (config.is_tookan_active || config.show_serving_restriction) && config.freelancer_create_pd_jobs">
+                    <label class="control-label yl-label"><ng-container >Pickup Address</ng-container><span  style="color: red;"> * </span> </label>
+                    <div class="input-group">
+                        <i class="btn glyphicon glyphicon-map-marker" aria-hidden="true" (click)="openMap(freelancerAddress.PICKUP_ADDRESS)"></i>
+                        <app-jw-google-autocomplete #search class="form-control yl-field-input" [ngStyle]="{ 'direction' : direction }" type="text"
+                             placeholder="Enter address" autocorrect="off" autocapitalize="off" [(ngModel)]="pickupAddress"
+                            [ngModelOptions]="{standalone: true}" spellcheck="off" (latLng)="onLatLngEvent($event, pickupAddress,freelancerAddress.PICKUP_ADDRESS)"
+                            (modelChange)="clearLatLng(freelancerAddress.PICKUP_ADDRESS)">
+                        </app-jw-google-autocomplete>
+                    </div>
+            </div>
+
+            <div class="col-lg-6 col-xs-12 col-md-12 col-sm-12 yl-field">
+                <label class="control-label yl-label"> <ng-container *ngIf="config.freelancer_create_pd_jobs" >Delivery</ng-container> <ng-container >{{terminology.Address}}</ng-container><span  style="color: red;"> * </span> </label>
+                <div class="input-group">
+                    <i class="btn glyphicon glyphicon-map-marker" aria-hidden="true" (click)="openMap(freelancerAddress.PROJECT_ADDRESS)"></i>
+                    <app-jw-google-autocomplete #search class="form-control yl-field-input" [ngStyle]="{ 'direction' : direction }" type="text"
+                         placeholder="Enter address" autocorrect="off" autocapitalize="off" [(ngModel)]="projectAddress"
+                        [ngModelOptions]="{standalone: true}" spellcheck="off" (latLng)="onLatLngEvent($event, projectAddress,freelancerAddress.PROJECT_ADDRESS)"
+                        (modelChange)="clearLatLng(freelancerAddress.PROJECT_ADDRESS)">
+                    </app-jw-google-autocomplete>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 yl-field-button">
+                <button class="btn" type="button" mat-button appColor hoverbgSimple="true" (click)="goBack()" *ngIf="index != 1"><ng-container >{{languageStrings.back || 'Back'}}</ng-container></button>
+                <button class="btn" type="submit" mat-button appColor hoverbgSimple="true" [disabled]="form?!form.valid:0" *ngIf="!showSubmit" (click)="onSubmit(form)"><ng-container >{{languageStrings.next || 'Next'}}</ng-container></button>
+                <button class="btn" type="submit" mat-button appColor hoverbgSimple="true" [disabled]="form?!form.valid:0" *ngIf="showSubmit && terminology" (click)="onSubmit(form)"><ng-container>{{terminology.POST_PROJECT || 'Post Project'}}</ng-container></button>
+            </div>
+        </div>
+    </form>
+
+
+</div>
+<app-map-popup *ngIf="showTemplatePopup" [lat]="lat" [lng]="lng" [formattedAddress]="city"
+    (save)="onMapPopupSave($event)" (close)="hideTempltePopup($event)"></app-map-popup>

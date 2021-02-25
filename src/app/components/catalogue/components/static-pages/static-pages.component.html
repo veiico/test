@@ -1,0 +1,17 @@
+<div class="pages" *ngIf="staticPages && staticPages.length > 0">
+  <div class="content">
+    <div class="page name" *ngFor="let page of staticPages | slice:sliceFrom:sliceTo;">
+      <a [href]="page.url" target="_blank">{{page.name}}</a>
+    </div>
+    <div class="menu-box text-center page" *ngIf="showArrow">
+      <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+      <ul class="menu-list">
+        <li *ngFor="let dropPage of dropDownArray;">
+          <a [href]="dropPage.url" target="_blank">
+            <ng-container>{{dropPage.name}}</ng-container>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<div class="container-fluid payfast">
+    <div class="row" *ngIf="payfastPaymentUrl" style="padding: 10px">
+      <div class="col-md-12 text-center">
+        <h4>
+          <ng-container>PayFast</ng-container>
+        </h4>
+      </div>
+      <div class="col-md-12">
+        <iframe id="payfastIFrame" style="border: none" #payfastIFrame [src]="payfastPaymentUrl" height="610px" width="100%" (load)="getContentPayfast(payfastIFrame)"></iframe>
+      </div>
+    </div>
+  </div>
+  

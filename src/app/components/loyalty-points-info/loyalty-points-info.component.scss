@@ -1,0 +1,208 @@
+
+@import '~assets/css/variables';
+.heading{
+    text-align: center;
+    padding: 20px 0;
+  }
+  .title {
+    font-size: 30px;
+    line-height: 30px;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    text-align: center;
+    color: #333333;
+    margin-bottom: 20px;
+    display: inline-block;
+  }
+  .line{
+    margin: 0 auto;
+    width: 50px;
+  }
+  .center-p-p{
+    display: flex;
+    display: -webkit-flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    margin: 17px auto;
+    padding:0px 15px;
+  }
+  .card-p{
+    background-color: #ffffff;
+    padding: 20px;
+    box-shadow: 0 13px 25px 0 rgba(0, 0, 0, 0.1);
+  }
+  
+  .center-p{
+    display: flex;
+    display: -webkit-flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    margin: 17px;
+    padding:0px 15px;
+  }
+  .fg{
+    font-size: 16px;
+    padding: 15px;
+  }
+  
+  
+  .referCode{
+    width : 300px;
+    height: 70px;
+    padding-top : 13px;
+    font-size: 24px;
+    text-align: center;
+    border: 1px dashed #ddd;
+    margin: 0 auto;
+  }
+  
+  .referText{
+    text-align:center;
+  }
+  
+  .linkShare{
+    height: 50px;
+    width: 50px;
+    border-radius: 2px;
+    box-shadow: 0 6px 18px 0 rgba(59,89,152,0.4);
+    margin: 17px;
+  }
+  
+  .refer{
+    padding-bottom: 20px;
+    height: auto;
+    min-height: calc(100vh - 180px);
+    //height: calc(100vh - 80px);
+    //overflow-y: scroll;
+    //overflow-x: hidden;
+  }
+  
+  @media only screen and (max-width: 650px) {
+    .card-p{
+      padding: 0px;
+      padding-bottom:15px !important;
+    }
+    .center-p-p{
+      margin: 0px 10px;
+    }
+    .center-p{
+      margin: 0px;
+      padding: 0px;
+      img{
+        width:100%;
+        object-fit: contain;
+      }
+    }
+    .referCode{
+      width: auto !important;
+      padding-top: 18px;
+    }
+  }
+  
+  
+  .cart_box{
+      font-size: 20px;
+      img{
+          margin-top: 10px;
+      }
+
+  }
+  .coin_box{
+    text-align: right;
+    font-size: 20px;
+    img{
+        margin-top: 15px;
+    }
+  }
+
+  .equal_box{
+    text-align:center;
+    margin-top: 21px;
+    font-size: 50px;
+  }
+
+  .coversion_box{
+      margin-top:40px
+  }
+
+  .get_point_box{
+    font-size: 20px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 2.6px;
+    text-align: center;
+    color: #3c3c3c;;
+    margin-top: 30px;
+  }
+  .terminology_box{
+    font-size: 16px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 3.2px;
+    text-align: center;
+    color: #3c3c3c;
+    margin-top: 10px;
+  }
+  .min_order_box{
+    font-size: 16px;
+    font-weight: 300;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #3c3c3c;
+    margin-top: 10px;
+  }
+
+.gift_box{
+    padding: 10px;
+    margin-top: 70px;
+    background: #f7f7f7 !important;
+    padding-bottom:50px;
+    img{
+        margin-top:-50px;
+        background: white;
+    }
+}
+
+.current_balance{
+    font-size: 20px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 2.6px;
+    text-align: center;
+    color: #3c3c3c;
+    margin-top: 30px;
+    .points{
+        padding-bottom:5px;
+    }
+}
+.reward_conditions{
+    font-size: 20px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.7px;
+    color: #3c3c3c;
+    margin-top: 20px;
+    padding: 10px;
+    .contents {
+    
+            font-size: 12px;
+            font-weight: 300;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            color: #3c3c3c;
+            margin-top: 10px;
+    }
+}

@@ -1,0 +1,275 @@
+
+@import '~assets/css/variables';
+mat-checkbox /deep/ .mat-checkbox-layout{
+  word-break: break-word;
+  white-space: pre-wrap !important;
+}
+.yl-template{
+  .yl-template-head{
+    text-align: left;
+    h3{
+      margin: 0px 0px 20px;
+      font-size: 25px;
+      font-family: '$proxima-reg';
+    }
+  }
+  .yl-field{
+    // min-height: 97px;
+    margin-bottom: 1.5rem;
+    .yl-label{
+      font-family: '$proxima-reg';
+      font-size: 18px;
+      font-weight: bold;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      // text-align: center;
+      color: #474747;
+      display: block;
+    }
+    .yl-field-input{
+      height: 50px;
+
+      background-color: #ffffff;
+      font-family: '$proxima-reg';
+      font-size: 16px;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      color: #474747;
+      border: solid 1px #bec0c2;
+    }
+  }
+
+  .yl-field-button{
+    margin: 20px 0px;
+    text-align: right;
+  }
+  /******************************************
+  **************single select****************
+  ******************************************/
+  /deep/.ui-dropdown{
+    width: 100% !important;
+    height: 48px !important;
+    border-radius: 4px !important;
+    border: 0px !important;
+    font-family: '$proxima-reg' !important;
+  }
+  /deep/.ui-dropdown label.ui-dropdown-label {
+    cursor: pointer;
+    height: 48px !important;
+    line-height: 40px !important;
+    border-radius: 4px !important;
+    padding: 6px 12px !important;
+    width: 100%;
+  }
+  ///deep/.ui-state-default{
+  //  border: 0px !important;
+  //}
+  /deep/.ui-dropdown .ui-dropdown-trigger{
+    width: 2.5em !important;
+    border: 0px !important;
+  }
+
+  /******************************************
+   *******multi select without prime*********
+   ******************************************/
+  /deep/.multiselect-dropdown{
+    font-family: '$proxima-reg' !important;
+    font-size: 16px !important;
+  }
+  /deep/.multiselect-dropdown .dropdown-btn{
+    height: 50px !important;
+    line-height: 35px !important;
+    font-family: '$proxima-reg' !important;
+    font-size: 16px !important;
+    border: 0px solid #adadad !important;
+  }
+  /deep/.multiselect-dropdown .dropdown-btn .selected-item {
+    height: 35px !important;
+    font-size: 16px !important;
+    line-height: 32px !important;
+  }
+  /deep/.multiselect-dropdown .dropdown-btn span:not(.selected-item){
+    color: #949494 !important;
+  }
+  /deep/.multiselect-dropdown .dropdown-btn .dropdown-down {
+    border-top: 6px solid #5f5f5f !important;
+    border-left: 6px solid transparent !important;
+    border-right: 6px solid transparent !important;
+  }
+  /deep/.multiselect-dropdown .dropdown-btn .dropdown-up {
+    border-bottom: 6px solid #5f5f5f !important;
+    border-left: 6px solid transparent !important;
+    border-right: 6px solid transparent !important;
+  }
+
+  /******************************************
+   *********multi select with prime**********
+   ******************************************/
+  /deep/.ui-multiselect{
+    width: 100% !important;
+    font-family: '$proxima-reg' !important;
+    font-size: 16px !important;
+    height: 48px !important;
+    border: 0px !important;
+  }
+  /deep/.ui-multiselect:not(.ui-state-disabled):hover {
+    background-color: #ffffff !important;
+    color: #555555 !important;
+  }
+
+  /deep/.ui-multiselect .ui-multiselect-label{
+    margin-bottom: 0px !important;
+    border-radius: 4px !important;
+    height: 48px !important;
+    line-height: 35px !important;
+    padding: 6px 12px !important;
+    font-weight: normal;
+    .placeholder-color{
+      color: #555555b5;
+    }
+  }
+  /deep/.ui-multiselect .ui-multiselect-trigger{
+    width: 2.5em !important;
+    border: 0px !important;
+  }
+  /deep/.ui-multiselect-panel .ui-multiselect-item label{
+    margin-bottom: 0px !important;
+    font-weight: normal;
+  }
+  /deep/.ui-multiselect-header .ui-multiselect-filter-container {
+    width: calc( 100% - 30px ) !important;
+  }
+  /deep/.ui-multiselect-header .ui-inputtext {
+    padding: .125em .125em .125em 30px !important;
+  }
+  /deep/.ui-widget-header {
+    background: transparent !important;
+  }
+  /deep/.ui-widget-header {
+    border: 0px !important;
+    background-color: transparent !important;
+  }
+  /deep/.ui-multiselect-header .ui-multiselect-close{
+    display: none;
+  }
+  /deep/.ui-multiselect-header .ui-multiselect-filter-container .ui-multiselect-filter-icon{
+    left: 10px !important;
+  }
+
+  /******************************************
+  ***************phone number***************
+  ******************************************/
+  /deep/.signup-input{
+    height: 48px !important;
+    font-family: '$proxima-reg' !important;
+    font-size: 16px !important;
+    border-width: 0px 0px 0px 1px !important;
+  }
+  /deep/.input-group-addon{
+    border: 0px !important;
+  }
+
+  /****************************************
+  *********prime datepicker****************
+  ****************************************/
+  /deep/.ui-calendar{
+    width: 100% !important;
+    height: 48px !important;
+    border-radius: 4px !important;
+    border-width: 0px !important;
+    font-family: '$proxima-reg' !important;
+    font-size: 16px !important;
+  }
+
+  /deep/.ui-calendar.ui-calendar-w-btn input{
+    width: 90% !important;
+    height: 48px !important;
+    border-width: 0px !important;
+    padding: 6px 12px !important;
+  }
+
+  /deep/.ui-calendar .ui-calendar-button {
+    width: 51px !important;
+    top: 0px !important;
+    right: 0px !important;
+    background-color: $color-theme;
+  }
+
+  .p-0{
+    padding: 0px !important;
+  }
+
+  textarea{
+    height: 150px !important;
+    resize: vertical;
+  }
+
+  .full-width{
+    width: 100%;
+  }
+
+  .uploadFileButton{
+    font-family: $proxima-reg;
+    font-size: 18px;
+    min-width:150px;
+  }
+  .imageListView{
+    width:100%;
+    max-height: 100px;
+    overflow: scroll;
+    .list{
+      width:80px;
+      height:80px;
+      margin: 5px;
+      margin-left: 0;
+      float:left;
+      .imgList{
+        height: 100%;
+        width: 100%;
+      }
+      .spanList{
+        position: relative;
+        left: 65px;
+        bottom: 80px;
+        background: #ddd;
+        padding: 1px 2px;
+      }
+    }
+  }
+}
+
+
+:host /deep/ .input-box{
+  border: 0;
+  padding: 6px 12px;
+}
+
+:host /deep/ .mat-checkbox-input[type=checkbox]{
+  display: none;
+}
+
+.input-group{
+  display: flex;
+  i{
+    position: absolute;
+    z-index: 10;
+    font-size: 16px;
+    /* top: 27%; */
+    /* left: -5px; */
+    /* top: 3px; */
+    height: calc(100% - 2px);
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    background-color: $color-blue;
+    color: white;
+  }
+  app-jw-google-autocomplete{
+    padding-left: 41px;
+  }
+}

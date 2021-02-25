@@ -1,0 +1,79 @@
+<div id="footer" class="footer-container" [ngClass]="{'dp-none':(config && config.hide_footer_in_mobile)}" *ngIf="data && is_enabled">
+  <div class="container">
+  <!-- Top row Start -->
+    <div class="top-row">
+      <!-- Col - 3 Start -->
+      <div class="logo col-xs-12 col-sm-3 col-md-3">
+          <ng-container *ngIf="data.logo">
+            <a *ngIf="data.logo_redirect_url;else plainTextLogo" rel="noreferrer noopener" [href]="data.logo_redirect_url" target="_blank">
+              <img [src]="data.logo" alt="company logo"> <!-- Company Logo -->
+            </a>
+            <ng-template #plainTextLogo>
+              <img *ngIf="!data.logo_redirect_url" [src]="data.logo" alt="company logo">
+            </ng-template>
+          </ng-container>
+      </div>
+      <!-- Col - 3 End -->
+      <!-- Col - 9 Start -->
+      <div class="columns">
+        <div class="column" *ngIf="data.infoText">{{data.infoText}}</div>
+        <div class="column" *ngFor="let column of data.columns">
+          <p class="column-row" *ngFor="let row of column">
+            <a rel="noreferrer noopener" *ngIf="row.url;else plainText" [href]="row.url" target="_blank">{{row.label}}</a>
+            <ng-template #plainText>
+              {{row.label}} <!-- Other Link -->
+            </ng-template>
+          </p>
+        </div>
+      </div>
+      <!-- Col - 9 End -->
+    </div>
+    <!-- Top row End -->
+    
+    <!-- Bottom row End -->
+    <div class="bottom-row" *ngIf="(data.downloadAppLinks && data.downloadAppLinks.length) || (data.socialLinks && data.socialLinks.length) ">
+      <!-- Download IMG Start -->
+      <div class=" download-app-links " *ngIf="data.downloadAppLinks && data.downloadAppLinks.length">
+        <div class="inner-section">
+          <div class="download-heading">
+            {{data.downloadAppText}}
+          </div>
+          <div class="download-data">
+            <ng-container *ngFor="let downloadAppLink of data.downloadAppLinks">
+              <a class="link" *ngIf="downloadAppLink.url;else plainTextSocial" rel="noreferrer noopener"  [href]="downloadAppLink.url" target="_blank">
+                <img class="link-img" [src]="downloadAppLink.image" [alt]="downloadAppLink.text">
+              </a>
+              <ng-template #plainTextSocial>
+                <img class="link-img without-link" [src]="downloadAppLink.image" [alt]="downloadAppLink.text">
+              </ng-template>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!-- Download IMG end -->
+      <!-- Socail Link Start -->
+      <div class="social-links" *ngIf="data.socialLinks && data.socialLinks.length">
+        <div class="inner-section">
+          <div class="social-heading">
+            {{data.socialText}}
+          </div>
+          <div class="social-data">
+            <ng-container *ngFor="let social of data.socialLinks">
+              <a class="social-link" *ngIf="social.url;else plainTextSocial" rel="noreferrer noopener"  [href]="social.url" target="_blank">
+                <img class="social-link-img" [src]="social.image" [alt]="social.text"> <!-- With Socail Link -->
+              </a>
+              <ng-template #plainTextSocial>
+                <img class="social-link-img social-without-link" [src]="social.image" [alt]="social.text"> <!-- Without Socail Link -->
+              </ng-template>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!-- Socail Link End -->
+
+    </div>
+    <!-- Bottom row End -->
+    <!-- Copyright Section -->
+    <div class=" copyright" [innerHTML]="data.copyright"></div>
+  </div>
+</div>

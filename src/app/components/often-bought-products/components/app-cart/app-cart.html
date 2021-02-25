@@ -1,0 +1,163 @@
+<div id="cart-fix-new">
+    <div class="hidden-xs hidden-sm deskView">
+        <div class="app-cart-text text-center cartAndClear">
+            <div class="text-capitalize">{{terminology.CART}}</div>
+           <i aria-hidden="true" (click)="clearCart()" *ngIf="cartData.length" class="fa fa-trash-o delete-icon"></i>
+        </div>
+        <div class="app-cart-div" [ngClass]="{'pad-60': !cartData.length }">
+            <div class="app-cart-item" *ngIf="cartData.length">
+                <div class="app-cart-list">
+                    <div class="app-cart-item" *ngFor="let product of cartData;let i = index;">
+                        <div class="d-flex" style="justify-content: space-between">
+                               
+                                <div class="d-flex">
+                                      <div>
+                                            <img [src]="product.image_url"  class="product-img" *ngIf="appConfig.is_product_image_visible_on_checkout && product.image_url && appConfig.onboarding_business_type != onboardingBusinessType.LAUNDRY">
+                                      </div>
+                                        
+                                        <div class="pl-6">
+                                                <p class="app-item-head">{{product.name}}</p>
+                                                <p *ngIf="product.customizations && product.customizations.length" class="app-sub-item" style="cursor: pointer;">
+                                                    <span *ngFor="let custom of product.customizations;let last = last">{{custom.name}}
+                                                      <span *ngIf="!last" style="padding:0;">, </span>
+                                                    </span>
+                                                    <span class="edit-customization" *ngIf="restraurantInfo && restraurantInfo.business_type === business_type.PRODUCT_MARKETPLACE"><i class="fa fa-pencil" (click)="editCustomization(product,i)"> </i></span>
+                                                </p>
+                                                <div class="app-item-totalprice" *ngIf="appConfig.show_product_price == 1 || product.showPrice > 0">
+                                                        <span>{{currency+''}} {{(product.quantity * product.showPrice) | decimalConfig}}</span>
+                                                    </div>
+                                        </div>
+                                      
+                                    </div>
+                                    <div class="app-item-info">
+                                            <div class="cart-p-detail-sec">
+                                                <div class="p-action-btn">
+                                                    <div [ngStyle]="{'display': (product.type != 1) ? 'flex':'none'}">
+                                                        <div class="p-minus btn-cursor" (click)="checkforMinQty(product.id,i,product,1)" appBs>
+                                                            <svg width="10" height="7" viewBox="0 0 10 2">
+                                                              <path fill="#858585" fill-rule="nonzero" d="M0 1.75h10V.25H0z" />
+                                                            </svg>
+                                                        </div>
+                                                        <div class="p-quantity">
+                                                            <input appNumberOnly maxlength="4"  aria-label="Product quantity" class="p-quantity inputBulkOrderClass" [(ngModel)]="product.quantity" (focus)="onFocusQty($event)" (blur)="checkforMinQty(product.id,i,product,0)">
+                                                        </div>
+                                                        <div class="p-plus btn-cursor" (click)="increaseQuantity(product.id,i)" [style.background-color]="appConfig.btn_color?appConfig.btn_color:'#1a9943'" appBs>
+                                                            <svg width="9" height="9" viewBox="0 0 10 10">
+                                                              <path fill="#FFF" fill-rule="nonzero" d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+                                                    <div [ngStyle]="{'display': (product.type == 1) ? 'flex':'none'}">
+                                                        <div class="p-minus btn-cursor t-btn" (click)="checkforMinQty(product.id,i,product,1)" appBs>
+                                                            {{removeBtnTxt}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                               
+                                            </div>
+                
+                                        </div>
+                        </div>
+                     
+                       
+                        <p *ngIf="product.minimum_quantity>1" class="app-sub-item min-qty">
+                            <ng-container>{{ languageStrings.minimum_quantity || "Minimum Quantity"}}</ng-container> {{product.minimum_quantity}}
+                        </p>
+                        <p *ngIf="product.maximum_quantity>1" class="app-sub-item max-qty">
+                            <ng-container>{{languageStrings.maximum_quantity || 'Maximum Quantity'}}</ng-container> {{product.maximum_quantity}}
+                        </p>
+                        <hr [ngClass]="{'app-cart_item_seperation': i < cartData.length - 1 , 'app-subtotal_seperation': i == cartData.length - 1 }" />
+
+                    </div>
+                </div>
+            </div> 
+            <div *ngIf="!cartData.length" class="emptyCart">
+                <span><img class="img-cart" src="assets/img/emptyCart.svg"></span>
+                <span class="text-cart">{{languageStrings.your_cart_empty || 'Your cart is empty' }}</span>
+                <span class="subtext-cart"><ng-container>{{languageStrings.add_item_to_begin || 'Add an item to begin' }}</ng-container></span>
+            </div>
+        </div>
+        <div class="app-subtotal">
+            <div class="app-item-subtotal" *ngIf="cartData.length">
+                <div class="total-txt" [ngStyle]="{ 'direction' : direction }">
+                    <span class="head">
+            <ng-container>{{ languageStrings.subtotal || 'Subtotal'}}</ng-container>
+          </span>
+                </div>
+                <div class="total">
+                    <span class="total">{{currency+''}} {{totalCount |decimalConfig}}</span>
+                </div>
+            </div>
+
+        </div>
+        <button mat-button *ngIf="cartData.length && !notDeliverable" class="cart-btn btn btn-default btn-block ripple" appColor hoverbgSimple="true" (click)="goToCheckout()" [style.background-color]="appConfig.color">
+      <span class="text-capitalize">{{terminology.CHECKOUT}}</span>
+    </button>
+    </div>
+    <button class="visible-sm visible-xs bottom-bar mobile-cart-view" mat-button [style.background-color]="appConfig.color" *ngIf="cartData.length && !notDeliverable" (click)="goToCheckout()">
+    <div class="col-xs-6  align-items-center checkout-bottom" style="justify-content: flex-start;flex: 2;">
+      <div>
+        <!--<img src="assets/img/cart-heading.svg" />-->
+        <span style="font-size: 24px;padding-right: 8px;">
+          <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+        </span>
+        <span style="text-transform: uppercase;">{{cartData.length > 1 ? cartData.length +' '+ terminology.ITEM : cartData.length +' '+ terminology.ITEM}} &nbsp;{{languageStrings.IN || 'IN'}}&nbsp;{{terminology.CART|| 'Cart'}}
+        </span>
+      </div>
+    </div>
+    <div class="col-xs-6 align-items-center checkout-bottom text-capitalize" *ngIf="appConfig.show_product_price == 1 || totalCount > 0" style="flex: 1">
+      <!--<span>{{terminology.CHECKOUT}}</span>-->
+      <span class="total">{{currency+''}} {{totalCount |decimalConfig}}</span>
+    </div>
+  </button>
+</div>
+
+<app-modal class="container" modalType="'modal-md'"  header="{{languageStrings.remove_item || 'Remove Item'}}" (onClose)="removeCartItemPopup = false" (esc)="removeCartItemPopup = false" *ngIf="removeCartItemPopup">
+    <div body>
+        <div class="row" style="padding: 15px">
+            <div class="col-md-12" style="height: 90px;padding:15px">
+                <h4 class="dialog-msg">
+                    <ng-container> {{messageRemoveItem}}</ng-container>
+                </h4>
+            </div>
+            <div class="col-md-12" style="padding:0px">
+                <div class="modal-footer dialog-action">
+                    <button class="dialog-cancel btn btn-default" mat-button (click)="onRemoveSelected(selectedCartItemId,selectedCartItemIndex,selectedOperationMethod,0)" [ngStyle]="{ 'direction' : direction }">
+                        <ng-container>{{languageStrings.retain || 'Retain'}}</ng-container>
+                    </button>
+                    <button class="dialog-ok btn btn-default" mat-button (click)="onRemoveSelected(selectedCartItemId,selectedCartItemIndex,selectedOperationMethod,1)"
+                        [ngStyle]="{ 'direction' : direction }" appColor bg="'true'">
+                        <ng-container>{{languageStrings.remove ||"Remove"}}</ng-container>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-modal>
+
+<app-modal class="container" modalType="'modal-md'" (onClose)="showClearCartPopup = false" (esc)="showClearCartPopup = false" *ngIf="showClearCartPopup">  
+    <div body>
+            <div class="row clearCartRow">
+                    <div class="col-md-12 p-0">
+                            <h4 class="dialog-msg">
+                                <ng-container>{{languageStrings.do_you_want_clear_your_cart || 'Do you want to clear your Cart'}} ?</ng-container>
+                            </h4>
+                    </div>
+                    <div class="col-md-12 btnsDiv">
+                            <div class="modal-footer dialog-action">
+                                    <button class="dialog-cancel btn btn-default yesNoBtn" (click)="clearCartData()">
+                                            <ng-container>{{languageStrings.yes || 'Yes' }}</ng-container>
+                                    </button>
+                                    <button class="dialog-ok btn btn-default primary-theme-btn yesNoBtn" 
+                        [ngStyle]="{ 'direction' : direction }" (click)="doNotClearCart()">
+                        <ng-container>{{languageStrings.no || 'No' }}</ng-container>
+                    </button>
+
+                            </div> 
+                    </div>
+
+            </div>
+
+    </div>
+
+</app-modal>

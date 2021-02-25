@@ -1,0 +1,27 @@
+<!-- 
+<div class="container-fluid fac">
+    <div class="row" *ngIf="authorizeNetPaymentUrl" style="padding: 10px">
+      <div class="col-md-12 text-center">
+        <h4>
+          <ng-container i18n>Authorize Net</ng-container>
+        </h4>
+      </div>
+      <div class="col-md-12">
+        <iframe id="authorizeIFrame" style="border: none" #authorizeIFrame [src]="authorizeNetPaymentUrl" height="610px" width="100%" (load)="getContentFac(authorizeIFrame)"></iframe>
+      </div>
+    </div>
+  </div> -->
+  
+  <div class="authorize-net">
+    <app-authorize-net-card-list *ngIf="cardList && cardList.length > 0" [cardList]="cardList"
+                           [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+                           (secureUrl)="secureUrl($event)"
+                           [showDeleteButton]="deleteButton"
+                           (deleteCardEvent)="deleteCard($event)"
+                           (paymentMade)="paymentMade($event)"></app-authorize-net-card-list>
+    <app-authorize-net-add-card *ngIf="addCardLink" [addCardLink]="addCardLink"
+                          [secureUrlFrame]="secureUrlFrame"
+                          [hideIframe]="hideIframe"
+                          (cardWindowRefOut)="cardWindowRefOut($event)"></app-authorize-net-add-card>
+  </div>
+  

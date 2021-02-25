@@ -1,0 +1,21 @@
+app-profile {
+  //height: calc(100vh - 77px);
+  //overflow-x: hidden;
+  //overflow-y: scroll;
+}
+
+
+#newId .modalImage{
+  width: 100%;
+  height: 250px;
+  object-fit: contain;
+  cursor: pointer;
+  margin: 0px 0px 20px 0px;
+}
+#newId .modal-body{
+  padding: 0px 0px 31px 0px !important;
+}
+#newId button.close{
+  font-size: 31px !important;
+  margin-right: 12px !important;
+}

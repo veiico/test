@@ -1,0 +1,59 @@
+@import '~assets/css/variables';
+
+.footer {
+  font-family: $proxima-reg;
+  padding: 15px 40px;
+  color: #2c2c2c;
+  vertical-align: middle;
+  margin-top: -7px;
+  position: fixed;
+  width: 100%;
+  z-index: 200;
+  left: 0;
+  bottom: 0;
+  font-size: 13px;
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.08);
+  background-color: #ffffff;
+  .dFlex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .gotItButton {
+    // margin-left: 30px;
+    border-radius: 4px !important;
+    background-color: #2396ff;
+    border: 1px solid #2396ff;
+    color: #fff !important;
+    font-size: 13px;
+    font-weight: normal;
+    text-decoration: none;
+    margin-right: 12px;
+    margin-left: 13px;
+  }
+
+  p {
+    margin-top: 0px;
+    margin-bottom: 0px !important;
+    font-family: $proxima-reg;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.1px;
+    color: #4a4a4a;
+  }
+
+  a {
+    cursor: pointer;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .hide-mobile-view
+  {
+    display: none;
+  }
+
+}

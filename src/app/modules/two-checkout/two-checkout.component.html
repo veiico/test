@@ -1,0 +1,5 @@
+<div style="height: 60vh;">
+  <payment-twocheckout *ngIf="twocheckoutPaymentData" [payment]="twocheckoutPaymentData"
+    (info)="getPaymentInfo($event)">
+  </payment-twocheckout>
+</div>

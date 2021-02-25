@@ -1,0 +1,20 @@
+<div class="input-group">
+    <span class="input-group-addon add-on-set lagInput p-0">
+       <div class="dropdown"> <!-- appClickOutside (clickOutside)="onClickOutside($event)" -->
+         <button (click)="toggleShowList($event)" class="dropbtn btn" aria-label="select country" tabindex="-1">
+           <span class="flag flag-{{selectedCountryCode}}"></span>
+          </button>
+          <div *ngIf="showList" class="dropdown-content" clickOutside> <!-- (keypress)="test($event)" #scrollElement -->
+              <a *ngFor="let country of countries" class="list-group-item" (click)="flagSelect(country)"   >
+                <span class="flag flag-{{country.countryCode}}"></span>
+                <span class="country-name">{{country.name}}
+                  <span class="dial-code">+ {{country.dialCode}}</span>
+                </span>
+              </a>
+          </div>
+        </div>
+      </span>
+  <!-- fugu-phone -->
+
+  <input type="text" class="form-control input-style fugu-tel-input" aria-label="Phone Number" appNumberOnly [ngStyle]="{ 'direction' : direction }"  placeholder="{{ languageStrings.phone_number || 'Phone Number'}}" [(ngModel)]="value" (ngModelChange)="updateValue()" (keydown)="onKeyDown($event)" >
+</div>

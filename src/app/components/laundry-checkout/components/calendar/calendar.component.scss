@@ -1,0 +1,157 @@
+@import '~assets/css/variables';
+
+.calendar{
+  padding: 10px;
+  .dateList{
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0px;
+    height: 57px;
+    background: #E4E2E2;
+    color: #333;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-top-right-radius: 3px;
+    -moz-border-radius-topleft: 3px;
+    -moz-border-radius-topright: 3px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    margin-bottom: 0px;
+    overflow: hidden;
+    .leftArrow{
+      position: absolute;
+      left: 0px;
+    }
+    .rightArrow{
+      position: absolute;
+      right: 0px;
+    }
+    li{
+      list-style: none;
+      width: auto;
+      float: left;
+      padding-top: 7px;
+      height: 54px;
+      margin-top: 3px;
+      text-align: center;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    li.leftArrow, li.rightArrow{
+      font-size: 14px !important;
+    }
+    li:not(.leftArrow):hover{
+      background-color: #F9F9F9;
+    }
+    li:not(.rightArrow):hover{
+      background-color: #F9F9F9;
+    }
+
+    .activeDate{
+      background-color: #F9F9F9;
+    }
+  }
+
+  .timeSlots{
+    height: 330px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #ccc;
+    border-top: none;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0px;
+    padding: 20px 0;
+    -webkit-border-bottom-left-radius: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+    -moz-border-radius-bottomleft: 3px;
+    -moz-border-radius-bottomright: 3px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    li {
+      width: 50%;
+      float: left;
+      list-style: none;
+      .inactive_slot {
+        text-decoration: line-through;
+        background: rgb(195, 195, 195)!important;
+        cursor: default!important;
+        opacity: 0.5;
+        pointer-events: none;
+      }
+      div{
+        width: 150px;
+        position: relative;
+        text-align: center;
+        margin: 0 auto;
+        padding: 10px 7px;
+        border: 1px solid #ccc;
+        margin-top: 10px;
+        border-radius: 2px;
+        background: #FDFDFD;
+        cursor: pointer;
+        font-size: 14px;
+        .check{
+          position: absolute;
+          margin-left: -17px;
+          margin-top: -20px;
+          display: none;
+          background: white;
+          border-radius: 14px;
+          width: 17px;
+          height: 17px;
+          font-size: 17px;
+          color: $color-theme;
+        }
+      }
+      div:hover{
+        border: 1px solid $color-theme;
+      }
+      div.selectedSlot{
+        background-color: $color-theme;
+        border: 1px solid $color-theme;
+        color: white;
+        .check{
+          display: block;
+        }
+      }
+    }
+
+    li.noSlot {
+      width: 100%;
+      p{
+        font-family: $proxima-reg;
+        font-size: 16px;
+        margin: 20px 0px;
+        text-align: center;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 990px) {
+  .dateList{
+    li{
+      font-size: 12px !important;
+    }
+
+    li.leftArrow, li.rightArrow{
+      font-size: 14px !important;
+    }
+  }
+
+  .timeSlots{
+    li{
+      div {
+        width: 132px !important;
+        font-size: 12px !important;
+      }
+      .check{
+        margin-left: -12px !important;
+        font-size: 12px !important;
+      }
+    }
+  }
+}

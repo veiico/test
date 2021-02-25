@@ -1,0 +1,65 @@
+
+@import '~assets/css/variables';
+
+.custom-order{
+    position: fixed;
+    z-index: 5;
+    top: 174px;
+    right: 20px;
+    height: 60px;
+    border-radius: 30px;
+    background: $color-theme;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0 15px;
+    max-width: 60px;
+    font-size: 18px;
+    font-family: $proxima-semi-bold;
+    color: #fff;
+    transition: max-width .5s ease-in;
+    @media only screen and (max-width: 1200px) {
+        top: 80px;
+        height: 50px;
+        max-width: 50px;
+        font-size: 14px;
+        border-radius: 50%;
+        img{
+            width: 20px;
+        }
+    }
+
+    .custom-order-text{
+        display: none;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    img{
+        padding-left: 0;
+    }
+    &:hover{
+        @media only screen and (min-width: 1200px) {
+            max-width: 100%;
+            .custom-order-text{
+                display: block;
+            }
+            img{
+                padding-left: 10px;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 700px) {
+  .custom-order{
+    top: 67vh !important;
+  }
+}
+
+@media only screen and (max-width: 1090px){
+    .custom-order {
+        top: 170px;
+    }
+}
+

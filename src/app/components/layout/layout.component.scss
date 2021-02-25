@@ -1,0 +1,14 @@
+@import '~assets/css/variables';
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+.layout_parent{
+  //display: flex;
+  //flex-direction: column;
+  //height:100%;
+  // margin-top: 70px;
+  font-family: $proxima-reg !important;
+}
+app-header{
+  height: 70px;
+}
+

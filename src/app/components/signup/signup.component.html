@@ -1,0 +1,386 @@
+<div class='container-fluid signup' [ngClass]="{'withoutParent': showSignUp == 3}">
+  <div class="row">
+    <div class="col-xs-12 card-signup">
+
+      <div class="progressbar" *ngIf="showSignUp!=0 && count>1">
+        <ul class="steps" >
+          <li class="step" *ngFor="let item of progressBar" [ngClass]="{'step--incomplete': progress < 1, 'step--active': progress ==  item,
+              'step--complete': progress >= item+1, 'step--inactive': progress != item}">
+            <span class="step__icon"></span>
+          </li>
+        </ul>
+      </div>
+      <p class="main-heading" *ngIf="showSignUp == 0" [ngStyle]="{ 'direction' : direction }">
+        <ng-container>{{languageStrings.sign_up_for_a_new_account || "Sign Up for a new account" }}</ng-container>
+      </p>
+      <p class="main-heading text-centred capital-text"  *ngIf="showSignUp == 1" [ngStyle]="{ 'direction' : direction }">
+        <ng-container>{{languageStrings.otp_verification || "OTP Verification"}}</ng-container>
+      </p>
+      <p class="main-heading text-centred capital-text"  *ngIf="showSignUp == 2" [ngStyle]="{ 'direction' : direction }">
+        <ng-container>{{languageStrings.change_your_phone_number || "Change your phone number"}}</ng-container>
+      </p>
+      <p class="main-heading text-centred capital-text"  *ngIf="showSignUp == 3" [ngStyle]="{ 'direction' : direction }">
+        <ng-container>{{languageStrings.enter_additional_information || "Enter Additional information"}}</ng-container>
+      </p>
+      <p class="main-heading text-centred capital-text"  *ngIf="showSignUp == 4" [ngStyle]="{ 'direction' : direction }">
+        <ng-container>{{languageStrings.confirm_your_email_address || "Confirm Your Email Address"}}</ng-container>
+      </p>
+      <p class="main-heading text-centred capital-text"  *ngIf="showSignUp == 5" [ngStyle]="{ 'direction' : direction }">
+        <ng-container>{{languageStrings.change_your_email_address || "Change your email address"}}</ng-container>
+      </p>
+      <hr [ngStyle]="{ 'direction' : direction }" />
+      <div class="c-b"></div>
+      <!--======================= signup form==================================-->
+      <form role="form" *ngIf="showSignUp == 0" [formGroup]="signupForm" autocomplete="off" id="signViaOtp">
+
+        <div class="form-group">
+
+          <label class="fs16 model-label" for="sFname" [ngStyle]="{ 'direction' : direction }">
+            <ng-container>{{languageStrings.name || "Name"}}</ng-container><span class="c-red">*</span>
+          </label>
+          <div class="input-group">
+            <span class="input-group-addon add-on-set">
+              <i class="glyphicon glyphicon-user" aria-hidden="true"></i>
+            </span>
+            <input id="sFname" type="text" autocomplete="off" [ngStyle]="{ 'direction' : direction }" formControlName="name" class="focusable form-control custom_register_form-control input-style"
+             placeholder="{{languageStrings.name || 'Name'}}" />
+          </div>
+          <app-control-messages [control]="signupForm.controls.name"></app-control-messages>
+        </div>
+
+        <label class="fs16 model-label" for="sEmail1" [ngStyle]="{ 'direction' : direction }">
+          <ng-container>{{languageStrings.email || "Email"}} </ng-container><span *ngIf="signup_field != 1" class="c-red">*</span>
+        </label>
+        <div class="form-group frm-grp-set">
+          <div class="input-group">
+            <span class="input-group-addon add-on-set">
+              <i class="glyphicon glyphicon-envelope" aria-hidden="true"></i>
+            </span>
+            <input id="sEmail1" type="email" autocomplete="off" formControlName="email" [ngStyle]="{ 'direction' : direction }" class="focusable form-control custom_register_form-control input-style"
+           placeholder="{{ languageStrings.email || 'Email'}}" [readonly]="emailDisabled" />
+          </div>
+          <app-control-messages [control]="signupForm.controls.email"></app-control-messages>
+        </div>
+
+
+        <div id="SignUpformTelephone" class="form-group frm-grp-set">
+          <label class="fs16 model-label" aria-hidden="true" [ngStyle]="{ 'direction' : direction }">
+            <ng-container>{{languageStrings.phone_no || 'Phone No.'}}</ng-container><span *ngIf="signup_field != 0" class="c-red">*</span>
+          </label>
+          <app-fugu-tel-input class="phone_style" formControlName="phone" [(ngModel)]="phone" [(dialCode)]="country_code"></app-fugu-tel-input>
+        </div>
+        <div class="form-group frm-grp-set" *ngIf="!hidePassword">
+          <label class="fs16 model-label" for="sPassword" [ngStyle]="{ 'direction' : direction }">
+            <ng-container>{{languageStrings.password || 'Password'}}</ng-container><span class="c-red">*</span>
+          </label>
+          <div class="input-group">
+          <span class="input-group-addon add-on-set">
+            <i class="glyphicon glyphicon-lock" aria-hidden="true"></i>
+          </span>
+          <input id="sPassword" type="password" autocomplete="off" formControlName="password" [ngStyle]="{ 'direction' : direction }"
+            class="focusable form-control custom_register_form-control input-style"  placeholder="{{languageStrings.password || 'Password'}}"
+            data-parsley-minlength="6" />
+        </div>
+        <app-control-messages [control]="signupForm.controls.password"></app-control-messages>
+      </div>
+
+        <div class="form-group frm-grp-set" [ngStyle]="{ 'direction' : direction }" *ngIf="showTerms">
+          <p class="">
+            <input type="checkbox" [(ngModel)]="termsPolicy" aria-label="Accept terms of Service and Privacy Policy" [ngModelOptions]="{standalone: true}" />&nbsp;
+            <ng-container>{{languageStrings.by_clicking_sign_up_you_agree_to_our || 'By clicking Sign Up, you agree to our'}}</ng-container>
+            <a  class="theme-color" *ngIf="!tnc_url" [routerLink]="['/terms-condition']" [target]="'_blank'">
+              <ng-container>{{languageStrings.terms_of_service_privacy_policy || "Terms of Service & Privacy Policy"}}</ng-container>
+            </a>
+            <a class="theme-color" *ngIf="tnc_url" [href]="tnc_url" [target]="'_blank'">
+              <ng-container>{{languageStrings.terms_of_service_privacy_policy || "Terms of Service & Privacy Policy"}}</ng-container>
+            </a>
+          </p>
+        </div>
+
+        <div class=" text-right p-b-20" >
+          <button type="submit" *ngIf="(!hidePassword  || (showSignupBtn) && (!['fb','insta','google'].includes(socialLogin)))" class=" w-100 btn btn-primary-1" name="Register" 
+            (click)="registerCheck()" [disabled]="!signupForm.valid">
+            <ng-container>{{languageStrings.sign_up || "Sign Up"}}</ng-container>
+          </button>
+          <button type="submit" *ngIf="hidePassword && socialLogin == 'fb'" class="w-100 btn btn-primary-1 " name="Register" 
+                  (click)="registerWithFbCheck()" [disabled]="!signupForm.valid">
+            <ng-container>{{languageStrings.sign_up || "Sign Up"}}</ng-container>
+          </button>
+          <button type="submit" *ngIf="hidePassword && socialLogin == 'insta'" class=" w-100 btn btn-primary-1 w-100" name="Register" 
+                  (click)="registerWithInstaCheck()" [disabled]="!signupForm.valid" >
+            <ng-container>{{languageStrings.sign_up || "Sign Up"}}</ng-container>
+          </button>
+          <button type="submit" *ngIf="hidePassword && socialLogin == 'google'" class="w-100 btn btn-primary-1 w-100" name="Register" 
+                  (click)="registerWithGoogleCheck()" [disabled]="!signupForm.valid" >
+            <ng-container>{{languageStrings.sign_up || "Sign Up"}}</ng-container>
+          </button>
+        </div>
+        <div class="form-group text-center">
+          <div class="form-group text-center" >
+            <p class="already_text" [ngStyle]="{ 'direction' : direction }">
+              <ng-container>{{languageStrings.already_have_an_account || "Already have an account?"}}</ng-container>
+              <a class="pointer" [style.color]="profile_color" (click)="openLoginModal()">
+                <ng-container>{{languageStrings.sign_in_here || "Sign In Here"}}</ng-container>
+              </a>
+            </p>
+          </div>
+        </div>
+      </form>
+
+      <!--======================= change number form==================================-->
+      <form role="form" class="changeNumberFormStyle p-t-30" *ngIf="showSignUp == 2" [formGroup]="changeNumberForm" autocomplete="off"
+        >
+        <div class="form-group frm-grp-set">
+          <app-fugu-tel-input class="phone_style" formControlName="newMobileNumber" [(ngModel)]="newMobileNumber" [(dialCode)]="country_code"></app-fugu-tel-input>
+          <app-control-messages [control]="changeNumberForm.controls.newMobileNumber"></app-control-messages>
+        </div>
+        <div class=" text-right p-b-20" >
+          <button type="button" class="btn btn-primary-1 w-50" name="Back" [ngStyle]="{ 'direction' : direction }" 
+            (click)="goBackToOTP()">
+            <ng-container>{{languageStrings.back || "Back"}}</ng-container>
+          </button>
+          <button type="submit" class="btn btn-primary-1 w-50" name="Phone" [ngStyle]="{ 'direction' : direction }" 
+            (click)="changeNumberVerification()" [disabled]="!changeNumberForm.valid">
+            <ng-container>{{languageStrings.submit || "Submit"}}</ng-container>
+          </button>
+        </div>
+
+      </form>
+      <!--======================= additional form==================================-->
+      <form role="form" class="addForm" [formGroup]="form" *ngIf="showSignUp == 3 && fields.length > 0" autocomplete="off">
+        <div class="form-group frm-grp-set" *ngFor="let field of fields; let j = index;">
+          <div class="input-group full-width" *ngIf="field.data_type == 'Text'">
+            <label class="fs16 model-label" [for]="field.display_name">{{field.display_name}}</label><span *ngIf="field.required" class="c-red">*</span>
+            <div>
+              <input [id]="field.display_name" type="text" autocomplete="off" [formControlName]="field.label" class="focusable form-control custom_register_form-control input-style"
+                [placeholder]="field.display_name" />
+            </div>
+          </div>
+          <div class="input-group full-width" *ngIf="field.data_type == 'Number'">
+            <label class="fs16 model-label" [for]="field.display_name">{{field.display_name}}</label><span *ngIf="field.required" class="c-red">*</span>
+            <div>
+              <input [id]="field.display_name" type="number" autocomplete="off" [formControlName]="field.label" class="focusable form-control custom_register_form-control input-style"
+                [placeholder]="field.display_name" />
+            </div>
+          </div>
+          <div class="input-group full-width" *ngIf="field.data_type == 'TextArea'">
+            <label class="fs16 model-label" [for]="field.display_name">{{field.display_name}}</label><span *ngIf="field.required" class="c-red">*</span>
+            <div>
+              <textarea class="text-area" [id]="field.display_name" type="text" autocomplete="off" [formControlName]="field.label" class="focusable form-control custom_register_form-control input-style" 
+                [placeholder]="field.display_name" ></textarea>
+            </div>
+          </div>
+          <div class="input-group full-width" *ngIf="field.data_type == 'Image'">
+            <label class="fs16 model-label" [for]="field.display_name">{{field.display_name}}</label><span *ngIf="field.required" class="c-red">*</span>
+            <div>
+              <input type="file" [id]="field.label" [formControlName]="field.label" (change)="onFileChange($event)" #fileInput class="no-display">
+              <button class="btn uploadFileButton" appColor hoverbgSimple="true" mat-button (click)="fileInput.click()">
+                <ng-container>{{languageStrings.upload_file || "Upload File"}}</ng-container>
+              </button>
+              <div  class="imgs-container">
+                <div *ngFor="let img of imageList[field.label];let i = index">
+                  <img [src]="img" aria-hidden="true" (click)="showImage(img)">
+                  <span  (click)="clearFile(field.label,i)">
+                    <i class="fa fa-times" class="c-red"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="input-group full-width" *ngIf="field.data_type == 'Date'">
+            <label class="fs16 model-label" [for]="field.display_name">{{field.display_name}}</label><span *ngIf="field.required" class="c-red">*</span>
+            <p-calendar  [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" [inputId]="field.display_name" [showTime]="false" [id]="field.display_name"
+                         [readonlyInput]="true" [formControlName]="field.label"
+                         [hideOnDateTimeSelect]="true"
+                         (onClose)="removeFocus()"
+                         placeholder="{{field.display_name}}" [showIcon]="false"></p-calendar>
+            <div>
+
+            </div>
+          </div>
+          <div class="input-group full-width" *ngIf="field.data_type == 'Date-Past'">
+            <label class="fs16 model-label" [for]="field.display_name">{{field.display_name}}</label><span *ngIf="field.required" class="c-red">*</span>
+            <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100"  [inputId]="field.display_name" [showTime]="false" [id]="field.display_name"
+                         [maxDate]="maxDate" [readonlyInput]="true" [formControlName]="field.label"
+                         [hideOnDateTimeSelect]="true"
+                         (onClose)="removeFocus()"
+                         placeholder="{{field.display_name}}" [showIcon]="false"></p-calendar>
+   
+          </div>
+          <div class="input-group full-width" *ngIf="field.data_type == 'Date-Future'">
+            <label class="fs16 model-label" [for]="field.display_name">{{field.display_name}}</label><span *ngIf="field.required" class="c-red">*</span>
+            <p-calendar  [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" [inputId]="field.display_name" [showTime]="false" [id]="field.display_name"
+                         [minDate]="minDateForFuture" [readonlyInput]="true" [formControlName]="field.label"
+                         [hideOnDateTimeSelect]="true"
+                         (onClose)="removeFocus()"
+                         placeholder="{{field.display_name}}" [showIcon]="false"></p-calendar>
+            <div>
+            </div>
+          </div>
+          <div class="input-group full-width" *ngIf="field.data_type == 'Date-Time'">
+            <label class="fs16 model-label" [for]="field.display_name">{{field.display_name}}</label><span *ngIf="field.required" class="c-red">*</span>
+            <p-calendar  [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" [inputId]="field.display_name" [showTime]="true" [id]="field.display_name"
+                         [hourFormat]="appConfig.time_format === timeFormat.TWELVE_HOURS ? 12 : 24"
+                         [readonlyInput]="true" [formControlName]="field.label"
+                         [hideOnDateTimeSelect]="true"
+                         (onClose)="removeFocus()"
+                         placeholder="{{field.display_name}}" [showIcon]="false"></p-calendar>
+
+          </div>
+          <div class="input-group full-width" *ngIf="field.data_type == 'Datetime-Past'">
+            <label class="fs16 model-label" [for]="field.display_name">{{field.display_name}}</label><span *ngIf="field.required" class="c-red">*</span>
+            <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100"  [inputId]="field.display_name" [showTime]="true" [id]="field.display_name"
+                         [hourFormat]="appConfig.time_format === timeFormat.TWELVE_HOURS ? 12 : 24"
+                         [maxDate]="maxDate" [readonlyInput]="true" [formControlName]="field.label"
+                         [hideOnDateTimeSelect]="true"
+                         (onClose)="removeFocus()"
+                         placeholder="{{field.display_name}}" [showIcon]="false"></p-calendar>
+          </div>
+          <div class="input-group full-width" *ngIf="field.data_type == 'Datetime-Future'">
+            <label class="fs16 model-label" [for]="field.display_name">{{field.display_name}}</label><span *ngIf="field.required" class="c-red">*</span>
+            <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100"  [inputId]="field.display_name" [showTime]="true" [id]="field.display_name"
+                         [hourFormat]="appConfig.time_format === timeFormat.TWELVE_HOURS ? 12 : 24"
+                         [minDate]="minDate" [readonlyInput]="true" [formControlName]="field.label"
+                         [hideOnDateTimeSelect]="true"
+                         (onClose)="removeFocus()"
+                         placeholder="{{field.display_name}}" [showIcon]="false"></p-calendar>
+          </div>
+          <div class="input-group full-width" *ngIf="field.data_type == 'Email'">
+            <label class="fs16 model-label" [for]="field.display_name">{{field.display_name}}</label><span *ngIf="field.required" class="c-red">*</span>
+            <input [id]="field.display_name" type="email" [formControlName]="field.label" class="focusable form-control custom_register_form-control input-style"
+              [placeholder]="field.display_name" />
+          </div>
+          <div id="formTelephone" class="input-group full-width" *ngIf="field.data_type == 'Telephone'">
+            <label class="fs16 model-label" [for]="field.display_name">{{field.display_name}}</label><span *ngIf="field.required" class="c-red">*</span>
+            <app-fugu-tel-input class="phone_style" [id]="field.display_name" [formControlName]="field.label" [(dialCode)]="country_code"></app-fugu-tel-input>
+          </div>
+          <div class="input-group full-width" *ngIf="field.data_type == 'Checkbox'">
+            <div class="">
+              <mat-checkbox class="model-label" [formControlName]="field.label" [id]="field.display_name">{{field.display_name}}</mat-checkbox><span *ngIf="field.required" class="c-red">*</span>
+            </div>
+          </div>
+          <div class="input-group full-width" *ngIf="field.data_type == 'Dropdown'">
+            <label class="fs16 model-label" [for]="field.display_name">{{field.display_name}}</label><span *ngIf="field.required" class="c-red">*</span>
+            <div class="dropdown">
+              <button [id]="field.display_name" class="btn btn-primary-1 dropdown-toggle" type="button" data-toggle="dropdown">{{field.display_name}}
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li [id]="option.id" *ngFor="let option of field.dropdown">
+                  <a href="#">{{option.value}}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="input-group full-width"  *ngIf="field.data_type == 'Single-Select'">
+            <label class="fs16 model-label" [for]="field.display_name">{{field.display_name}}</label><span *ngIf="field.required" class="c-red">*</span>
+            <p-dropdown [showClear]="true" [options]="field.allowed_values_modified" [formControlName]="field.label" placeholder="{{languageStrings.select_value || 'Select a value'}}"></p-dropdown>
+          </div>
+          <div class="input-group full-width" *ngIf="field.data_type == 'Multi-Select'">
+              <label class="fs16 model-label" [for]="field.display_name">{{field.display_name}}</label><span *ngIf="field.required" class="c-red">*</span>
+              <p-multiSelect [options]="field.allowed_values" [formControlName]="field.label" optionLabel="name"></p-multiSelect>
+            </div>
+          <app-control-messages [control]="form.controls[field.label]"></app-control-messages>
+        </div>
+        <div class=" text-right form-group" >
+          <button type="submit" mat-button class="btn btn-primary-1 w-100" name="Register"  (click)="fieldsRegister()"
+            [disabled]="form?!form.valid:0">
+            <ng-container>{{languageStrings.submit || "Submit"}}</ng-container>
+          </button>
+        </div>
+      </form>
+
+      <!--=========New Otp form===========-->
+      <form role="form" class="otpFormStyle" *ngIf="showSignUp == 1" [formGroup]="otpForm" autocomplete="off" >
+        <div class="formHeading">
+          <p class="fs16 text-centred m-0" [ngStyle]="{ 'direction' : direction }">
+            <ng-container>{{ languageStrings.enter_the_otp_that_you_have_recieved_on_your_phone_number || "Enter the OTP that you’ve recieved on your phone number"}}</ng-container>
+          </p>
+        </div>
+        <div class="otpWidth">
+          <div class="form-group">
+        <label for="OTP" class="fontSize" [ngStyle]="{ 'direction' : direction }">
+          <ng-container>{{languageStrings.enter_otp || "Enter OTP"}}</ng-container><span class="c-red">*</span>
+        </label>
+          <input [id]="OTP" type="text" maxlength="6" appNumberOnly autocomplete="off" formControlName="otpValue" class="focusable form-control custom_register_form-control input-style"
+            placeholder="6 {{languageStrings.digit_otp || 'digit OTP' }}" />
+          <app-control-messages [control]="otpForm.controls.otpValue"></app-control-messages>
+        </div>
+          <div class="form-group">
+          <button type="submit" class="btn btn-primary-1 w-100" name="OTP" (click)="checkOtpVerification()" 
+            [disabled]="!otpForm.valid"><ng-container>{{languageStrings.submit || "Submit"}}</ng-container></button>
+          </div>
+          <div class="form-group frm-grp-set p-b-20" >
+            <div class="col-xs-6 otpOption text-left" >
+              <a (click)="changeMobileNumberUI()"  [ngStyle]="{ 'direction' : direction }" [style.color]="profile_color">
+                <ng-container>{{languageStrings.change_number || "Change Number"}}</ng-container>
+              </a>
+            </div>
+            <div class="col-xs-6 otpOption text-right"  [ngStyle]="{ 'direction' : direction }">
+              <a (click)="checkResendOTP()"  [style.color]="profile_color">
+                <ng-container>{{languageStrings.resend_otp || "Resend OTP"}}</ng-container>
+              </a>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <!--==========New Email Confirmation Form===============-->
+      <div *ngIf="showSignUp == 4" >
+        <div class="text-centred m-b-20">
+          <ng-container>{{languageStrings.confirmation_mail_sent_your_email || "A confirmation mail is sent to your email"}}</ng-container> {{contact_email}}.<ng-container>{{languageStrings.check_on_spam_and_confirm_the_email_address || "If you dont see it check your spam folder or click the button below to resend the email. Once it is done click on the link to confirm your email address."}}</ng-container>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary-1 w-100" (click)="checkEmailVerified()" ><ng-container>{{languageStrings.continue || "Continue"}}</ng-container></button>
+        </div>
+        <div class="form-group frm-grp-set p-b-20" >
+          <div class="col-xs-6 otpOption text-left"  [ngStyle]="{ 'direction' : direction }">
+            <a (click)="checkResendMail()"  [style.color]="profile_color">
+              <ng-container>{{languageStrings.resend_confirmation_email || "Resend confirmation email"}}</ng-container>
+            </a>
+          </div>
+          <div class="col-xs-6 otpOption text-right"  *ngIf="!emailChanged">
+            <a (click)="changeEmail()"  [ngStyle]="{ 'direction' : direction }" [style.color]="profile_color">
+              <ng-container>{{languageStrings.change_email || "Change Email"}}</ng-container>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!--======================= change email form==================================-->
+      <form role="form" class="changeNumberFormStyle p-t-30" *ngIf="showSignUp == 5" [formGroup]="changeEmailForm" autocomplete="off"
+            >
+        <div class="form-group frm-grp-set">
+
+
+        <label class="fontSize" for="resend-mail" [ngStyle]="{ 'direction' : direction }">
+          <ng-container>{{languageStrings.email || "Email"}}</ng-container><span class="c-red">*</span>
+        </label>
+          <div class="input-group">
+            <span class="input-group-addon add-on-set">
+              <i class="glyphicon glyphicon-envelope" aria-hidden="true"></i>
+            </span>
+            <input type="email" id="resend-mail" autocomplete="off" formControlName="newEmailAddress" [ngStyle]="{ 'direction' : direction }" class="focusable form-control custom_register_form-control input-style"
+ placeholder="{{languageStrings.email || 'Email'}}" />
+          </div>
+          <app-control-messages [control]="changeEmailForm.controls.newEmailAddress"></app-control-messages>
+        </div>
+        <div class=" text-right p-b-20" >
+          <button type="button" class="btn btn-primary-1 w-50" name="Back" [ngStyle]="{ 'direction' : direction }" 
+                  (click)="goBackToEmailVerification()">
+            <ng-container>{{languageStrings.back || "Back"}}</ng-container>
+          </button>
+          <button type="submit" class="btn btn-primary-1 w-50" name="Phone" [ngStyle]="{ 'direction' : direction }" 
+                  (click)="changeEmailVerification()" [disabled]="!changeEmailForm.valid">
+            <ng-container>{{languageStrings.submit || "Submit"}}</ng-container>
+          </button>
+        </div>
+      </form>
+
+      <!--======================= signup fee ==================================-->
+      <section *ngIf="showSignUp == 6" class="changeNumberFormStyle">
+        <app-customer-subscription [loginResponse]="signUpResponse" (successfullLogin)="successfullLogin($event)"></app-customer-subscription>
+      </section>
+    </div>
+  </div>
+</div>

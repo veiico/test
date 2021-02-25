@@ -1,0 +1,13 @@
+<!--<app-payfort [loginResponse]="loginResponse" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"></app-payfort>-->
+<div class="payfort">
+  <app-payfort-card-list *ngIf="cardList && cardList.length > 0" [cardList]="cardList"
+                         [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+                         (secureUrl)="secureUrl($event)"
+                         [showDeleteButton]="deleteButton"
+                         (deleteCardEvent)="deleteCard($event)"
+                         (paymentMade)="paymentMade($event)"></app-payfort-card-list>
+  <app-payfort-add-card [addCardLink]="addCardLink"
+                        [secureUrlFrame]="secureUrlFrame"
+                        [hideIframe]="hideIframe"
+                        (cardWindowRefOut)="cardWindowRefOut($event)"></app-payfort-add-card>
+</div>

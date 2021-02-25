@@ -1,0 +1,10 @@
+<app-header style="height:85px;padding: 0px;" class="col-xs-12" [headerData]="headerData"></app-header>
+<div class="gift row container marginAuto">
+  <div class="col-xs-12">
+    <app-gift-button (sendMode)="sendMode($event)"></app-gift-button>
+    <app-gift-buy *ngIf="showMode == 'BUY'"></app-gift-buy>
+    <app-gift-reedem *ngIf="showMode == 'REEDEM'"></app-gift-reedem>
+    <app-gift-card-history *ngIf="showMode == 'HISTORY'"></app-gift-card-history>
+  </div>
+</div>
+<app-footer></app-footer>

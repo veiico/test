@@ -1,0 +1,292 @@
+<div class="posted-project" [ngClass]="{'footer-div':!(projectList && projectList.length)}">
+    <div class="head clearfix">
+        <h3 class="pull-left">
+            <ng-container>{{terminology.PROJECTS}}</ng-container>
+        </h3>
+        <div class="pull-right width200" *ngIf="config.project_type !== projectTypeEnum.FREELANCER_WITHOUT_BIDDING">
+            <p-dropdown autocomplete="off" [ngStyle]="{'direction': direction, width:'100px' }" [autoWidth]="true" class="p-0" [options]="categories"  placeholder="{languageStrings.select{ || 'Select'}}" [(ngModel)]="categorySelected" (onChange)="getProjectsAll('new')"></p-dropdown>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="projects-container">
+        <div class="col" *ngFor="let project of projectList;let i = index;">
+            <div class="project">
+                <div class="heading">
+                    {{project.view[0].value}}
+                    <!-- <button class="btn btn-sm btn-cancel"
+                        *ngIf="config.project_type !== projectTypeEnum.FREELANCER_WITHOUT_BIDDING && categorySelected !== 'expired' "
+                        (click)="cancelJob(project, $event)" >
+                        Cancel
+                    </button> -->
+                    (#{{project.project_id}})
+                    <button class="btn btn-sm btn-cancel"
+                        *ngIf="config.project_type !== projectTypeEnum.FREELANCER_WITHOUT_BIDDING && categorySelected == 'opened' " 
+                        (click)="openCancelPopup(project)" >
+                        <ng-container>{{languageStrings.cancel || 'Cancel'}}</ng-container>
+                    </button>
+                </div>
+                <div class="body" (click)="getProjectDetails(project)">
+                    <div class="item" *ngFor="let item of project.view | slice: 1 ">
+                        <label class="key">{{item.display_name}}</label>
+
+                        <ng-container [ngSwitch]="item.data_type">
+                            <ng-container *ngSwitchCase="dynamicTemplateDataType.DATE">
+                                <span class="value"> {{item.value | dateTimeFormat: "dd MMM, yyyy"}}</span>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="dynamicTemplateDataType.DATE_FUTURE">
+                                <span class="value"> {{item.value | dateTimeFormat: "dd MMM, yyyy"}}</span>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="dynamicTemplateDataType.DATE_PAST">
+                                <span class="value"> {{item.value | dateTimeFormat: "dd MMM, yyyy"}}</span>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="dynamicTemplateDataType.DATE_TIME">
+                                <span class="value"> {{item.value | dateTimeFormat: "dd MMM, yyyy hh:mm a"}}</span>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="dynamicTemplateDataType.DATE_TIME_FUTURE">
+                                <span class="value"> {{item.value | dateTimeFormat: "dd MMM, yyyy hh:mm a"}}</span>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="dynamicTemplateDataType.DATE_TIME_PAST">
+                                <span class="value"> {{item.value | dateTimeFormat: "dd MMM, yyyy hh:mm a"}}</span>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="dynamicTemplateDataType.IMAGE">
+                                <span class="value">
+                                    <span  *ngFor="let item of item.value" > 
+                                        <img [src]="item" class="img-project-tile" [alt]="item.display_name">
+                                    </span>
+                                </span>
+                            </ng-container>
+                            <ng-container *ngSwitchDefault>
+                                <span class="value"> {{item.value}}</span>
+                            </ng-container>
+                        </ng-container>
+
+
+                    </div>
+                    <div *ngIf="project.path" class="breadcrumb-container">
+                        <p-breadcrumb [model]="project.path | pathBreadcrumb"></p-breadcrumb>
+                    </div>
+                </div>
+                <div class="footer" [ngClass]="{'bid-visible': categorySelected !== 'expired' && project.bid_count != undefined && project.bid_count > 0 && project.accepted_bids !=  project.max_bids}">
+                    <div class="posted-container">
+                        <span class='posted-ago'>
+                            <img src="assets/images/clock.svg" alt="time">
+                            <span class="posted-txt">{{languageStrings.posted || 'Posted'}}</span> {{project.creation_datetime | daysAgo}}
+                        </span>
+                    </div>
+                    <div class="btn-container">
+                        <button class="btn view-bids" (click)="jobClick('View Bids', project, $event)" *ngIf="categorySelected !== 'expired' && project.bid_count != undefined && project.bid_count > 0 && project.accepted_bids !=  project.max_bids">
+                            <ng-container>{{languageStrings.view_bids || 'View Bids'}}</ng-container>
+                            {{project.bid_count?'('+ project.bid_count+')':''}}
+                        </button>
+                        <button class="btn view-details" (click)="getProjectDetails(project)">{{languageStrings.view_details || 'View details'}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="list" *ngFor="let project of projectList;let i = index;">
+        <div class="list-container" (click)="showProjectDetails(project)">
+            <div class="row">
+                <div class="col-lg-8 col-sm-8 col-md-8 col-xs-6">
+                    <div class="first">
+                        <div class="img">
+                            <img src="assets/img/tablet-and-laptop.svg" aria-hidden="true" />
+                        </div>
+                        <div class="text">
+                            <span>{{project.headline || 'No Name'}}</span>
+                            <br/>
+                            <span>#{{project.project_id}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div [hidden]="categorySelected === 'expired'  " *ngIf="categorySelected != 'expired' && (project.accepted_bids !=  project.max_bids)"
+                    class="col-lg-4 col-sm-4 col-md-4 col-xs-6">
+                    <div *ngIf="project.bid_count != undefined && project.bid_count > 0" class="bton">
+                        <button class="btn viewBids" mat-button (click)="jobClick('View Bids', project, $event)">
+                            <ng-container >View Bids </ng-container>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-lg-9 col-sm-9 col-md-9 col-xs-6 mt5">
+                    <p class="category">{{project.name}}</p>
+                </div>
+                <div class="col-lg-3 col-sm-3 col-md-3 col-xs-6">
+                    <div class="bton maxBidStatus" *ngIf="config.project_type !== projectTypeEnum.FREELANCER_WITHOUT_BIDDING">
+                        <ng-container class="text"> {{ (project.max_bids!= undefined && project.accepted_bids) ? ( project.accepted_bids + ' vs ' + project.max_bids)
+                            : project.max_bids }} </ng-container>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+                    <p class="skills">{{project.description}}</p>
+                </div>
+
+                <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 mt45">
+
+                    <div class="col-lg-3 col-sm-6 col-md-6 col-xs-12">
+                        <p class="posted">
+                            <img src="assets/img/time.svg" aria-hidden="true" />
+                            <span>
+                                <ng-container >Posted</ng-container>
+                            </span> {{project.creation_datetime | daysAgo}}
+                        </p>
+                    </div>
+                    <div [hidden]="categorySelected === 'expired'  " class="col-lg-3 col-sm-6 col-md-6 col-xs-12">
+                        <p class="cancel" *ngIf="config.project_type !== projectTypeEnum.FREELANCER_WITHOUT_BIDDING">
+                            <span (click)="cancelJob(project, $event)">
+                                <ng-container >Cancel</ng-container>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+
+    <div class="no-project" *ngIf="result && projectList && projectList.length == 0">
+        <p>
+            <ng-container >No {{terminology.PROJECT || 'Project'}} Found.</ng-container>
+        </p>
+    </div>
+
+
+    <app-modal *ngIf="projectDetails" [modalType]="modalType.LARGE" (esc)="hideTempltePopup()" (onClose)="hideTempltePopup()">
+        <!--header="View custom fields"-->
+        <div body>
+
+            <div class="row popDetails">
+                <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+                    <p class="detailsHead">
+                        <ng-container >{{terminology.PROJECT || 'Project'}} Details</ng-container>
+                    </p>
+                </div>
+
+
+                <div class="col-xs-12 p-0">
+                    <hr class="seperator" />
+                </div>
+
+                <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+                    <div *ngIf="details.path" class="col-lg-12 col-sm-12 col-md-12 col-xs-12 details p-0 mb10">
+                        <p-breadcrumb [model]="details.path | pathBreadcrumb" class="popup-crumb"></p-breadcrumb>
+                    </div>
+
+                    <div class="col-lg-6 col-sm-12 col-md-12 col-xs-12 details p-0 mb10">
+                        <strong>
+                            #{{details.project_id}}
+                        </strong>
+                        <span class="name">
+                            <ng-container >Posted</ng-container> {{details.creation_datetime | daysAgo}}
+                        </span>
+                    </div>
+                    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 date-div">
+                        <div class="col-lg-6 col-sm-12 col-md-12 col-xs-12 details p-0 mb10" *ngFor="let template of typesWithoutDate;">
+                            <ng-container>
+                                <span class="name">{{template.display_name }}:</span>
+    
+                                <span *ngIf="template.data_type === 'Number'" class="value">
+                                <span *ngIf="template.label !== 'budget'">{{template.value}}</span>
+                                <span *ngIf="template.label === 'budget'">{{currency}}{{template.value |decimalConfig}}</span>
+                                </span>
+                                <span [hidden]="template.data_type === 'Number' " class="value">{{template.value || '-' }}</span>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 date-div">
+                        <div class="col-lg-6 col-sm-12 col-md-12 col-xs-12 details p-0 mb10" *ngFor="let dates of typesDate;">
+                            <span class="name">{{dates.display_name}}:</span>
+                            <span class="value">{{dates.value | dateTimeFormat:'MMM d, y, h:mm a' || '-' }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6 col-sm-12 col-md-12 col-xs-12 details p-0 mb10" *ngFor="let check of typesCheckbox;">
+                        <span class="name">{{check.display_name}}:</span>
+                        <span class="value">{{check.value || '-' }}</span>
+                    </div>
+                    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 details p-0 mb10" *ngFor="let desc of typesDescription;">
+                        <span class="name">{{desc.display_name}}:</span>
+                        <span class="value">{{desc.value || '-' }}</span>
+                    </div>
+                    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 details p-0 mb10" *ngFor="let textArea of typesTextArea;">
+                        <span class="name">{{textArea.display_name}}:</span>
+                        <span class="value">{{textArea.value || '-' }}</span>
+                    </div>
+                    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 details p-0 mb10" *ngFor="let multi of typesMultiSelect;">
+                        <span class="name">{{multi.display_name}}:</span>
+                        <ul>
+                            <li *ngFor="let data of multi.value;">
+                                <span class="value">{{data}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-sm-12 col-md-12 col-xs-12 " *ngIf="typesImages && typesImages.length > 0">
+                    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 p-0 mb10 images" *ngFor="let images of typesImages;">
+                        <div *ngIf="images.value && images.value.length > 0">
+                            <p>{{images.display_name}}</p>
+                            <div class="img-container">
+                                <div class="carouselDiv">
+                                    <div id="lightbox-1" class="carousel slide">
+                                        <ol class="carousel-indicators" *ngIf="images.value && images.value.length > 1">
+                                            <li *ngFor="let image of images.value;let i = index;" data-target="#lightbox" [attr.data-slide-to]="i" [ngClass]="{'active' : i==0}"></li>
+                                        </ol>
+                                        <div class="carousel-inner">
+                                            <div *ngFor="let image of images.value;let i = index;" class="item" [ngClass]="{'active' : i==0}">
+                                                <img [src]="image || 'assets/img/image-placeholder.svg'" [alt]="'carausel image ' + i">
+                                            </div>
+                                        </div>
+                                        <a *ngIf="images.value && images.value.length > 1" class="left carousel-control" href="#lightbox-1" role="button" data-slide="prev" aria-label="go to previous slide">
+                                            <span class="glyphicon glyphicon-chevron-left"></span>
+                                        </a>
+                                        <a *ngIf="images.value && images.value.length > 1" class="right carousel-control" href="#lightbox-1" role="button" data-slide="next" aria-label="go to next slide">
+                                            <span class="glyphicon glyphicon-chevron-right"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </app-modal>
+
+
+    <app-modal class="container popup-Main" *ngIf="cancelPopup" modalType="modal-md" (esc)="closeCancelPopup()" (onClose)="closeCancelPopup()">
+        <div body>
+            <div class="row clear-pop-row">
+                <div class="col-md-12 p-0 h-m">
+                        <h4 class="dialog-msg">
+                            <ng-container > Are you sure want to cancel this {{terminology.PROJECT || 'Project'}}?</ng-container>
+                        </h4>
+                </div>
+                <div class="col-md-12 btns-div">
+                    <div class="modal-footer dialog-action">
+                        <button class="dialog-cancel btn btn-default yes-no-btn" (click)="closeCancelPopup()" >
+                            <ng-container>{{languageStrings.no || 'No'}}</ng-container>
+                        </button>
+                        <button class="dialog-ok btn btn-default primary-theme-btn yes-no-btn" (click)="cancelJob($event)">
+                            <ng-container>{{languageStrings.yes || 'Yes'}}</ng-container>
+                        </button>
+                    </div> 
+                </div>
+
+            </div>
+        </div>
+    </app-modal>
+
+    <!--=========================loader for scroll=======================-->
+    <div *ngIf="showPaginating" class="pg-ldr-prt">
+        <div class="pg-ldr-cld">
+            <div class="pg-ldr-ctr">
+                <div class="pg-loader" [ngStyle]="{'border-bottom-color': config.color,'border-left-color': config.color}"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<app-footer></app-footer>

@@ -1,0 +1,301 @@
+<nav class="navbar navbar-default navbar-fixed-top navHeightFreelance" [ngStyle]="{'background-color': loggedIn ? bg_color: '#2296ff'}">
+  <div class="container-fluid paddingMobile">
+    <div class="navbar-header headerHeight marginZero" [ngClass]="{'widthFull': loggedIn, 'widthAuto': !loggedIn}">
+
+      <button type="button" [style.border-color]="formSettings.header_element_color" class="navbar-toggle burgurButton"
+        data-toggle="collapse" data-target="#myNavbarWithoutLogin">
+        <span class="icon-bar" [style.background-color]="formSettings.header_element_color"></span>
+        <span class="icon-bar" [style.background-color]="formSettings.header_element_color"></span>
+        <span class="icon-bar" [style.background-color]="formSettings.header_element_color"></span>
+      </button>
+
+      <div class="pull-right" *ngIf="loggedIn">
+        <ul class="nav navbar-nav navbar-right loggedInUi">
+          <li>
+            <div class="noti">
+              <a appClickOutside (clickOutside)="onClickOutside($event)" (click)="toggleContainer(show);show=!show"
+               title="Notification" id="notificationLink">
+                <span id="notification_count" *ngIf="count" [ngStyle]="{ 'direction' : direction }">
+                  <span *ngIf="count <= 99">{{count}}</span>
+                  <span *ngIf="count > 99" [ngStyle]="{ 'direction' : direction }">
+                    <ng-container>99</ng-container>
+                    <sup>+</sup>
+                  </span>
+                </span>
+                <img src="assets/img/notification-white.svg" alt="Notification bell" class="notification-bell" *ngIf="bg_color != '#ffffff' && bg_color != '#fff' && bg_color != 'white' && bg_color != '#FFFFFF' && bg_color != '#FFF' && bg_color != 'rgb(255, 255, 255)'" />
+                <img src="assets/img/notification-black.svg" alt="Notification bell" class="notification-bell" *ngIf="bg_color == '#ffffff' || bg_color == '#fff' || bg_color == 'white' || bg_color == '#FFFFFF' || bg_color == '#FFF' || bg_color == 'rgb(255, 255, 255)'" />
+              </a>
+
+              <div id="notificationContainer" class="notificationContainer">
+                <div id="notificationTitle" *ngIf="terminology" class="text-capitalize notificationTitle" [ngStyle]="{ 'direction' : direction }">
+                  {{terminology.NOTIFICATIONS}}
+                  <a *ngIf="!notifyFlag || notificationData.length" class="clearAllLink" (click)="clearAllNotification()"
+                    style="cursor:pointer">
+                    <ng-container>{{languageStrings.clear_all || "Clear All"}}</ng-container>
+                  </a>
+                </div>
+                <div id="notificationsBody" class="notifications noti-body">
+                  <div>
+                    <div *ngFor="let column of notificationData" [class]="['notificationParent',{'unread':column.is_read==false},{'ydeleting':column.dashboard_notif_id==delete_noti_id}]">
+                      <div (click)="read(column)" class="notification-bar">
+                        <span style="padding: 0;margin: 0;font-size: 14px">
+                          {{column.body}}
+                        </span>
+                        <br>
+                        <span style="font-size: 12px">
+                          {{column.creation_datetime|dateTimeFormat:"dd MMM, yyyy 'at' h:mm a"}}
+                        </span>
+                      </div>
+                    </div>
+                    <div *ngIf="notifyFlag && !notificationData.length && terminology" class="notification-bar" style="width:100%;">{{languageStrings.no_notifications_are_available || "No notifications are available."}}
+                   </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <!-- <li [ngStyle]="{ 'direction' : direction }" *ngIf="hideSearch && !formSettings.pdp_view && !showHeadingSearch && formSettings.business_model_type != 'FREELANCER'" class="hidden-xs visible-lg visible-sm visible-md">
+                        <a class="loginBtn searchDeskTop" appColor loginColor="true" (click)="goToSearch()">
+                            <i class="fa fa-search" [style.color]="formSettings.header_element_color"></i>
+                            <ng-container >Search</ng-container>
+                        </a>
+                    </li> -->
+          <li class="hidden-xs visible-lg visible-sm visible-md">
+            <div class="dropdown profileDrop">
+              <button id="profileBtn_2" [ngStyle]="{ 'direction' : direction }" mat-button class="btn dropdown-toggle profileButton"
+                type="button" data-toggle="dropdown" [style.background-color]="profile_color">
+                {{name}}
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" [ngStyle]="{ 'direction' : direction }" [ngClass]="{'dual-user':headerData.is_dual_user_enable}">
+                <li *ngIf="headerData.is_dual_user_enable" (click)="$event.stopPropagation()">
+                  <a appColor onlyColor="true" style="display:flex;justify-content:space-between;align-items: center;">
+                    <!-- <ng-container >Switch to {{headerData.terminology.MERCHANT}} Panel</ng-container> -->
+                    <label class="switch switch custom-switch" style="margin-bottom: 0px;    margin-left: 3px;">
+                      <input type="checkbox" value="false" aria-label="Dual user toggle"  [ngStyle]="{'direction': direction}" (change)="onAccountSwitch($event)">
+                      <span></span>
+                    </label>
+                  </a>
+                </li>
+                <li>
+                  <a (click)="goToProfile()" appColor onlyColor="true">
+                    <ng-container>{{languageStrings.profile || 'Profile'}}</ng-container>
+                  </a>
+                </li>
+                <li *ngIf="formSettings.business_model_type === 'FREELANCER'">
+                  <a (click)="freelancerOrders()" class="text-capitalize" appColor onlyColor="true">{{terminology.ORDERS
+                    || 'Orders'}}</a>
+                </li>
+
+                <li>
+                  <a (click)="goToOrders()" *ngIf="terminology" class="text-capitalize" appColor onlyColor="true">{{
+                    formSettings.business_model_type === 'FREELANCER' ? (terminology.PROJECTS || 'Projects')
+                    : terminology.ORDERS || 'Orders'}}</a>
+                </li>
+
+                <!-- <li *ngIf="formSettings.is_dual_user_enable">
+                                    <a href="{{formSettings.dashboard_url}}/dashboard/homePage?access_token={{vendor_token}}" target="_blank" class="text-capitalize"
+                                        appColor onlyColor="true">{{terminology.MERCHANT}} Panel</a>
+                                </li> -->
+                <!--<li><a (click)="goToStripe()">Stripe</a></li>-->
+                <li *ngIf="refStatus">
+                  <a (click)="goToRefer()" appColor onlyColor="true">
+                    <!--<ng-container >Refer and Earn</ng-container>-->
+                    {{terminology.REFERRAL}}
+                  </a>
+                </li>
+                <li *ngIf="!formSettings.is_demo && !formSettings.hide_gdpr">
+                  <a (click)="goToSettings()" appColor onlyColor="true" *ngIf="terminology" class="text-capitalize">
+                      {{terminology.CUSTOMER_RIGHTS || 'Customer Rights'}}
+                  </a>
+                </li>
+                <!--domain != 'food.yelo.red' && domain != 'rentals.yelo.red' && domain != 'cannabis.yelo.red'-->
+                <li (click)="logout()">
+                  <a appColor onlyColor="true">
+                    <ng-container>{{languageStrings.logout || 'Logout'}}</ng-container>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div style="display: inline-flex;">
+        <div (click)="goBack()" class="goBack arrowPadding" *ngIf="!backHidden && !isEcomFlow">
+          <!--<i class="fa fa-arrow-left fa-2x" aria-hidden="true" style="color:#fff;"></i>-->
+          <img src="assets/img/back-arrow.svg" alt="Back arrow"  style="width: 27px;" *ngIf="bg_color != '#ffffff' && bg_color != '#fff' && bg_color != 'white' && bg_color != '#FFFFFF' && bg_color != '#FFF' && bg_color != 'rgb(255, 255, 255)'" />
+          <img src="assets/img/black-back.svg" alt="Back arrow" style="width: 27px;" *ngIf="bg_color == '#ffffff' || bg_color == '#fff' || bg_color == 'white' || bg_color == '#FFFFFF' || bg_color == '#FFF' || bg_color == 'rgb(255, 255, 255)'" />
+        </div>
+        <div class="imagePadding">
+          <a class="navbar-brand goBack logoImage" (click)="goToHome()">
+            <img [src]="image_link" alt="logo">
+          </a>
+        </div>
+      </div>
+
+    </div>
+    <div class="navbar-collapse collapse" id="myNavbarWithoutLogin" [ngStyle]="{'background-color': loggedIn ? bg_color: '2296ff'}">
+      <ul class="nav navbar-nav navbar-right" style="margin:0px" *ngIf="!loggedIn">
+        <!-- <li [ngStyle]="{ 'direction' : direction }">
+                    <a class="loginBtn" appColor loginColor="true" (click)="goToSearch()">
+                        <i class="fa fa-search" [style.color]="formSettings.header_element_color"></i>
+                        <ng-container >Search</ng-container>
+                    </a>
+                </li> -->
+        <li [ngStyle]="{ 'direction' : direction }">
+          <a [href]="merchant_url" target="_blank" class="loginBtnFreelance" loginColor="true" *ngIf="formSettings && hideLogin">
+            <!-- <i class="fa fa-sign-out" [style.color]="formSettings.header_element_color"></i> -->
+            <button mat-button appColor profileColor="true" type="button" class="btn btn-freelance">
+              <!-- <ng-container >Become a freelancer</ng-container> -->
+            </button>
+
+            <!--<img src="assets/img/login.svg">-->
+          </a>
+        </li>
+        <li [ngStyle]="{ 'direction' : direction }">
+          <a class="loginBtnFreelance" loginColor="true" data-toggle="modal" data-target="#loginDialog" *ngIf="formSettings && hideLogin">
+            <!-- <i class="fa fa-sign-out" [style.color]="formSettings.header_element_color"></i> -->
+            <button mat-button appColor profileColor="true" type="button" class="btn btn-freelance" (click)="goToLogin()">
+              <ng-container>{{languageStrings.login || 'Login'}}</ng-container>
+            </button>
+
+            <!--<img src="assets/img/login.svg">-->
+          </a>
+        </li>
+
+        <li *ngIf="languageArray && languageArray.length > 1">
+          <div class="changeLanguage dropdown" [hidden]="loggedIn">
+            <button id="langBtn_2" mat-button appColor profileColor="true" class="btn dropdown-toggle profileButton text-uppercase"
+              type="button" data-toggle="dropdown">{{languageSelected}}
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu langBtn hidden-xs visible-sm visible-lg visible-md">
+              <li *ngFor="let lang of languageArray">
+                <a (click)="languageChanged(lang.language_code)" appColor onlyColor="true">{{lang.language_name}}</a>
+              </li>
+            </ul>
+            <ul class="dropdown-menu langBtn visible-xs hidden-sm hidden-lg hidden-md">
+              <li *ngFor="let lang of languageArray">
+                <a (click)="languageChanged(lang.language_code)" [style.color]="formSettings.header_element_color">{{lang.language_name}}</a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right" style="margin-right: 0px;" *ngIf="loggedIn">
+        <li [ngStyle]="{ 'direction' : direction }" *ngIf="hideSearch && !formSettings.pdp_view && !showHeadingSearch && formSettings.business_model_type != 'FREELANCER'"
+          class="visible-xs hidden-lg hidden-sm hidden-md">
+          <a class="loginBtn" appColor loginColor="true" (click)="goToSearch()">
+            <i class="fa fa-search" aria-hidden="true"  [style.color]="formSettings.header_element_color"></i>
+            <ng-container>{{languageStrings.search || 'Search'}}</ng-container>
+          </a>
+        </li>
+        <li [ngStyle]="{ 'direction' : direction }" class="visible-xs hidden-lg hidden-sm hidden-md">
+          <div class="dropdown profileMobile">
+            <button id="profileBtn_3" [ngStyle]="{ 'direction' : direction }" mat-button class="btn dropdown-toggle profileButton"
+              type="button" data-toggle="dropdown" [style.background-color]="profile_color">
+              {{name}}
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu profileButtonDrop" [ngStyle]="{ 'direction' : direction }">
+              <li *ngIf="headerData.is_dual_user_enable" (click)="$event.stopPropagation()">
+                <a style="display:flex;justify-content:space-between;align-items: center;">
+                  <!-- <ng-container >Switch to {{headerData.terminology.MERCHANT}} Panel</ng-container> -->
+                  <label class="switch switch custom-switch" style="margin-bottom: 0px;    margin-left: 3px;">
+                    <input type="checkbox"  aria-label="Dual user toggle" value="false" [ngStyle]="{'direction': direction}" (change)="onAccountSwitch($event)">
+                    <span></span>
+                  </label>
+                </a>
+              </li>
+              <li>
+                <a (click)="goToProfile()" [style.color]="formSettings.header_element_color">
+                  <ng-container>{{languageStrings.profile || 'Profile'}}</ng-container>
+                </a>
+              </li>
+              <li>
+                <a (click)="goToOrders()" *ngIf="terminology" class="text-capitalize" [style.color]="formSettings.header_element_color">{{terminology.ORDERS}}</a>
+              </li>
+              <!-- <li *ngIf="formSettings.is_dual_user_enable">
+                                <a href="{{formSettings.dashboard_url}}/dashboard/homePage?access_token={{vendor_token}}" target="_blank" class="text-capitalize"
+                                    appColor onlyColor="true">{{terminology.MERCHANT}} Panel</a>
+                            </li> -->
+              <!--<li><a (click)="goToStripe()">Stripe</a></li>-->
+              <li *ngIf="refStatus">
+                <a (click)="goToRefer()" [style.color]="formSettings.header_element_color">
+                  <ng-container>{{languageStrings.refer_and_earn ||'Refer and Earn'}}</ng-container>
+                </a>
+              </li>
+              <li *ngIf="domain != 'food.yelo.red' && domain != 'rentals.yelo.red' && domain != 'cannabis.yelo.red'">
+                <a (click)="goToSettings()" [style.color]="formSettings.header_element_color" *ngIf="terminology" class="text-capitalize">{{terminology.CUSTOMER_RIGHTS || 'Customer Rights'}}</a>
+              </li>
+              <li (click)="logout()">
+                <a [style.color]="formSettings.header_element_color">
+                  <ng-container>{{languageStrings.logout || 'Logout'}}</ng-container>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <app-pop-up></app-pop-up>
+  </div>
+</nav>
+<app-pop-up-modal></app-pop-up-modal>
+<div id="loginDialog" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button" class="close" (click)="showSignInFalse()" data-dismiss="modal">&times;</button>
+        <app-login [showFbSignIn]="showFbSignIn" [headerData]="headerData"></app-login>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="signupDialog" style="max-height:calc( 100% - 12px ); overflow:scroll;" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <app-signup></app-signup>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="forgotModal" class="modal fade" role="dialog" style="margin: 10px;">
+  <div class="modal-dialog">
+
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" style="margin-top: -15px!important;" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" [ngStyle]="{ 'direction' : direction }">
+          <ng-container>{{languageStrings.forgot_password || 'Forgot Password'}} ?</ng-container>
+        </h4>
+      </div>
+      <form role="form" [formGroup]="forgotForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon add-on-set">
+                <i class="glyphicon glyphicon-envelope" aria-hidden="true"></i>
+              </span>
+              <input id="sEmail" type="email" autocomplete="off" required="required" formControlName="email" [ngStyle]="{ 'direction' : direction }"
+                class="focusable form-control custom_register_form-control input-style" placeholder="{{languageStrings.email || 'Email'}}" aria-label="Email"/>
+            </div>
+            <app-control-messages [control]="forgotForm.controls.email"></app-control-messages>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" [ngStyle]="{ 'direction' : direction }" class="btn btn-danger" (click)="forgotEmail()"
+            [disabled]="!forgotForm.valid">
+            <ng-container>{{languageStrings.submit || 'Submit'}}</ng-container>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- <app-cookie-footer *ngIf="!formSettings.is_demo && !formSettings.hide_gdpr"></app-cookie-footer> -->

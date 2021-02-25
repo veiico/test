@@ -1,0 +1,38 @@
+<app-modal [modalType]="modalType" *ngIf="showMandatoryItems">
+    <div body style="margin: 25px 30px;min-height: 400px">
+      <div class="col-12">
+       <p class="main-heading text-capitalize"> {{languageStrings.mandatory_items || 'Mandatory Items'}} </p>
+      </div>
+      <div>
+        <p>{{languageStrings.select_atleast_one_product_from_listed_items || 'Select atleast one product from listed items'}}</p>
+      </div>
+      <ng-container *ngIf = "!isSingleCategoryMandatory">
+        <div class="nav-tab col-12">
+          <ul [class]="tabState">
+            <ng-container *ngFor="let tab of tabs;let i = index">
+              <li [ngClass]="{'active' : i == activeIndex }" (click)="onItemClick($event, i)">{{tab.label}}</li>
+            </ng-container>
+          </ul>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="isSingleCategoryMandatory">
+        <div>
+          <p class="heading">{{tabs[0].label}}</p>
+        </div>
+      </ng-container>
+      <ng-container>
+        <div class="col-12" style="min-height:200px">
+            <app-product [isRestaurantActive]="true" class="product-app" [ngClass]="{'product-app': productList && productList.length, 'product-app_without_product': productList && !productList.length}"
+            [hidden]="false" [productData]="productList" [cardInfo]="cardInfo" [searchProducts]="0"
+            [paginating]="false" [hasImages]="true" [mandat_item_layout_type]="2" [showCategoryName]="false"></app-product>
+        </div>
+      </ng-container>
+
+      <div class="col-12 buttonDiv">
+          <button class="dialog-cancel btn btn-default btn-block ripple cart-btn" (click)="closePopup()" mat-button appBs  [ngStyle]="{ 'direction' : direction }" *ngIf="popupOnCheckout"><ng-container>{{languageStrings.cancel ||'Cancel'}}</ng-container></button>
+          <button type="button" class=" btn btn-default btn-block ripple cart-btn" [ngStyle]="{ 'direction' : direction }" appColor (click)="hidePopup()" [style.background-color]="formSettings.color">
+            <ng-container>{{languageStrings.continue ||'Continue'}}</ng-container>
+          </button>
+        </div>
+    </div>
+</app-modal>

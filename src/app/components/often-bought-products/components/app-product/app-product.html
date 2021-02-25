@@ -1,0 +1,1287 @@
+<div class="productLayoutOne" *ngIf="(layout_type == 1 || layout_type == 4) || (layout_type == 2 && !hasImages)">
+  <div class="productLayoutOne_1">
+    <p class="cls-p-cat-head hidden-xs hidden-sm" *ngIf="currentCategoryName && !searchProducts && showCategoryName">
+      {{currentCategoryName}}</p>
+    <p class="cls-p-cat-head text-capitalize hidden-xs hidden-sm"
+      *ngIf="(!currentCategoryName || searchProducts) && !noProduct && showCategoryName">{{terminology.PRODUCT}}</p>
+    <div class="cls-p-cnt-div" style="position:relative"
+      [style.display]="product.inventory_enabled && (product.available_quantity <= 0)? (cardInfo.show_outstocked_product?'flex':'none') : 'flex'"
+      *ngFor="let product of productData;let i = index;" (click)="addon_layout_type === 1 ? addCart(product,0): false">
+      <div class="p-detail-veg-img" *ngIf="formSetting.enable_veg_non_veg_label == 1">
+        <ng-container *ngIf="(product.is_veg == 1 || product.is_veg == 0); else elseTemplate">
+          <img
+            [ngStyle]="{'cursor':product.multi_image_url?(product.multi_image_url.length > 0 ? 'pointer':'default'):'default'}"
+            [src]="product.is_veg == 1 ? 'assets/img/veg.jpg' : product.is_veg == 0 ? 'assets/img/non_veg.jpg':''"
+            alt="veg nonveg symbol">
+        </ng-container>
+        <ng-template #elseTemplate>
+          <div style="width:15px"></div>
+        </ng-template>
+      </div>
+      <div class="p-detail-main-img" (click)="showLightBox(product)"
+        *ngIf="product.layout_data && product.layout_data.images[0].size !== 4 && hasImages">
+        <img
+          [ngStyle]="{'cursor':(product.multi_image_url || product.multi_video_url.length)?((product.multi_image_url.length > 0 || product.multi_video_url.length > 0)? 'pointer':'default'):'default'}"
+          [src]="product.thumb_list ?product.thumb_list['400x400'] : product.image_url ? product.image_url : 'assets/img/image-placeholder.svg'"
+          [alt]="product.name + ' image'">
+      </div>
+      <div class="p-detail-main-div">
+        <div class="p-detail-sec">
+          <div style="flex: 5 1 0%;word-break: break-word;">
+            <span>{{(product.layout_data && product.layout_data.lines[0])? product.layout_data.lines[0].data : ''}}</span>
+          </div>
+          <div class="share-prod"
+            *ngIf="formSetting.is_product_share_enabled && !(product.inventory_enabled && (product.available_quantity <= 0))"
+            (click)="productShareBox(product,i);$event.stopPropagation()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 21 24">
+              <g [attr.fill]="formSetting.btn_color?formSetting.btn_color:'#1a9943'">
+                <path
+                  d="M20.13 3.789c0 1.7-1.379 3.079-3.08 3.079-1.7 0-3.078-1.379-3.078-3.079 0-1.7 1.379-3.079 3.079-3.079 1.7 0 3.078 1.379 3.078 3.079z"
+                  transform="translate(0 .478)" />
+                <path
+                  d="M17.05 7.578c-2.089 0-3.788-1.7-3.788-3.789 0-2.09 1.7-3.789 3.789-3.789 2.09 0 3.789 1.7 3.789 3.789 0 2.09-1.7 3.79-3.79 3.79zm0-6.157c-1.305 0-2.367 1.063-2.367 2.368s1.062 2.368 2.368 2.368c1.306 0 2.368-1.063 2.368-2.368s-1.062-2.368-2.368-2.368zM20.13 18.945c0 1.7-1.379 3.08-3.08 3.08-1.7 0-3.078-1.38-3.078-3.08 0-1.7 1.379-3.078 3.079-3.078 1.7 0 3.078 1.378 3.078 3.078z"
+                  transform="translate(0 .478)" />
+                <path
+                  d="M17.05 22.735c-2.089 0-3.788-1.7-3.788-3.79s1.7-3.789 3.789-3.789c2.09 0 3.789 1.7 3.789 3.79 0 2.089-1.7 3.789-3.79 3.789zm0-6.158c-1.305 0-2.367 1.063-2.367 2.368 0 1.306 1.062 2.369 2.368 2.369 1.306 0 2.368-1.063 2.368-2.369 0-1.305-1.062-2.368-2.368-2.368zM6.868 11.367c0 1.7-1.379 3.079-3.079 3.079-1.7 0-3.079-1.378-3.079-3.079 0-1.7 1.379-3.078 3.079-3.078 1.7 0 3.079 1.378 3.079 3.078z"
+                  transform="translate(0 .478)" />
+                <path
+                  d="M3.789 15.156C1.699 15.156 0 13.457 0 11.367s1.7-3.789 3.789-3.789c2.09 0 3.79 1.7 3.79 3.79 0 2.089-1.7 3.788-3.79 3.788zm0-6.157c-1.306 0-2.368 1.063-2.368 2.368 0 1.306 1.062 2.368 2.368 2.368 1.306 0 2.368-1.062 2.368-2.368C6.157 10.062 5.095 9 3.79 9z"
+                  transform="translate(0 .478)" />
+                <path
+                  d="M6.026 10.913c-.33 0-.65-.172-.825-.479-.258-.453-.099-1.032.355-1.292l8.79-5.01c.453-.261 1.032-.102 1.292.353.258.454.099 1.033-.355 1.292l-8.79 5.011c-.147.085-.308.125-.467.125zM14.814 18.728c-.159 0-.32-.04-.468-.125l-8.79-5.01c-.453-.26-.612-.838-.354-1.293.258-.454.838-.614 1.293-.354l8.79 5.011c.453.259.612.837.353 1.292-.175.307-.495.479-.824.479z"
+                  transform="translate(0 .478)" />
+              </g>
+            </svg>
+          </div>
+          <div *ngIf="product.inventory_enabled && (product.available_quantity <= 0)"
+            [ngStyle]="{ 'direction' : direction }" class="p-action-stock">
+            <ng-container> {{terminology.OUT_OF_STOCK || 'Out of Stock'}} </ng-container>
+          </div>
+        </div>
+        <div *ngIf="product.layout_data && product.layout_data.lines[1] && product.layout_data.lines[1].data"
+          class="descriptionP" (click)="showLightBox(product)">
+          <span class="pointer wd-85">
+            <span [ngClass]="{'d-n':readMore==i}">
+
+              {{product.layout_data.lines[1].data | truncate : 150 : '.'}}
+              <span class="description-short"
+                *ngIf="product.layout_data && product.layout_data.lines[1].data.length > 150"
+                (click)="onreadMore($event,i)">
+                <ng-container>{{ languageStrings.read_more || 'Read More'}}</ng-container>
+              </span>
+            </span>
+            <span [innerHTML]="product.layout_data.lines[1].data" [ngClass]="{'d-n':readMore!=i}"></span>
+          </span>
+
+
+        </div>
+        <div *ngIf="formSetting.show_service_time && product.service_time" class="descriptionP">
+          <span class="pointer">
+            <ng-container>{{languageStrings.service_time || 'Service Time'}}</ng-container>:
+            {{product.service_time | serviceTimePipe : [product.unit_type, product.unit_in_text]}}
+          </span>
+        </div>
+        <div *ngIf="formSetting.is_recurring_enabled && store.is_recurring_enabled && product.is_recurring_enabled"
+          class="descriptionP">
+          <span class="subscription-avail">
+            <i class="fa fa-refresh"></i>
+            <ng-container>{{terminology.SUBSCRIPTION_AVAILABLE || 'Subscription Available'}}</ng-container>
+          </span>
+        </div>
+        <div class="price-box"
+          *ngIf="(!appConfig.add_mrp_in_product_enabled &&restaurantInfo.business_type === business_type.PRODUCT_MARKETPLACE) || restaurantInfo.business_type === business_type.SERVICE_MARKETPLACE">
+          <div class="priceText discount-price"
+            *ngIf="(formSetting.show_product_price == 1 || product.price > 0) && product.original_price">{{currency
+            + '' + (product.original_price |decimalConfig)}}</div>
+          <div class="priceText"
+            *ngIf="product.layout_data && formSetting.show_product_price == 1 || product.price > 0">{{currency+'
+            '+product.layout_data.lines[2] ? product.layout_data.lines[2].data : ''}}</div>
+          <div
+            *ngIf="isRestaurantActive && !(product.inventory_enabled && (product.available_quantity <= 0)) && (addon_layout_type === 0)"
+            class="p-action-btn">
+            <div class="d-flex" *ngIf="product.maximum_quantity==1 && !(product.menu_enabled_product==0)">
+              <div class="add-remove-parent"
+                [ngStyle]="{'visibility':(productBool[product.product_id]) ? 'visible':'hidden','height':(productBool[product.product_id]) ? 'auto' : '0px'}">
+                <button class="btn-sm addremovebtn"
+                  [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'"
+                  (click)="decreamentQuantity(product.product_id,i)">{{removeBtnTxt || removeButton}}</button>
+              </div>
+              <div class="add-remove-parent" *ngIf="!productBool[product.product_id]">
+                <button class="btn-sm addremovebtn"
+                  [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'"
+                  (click)="checkBusinessTypeBeforeAdding(product,i)">{{addBtnTxt || addButton}}</button>
+              </div>
+            </div>
+            <div
+              [ngStyle]="{'display':(product.layout_data && product.layout_data.buttons && product.layout_data.buttons[0].type != 1) ? 'flex':'none'}"
+              *ngIf="product.maximum_quantity!=1">
+              <div class="p-minus" (click)="decreamentQuantity(product.product_id,i);$event.stopPropagation()"
+                [ngStyle]="{'visibility':(productBool[product.product_id]) ? 'visible':'hidden'}" appBs>
+                <svg width="10" height="7" viewBox="0 0 10 2">
+                  <path fill="#858585" fill-rule="nonzero" d="M0 1.75h10V.25H0z" />
+                </svg>
+              </div>
+              <div [ngStyle]="{'visibility':(productBool[product.product_id]) ? 'visible':'hidden'}"
+                class="p-quantity custom">
+                <span *ngIf="checkUniq(product)"></span>
+                <input appNumberOnly maxlength="4" [disabled]="!product?.isUniq"
+                  [ngStyle]="{'visibility':(productBool[product.product_id]) ? 'visible':'hidden'}"
+                  class="p-quantity inputBulkOrderClass" [(ngModel)]="productQuantity[product.product_id]"
+                  aria-label="Product quantity" (click)="$event.stopPropagation()"
+                  (blur)="onBlurInputFun(product,product.product_id,i,productQuantity[product.product_id])">
+              </div>
+              <div
+                *ngIf="productBool[product.product_id] && !(product.customization ? product.customization.length != 0 : 0) && !(product.menu_enabled_product==0)"
+                class="p-plus" [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'" appBs
+                (click)="increaseQuantity(product,product.product_id,i);$event.stopPropagation()">
+           
+                <svg width="10" height="10" viewBox="0 0 10 10">
+                  <path fill="#FFF" fill-rule="nonzero"
+                    d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+                </svg>
+              </div>
+              <div
+                *ngIf="productBool[product.product_id] && (product.customization ? product.customization.length != 0 : 0) && !(product.menu_enabled_product==0)"
+                class="p-plus" [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'" appBs
+                (click)="checkBusinessTypeBeforeAdding(product,i);$event.stopPropagation()">
+                <svg width="10" height="10" viewBox="0 0 10 10">
+                  <path fill="#FFF" fill-rule="nonzero"
+                    d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+                </svg>
+              </div>
+              <div *ngIf="!productBool[product.product_id] && !(product.menu_enabled_product==0)" class="p-plus"
+                (click)="checkBusinessTypeBeforeAdding(product,i);$event.stopPropagation()"
+                [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'" appBs>
+                <svg width="10" height="10" viewBox="0 0 10 10">
+                  <path fill="#FFF" fill-rule="nonzero"
+                    d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+                </svg>
+              </div>
+            </div>
+
+            <div
+              [ngStyle]="{'display':(product.layout_data && product.layout_data.buttons && product.layout_data.buttons[0].type == 1) ? 'flex':'none'}"
+              *ngIf="product.maximum_quantity!=1">
+              <div class="p-minus t-btn" style="height:28px !important;line-height: 23px;"
+                (click)="decreamentQuantity(product.product_id,i);$event.stopPropagation()"
+                [ngStyle]="{'display':(productBool[product.product_id]) ? 'flex':'none'}" appBs>
+                {{removeBtnTxt}}
+              </div>
+              <div *ngIf="!productBool[product.product_id] && !(product.menu_enabled_product==0)"
+                style="height:28px !important;" class="p-plus t-btn"
+                [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'" appBs
+                (click)="checkBusinessTypeBeforeAdding(product,i);$event.stopPropagation()">
+                {{addBtnTxt}}
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="price-box"
+          *ngIf="appConfig.add_mrp_in_product_enabled && restaurantInfo.business_type === business_type.PRODUCT_MARKETPLACE">
+          <div class="mrp" *ngIf="product.mrp">
+            <span>{{languageStrings.mrp || 'MRP'}}</span>
+            <div class="mb-5 priceText"
+              *ngIf="product.layout_data && formSetting.show_product_price == 1 || product.mrp > 0">{{currency+'
+              '+product.mrp}}
+            </div>
+          </div>
+          <div [ngClass]="{'price-text':product.mrp}">
+            <div class="fl mob-dc-c">
+              <div class="mb-5 priceText discount-price"
+                *ngIf="(formSetting.show_product_price == 1 || product.price > 0) && product.original_price">{{currency
+                + '' + (product.original_price |decimalConfig)}}</div>
+              <div class="mb-5 priceText"
+                *ngIf="product.layout_data && formSetting.show_product_price == 1 || product.price > 0">{{currency+'
+                  '+product.layout_data.lines[2] ? product.layout_data.lines[2].data : ''}}</div>
+            </div>
+          </div>
+
+          <div
+            *ngIf="isRestaurantActive && !(product.inventory_enabled && (product.available_quantity <= 0)) && (addon_layout_type === 0)"
+            class="p-action-btn">
+            <div class="d-flex" *ngIf="product.maximum_quantity==1 && !(product.menu_enabled_product==0)">
+              <div class="add-remove-parent"
+                [ngStyle]="{'visibility':(productBool[product.product_id]) ? 'visible':'hidden','height':(productBool[product.product_id]) ? 'auto' : '0px'}">
+                <button class="btn-sm addremovebtn"
+                  [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'"
+                  (click)="decreamentQuantity(product.product_id,i)">{{removeBtnTxt || removeButton}}</button>
+              </div>
+              <div class="add-remove-parent" *ngIf="!productBool[product.product_id]">
+                <button class="btn-sm addremovebtn"
+                  [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'"
+                  (click)="checkBusinessTypeBeforeAdding(product,i)">{{addBtnTxt || addButton}}</button>
+              </div>
+            </div>
+            <div
+              [ngStyle]="{'display':(product.layout_data && product.layout_data.buttons && product.layout_data.buttons[0].type != 1) ? 'flex':'none'}"
+              *ngIf="product.maximum_quantity!=1">
+              <div class="p-minus" (click)="decreamentQuantity(product.product_id,i);$event.stopPropagation()"
+                [ngStyle]="{'visibility':(productBool[product.product_id]) ? 'visible':'hidden'}" appBs>
+                <svg width="10" height="7" viewBox="0 0 10 2">
+                  <path fill="#858585" fill-rule="nonzero" d="M0 1.75h10V.25H0z" />
+                </svg>
+              </div>
+              <div [ngStyle]="{'visibility':(productBool[product.product_id]) ? 'visible':'hidden'}"
+                class="p-quantity custom">
+                <span *ngIf="checkUniq(product)"></span>
+                <input appNumberOnly maxlength="4" [disabled]="!product?.isUniq"
+                  [ngStyle]="{'visibility':(productBool[product.product_id]) ? 'visible':'hidden'}"
+                  class="p-quantity inputBulkOrderClass" [(ngModel)]="productQuantity[product.product_id]"
+                  aria-label="Product quantity" (click)="$event.stopPropagation()"
+                  (blur)="onBlurInputFun(product,product.product_id,i,productQuantity[product.product_id])">
+              </div>
+              <div
+                *ngIf="productBool[product.product_id] && !(product.customization ? product.customization.length != 0 : 0) && !(product.menu_enabled_product==0)"
+                class="p-plus" [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'" appBs
+                (click)="increaseQuantity(product,product.product_id,i);$event.stopPropagation()">
+                
+                <svg width="10" height="10" viewBox="0 0 10 10">
+                  <path fill="#FFF" fill-rule="nonzero"
+                    d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+                </svg>
+              </div>
+              <div
+                *ngIf="productBool[product.product_id] && (product.customization ? product.customization.length != 0 : 0) && !(product.menu_enabled_product==0)"
+                class="p-plus" [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'" appBs
+                (click)="checkBusinessTypeBeforeAdding(product,i);$event.stopPropagation()">
+                <!--addCart(product,i) appColor bg='true'-->
+                <svg width="10" height="10" viewBox="0 0 10 10">
+                  <path fill="#FFF" fill-rule="nonzero"
+                    d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+                </svg>
+              </div>
+              <div *ngIf="!productBool[product.product_id] && !(product.menu_enabled_product==0)" class="p-plus"
+                (click)="checkBusinessTypeBeforeAdding(product,i);$event.stopPropagation()"
+                [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'" appBs>
+                <!--addCart(product,i)  appColor bg='true'-->
+                <svg width="10" height="10" viewBox="0 0 10 10">
+                  <path fill="#FFF" fill-rule="nonzero"
+                    d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+                </svg>
+              </div>
+            </div>
+
+            <div
+              [ngStyle]="{'display':(product.layout_data && product.layout_data.buttons && product.layout_data.buttons[0].type == 1) ? 'flex':'none'}"
+              *ngIf="product.maximum_quantity!=1">
+              <div class="p-minus t-btn" style="height:28px !important;line-height: 23px;"
+                (click)="decreamentQuantity(product.product_id,i);$event.stopPropagation()"
+                [ngStyle]="{'display':(productBool[product.product_id]) ? 'flex':'none'}" appBs>
+                {{removeBtnTxt}}
+              </div>
+              <div *ngIf="!productBool[product.product_id] && !(product.menu_enabled_product==0)"
+                style="height:28px !important;" class="p-plus t-btn"
+                [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'" appBs
+                (click)="checkBusinessTypeBeforeAdding(product,i);$event.stopPropagation()">
+                <!--addCart(product,i) appColor bg='true'-->
+                {{addBtnTxt}}
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div *ngIf="product && product.discount" class="discount-percent">{{product.discount}}% <ng-container>
+            {{languageStrings.discount || 'Discount'}}</ng-container>
+          <ng-container *ngIf="product.max_discount_amount">
+            <ng-container>{{languageStrings.upto || 'Upto'}}</ng-container>
+            {{currency + product.max_discount_amount}}
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="paginating" class="pg-ldr-prt">
+      <div class="pg-ldr-cld">
+        <div class="pg-ldr-ctr">
+          <div class="pg-loader"
+            [ngStyle]="{'border-bottom-color': formSetting.color,'border-left-color': formSetting.color}"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="noProduct && productData && productData.length == 0 && !viewLoad"
+    style="display:table;text-align:center;width:100%;margin: 13% 0px;" class="ptb0-lr30"
+    [ngClass]="{'npf': !layoutBool || !loopData, 'npf_with_menu': layoutBool && loopData}">
+    <div class="text-capitalize noProductLoad"
+      *ngIf="!formSetting.is_custom_order_active || (formSetting.is_custom_order_active && restaurantInfo.self_pickup && !restaurantInfo.home_delivery && !restaurantInfo.pick_and_drop)">
+      {{languageStrings.no_product_available || "No Product Available."}}</div>
+    <div class="no-prod-text"
+      *ngIf="restaurantInfo && restaurantInfo.custom_order_active_for_store && restaurantInfo.available && formSetting.is_custom_order_active && !(restaurantInfo.self_pickup && (!restaurantInfo.home_delivery && !restaurantInfo.pick_and_drop)) &&(restaurantInfo.merchant_as_delivery_manager || (restaurantInfo.merchant_as_delivery_manager ==0 && formSetting.is_marketplace_delivery_availabile))">
+      <span class="font-20">
+        <ng-container *ngIf="customOrderDescription">{{terminology.READY_TO_PLACE_YOUR_ORDER+' '}}
+          <ng-container>{{restaurantInfo.store_name}}</ng-container>
+        </ng-container>
+        <ng-container *ngIf="!customOrderDescription">
+          <ng-container>{{languageStrings.ready_place_your || 'Ready to Place your'}}</ng-container>
+          <b>{{' '+terminology.ORDER+' '}}</b>
+          <ng-container>{{languageStrings.with}} {{restaurantInfo.store_name}}</ng-container>
+        </ng-container>
+
+      </span>
+      <span class="custom-order-but" (click)="moveToCustomOrder()"><a class="tk-link">
+          <ng-container>{{languageStrings.place || 'Place'}} </ng-container> {{' '+terminology.CUSTOM_ORDER}}
+        </a></span>
+    </div>
+    <div class="no-prod-text"
+      *ngIf="restaurantInfo && formSetting.is_custom_order_active && !restaurantInfo.custom_order_active_for_store && restaurantInfo.available && !(restaurantInfo.self_pickup && (!restaurantInfo.home_delivery && !restaurantInfo.pick_and_drop)) &&(restaurantInfo.merchant_as_delivery_manager || (restaurantInfo.merchant_as_delivery_manager ==0 && formSetting.is_marketplace_delivery_availabile))">
+      <span
+        class="font-18">{{languageStrings.could_not_find_what_you_looking_for ||'Couldn’t find what you were looking for'}}?</span>
+      <span class="font-20">
+        <ng-container>
+          {{languageStrings.dont_worry_have_got_your_back_place || 'Don’t worry we have got your back. Place a' }}
+        </ng-container>
+        <b>{{' '+terminology.CUSTOM_ORDER+' '}}</b>
+        <ng-container>{{languageStrings.as_per_your_requirement || 'as per your requirement.'}}</ng-container>
+      </span>
+      <span class="custom-order-but" (click)="redirectToCustomOrder()"><a class="tk-link">
+          <ng-container>{{languageStrings.place || 'Place'}}</ng-container> {{' '+terminology.CUSTOM_ORDER}}
+        </a></span>
+    </div>
+  </div>
+
+
+</div>
+<div class="home-fluid-thumbnail-grid-narrow productLayoutTwo" *ngIf="layout_type == 2 && hasImages"
+  [ngClass]="{'mt-10' : !showCategoryName}">
+  <div class="home-fluid-thumbnail-grid productLayoutTwo_2">
+    <p class="cls-p-cat-head_2 hidden-xs hidden-sm" *ngIf="currentCategoryName && !searchProducts && showCategoryName">
+      {{currentCategoryName}}</p>
+    <p class="cls-p-cat-head_2 text-capitalize hidden-xs hidden-sm"
+      *ngIf="(!currentCategoryName || searchProducts) && !noProduct && showCategoryName">{{terminology.PRODUCT}}</p>
+    <div class="row-eq-height">
+      <div class="home-fluid-thumbnail-grid-item row-col-eq"
+        [style.display]="product.inventory_enabled && (product.available_quantity <= 0)? (cardInfo.show_outstocked_product?'block':'none') : 'block'"
+        *ngFor="let product of productData;let i = index;">
+        <div class="home_shadow" (click)="addon_layout_type === 1 ? addCart(product,0): false">
+          <!--<div *ngIf="product.inventory_enabled && (product.available_quantity <= 0)" class="outOfStock"> Out of Stock</div>-->
+          <a class=" fluid-thumbnail-grid-image-item-link">
+            <div class="fluid-thumbnail-grid-image-image-container" style="border-radius: 5px;">
+              <div (click)="showMultiImages(product)">
+                <img
+                  [ngStyle]="{'cursor':(product.multi_image_url || product.multi_video_url.length)?(product.multi_image_url.length > 0 ? 'pointer':'default'):'default'}"
+                  class="fluid-thumbnail-grid-image-image"
+                  [src]="product.thumb_list ?product.thumb_list['400x400'] : product.image_url ? product.image_url : 'assets/img/image-placeholder.svg'"
+                  [alt]="product.name + ' image'">
+                <div
+                  [ngStyle]="{'cursor':product.multi_image_url?(product.multi_image_url.length > 0 ? 'pointer':'default'):'default'}"
+                  class="fluid-thumbnail-grid-image-overlay"></div>
+              </div>
+              <div class="displayQuickLook quickLook" *ngIf="formSetting.is_product_share_enabled"
+                (click)="productShareBox(product);$event.stopPropagation()">
+                <button class="btn quickLookStyle"
+                  [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 21 24" fill='white'>
+                    <g>
+                      <path
+                        d="M20.13 3.789c0 1.7-1.379 3.079-3.08 3.079-1.7 0-3.078-1.379-3.078-3.079 0-1.7 1.379-3.079 3.079-3.079 1.7 0 3.078 1.379 3.078 3.079z"
+                        transform="translate(0 .478)" />
+                      <path
+                        d="M17.05 7.578c-2.089 0-3.788-1.7-3.788-3.789 0-2.09 1.7-3.789 3.789-3.789 2.09 0 3.789 1.7 3.789 3.789 0 2.09-1.7 3.79-3.79 3.79zm0-6.157c-1.305 0-2.367 1.063-2.367 2.368s1.062 2.368 2.368 2.368c1.306 0 2.368-1.063 2.368-2.368s-1.062-2.368-2.368-2.368zM20.13 18.945c0 1.7-1.379 3.08-3.08 3.08-1.7 0-3.078-1.38-3.078-3.08 0-1.7 1.379-3.078 3.079-3.078 1.7 0 3.078 1.378 3.078 3.078z"
+                        transform="translate(0 .478)" />
+                      <path
+                        d="M17.05 22.735c-2.089 0-3.788-1.7-3.788-3.79s1.7-3.789 3.789-3.789c2.09 0 3.789 1.7 3.789 3.79 0 2.089-1.7 3.789-3.79 3.789zm0-6.158c-1.305 0-2.367 1.063-2.367 2.368 0 1.306 1.062 2.369 2.368 2.369 1.306 0 2.368-1.063 2.368-2.369 0-1.305-1.062-2.368-2.368-2.368zM6.868 11.367c0 1.7-1.379 3.079-3.079 3.079-1.7 0-3.079-1.378-3.079-3.079 0-1.7 1.379-3.078 3.079-3.078 1.7 0 3.079 1.378 3.079 3.078z"
+                        transform="translate(0 .478)" />
+                      <path
+                        d="M3.789 15.156C1.699 15.156 0 13.457 0 11.367s1.7-3.789 3.789-3.789c2.09 0 3.79 1.7 3.79 3.79 0 2.089-1.7 3.788-3.79 3.788zm0-6.157c-1.306 0-2.368 1.063-2.368 2.368 0 1.306 1.062 2.368 2.368 2.368 1.306 0 2.368-1.062 2.368-2.368C6.157 10.062 5.095 9 3.79 9z"
+                        transform="translate(0 .478)" />
+                      <path
+                        d="M6.026 10.913c-.33 0-.65-.172-.825-.479-.258-.453-.099-1.032.355-1.292l8.79-5.01c.453-.261 1.032-.102 1.292.353.258.454.099 1.033-.355 1.292l-8.79 5.011c-.147.085-.308.125-.467.125zM14.814 18.728c-.159 0-.32-.04-.468-.125l-8.79-5.01c-.453-.26-.612-.838-.354-1.293.258-.454.838-.614 1.293-.354l8.79 5.011c.453.259.612.837.353 1.292-.175.307-.495.479-.824.479z"
+                        transform="translate(0 .478)" />
+                    </g>
+                  </svg>
+                </button>
+                 </div>
+            </div>
+          </a>
+          <div class="home-fluid-thumbnail-grid-author">
+            <div class="p-detail-sec">
+              <div
+                [tooltip]="(product.layout_data && product.layout_data.lines[0])?product.layout_data.lines[0].data:''"
+                class="productWithPrice">
+                <span class="p-detail-veg-img"
+                  *ngIf="formSetting.enable_veg_non_veg_label == 1 && (product.is_veg == 1 || product.is_veg == 0)">
+                   <img
+                    [ngStyle]="{'cursor':product.multi_image_url?(product.multi_image_url.length > 0 ? 'pointer':'default'):'default'}"
+                    [src]="product.is_veg == 1 ? 'assets/img/veg.jpg' : product.is_veg == 0 ? 'assets/img/non_veg.jpg':''"
+                    alt="veg nonveg symbol">
+                </span>
+                <span
+                  style="word-wrap: break-word;width: 100%;word-break: break-all;">{{(product.layout_data && product.layout_data.lines[0]) ? product.layout_data.lines[0].data : ''}}</span>
+              </div>
+            </div>
+            <div class="mb-5 p-detail-sec pad-t-0" style="font-weight: bold">
+              <div
+                *ngIf="appConfig.add_mrp_in_product_enabled && restaurantInfo.business_type === business_type.PRODUCT_MARKETPLACE && product.mrp"
+                class="mrp">
+                <div class="text-styling"
+                  *ngIf="(formSetting.show_product_price == 1 || product.mrp > 0) && product.mrp">
+                  {{languageStrings.mrp || 'MRP'}}
+                </div>
+                <div class="product-cl-data" *ngIf="formSetting.show_product_price == 1 || product.price > 0">
+                  {{currency+''+product.mrp}}
+                </div>
+              </div>
+              <div *ngIf="restaurantInfo.business_type === business_type.PRODUCT_MARKETPLACE" class="fl fl-dir-c"
+                [ngClass]="{'price-text':product.mrp}">
+                <div [ngClass]="{'fl':product.mrp}">
+                  <div class="discount-price"
+                    *ngIf="(formSetting.show_product_price == 1 || product.price > 0) && product.original_price">
+                    {{currency + '' + (product.original_price |decimalConfig) }}
+                  </div>
+                  <div class="product-cl-data" *ngIf="formSetting.show_product_price == 1 || product.price > 0">
+                    {{currency+''+product.layout_data.lines[2] ? product.layout_data.lines[2].data : ''}}
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="restaurantInfo.business_type === business_type.SERVICE_MARKETPLACE">
+                <div class="discount-price"
+                  *ngIf="(formSetting.show_product_price == 1 || product.price > 0) && product.original_price">
+                  {{currency + '' + (product.original_price |decimalConfig) }}
+                </div>
+                <div class="product-cl-data" *ngIf="formSetting.show_product_price == 1 || product.price > 0">
+                  {{currency+''+product.layout_data.lines[2] ? product.layout_data.lines[2].data : ''}}
+                </div>
+              </div>
+              <div
+                *ngIf="isRestaurantActive &&!(product.inventory_enabled && (product.available_quantity <= 0)) && (addon_layout_type === 0)"
+                class="p-action-btn">
+                <div *ngIf="product.maximum_quantity==1 && !(product.menu_enabled_product==0)">
+                  <div class="add-remove-parent"
+                    [ngStyle]="{'visibility':(productBool[product.product_id]) ? 'visible':'hidden','height':(productBool[product.product_id]) ? 'auto' : '0px'}">
+                    <button class="btn-sm addremovebtn"
+                      [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'"
+                      (click)="decreamentQuantity(product.product_id,i)">{{removeBtnTxt  || removeButton}}</button>
+                  </div>
+                  <div class="add-remove-parent" *ngIf="!productBool[product.product_id]">
+                    <button class="btn-sm addremovebtn"
+                      [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'"
+                      (click)="checkBusinessTypeBeforeAdding(product,i)">{{addBtnTxt || addButton}}</button>
+                  </div>
+                </div>
+                <div
+                  [ngStyle]="{'display':(product.layout_data && product.layout_data.buttons && product.layout_data.buttons[0].type != 1) ? 'flex':'none'}"
+                  *ngIf="product.maximum_quantity!=1">
+
+                  <div appBs class="p-minus" (click)="decreamentQuantity(product.product_id,i)"
+                    [ngStyle]="{'visibility':(productBool[product.product_id]) ? 'visible':'hidden'}">
+                    <svg width="10" height="7" viewBox="0 0 10 2">
+                      <path fill="#858585" fill-rule="nonzero" d="M0 1.75h10V.25H0z" />
+                    </svg>
+                  </div>
+                  <div [ngStyle]="{'visibility':(productBool[product.product_id]) ? 'visible':'hidden'}"
+                    class="p-quantity">
+                    <input appNumberOnly maxlength="4"
+                      [ngStyle]="{'visibility':(productBool[product.product_id]) ? 'visible':'hidden'}"
+                      class="p-quantity inputBulkOrderClass" [(ngModel)]="productQuantity[product.product_id]"
+                      (blur)="onBlurInputFun(product,product.product_id,i,productQuantity[product.product_id])"
+                      aria-label="Product quantity">
+                  </div>
+                  <div
+                    *ngIf="productBool[product.product_id] && !(product.customization?product.customization.length:0) && !(product.menu_enabled_product==0)"
+                    class="p-plus" [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'"
+                    appBs (click)="increaseQuantity(product,product.product_id,i)">
+
+                    
+                    <svg width="10" height="10" viewBox="0 0 10 10">
+                      <path fill="#FFF" fill-rule="nonzero"
+                        d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+                    </svg>
+                  </div>
+                  <div
+                    *ngIf="productBool[product.product_id] && product.customization?product.customization.length:0 && !(product.menu_enabled_product==0)"
+                    class="p-plus" [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'"
+                    appBs (click)="checkBusinessTypeBeforeAdding(product,i)">
+                    <!--addCart(product,i) appColor bg='true'-->
+                    <svg width="10" height="10" viewBox="0 0 10 10">
+                      <path fill="#FFF" fill-rule="nonzero"
+                        d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+                    </svg>
+                  </div>
+                  <div *ngIf="!productBool[product.product_id] && !(product.menu_enabled_product==0)" class="p-plus"
+                    [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'" appBs
+                    (click)="checkBusinessTypeBeforeAdding(product,i)">
+                    <!--addCart(product,i) appColor bg='true'-->
+                    <svg width="10" height="10" viewBox="0 0 10 10">
+                      <path fill="#FFF" fill-rule="nonzero"
+                        d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+                    </svg>
+                  </div>
+                </div>
+
+                <div
+                  [ngStyle]="{'display':(product.layout_data && product.layout_data.buttons && product.layout_data.buttons[0].type == 1) ? 'flex':'none'}">
+                  <div class="p-minus t-btn" style="height:28px !important;line-height: 23px;"
+                    (click)="decreamentQuantity(product.product_id,i)"
+                    [ngStyle]="{'display':(productBool[product.product_id]) ? 'flex':'none'}" appBs>
+                    {{removeBtnTxt}}
+                  </div>
+                  <div *ngIf="!productBool[product.product_id] && !(product.menu_enabled_product==0)"
+                    style="height:28px !important;" class="p-plus t-btn"
+                    [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'" appBs
+                    (click)="checkBusinessTypeBeforeAdding(product,i)">
+                    <!--addCart(product,i) appColor bg='true'-->
+                    {{addBtnTxt}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="product.inventory_enabled && (product.available_quantity <= 0)"
+              class="p-action-stock grid-stock" [ngStyle]="{ 'direction' : direction }">
+              <ng-container>{{terminology.OUT_OF_STOCK || 'Out of Stock'}}</ng-container>
+            </div>
+            <div *ngIf="product && product.discount" class="discount-percent">{{product.discount}}% <ng-container>
+                {{languageStrings.discount || 'Discount'}}</ng-container>
+              <ng-container *ngIf="product.max_discount_amount">
+                <ng-container>{{languageStrings.upto ||'Upto'}}</ng-container>
+                {{currency + product.max_discount_amount}}
+              </ng-container>
+            </div>
+            <div *ngIf="formSetting.show_service_time && product.service_time" class="decriptionB">
+              <span class="">
+                <ng-container>{{languageStrings.service_time || 'Service Time'}}</ng-container>:
+                {{product.service_time | serviceTimePipe : [product.unit_type, product.unit_in_text]}}
+              </span>
+            </div>
+            <div *ngIf="formSetting.is_recurring_enabled && store.is_recurring_enabled && product.is_recurring_enabled"
+              class="decriptionB">
+              <span class="subscription-avail">
+                <i class="fa fa-refresh"></i>
+                <ng-container>{{terminology.SUBSCRIPTION_AVAILABLE || 'Subscription Available'}}</ng-container>
+              </span>
+            </div>
+            <div *ngIf="product.layout_data && product.layout_data.lines[1]" (click)="showLightBox(product)">
+              <!--<span matTooltip="Tooltip!">{{product.layout_data.lines[1] ? product.layout_data.lines[1].data : ''}}</span>-->
+              <span class="decriptionB pointer">
+                <span [tooltip]="product.layout_data.lines[1].data"
+                  [innerHTML]="product.layout_data.lines[1].data | truncate : 60 : '.'"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="paginating" class="pg-ldr-prt">
+    <div class="pg-ldr-cld">
+      <div class="pg-ldr-ctr">
+        <div class="pg-loader"
+          [ngStyle]="{'border-bottom-color': formSetting.color,'border-left-color': formSetting.color}"></div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="noProduct && productData && productData.length == 0  && !viewLoad"
+    style="display:table;text-align:center;width:100%;margin: 13% 0px;" class="ptb0-lr30"
+    [ngClass]="{'npf': !layoutBool || !loopData, 'npf_with_menu': layoutBool && loopData}">
+    <div class="text-capitalize noProductLoad"
+      *ngIf="!formSetting.is_custom_order_active || (formSetting.is_custom_order_active && restaurantInfo.self_pickup && !restaurantInfo.home_delivery && !restaurantInfo.pick_and_drop)">
+      {{ languageStrings.no_product_available || 'No Product Available.'}}</div>
+    <div class="no-prod-text"
+      *ngIf="restaurantInfo && restaurantInfo.custom_order_active_for_store && formSetting.is_custom_order_active &&  restaurantInfo.available  && !(restaurantInfo.self_pickup && (!restaurantInfo.home_delivery && !restaurantInfo.pick_and_drop))  &&(restaurantInfo.merchant_as_delivery_manager || (restaurantInfo.merchant_as_delivery_manager ==0 && formSetting.is_marketplace_delivery_availabile))">
+      <span class="font-20">
+        <ng-container *ngIf="customOrderDescription">{{terminology.READY_TO_PLACE_YOUR_ORDER+' '}}
+          <ng-container>{{restaurantInfo.store_name}}</ng-container>
+        </ng-container>
+        <ng-container *ngIf="!customOrderDescription">
+          <ng-container>{{languageStrings.ready_to_place_your || 'Ready to Place your'}}</ng-container>
+          <b>{{' '+terminology.ORDER+' '}}</b>
+          <ng-container>{{languageStrings.with || 'with'}} {{restaurantInfo.store_name}}</ng-container>
+        </ng-container>
+
+      </span>
+      <span class="custom-order-but" (click)="moveToCustomOrder()"><a class="tk-link">
+          <ng-container>{{languageStrings.place ||'Place'}}</ng-container> {{' '+terminology.CUSTOM_ORDER}}
+        </a></span>
+    </div>
+    <div class="no-prod-text"
+      *ngIf="restaurantInfo && formSetting.is_custom_order_active && !restaurantInfo.custom_order_active_for_store &&  restaurantInfo.available  &&!(restaurantInfo.self_pickup && (!restaurantInfo.home_delivery && !restaurantInfo.pick_and_drop)) &&(restaurantInfo.merchant_as_delivery_manager || (restaurantInfo.merchant_as_delivery_manager ==0 && formSetting.is_marketplace_delivery_availabile))">
+      <span
+        class="font-18">{{ languageStrings.could_not_find_what_you_looking_for || 'Couldn’t find what you were looking for?'}}</span>
+      <span class="font-20">
+        <ng-container>
+          {{languageStrings.dont_worry_have_got_your_back_place || 'Don’t worry we have got your back. Place a'}}
+        </ng-container>
+        <b>{{' '+terminology.CUSTOM_ORDER+' '}}</b>
+        <ng-container>{{languageStrings.as_per_your_requirement || 'as per your requirement.'}}</ng-container>
+      </span>
+      <span class="custom-order-but" (click)="redirectToCustomOrder()"><a class="tk-link">
+          <ng-container>{{languageStrings.place || 'Place'}} </ng-container> {{' '+terminology.CUSTOM_ORDER}}
+        </a></span>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<div class="modal fade" id="myModal" role="dialog" *ngIf="currentProduct">
+  <div>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title header-modal text-capitalize">{{currentProduct?.name}}</h4>
+          <div class="cls-cust-head">
+            <div class="cls-cust-n pl-25">
+              <p *ngIf="formSetting.show_product_price == 1 || currentProduct.price > 0">{{currency+'
+                '+currentProduct.layout_data.lines[2] ? currentProduct.layout_data.lines[2].data : ''}}</p>
+            </div>
+            <div class="p-action-btn" *ngIf="!editAddon">
+              <div [ngStyle]="{'display':(currentProduct.type != 1) ? 'flex':'none'}">
+                <div class="p-minus btn-cursor" (click)="decreaseCustomizeProduct()" appBs>
+                  <svg width="10" height="7" viewBox="0 0 10 2">
+                    <path fill="#858585" fill-rule="nonzero" d="M0 1.75h10V.25H0z" />
+                  </svg>
+                </div>
+                <div [ngStyle]="{'visibility':(currentProduct.product_id) ? 'visible':'hidden'}"
+                  class="p-quantity cust">
+                  <input appNumberOnly maxlength="4"
+                    [ngStyle]="{'visibility':(currentProduct.product_id) ? 'visible':'hidden'}"
+                    class="p-quantity inputBulkOrderClass" aria-label="Product quantity"
+                    [(ngModel)]="currentProduct.quantity">
+                </div>
+                <div class="p-plus btn-cursor" (click)="increaseCustomizeProduct()"
+                  [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'" appBs>
+                  
+                  <svg width="10" height="10" viewBox="0 0 10 10">
+                    <path fill="#FFF" fill-rule="nonzero"
+                      d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+                  </svg>
+                </div>
+              </div>
+              <div [ngStyle]="{'display':(currentProduct.type == 1) ? 'flex':'none'}">
+                <div class="p-minus btn-cursor t-btn t-btn-26 " (click)="decreaseCustomizeProduct()" appBs>
+                  {{removeBtnTxt}}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="currentProduct.minimum_quantity>1 && (currentProduct.minimum_quantity > currentProduct.quantity)"
+            class="cls-cust-head min_sel_error pull-right">
+            <ng-container>{{languageStrings.minimum_quantity || 'Minimum Quantity'}}</ng-container>
+            {{currentProduct.minimum_quantity}}
+          </div><br>
+          <div *ngIf="currentProduct.maximum_quantity>1 && (currentProduct.maximum_quantity > currentProduct.quantity)"
+            class="cls-cust-head min_sel_error pull-right">
+            <ng-container>{{ languageStrings.maximum_quantity ||'Maximum Quantity'}}</ng-container>
+            {{currentProduct.maximum_quantity}}
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="cls-cust-body">
+            <div class="cls-cust-main-div" style="word-break: break-all;" *ngIf="currentProduct.long_description">
+              <div [innerHtml]="currentProduct.long_description" class="long_description cls-pcust-head"> </div>
+            </div>
+            <div class="cls-cust-main-div" *ngFor="let custom of currentProduct.customization;let custIndex = index;">
+              <p class="cls-pcust-head">{{custom.name | truncate : 100 : '.'}}
+                <span style="font-size:10px;text-transform: none" *ngIf="!custom.is_check_box">(<ng-container>
+                    {{ languageStrings.select_any || "Select any"}} 1</ng-container>)</span>
+                <span style="font-size:10px;text-transform: none" *ngIf="custom.is_check_box">
+                  {{(custom.minimum_selection
+                  >1) && custom.minimum_selection_required ? '(' + (languageStrings.select_any || "Select any" ) + custom.minimum_selection + ')': languageStrings.optional || 'Optional' }} </span>
+
+              </p>
+
+              <div class="cls-cust-option" *ngFor="let option of custom.customize_options;let optionIndex = index;">
+                <div class="cls-cust-check"
+                  (click)="changeExtrasStatus(currentProduct.product_id,custom,custIndex,optionIndex,customizedObj[currentProduct.product_id].customization[custIndex].customize_options[optionIndex].is_default)">
+                  <svg width="10" height="12" viewBox="0 0 10 7"
+                    *ngIf="customizedObj[currentProduct.product_id].customization[custIndex].customize_options[optionIndex].is_default">
+                    <path [attr.fill]="appConfig.color" fill-rule="nonzero"
+                      d="M3.598 6.906a.808.808 0 0 1-.561-.223L.232 3.991a.74.74 0 0 1 0-1.076.817.817 0 0 1 1.122 0l2.244 2.153L8.646.223a.817.817 0 0 1 1.122 0 .74.74 0 0 1 0 1.077l-5.61 5.383a.808.808 0 0 1-.56.223z" />
+                  </svg>
+                </div>
+                <div style="flex: 1 1 0%; margin-right: 10px;cursor:pointer"
+                  (click)="changeExtrasStatus(currentProduct.product_id,custom,custIndex,optionIndex,customizedObj[currentProduct.product_id].customization[custIndex].customize_options[optionIndex].is_default)">
+                  <span>{{option.name}}</span>
+                </div>
+                <div class="txt-right" *ngIf="option.price > 0">
+                  <span><span class="optionalPrice">+</span>{{currency+' '+ (option.price |decimalConfig)}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="cls-cust-main-div"
+              *ngIf="sessionService.get('config').side_order && sessionService.get('config').onboarding_business_type === 804">
+              <p class="cls-pcust-head side-heading" *ngIf="sideOrderProducts && sideOrderProducts.length>0">
+                {{languageStrings.side_order || 'Side order'}}</p>
+
+              <div class="side-products" *ngFor="let product of sideOrderProducts;let i = index;">
+                <div [ngClass]="{'side-order-parent-div' : i!=0}"
+                  *ngIf="i==0 || (product.parent_category_id!=sideOrderProducts[i-1].parent_category_id)">
+                  <p class="side-order-parent">{{product.parent_category_name}}</p>
+                </div>
+                <div class="side-product-name">
+                  <div>{{product.name}}</div>
+                  <div class="p-action-btn">
+
+                    <div style="display: flex;">
+                      <div class="p-minus" (click)="decreamentSideOrderQuantity(product.product_id,i)"
+                        [ngStyle]="{'visibility':(sideOrderProductBool[product.product_id]) ? 'visible':'hidden'}"
+                        appBs>
+                        <svg width="10" height="7" viewBox="0 0 10 2">
+                          <path fill="#858585" fill-rule="nonzero" d="M0 1.75h10V.25H0z" />
+                        </svg>
+                      </div>
+                      <div [ngStyle]="{'visibility':(sideOrderProductBool[product.product_id]) ? 'visible':'hidden'}"
+                        class="p-quantity custom">
+                        <span *ngIf="checkUniq(product)"></span>
+                        <input appNumberOnly maxlength="4" [disabled]="!product?.isUniq"
+                          [ngStyle]="{'visibility':(sideOrderProductBool[product.product_id]) ? 'visible':'hidden'}"
+                          class="p-quantity inputBulkOrderClass"
+                          [value]="sideOrderProductData[product.product_id] ? sideOrderProductData[product.product_id].quantity : 0"
+                          (blur)="onBlurSideOrderInputFun(product,product.product_id,i,$event.target.value)">
+                      </div>
+                      <div *ngIf="sideOrderProductBool[product.product_id] && !(product.menu_enabled_product==0)"
+                        class="p-plus" [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'"
+                        appBs (click)="increaseSideOrderQuantity(product,product.product_id,i)">
+                        
+                        <svg width="10" height="10" viewBox="0 0 10 10">
+                          <path fill="#FFF" fill-rule="nonzero"
+                            d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+                        </svg>
+                      </div>
+                      <div *ngIf="!sideOrderProductBool[product.product_id] && !(product.menu_enabled_product==0)"
+                        class="p-plus" [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'"
+                        appBs (click)="addSideOrder(product,i)">
+
+                        <svg width="10" height="10" viewBox="0 0 10 10">
+                          <path fill="#FFF" fill-rule="nonzero"
+                            d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+                        </svg>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+                <div class="side-product-detail">
+                  <span class="desc"
+                    [ngClass]="{'side-order-desc' : product.description}">{{product.description ? '(' : ''}}
+                    {{product.description}} {{product.description ?
+                    ')' : ''}}</span>
+                  <span class="amount"> {{currency + '' + (product.price |decimalConfig)}}</span>
+                </div>
+                <div class="min-check w-100 min_error">
+                  <div
+                    *ngIf="sideOrderProductData[product.product_id] && sideOrderProductData[product.product_id].minimum_quantity>1 && (sideOrderProductData[product.product_id].minimum_quantity > sideOrderProductData[product.product_id].quantity)"
+                    class="w-100 text-right">
+                    <ng-container>{{languageStrings.minimum_quantity ||'Minimum Quantity'}}</ng-container>
+                    {{product.minimum_quantity}}
+                  </div>
+                  <div
+                    *ngIf="sideOrderProductData[product.product_id] && sideOrderProductData[product.product_id].maximum_quantity>1 && (sideOrderProductData[product.product_id].maximum_quantity > sideOrderProductData[product.product_id].quantity)"
+                    class="w-100 text-right">
+                    <ng-container>{{languageStrings.maximum_quantity || 'Maximum Quantity'}}</ng-container>
+                    {{product.maximum_quantity}}
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button mat-button class="dialog-cancel btn" (click)="resetDialog()"
+              appBs>{{languageStrings.cancel || 'Cancel'}}</button>
+            <!--[ngStyle]="{ 'direction' : direction }"-->
+            <button mat-button class="dialog-ok btn" (click)="addCustomization(0)" appColor bg="'true'"
+              *ngIf="addBtnTxt" appBs [disabled]="currentProduct.quantity <= 0">
+              <ng-container *ngIf="currentProduct.is_product_template_enabled == 0 && (appConfig.theme_enabled == 0)">
+                {{addBtnTxt}}
+                <ng-container>{{languageStrings.for|| 'for'}}</ng-container>
+              </ng-container>
+              <ng-container
+                *ngIf="!(currentProduct.is_product_template_enabled == 0 && (this.appConfig.theme_enabled == 0))">
+                <ng-container>{{languageStrings.next || 'Next'}}</ng-container>
+              </ng-container>
+              {{currency+'
+              '+(((currentProduct.totalPrice*currentProduct.quantity) + sideOrderTotalAmount) |decimalConfig)}}
+            </button>
+            <!--[ngStyle]="{ 'direction' : direction }"-->
+            <button mat-button class="dialog-ok btn" (click)="addCustomization(0)" appColor bg="'true'" appBs
+              *ngIf="!addBtnTxt" [disabled]="currentProduct.quantity <= 0">
+              <ng-container *ngIf="currentProduct.is_product_template_enabled == 0 && (appConfig.theme_enabled == 0)">
+                {{languageStrings.add_for|| 'Add for'}}</ng-container>
+              <ng-container
+                *ngIf="!(currentProduct.is_product_template_enabled == 0 && (appConfig.theme_enabled == 0))">
+                {{languageStrings.next|| 'Next'}}</ng-container>
+              {{currency+' '+(((currentProduct.totalPrice*currentProduct.quantity) + sideOrderTotalAmount) |decimalConfig)}}
+            </button>
+            <!--[ngStyle]="{ 'direction' : direction }"-->
+            <div class="text-center min_sel_error">
+              <span>{{minSelectAddonError}}</span>
+              <span>{{maxSelectAddonError}}</span>
+            </div>
+            <div class="text-center min_sel_error">
+              <span>{{minSingleSelectAddonError}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal [modalType]="modalType" (esc)="resetDialog()" (onClose)="resetDialog()"
+  *ngIf="currentProduct && showAddonPopup">
+  <div body style="padding : 20px">
+    <div class="productbody">
+      <div class="productImage" [ngClass]="{'w-50': currentProduct.image_url , 'w-0' : !currentProduct.image_url}">
+        <img [src]="currentProduct.image_url?currentProduct.image_url : 'assets/img/image-placeholder.svg'">
+      </div>
+      <div class="productDescription"
+        [ngClass]="{'w-50': currentProduct.image_url , 'w-100' : !currentProduct.image_url}">
+        <div class="productHeader">
+          <h2 class="modal-title header-modal text-capitalize d-flex" style="padding-left: 0px">{{currentProduct?.name}}
+          </h2>
+          <div class="cls-cust-head">
+            <div class="cls-cust-n" style="padding-left: 0px; margin-right: 0;display: flex;margin-bottom: 10px">
+              <p style="padding-left: 0px; font-size: 16px"
+                *ngIf="formSetting.show_product_price == 1 || currentProduct.price > 0">{{currency+'
+                      '+currentProduct.layout_data.lines[2] ? currentProduct.layout_data.lines[2].data : ''}}</p>
+              <div class="p-action-btn">
+                <div [ngStyle]="{'display':(currentProduct.type != 1) ? 'flex':'none'}">
+                  <div class="p-minus btn-cursor" (click)="decreaseCustomizeProduct()" appBs>
+                    <svg width="10" height="7" viewBox="0 0 10 2">
+                      <path fill="#858585" fill-rule="nonzero" d="M0 1.75h10V.25H0z" />
+                    </svg>
+                  </div>
+                  <div [ngStyle]="{'visibility':(currentProduct.product_id) ? 'visible':'hidden'}"
+                    class="p-quantity cust">
+                    <input appNumberOnly maxlength="4"
+                      [ngStyle]="{'visibility':(currentProduct.product_id) ? 'visible':'hidden'}"
+                      class="p-quantity inputBulkOrderClass" aria-label="Product quantity"
+                      [(ngModel)]="currentProduct.quantity">
+                  </div>
+                  <div mat-button class="p-plus btn-cursor" (click)="increaseCustomizeProduct()" appColor bg="'true'"
+                    appBs appBs>
+                    
+                    <svg width="10" height="10" viewBox="0 0 10 10">
+                      <path fill="#FFF" fill-rule="nonzero"
+                        d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+                    </svg>
+                  </div>
+                </div>
+                <div [ngStyle]="{'display':(currentProduct.type == 1) ? 'flex':'none'}">
+                  <div class="p-minus btn-cursor t-btn t-btn-26 " (click)="decreaseCustomizeProduct()" appBs>
+                    {{removeBtnTxt}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="productBody">
+          <p> {{currentProduct.long_description}} </p>
+        </div>
+        <div class="cls-cust-main-div" *ngFor="let custom of currentProduct.customization;let custIndex = index;">
+          <p class="cls-pcust-head" style="color: #000000;opacity: 1;">{{custom.name | truncate : 100 : '.'}}
+            <span style="font-size:12px;text-transform: none" *ngIf="!custom.is_check_box">(<ng-container>
+                {{languageStrings.select_any ||'Select any'}} 1</ng-container>)</span>
+            <span style="font-size:12px;text-transform: none"
+              *ngIf="custom.is_check_box">{{(custom.minimum_selection
+                  >1) && custom.minimum_selection_required ? '(' + (languageStrings.select_any || "Select any" ) + custom.minimum_selection+')': languageStrings.optional || 'Optional' }}</span>
+
+          </p>
+          <div style="visibility: visible" *ngIf=!custom.is_check_box>
+            <p-dropdown [options]="custom.customize_options" [optionLabel]="'optionLabel'"
+              placeholder="{{languageStrings.select_option || 'Select an option'}}"
+              (onChange)=addNewAddon($event.value,-1,currentProduct,custom,custIndex,customizedObj)>
+            </p-dropdown>
+          </div>
+          <div *ngIf=custom.is_check_box>
+            <p-multiSelect [options]="custom.customize_options" [optionLabel]="'optionLabel'" placeholder="Choose"
+              [maxSelectedLabels]="2"
+              (onChange)=addNewAddon($event.itemValue,$event.value,currentProduct,custom,custIndex,customizedObj)>
+            </p-multiSelect>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div style="display: flex;
+    width: 100%;
+    justify-content: flex-end;">
+      <button mat-button class="dialog-cancel btn" (click)="resetDialog()"
+        appBs>{{languageStrings.cancel || 'Cancel'}}</button>
+      <button mat-button class="dialog-ok btn" (click)="addCustomization(0)" appColor bg="'true'" appBs
+        [disabled]="currentProduct.quantity <= 0">
+        <ng-container *ngIf="currentProduct.is_product_template_enabled === 0 && (appConfig.theme_enabled == 0)">
+          {{languageStrings.add_for ||'Add for' }}</ng-container>
+        <ng-container *ngIf="currentProduct.is_product_template_enabled === 1 && (appConfig.theme_enabled == 0)">
+          {{languageStrings.next || 'Next' }}</ng-container>
+        {{currency+' '+
+              (((currentProduct.totalPrice*currentProduct.quantity) + sideOrderTotalAmount) |decimalConfig)}}
+      </button>
+    </div>
+    <div class="text-center min_sel_error">
+      <span>{{minSelectAddonError}}</span>
+      <span>{{maxSelectAddonError}}</span>
+    </div>
+    <div class="text-center min_sel_error">
+      <span>{{minSingleSelectAddonError}}</span>
+    </div>
+  </div>
+</app-modal>
+
+<div>
+  <div class="modal fade in" keyboard-event *ngIf="openMultiImage || openVideoImage" (esc)="hideMultiImageDialog()"
+    (onClose)="hideMultiImageDialog()" class="new-modal">
+    <div body>
+      <!-- Cancel Button -->
+      <div>
+        <i class="fa fa-close mobile-cross" (click)="hideMultiImageDialog()"></i>
+        <img src="assets/img/cross-icon.svg" class="crossStyle" alt="close search" (click)="hideMultiImageDialog()" />
+      </div>
+      <!-- Carousal -->
+      <div class="col-12 carousel slide new-carousel" id="lightbox">
+        <!-- Images/Videos -->
+        <div class="carousel-inner">
+          <div *ngFor="let image of caraouselImagesIncludingVideos;let i = index;" class="item"
+            [ngClass]="{'active' : i==0}">
+            <img *ngIf="!(image.url | checkVideo)" [src]="image.url" [alt]="'caraousel slide ' + i">
+            <video *ngIf="image.url | checkVideo" class="show-video" [src]="image.url" controls></video>
+          </div>
+        </div>
+        <!-- sliders (prev/next) -->
+        <a *ngIf="caraouselImagesIncludingVideos.length > 1" class="left carousel-control" href="#lightbox"
+          role="button" data-slide="prev" aria-label="go to previous slide">
+          <i class="fa fa-angle-left" aria-hidden="true"></i>
+        </a>
+        <a *ngIf="caraouselImagesIncludingVideos.length > 1" class="right carousel-control" id='click-event'
+          href="#lightbox" role="button" data-slide="next" aria-label="go to next slide">
+          <i class="fa fa-angle-right" aria-hidden="true"></i>
+        </a>
+        <div class="bt-10"
+          [ngClass]="{'only-description': caraouselImagesIncludingVideos && caraouselImagesIncludingVideos.length == 0}">
+          <!-- Product thumbnails -->
+          <ng-container *ngIf="caraouselImagesIncludingVideos.length > 1">
+            <div class="carousel-indicators image-thumb-list bt-30">
+              <div *ngFor="let image of caraouselImagesIncludingVideos;let i = index;" data-target="#lightbox"
+                [attr.data-slide-to]="i" class="image-div" [ngClass]="{'active' : i==0}">
+                <img [src]="image.thumb_urls['250x250'] || image.thumb_urls['400x400']">
+              </div>
+            </div>
+          </ng-container>
+          <!-- Description -->
+          <ng-container *ngIf="productLongDescription">
+            <div class="long-description">
+              <span style="word-break: normal;"
+                [innerHTML]="(showFullDescription || caraouselImagesIncludingVideos && caraouselImagesIncludingVideos.length == 0)? productLongDescription : (productLongDescription | truncate : 500 : '.')">
+              </span>
+              <span class="readMore" (click)="showFullDescription = true"
+                *ngIf="productLongDescription.length > 500 && !showFullDescription">
+                <ng-container>{{languageStrings.read_more || 'Read More'}}</ng-container>
+              </span>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="backdrop" *ngIf="showBackdrop"></div>
+
+<app-product-template (closePopup1)="closePopup()" [productData]="this.currentProductForTemplate"
+  *ngIf="showProductTemplate" [currency]="currency"></app-product-template>
+<!-- Product Share Box -->
+<app-modal [modalType]="modalType" (esc)="removeParams()" (onClose)="removeParams()" *ngIf="showProductShareBox">
+  <div body style="padding : 20px">
+    <div>
+      <h4 class="modal-title padding-right120">
+        {{(productShareData.layout_data && productShareData.layout_data.lines[0]) ? productShareData.layout_data.lines[0].data : ''}}
+      </h4>
+      <div class="share-close-btn">
+        <div class="show-drop-box">
+          <!-- share -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="21" height="24" viewBox="0 0 21 24">
+            <g [attr.fill]="formSetting.btn_color?formSetting.btn_color:'#1a9943'">
+              <path
+                d="M20.13 3.789c0 1.7-1.379 3.079-3.08 3.079-1.7 0-3.078-1.379-3.078-3.079 0-1.7 1.379-3.079 3.079-3.079 1.7 0 3.078 1.379 3.078 3.079z"
+                transform="translate(0 .478)" />
+              <path
+                d="M17.05 7.578c-2.089 0-3.788-1.7-3.788-3.789 0-2.09 1.7-3.789 3.789-3.789 2.09 0 3.789 1.7 3.789 3.789 0 2.09-1.7 3.79-3.79 3.79zm0-6.157c-1.305 0-2.367 1.063-2.367 2.368s1.062 2.368 2.368 2.368c1.306 0 2.368-1.063 2.368-2.368s-1.062-2.368-2.368-2.368zM20.13 18.945c0 1.7-1.379 3.08-3.08 3.08-1.7 0-3.078-1.38-3.078-3.08 0-1.7 1.379-3.078 3.079-3.078 1.7 0 3.078 1.378 3.078 3.078z"
+                transform="translate(0 .478)" />
+              <path
+                d="M17.05 22.735c-2.089 0-3.788-1.7-3.788-3.79s1.7-3.789 3.789-3.789c2.09 0 3.789 1.7 3.789 3.79 0 2.089-1.7 3.789-3.79 3.789zm0-6.158c-1.305 0-2.367 1.063-2.367 2.368 0 1.306 1.062 2.369 2.368 2.369 1.306 0 2.368-1.063 2.368-2.369 0-1.305-1.062-2.368-2.368-2.368zM6.868 11.367c0 1.7-1.379 3.079-3.079 3.079-1.7 0-3.079-1.378-3.079-3.079 0-1.7 1.379-3.078 3.079-3.078 1.7 0 3.079 1.378 3.079 3.078z"
+                transform="translate(0 .478)" />
+              <path
+                d="M3.789 15.156C1.699 15.156 0 13.457 0 11.367s1.7-3.789 3.789-3.789c2.09 0 3.79 1.7 3.79 3.79 0 2.089-1.7 3.788-3.79 3.788zm0-6.157c-1.306 0-2.368 1.063-2.368 2.368 0 1.306 1.062 2.368 2.368 2.368 1.306 0 2.368-1.062 2.368-2.368C6.157 10.062 5.095 9 3.79 9z"
+                transform="translate(0 .478)" />
+              <path
+                d="M6.026 10.913c-.33 0-.65-.172-.825-.479-.258-.453-.099-1.032.355-1.292l8.79-5.01c.453-.261 1.032-.102 1.292.353.258.454.099 1.033-.355 1.292l-8.79 5.011c-.147.085-.308.125-.467.125zM14.814 18.728c-.159 0-.32-.04-.468-.125l-8.79-5.01c-.453-.26-.612-.838-.354-1.293.258-.454.838-.614 1.293-.354l8.79 5.011c.453.259.612.837.353 1.292-.175.307-.495.479-.824.479z"
+                transform="translate(0 .478)" />
+            </g>
+          </svg>
+          <div class="dropdown">
+            <ul class="dropdown-menu share-drop-btn">
+              <li>
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{domainName}}"
+                  class="addthis_button_facebook at300b" target="_blank" title="Facebook"><span class="at-icon-wrapper"
+                    style="background-color: rgb(59, 89, 152); line-height: 16px; height: 16px; width: 16px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                      viewBox="0 0 32 32" version="1.1" role="img" aria-labelledby="at-svg-facebook-1" title="Facebook"
+                      alt="Facebook" class="at-icon at-icon-facebook" style="width: 16px; height: 16px;">
+                      <title id="at-svg-facebook-1">Facebook</title>
+                      <g>
+                        <path
+                          d="M22 5.16c-.406-.054-1.806-.16-3.43-.16-3.4 0-5.733 1.825-5.733 5.17v2.882H9v3.913h3.837V27h4.604V16.965h3.823l.587-3.913h-4.41v-2.5c0-1.123.347-1.903 2.198-1.903H22V5.16z"
+                          fill-rule="evenodd"></path>
+                      </g>
+                    </svg>
+                  </span>Facebook</a>
+                <a href="https://twitter.com/intent/tweet?text={{productShareData.name}}&url={{domainName}}"
+                  target="_blank" class="addthis_button_twitter at300b" title="Twitter"><span class="at-icon-wrapper"
+                    style="background-color: rgb(29, 161, 242); line-height: 16px; height: 16px; width: 16px;"><svg
+                      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32"
+                      version="1.1" role="img" aria-labelledby="at-svg-twitter-2" title="Twitter" alt="Twitter"
+                      class="at-icon at-icon-twitter" style="width: 16px; height: 16px;">
+                      <title id="at-svg-twitter-2">Twitter</title>
+                      <g>
+                        <path
+                          d="M27.996 10.116c-.81.36-1.68.602-2.592.71a4.526 4.526 0 0 0 1.984-2.496 9.037 9.037 0 0 1-2.866 1.095 4.513 4.513 0 0 0-7.69 4.116 12.81 12.81 0 0 1-9.3-4.715 4.49 4.49 0 0 0-.612 2.27 4.51 4.51 0 0 0 2.008 3.755 4.495 4.495 0 0 1-2.044-.564v.057a4.515 4.515 0 0 0 3.62 4.425 4.52 4.52 0 0 1-2.04.077 4.517 4.517 0 0 0 4.217 3.134 9.055 9.055 0 0 1-5.604 1.93A9.18 9.18 0 0 1 6 23.85a12.773 12.773 0 0 0 6.918 2.027c8.3 0 12.84-6.876 12.84-12.84 0-.195-.005-.39-.014-.583a9.172 9.172 0 0 0 2.252-2.336"
+                          fill-rule="evenodd"></path>
+                      </g>
+                    </svg></span>Twitter</a>
+                <a href="{{mailingLink}}" class="addthis_button_email at300b" target="_blank" title="Email">
+                  <span class="at-icon-wrapper"
+                    style="background-color: rgb(132, 132, 132); line-height: 16px; height: 16px; width: 16px;"><svg
+                      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32"
+                      version="1.1" role="img" aria-labelledby="at-svg-email-3" title="Email" alt="Email"
+                      class="at-icon at-icon-email" style="width: 16px; height: 16px;">
+                      <title id="at-svg-email-3">{{languageStrings.email ||'Email'}}</title>
+                      <g>
+                        <g fill-rule="evenodd"></g>
+                        <path
+                          d="M27 22.757c0 1.24-.988 2.243-2.19 2.243H7.19C5.98 25 5 23.994 5 22.757V13.67c0-.556.39-.773.855-.496l8.78 5.238c.782.467 1.95.467 2.73 0l8.78-5.238c.472-.28.855-.063.855.495v9.087z">
+                        </path>
+                        <path
+                          d="M27 9.243C27 8.006 26.02 7 24.81 7H7.19C5.988 7 5 8.004 5 9.243v.465c0 .554.385 1.232.857 1.514l9.61 5.733c.267.16.8.16 1.067 0l9.61-5.733c.473-.283.856-.96.856-1.514v-.465z">
+                        </path>
+                      </g>
+                    </svg></span>{{languageStrings.email ||'Email'}}</a>
+                <a href="https://api.whatsapp.com/send?text={{domainName}}" class="addthis_button_whatsapp at300b"
+                  target="_blank" title="WhatsApp"><span class="at-icon-wrapper"
+                    style="background-color: rgb(77, 194, 71); line-height: 16px; height: 16px; width: 16px;"><svg
+                      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32"
+                      version="1.1" role="img" aria-labelledby="at-svg-whatsapp-4" title="WhatsApp" alt="WhatsApp"
+                      class="at-icon at-icon-whatsapp" style="width: 16px; height: 16px;">
+                      <title id="at-svg-whatsapp-4">WhatsApp</title>
+                      <g>
+                        <path
+                          d="M19.11 17.205c-.372 0-1.088 1.39-1.518 1.39a.63.63 0 0 1-.315-.1c-.802-.402-1.504-.817-2.163-1.447-.545-.516-1.146-1.29-1.46-1.963a.426.426 0 0 1-.073-.215c0-.33.99-.945.99-1.49 0-.143-.73-2.09-.832-2.335-.143-.372-.214-.487-.6-.487-.187 0-.36-.043-.53-.043-.302 0-.53.115-.746.315-.688.645-1.032 1.318-1.06 2.264v.114c-.015.99.472 1.977 1.017 2.78 1.23 1.82 2.506 3.41 4.554 4.34.616.287 2.035.888 2.722.888.817 0 2.15-.515 2.478-1.318.13-.33.244-.73.244-1.088 0-.058 0-.144-.03-.215-.1-.172-2.434-1.39-2.678-1.39zm-2.908 7.593c-1.747 0-3.48-.53-4.942-1.49L7.793 24.41l1.132-3.337a8.955 8.955 0 0 1-1.72-5.272c0-4.955 4.04-8.995 8.997-8.995S25.2 10.845 25.2 15.8c0 4.958-4.04 8.998-8.998 8.998zm0-19.798c-5.96 0-10.8 4.842-10.8 10.8 0 1.964.53 3.898 1.546 5.574L5 27.176l5.974-1.92a10.807 10.807 0 0 0 16.03-9.455c0-5.958-4.842-10.8-10.802-10.8z"
+                          fill-rule="evenodd"></path>
+                      </g>
+                    </svg></span>WhatsApp</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <i (click)="copyText()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27">
+            <g [attr.fill]="formSetting.btn_color?formSetting.btn_color:'#1a9943'">
+              <path
+                d="M18.628 4.657H2.794C1.251 4.657 0 5.908 0 7.451v15.834c0 1.544 1.251 2.795 2.794 2.795h15.834c1.544 0 2.795-1.251 2.795-2.795V7.451c0-1.543-1.251-2.794-2.795-2.794zm.932 18.628c0 .515-.417.932-.932.932H2.794c-.514 0-.931-.417-.931-.932V7.451c0-.514.417-.931.931-.931h15.834c.515 0 .932.417.932.931v15.834z"
+                transform="translate(.174 .74)" />
+              <path
+                d="M23.285 0H6.52C4.977 0 3.726 1.251 3.726 2.794c0 .515.417.932.931.932.515 0 .932-.417.932-.932 0-.514.417-.931.93-.931h16.766c.515 0 .932.417.932.931V19.56c0 .514-.417.931-.932.931-.514 0-.931.417-.931.932 0 .514.417.931.931.931 1.544 0 2.795-1.251 2.795-2.794V2.794C26.08 1.251 24.829 0 23.285 0z"
+                transform="translate(.174 .74)" />
+            </g>
+          </svg>
+        </i>
+        <i (click)="removeParams()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="29" viewBox="0 0 30 29">
+            <g fill="none" fill-rule="evenodd" transform="translate(.435)">
+              <circle cx="14.499" cy="14.499" r="14.499"
+                [attr.fill]="formSetting.btn_color?formSetting.btn_color:'#1a9943'" fill-rule="nonzero" />
+              <path stroke="#FFF" stroke-linecap="round" stroke-width="1.16"
+                d="M9.28 19.719L14.499 14.499 19.719 9.28M9.28 9.28L14.499 14.499 19.719 19.719" />
+            </g>
+          </svg>
+        </i>
+      </div>
+    </div>
+    <div class="padding-top18">
+      <div class="long-description-box" *ngIf="productShareData.long_description">
+        <span [innerHTML]="productShareData.long_description"></span>
+
+        <br>
+      </div>
+      <a class=" fluid-thumbnail-grid-image-item-link">
+        <div style="border-radius: 5px;">
+          <div class="text-center">
+            <img class="share-prod-image"
+              [src]="productShareData.image_url ? productShareData.image_url : 'assets/img/image-placeholder.svg'"
+              [alt]="productShareData.name + ' image'">
+          </div>
+        </div>
+      </a>
+      <div class="home-fluid-thumbnail-grid-author">
+        <div class="mb-5 p-detail-sec pad-t-0" style="font-weight: bold">
+          <div
+            *ngIf="appConfig.add_mrp_in_product_enabled && restaurantInfo.business_type === business_type.PRODUCT_MARKETPLACE && productShareData.mrp"
+            class="mrp">
+            <div class="text-styling"
+              *ngIf="(formSetting.show_product_price == 1 || productShareData.mrp > 0) && productShareData.mrp">
+              {{languageStrings.mrp ||'MRP'}}
+            </div>
+            <div class="product-cl-data" *ngIf="formSetting.show_product_price == 1 || productShareData.price > 0">
+              {{currency+''+productShareData.mrp}}
+            </div>
+          </div>
+          <div *ngIf="restaurantInfo.business_type === business_type.PRODUCT_MARKETPLACE" class="fl fl-dir-c"
+            [ngClass]="{'price-text':productShareData.mrp}">
+            <span [ngStyle]="{'display': (productShareData.mrp)?'inline':'none' }">Price</span>
+            <div [ngClass]="{'fl':productShareData.mrp}">
+              <div class="discount-price"
+                *ngIf="(formSetting.show_product_price == 1 || productShareData.price > 0) && productShareData.original_price">
+                {{currency + '' + (productShareData.original_price |decimalConfig) }}
+              </div>
+              <div class="product-cl-data" *ngIf="formSetting.show_product_price == 1 || productShareData.price > 0">
+                {{currency+''+productShareData.layout_data.lines[2] ? productShareData.layout_data.lines[2].data : ''}}
+              </div>
+            </div>
+          </div>
+          <div *ngIf="restaurantInfo.business_type === business_type.SERVICE_MARKETPLACE">
+            <div class="discount-price"
+              *ngIf="(formSetting.show_product_price == 1 || productShareData.price > 0) && productShareData.original_price">
+              {{currency + '' + (productShareData.original_price |decimalConfig) }}
+            </div>
+            <div class="product-cl-data" *ngIf="formSetting.show_product_price == 1 || productShareData.price > 0">
+              {{currency+''+productShareData.layout_data.lines[2] ? productShareData.layout_data.lines[2].data : ''}}
+            </div>
+          </div>
+          <div
+            *ngIf="isRestaurantActive &&!(productShareData.inventory_enabled && (productShareData.available_quantity <= 0)) && (addon_layout_type === 0)"
+            class="p-action-btn">
+            <div *ngIf="productShareData.maximum_quantity==1 && !(productShareData.menu_enabled_product==0)">
+              <div class="add-remove-parent"
+                [ngStyle]="{'visibility':(productBool[productShareData.product_id]) ? 'visible':'hidden','height':(productBool[productShareData.product_id]) ? 'auto' : '0px'}">
+                <button class="btn-sm addremovebtn"
+                  [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'"
+                  (click)="decreamentQuantity(productShareData.product_id,productPosition)">{{removeBtnTxt  || removeButton}}</button>
+              </div>
+              <div class="add-remove-parent" *ngIf="!productBool[productShareData.product_id]">
+                <button class="btn-sm addremovebtn"
+                  [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'"
+                  (click)="checkBusinessTypeBeforeAdding(productShareData,productPosition)">{{addBtnTxt || addButton}}</button>
+              </div>
+            </div>
+            <div
+              [ngStyle]="{'display':(productShareData.layout_data && productShareData.layout_data.buttons && productShareData.layout_data.buttons[0].type != 1) ? 'flex':'none'}"
+              *ngIf="productShareData.maximum_quantity!=1">
+
+              <div appBs class="p-minus" (click)="decreamentQuantity(productShareData.product_id,productPosition)"
+                [ngStyle]="{'visibility':(productBool[productShareData.product_id]) ? 'visible':'hidden'}">
+                <svg width="10" height="7" viewBox="0 0 10 2">
+                  <path fill="#858585" fill-rule="nonzero" d="M0 1.75h10V.25H0z" />
+                </svg>
+              </div>
+              <div [ngStyle]="{'visibility':(productBool[productShareData.product_id]) ? 'visible':'hidden'}"
+                class="p-quantity">
+                <input appNumberOnly maxlength="4"
+                  [ngStyle]="{'visibility':(productBool[productShareData.product_id]) ? 'visible':'hidden'}"
+                  class="p-quantity inputBulkOrderClass" [(ngModel)]="productQuantity[productShareData.product_id]"
+                  (blur)="onBlurInputFun(productShareData,productShareData.product_id,productPosition,productQuantity[productShareData.product_id])"
+                  aria-label="Product quantity">
+              </div>
+              <div
+                *ngIf="productBool[productShareData.product_id] && !(productShareData.customization?productShareData.customization.length:0) && !(productShareData.menu_enabled_product==0)"
+                class="p-plus" [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'" appBs
+                (click)="increaseQuantity(productShareData,productShareData.product_id,productPosition)">
+
+                
+                <svg width="10" height="10" viewBox="0 0 10 10">
+                  <path fill="#FFF" fill-rule="nonzero"
+                    d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+                </svg>
+              </div>
+              <div
+                *ngIf="productBool[productShareData.product_id] && productShareData.customization?productShareData.customization.length:0 && !(productShareData.menu_enabled_product==0)"
+                class="p-plus" [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'" appBs
+                (click)="checkBusinessTypeBeforeAdding(productShareData,productPosition)">
+                <!--addCart(product,i) appColor bg='true'-->
+                <svg width="10" height="10" viewBox="0 0 10 10">
+                  <path fill="#FFF" fill-rule="nonzero"
+                    d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+                </svg>
+              </div>
+              <div *ngIf="!productBool[productShareData.product_id] && !(productShareData.menu_enabled_product==0)"
+                class="p-plus" [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'" appBs
+                (click)="checkBusinessTypeBeforeAdding(productShareData,productPosition)">
+                <!--addCart(product,i) appColor bg='true'-->
+                <svg width="10" height="10" viewBox="0 0 10 10">
+                  <path fill="#FFF" fill-rule="nonzero"
+                    d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+                </svg>
+              </div>
+            </div>
+
+            <div
+              [ngStyle]="{'display':(productShareData.layout_data && productShareData.layout_data.buttons && productShareData.layout_data.buttons[0].type == 1) ? 'flex':'none'}">
+              <div class="add-remove-btn-share p-minus t-btn"
+                (click)="decreamentQuantity(productShareData.product_id,productPosition)"
+                [ngStyle]="{'display':(productBool[productShareData.product_id]) ? 'flex':'none'}" appBs>
+                {{removeBtnTxt}}
+              </div>
+              <div *ngIf="!productBool[productShareData.product_id] && !(productShareData.menu_enabled_product==0)"
+                class="add-remove-btn-share p-plus t-btn"
+                [style.background-color]="formSetting.btn_color?formSetting.btn_color:'#1a9943'" appBs
+                (click)="checkBusinessTypeBeforeAdding(productShareData,productPosition)">
+                <!--addCart(product,i) appColor bg='true'-->
+                {{addBtnTxt}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="productShareData.inventory_enabled && (productShareData.available_quantity <= 0)"
+          class="p-action-stock grid-stock" [ngStyle]="{ 'direction' : direction }">
+          <ng-container>{{terminology.OUT_OF_STOCK || 'Out of Stock'}}</ng-container>
+        </div>
+        <div *ngIf="productShareData && productShareData.discount" class="discount-percent">
+          {{productShareData.discount}}% <ng-container>{{languageStrings.discount ||'Discount'}}</ng-container>
+          <ng-container *ngIf="productShareData.max_discount_amount">
+            <ng-container>{{languageStrings.upto ||'Upto'}}</ng-container>
+            {{currency + productShareData.max_discount_amount}}
+          </ng-container>
+        </div>
+        <div *ngIf="formSetting.show_service_time && productShareData.service_time" class="decriptionB">
+          <span class="">
+            <ng-container>{{languageStrings.service_time || 'Service Time'}}</ng-container>:
+            {{productShareData.service_time | serviceTimePipe : [productShareData.unit_type, productShareData.unit_in_text]}}
+          </span>
+        </div>
+        <div
+          *ngIf="formSetting.is_recurring_enabled && store.is_recurring_enabled && productShareData.is_recurring_enabled"
+          class="decriptionB">
+          <span class="subscription-avail">
+            <i class="fa fa-refresh"></i>
+            <ng-container>{{terminology.SUBSCRIPTION_AVAILABLE || 'Subscription Available'}}</ng-container>
+          </span>
+        </div>
+        <div *ngIf="productShareData.layout_data && productShareData.layout_data.lines[1]">
+          <span class="decriptionB pointer">
+            <span [innerHTML]="productShareData.layout_data.lines[1].data"></span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-modal>
+<app-modal [modalType]="modalType" *ngIf="showNotAvailable">
+  <div body style="padding : 40px">
+    <i class="close-no-prod" (click)="removeParams()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="30" height="29" viewBox="0 0 30 29">
+        <g fill="none" fill-rule="evenodd" transform="translate(.435)">
+          <circle cx="14.499" cy="14.499" r="14.499" [attr.fill]="formSetting.btn_color?formSetting.btn_color:'#1a9943'"
+            fill-rule="nonzero" />
+          <path stroke="#FFF" stroke-linecap="round" stroke-width="1.16"
+            d="M9.28 19.719L14.499 14.499 19.719 9.28M9.28 9.28L14.499 14.499 19.719 19.719" />
+        </g>
+      </svg>
+    </i>
+    <div [ngStyle]="{ 'direction' : direction }" class="restaurnat-close-popup">
+      <div> <img src="assets/images/sleepy.svg" style="margin-right:1rem;" />
+        {{ languageStrings.sorry_product_not_available_at_moment || "Sorry product is not available at the moment." }}
+      </div>
+    </div>
+  </div>
+</app-modal>

@@ -1,0 +1,36 @@
+@import '~assets/css/variables';
+
+.promo-list{
+  hr{
+    margin: 5px 0px;
+  }
+  .promoList{
+    hr{
+      margin: 5px 0px;
+    }
+    .promos{
+      display: flex;
+      align-items: center;
+      .radioCheck{
+        width: 70px;
+      }
+
+      .text{
+        .name{
+          margin-bottom: 3px;
+          font-family: Proximanova-Regular;
+          font-weight: 500;
+          font-size: 16px;
+          color: #333;
+        }
+        .description{
+          margin-bottom: 3px;
+          font-family: Proximanova-Regular;
+          font-weight: 500;
+          font-size: 14px;
+          color: #8A8888;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,92 @@
+<div class="buy">
+  <form [formGroup]="buyForm">
+    <div class="row">
+      <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+        <h2 class="head" > {{ languageStrings.give_gift_card || 'Give a Gift Card'}}</h2>
+        <div class="enterAmount">
+          <span class="currency">{{currency}}</span>
+          <input type="text" formControlName="amount"  placeholder="{{ languageStrings.enter_amount || 'Enter Amount' }}" class="amount" />
+          <app-control-messages [control]="buyForm.controls.amount"></app-control-messages>
+        </div>
+        <div class="textFor">
+          <p>{{config.gift_card_description}}</p>
+        </div>
+      </div>
+      <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12 displayFlex">
+        <div class="img">
+          <img class="card" src="assets/img/gift-card.svg" />
+          <span class="logoImg">
+            <img [src]="this.config.web_header_logo" />
+          </span>
+          <span class="textGift">
+            {{terminology.GIFT_CARD}}
+          </span>
+          <span class="amountR">
+            <span class="symbol">{{config ? config.payment_settings[0].code : ''}}</span>
+            <span class="amount">{{buyForm.controls.amount.value || '0' |decimalConfig}}</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-7 col-sm-7 col-md-7 col-xs-12">
+        <h2 class="head" >{{ languageStrings.from || "From" }}</h2>
+        <div class="details">
+          <div class="form-group">
+            <input type="text" formControlName="fromName"  placeholder="{{ languageStrings.your_full_name || 'Your Full Name' }}" class="input form-control"/>
+            <app-control-messages [control]="buyForm.controls.fromName"></app-control-messages>
+          </div>
+          <div class="form-group">
+            <textarea class="input form-control"
+                       placeholder="{{ languageStrings.message_upto_150_characters || 'Message (Upto 150 Characters)' }}"
+                      maxlength="150" formControlName="fromDescription" ></textarea>
+            <app-control-messages [control]="buyForm.controls.fromDescription"></app-control-messages>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5 col-sm-5 col-md-5 col-xs-12">
+        <h2 class="head" >{{ languageStrings.recipient || "Recipient"}}</h2>
+        <div class="details recipt">
+          <div class="form-group">
+            <input type="text" formControlName="toName"  placeholder="{{ languageStrings.full_name || 'Full Name' }}" class="input form-control"/>
+            <app-control-messages [control]="buyForm.controls.toName"></app-control-messages>
+          </div>
+          <div class="form-group">
+            <input type="text" formControlName="toEmail"  placeholder="{{ languageStrings.email_id || 'Email ID' }}" class="input form-control"/>
+            <app-control-messages [control]="buyForm.controls.toEmail"></app-control-messages>
+          </div>
+          <div class="form-group">
+            <button class="btn submitBtn" (click)="onSubmit()" >{{ languageStrings.submit ||"Submit"}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+<app-modal *ngIf="showModal" [modalType]="modalType.LARGE" (onClose)="showModal = false" (esc)="showModal = false">
+  <div body>
+    <div class="container-fluid modal-padding">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <span class="text" >{{ languageStrings.make_payment || "Make Payment"}}</span>
+          <span (click)="hidePaymentModal()" class="fa fa-times pull-right" [ngStyle]="{'direction':direction}"></span>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-12 mt-10">
+          <app-enabled-payment-methods [list]="billInfo"
+                                       [hideCash]="'true'"
+                                       [hidePayLater]="'true'"
+                                       [paymentFor]="'3'"
+                                       [triggerPayment]="triggerPayment"
+                                       [walletDetails]="walletDetails"
+                                       (paymentResponse)="paymentResponse($event)"
+                                       (selectedMethod)="paymentMethod($event)" [getOrderCreationPayload]="getOrderCreationPayload"></app-enabled-payment-methods>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</app-modal>

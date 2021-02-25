@@ -1,0 +1,20 @@
+<div class="backArea">
+  <span *ngIf="activeStep >1" (click)="goToPreviousStep(activeStep)" class="back pull-left">
+    <i class="fa fa-arrow-left" aria-hidden="true"></i>
+    <ng-container>{{languageStrings.back || 'Back'}}</ng-container>
+  </span>
+  <span class="pull-right">
+    <ng-container>{{languageStrings.step || 'Step'}}</ng-container> {{activeStep}} / 5
+  </span>
+</div>
+<div class="progressbar">
+  <div *ngFor="let steps of stepsArray;let i = index;"
+       class="step-progress" [style.width]="width"
+       [ngClass]="{'active-progress-bar': steps.active == 1 || steps.complete == 1}"
+       (click)="goToStep(steps, i)" [ngStyle]="{ 'direction' : direction }">
+    <span class="progress-no">{{steps.step}}</span>
+    <span class="progress-title">
+      {{steps.showName}}
+    </span>
+  </div>
+</div>

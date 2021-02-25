@@ -1,0 +1,13 @@
+<div class="container-fluid">
+  <div class="row" *ngIf="stripeIdealPaymentUrl" style="padding: 10px">
+    <div class="col-md-12 text-center">
+      <h4>
+        <ng-container>StripeIdeal Payment</ng-container>
+      </h4>
+    </div>
+    <div class="col-md-12">
+      <iframe id="stripeIdealIFrame" style="border: none" #stripeIdealIFrame [src]="stripeIdealPaymentUrl" height="610px" width="100%" ></iframe>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,11 @@
+<div class="language" *ngIf="allLanguages && allLanguages.length > 1">
+  <p-dropdown [(ngModel)]="languageSelected" (onChange)="onLanguageSelection($event)" [options]="allLanguages"
+              [optionLabel]="'label'">
+    <ng-template let-item pTemplate="selectedItem">
+      {{item.label}}
+    </ng-template>
+    <ng-template let-status pTemplate="item">
+      {{status.label}}
+    </ng-template>
+  </p-dropdown>
+</div>

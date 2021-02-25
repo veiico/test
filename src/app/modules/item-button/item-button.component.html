@@ -1,0 +1,39 @@
+<div class="p-action-btn">
+  <div *ngIf="product.type!=1" class="btn-container">
+    <button class="btn btn-sm btn-minus" aria-label="Decrease quantity" (click)="checkforMinQty(product.id,index,product,1)">
+      <svg style="margin-top: 5px" width="10" height="12" viewBox="0 0 10 2">
+        <path fill-rule="nonzero" d="M0 1.75h10V.25H0z" />
+      </svg>
+    </button>
+    <input type="text" appNumberOnly maxlength="4"  aria-label="quantity" class="input-price" #input=ngModel [(ngModel)]="product.quantity"
+      [ngModelOptions]="{standalone: true}">
+    <button class="btn btn-sm btn-plus" (click)="increaseQuantity(product.id,index)" aria-label="Increase quantity" >
+      <svg width="9" height="9" viewBox="0 0 10 10">
+        <path fill-rule="nonzero" d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+      </svg>
+    </button>
+    <!-- <div [ngStyle]="{'display': (product.type != 1) ? 'flex':'none'}">
+      <div appBs class="p-minus btn-cursor" (click)="checkforMinQty(product.id,index,product,1)">
+        <svg style="margin-top: 5px" width="10" height="12" viewBox="0 0 10 2">
+          <path fill="#858585" fill-rule="nonzero" d="M0 1.75h10V.25H0z" />
+        </svg>
+      </div>
+      <div class="p-quantity" style="font-size: 12.6px;">
+        <input appNumberOnly maxlength="4" [ngModelOptions]="{standalone: true}" class="inputBulkOrderClass" [(ngModel)]="product.quantity"
+          (focus)="onFocusQty($event)" (blur)="checkforMinQty(product.id,index,product,0)">
+      </div>
+      <div appBs class="p-plus btn-cursor" (click)="increaseQuantity(product.id,index)" appBs [style.background-color]="appConfig.btn_color?appConfig.btn_color:'#1a9943'">
+        <svg width="9" height="9" viewBox="0 0 10 10">
+          <path fill="#FFF" fill-rule="nonzero" d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+        </svg>
+      </div>
+    </div> -->
+    <div *ngIf="showLoader" class="loaders"></div>
+  </div>
+  <div [ngStyle]="{'display': (product.type == 1) ? 'flex':'none'}">
+    <!--<div appBs class="p-minus btn-cursor t-btn" (click)="decreamentQuantity(product.id,i)">-->
+    <!--{{removeBtnTxt}}-->
+    <!--</div>-->
+    <i class="fa fa-times-circle btn-cursor removeColor" (click)="decreamentQuantity(product.id,index)" aria-hidden="true"></i>
+  </div>
+</div>

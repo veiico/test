@@ -1,0 +1,77 @@
+<div class="addCard">
+  <div class="row">
+    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 text-center" *ngIf="!showStripeCard">
+      <button class="addCardButton btn" mat-button (click)="addCard()">
+        <i class="fa fa-plus" aria-hidden="true"></i> <span>{{languageStrings.add_new_card || 'Add New Card'}}</span>
+      </button>
+    </div>
+
+    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 addCardForm" [hidden]="!showStripeCard">
+      <form #cardForm="ngForm">
+        <!-- <div class="form-row">
+          <label for="card-info" [ngStyle]="{ 'direction' : direction }">
+            <ng-container i18n>Card Info</ng-container>
+          </label>
+          <div id="card-info" #cardInfo class="cardInfo"></div>
+
+          <div id="card-errors" role="alert" *ngIf="error" style="margin-top: 5px">{{ error }}</div>
+        </div> -->
+        <div class="form-row f-c d-flex" style="font-family: sans-serif;">
+          <label for="card-info" [ngStyle]="{ 'direction' : direction }" style="margin-bottom: 2rem;">
+            <ng-container>{{languageStrings.card_information || "Card Information"}}</ng-container>
+          </label>
+          <input id="billing" type="text" [(ngModel)]="cardHolderName" placeholder="{{languageStrings.card_holder_name || 'Card Holder Name'}}" name="name"
+            style="margin: 0;" #name="ngModel" />
+          <span id="mandatory"
+            *ngIf="(name.invalid && (name.dirty || name.touched)) || (!cardHolderName && showerror)">{{languageStrings.this_field_mandatory || "This field is mandatory"}}</span>
+          <ng-container *ngIf="userId == 198298 || userId == 283747">
+            <input id="billing" type="email" [(ngModel)]="customerEmail" placeholder="{{languageStrings.email || 'Email'}}" name="email"
+              style="margin: 0;margin-top: 1rem;" #email="ngModel" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+              required />
+            <ng-container *ngIf="email.invalid && (email.dirty || email.touched)|| (!customerEmail && showerror)">
+              <span id="mandatory" *ngIf="email.errors.required">{{languageStrings.this_field_mandatory || "This field is mandatory"}}</span>
+              <span id="mandatory" *ngIf="email.errors?.pattern">{{languageStrings.email_invalid || "Email is invalid"}}</span>
+            </ng-container>
+          </ng-container>
+          <div style="margin-top: 1rem;" id="card-info" #cardInfo></div>
+          <ng-container *ngIf="userId == 198298 || userId == 283747">
+            <label style="margin-top: 1.5rem;" for="card-info" [ngStyle]="{ 'direction' : direction }">
+              <ng-container>{{languageStrings.billing_information || "Billing Information"}}</ng-container>
+            </label>
+            <div class="f-c d-flex">
+              <input id="billing" type="text" [(ngModel)]="line1" placeholder="{{languageStrings.line1 || 'Line1'}}" name="billingLine1"
+                #billingLine1="ngModel"  />
+              <span id="mandatory"
+                *ngIf="billingLine1 && (billingLine1.invalid && (billingLine1.dirty || billingLine1.touched)) || (!line1 && showerror)">{{languageStrings.this_field_mandatory || "This field is mandatory"}}</span>
+              <input id="billing" type="text" [(ngModel)]="line2" placeholder="{{languageStrings.line2 || 'Line2'}}" name="billingLine2"
+                #billingLine2="ngModel" />
+
+              <div id="cityDiv">
+                <div style="display: flex;flex-direction: column;width: 45%;">
+                  <input id="billing" type="text" [(ngModel)]="city" placeholder="{{languageStrings.city || 'City'}}"  name="billingInfoCity"
+                    #billingInfoCity="ngModel" style="margin: 0;" />
+                  <span id="mandatory"
+                    *ngIf="billingInfoCity && (billingInfoCity.invalid && (billingInfoCity.dirty || billingInfoCity.touched)) || (!city && showerror)">{{languageStrings.this_field_mandatory || "This field is mandatory"}}</span>
+                </div>
+                <div style="display: flex;flex-direction: column;width: 45%;">
+                  <input id="billing" type="text" [(ngModel)]="state" placeholder="{{languageStrings.state || 'State'}}" name="billingInfoState"
+                    #billingInfoState="ngModel" />
+                  <span id="mandatory"
+                    *ngIf="billingInfoState && (billingInfoState.invalid && (billingInfoState.dirty || billingInfoState.touched)) || (!state && showerror)">{{languageStrings.this_field_mandatory || "This field is mandatory"}}</span>
+  
+                </div>
+              </div>
+      
+            </div>
+          </ng-container>
+          <div id="card-errors" role="alert" *ngIf="error" style="margin-top: 5px">{{ error }}</div>
+        </div>
+        <div class="btnsForSave">
+          <button type="submit" mat-button class="saveButton btn" [disabled]="!cardForm.valid"
+            (click)="getCardToken(cardForm.value,$event)">{{languageStrings.save || "Save"}}</button>
+          <button type="button" mat-button class="cancelButton btn" (click)="resetCard()">{{languageStrings.cancel || "Cancel"}}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

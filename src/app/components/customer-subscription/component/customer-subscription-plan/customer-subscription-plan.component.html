@@ -1,0 +1,61 @@
+<div class="main">
+    <div class="col-xs-12">
+        <div class="heading">
+            <p class="title">
+                <ng-container>{{languageStrings.customer_subscription_plans || "Customer Subscription Plans"}}</ng-container>
+            </p>
+            <hr class="line" [style.border-top-color]="appConfig.color" />
+        </div>
+    </div>
+
+    <div class="plan-parent">
+      <div class="activate-plan" *ngIf="activatePlan && activatePlan.length">
+        <h1 class="plan-heading">{{languageStrings.active_plan || 'Active Plan'}}</h1>
+        <div *ngFor="let plan of activatePlan" class="activate-plan-card">
+          <div class="plan-image">
+            <img [src]="plan.image_url">
+          </div>
+          <div class="plan-middle-content">
+            <span class="name">{{plan.plan_name}}</span>
+            <span>{{languageStrings.expire_on ||'Expire On'}}: <p class="key"> {{plan.expiry_datetime | dateTimeFormat : 'MMM d, y'}}</p></span>
+            <span *ngIf="plan.number_of_orders">{{languageStrings.number_of ||'Number of'}} <ng-container *ngIf="!freelancerFlow">{{terminology.ORDERS || 'Orders'}}</ng-container><ng-container *ngIf="freelancerFlow">{{terminology.PROJECTS || 'Projects'}}</ng-container>: <p class="key"> {{plan.number_of_orders}}</p>, {{languageStrings.which_ever_occurs_first || "which ever occurs first."}}</span>
+            <span *ngIf="plan.number_of_orders_remaining != null">{{languageStrings.number_of ||'Number of'}} <ng-container *ngIf="!freelancerFlow">{{terminology.ORDERS || 'Orders'}}</ng-container><ng-container *ngIf="freelancerFlow">{{terminology.PROJECTS || 'Projects'}}</ng-container> {{ languageStrings.remaining || 'Remaining' }}: <p class="key"> <ng-container *ngIf="plan.number_of_orders_remaining">{{plan.number_of_orders_remaining}}</ng-container><ng-container *ngIf="!plan.number_of_orders_remaining">0</ng-container></p></span>
+            <span> {{plan.description}}</span>
+          </div>
+          <div class="plan-right-content">
+            <span class="active-button">{{languageStrings.active ||'Active'}}</span>
+            <pre class="amount"><ng-container>{{languageStrings.total_amount ||'TOTAL AMOUNT'}} </ng-container>  {{currency}}{{plan.amount}}</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="available-plans" *ngIf="availablePlans">
+        <h1 class="plan-heading">{{languageStrings.browse_plans || 'Browse Plans'}}</h1>
+        <div class="available-card" *ngFor="let plan of availablePlans">
+          <div class="plan-image">
+            <img [src]="plan.image_url">
+          </div>
+          <div class="plan-middle-content">
+            <span class="name">{{plan.plan_name}}</span>
+            <ul>
+              <li>{{plan.plan_duration}}({{languageStrings.in_days || 'in days'}})</li>
+              <li *ngIf="plan.number_of_orders">{{plan.number_of_orders}} (<ng-container *ngIf="!freelancerFlow">{{ languageStrings.allowed_orders  || 'Allowed Orders' }}</ng-container><ng-container *ngIf="freelancerFlow">{{languageStrings.allowed_projects || 'Allowed Projects' }}</ng-container>)</li>
+              <li>{{plan.description}}</li>
+            </ul>
+          </div>
+
+          <div class="plan-right-content">
+            <pre class="amount"><ng-container>{{languageStrings.total_amount || 'TOTAL AMOUNT'}} </ng-container>   {{currency}}{{plan.amount}}</pre>
+            <div class="btn-parent">
+              <span class="choose-plan" (click)="choosePlan(plan)">{{languageStrings.choose_plan || 'Choose Plan'}} </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <div class="skip-parent" *ngIf="!customer_subscription_mandatory">
+    <span class="skip-now" (click)="goBack()">{{languageStrings.skip_for_now ||'Skip for now'}}</span>
+  </div>
+</div>

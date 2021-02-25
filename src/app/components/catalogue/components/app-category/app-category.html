@@ -1,0 +1,45 @@
+<div class="cat-menu row" id="cat-fix">
+  <div class="deskViewMain">
+    <div class="cls-menu-text hidden-xs hidden-sm" [ngStyle]="{ 'direction' : direction }" *ngIf="terminology">
+      <span >{{terminology.MENU ? terminology.MENU : 'Menu'}}</span>
+    </div>
+    <div class="hidden-xs hidden-sm deskCateView">
+      <div class="cls-cat-list" *ngFor="let category of categoryData; let ind = index">
+        <div *ngIf="category.has_children" appBc class="cls-hover-cat deskView bg-white collapse-hover-none"
+          [ngClass]="{'active':(selectedItem.parent_category_id==category.catalogue_id)? true:false}">
+          <div><a class="d-flex" data-toggle="collapse" [href]="'#collapse'+ind" aria-expanded="false" (click)="closeOpenDivs()">{{category.name}}
+            <span class="collapse-cat-arrow"></span></a></div>
+          <div [id]="'collapse'+ind" class="panel-collapse collapse m-t-10">
+            <div appBc class="panel-body subcategory"
+            [ngClass]="{'active': selectedItem.catalogue_id==sub_cat.catalogue_id }"
+            *ngFor="let sub_cat of category.sub_categories" (click)="selectedCategory(sub_cat,category)">
+              <span>{{sub_cat.name}}</span>
+            </div>
+            </div>
+        </div>
+
+          <ng-container *ngIf="!category.has_children">
+            <div appBc class="cls-hover-cat deskView" (click)="selectedCategory(category)"
+              [ngClass]="{'active':(selectedItem.catalogue_id==category.catalogue_id)? true:false}"
+              [ngStyle]="{'color':(selectedItem.catalogue_id==category.catalogue_id)? appConfig.color:''}">
+              <span>{{category.name}}</span>
+            </div>
+          </ng-container>
+      </div>
+    </div>
+  </div>
+  <div class="mobileViewMain" [ngStyle]="{'background':catBgColor }">
+    <div class="visible-xs visible-sm m-t-0 w-100 z-1" *ngIf="!hideCategory">
+      <div class="c-res-cat">
+        <div class="cls-cat-list" *ngFor="let category of categoryData">
+          <div appBc class="cls-hover-cat" [ngClass]="{'active':(selectedItem.catalogue_id==category.catalogue_id)? true:false}"
+               (click)="selectedCategory(category)">
+            <span>{{category.name}}</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

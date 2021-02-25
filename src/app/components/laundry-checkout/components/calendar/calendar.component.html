@@ -1,0 +1,33 @@
+<div class="calendar">
+  <ul class="dateList">
+    <li class="leftArrow" (click)="arrowHit(1)" *ngIf="hideArrows">
+      <i class="fa fa-angle-left fa-2x"></i>
+    </li>
+    <li [style.width]="width"
+        *ngFor="let data of dateArray | slice:sliceFrom:sliceTo; let i = index;"
+        [ngClass]="{'activeDate': i == selectedDateIndex}"
+        (click)="selectDate(data, i)" [ngStyle]="{ 'direction' : direction }">
+      {{data.date | dateTimeFormat: 'EEE'}}
+      <br/>
+      {{data.date | dateTimeFormat: 'dd LLL'}}
+    </li>
+    <li class="rightArrow" (click)="arrowHit(2)" *ngIf="hideArrows">
+      <i class="fa fa-angle-right fa-2x"></i>
+    </li>
+  </ul>
+  <ul class="timeSlots">
+    <li *ngFor="let slot of slots; let i = index;">
+      <div (click)="selectTimeSlot(slot, i)"
+           [ngClass]="{'selectedSlot': slot.selected, 'inactive_slot': slot.pastSlot, 'inactive_slot': slot.is_booked === 1}"
+           [ngStyle]="{ 'direction' : direction }">
+        <span class="check">
+          <i class="fa fa-check-circle fa-lg"></i>
+        </span>
+        <span>{{slot.start_time | dateTimeFormat: 'shortTime':'+0000'}} → {{slot.end_time | dateTimeFormat: 'shortTime':'+0000'}}</span>
+      </div>
+    </li>
+    <li class="noSlot" *ngIf="noSlot">
+      <p>{{ languageStrings.no_slot_avail || "No Slots Available"}}</p>
+    </li>
+  </ul>
+</div>

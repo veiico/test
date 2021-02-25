@@ -1,0 +1,123 @@
+<div class="container merchantProfileStyle">
+  <div class="head">
+    <h3 class="pull-left">
+      <ng-container>{{languageStrings.basic_details ||'Basic Details'}}</ng-container>
+    </h3>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row m-0" *ngIf="profileData">
+    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 profileP">
+      <div class="row">
+        <div class="col-lg-3 col-sm-4 col-md-6 col-xs-12 profile-view-only">
+          <img [src]="profileData.logo?profileData.logo:'https://cdn.ec2dashboard.com/task_images/KArL1576675174047-icon.png'" (click)="imagePopup(profileData.logo)" />
+        </div>
+        <div class="col-lg-9 col-sm-8 col-md-6 col-xs-12 profile-view-only">
+          <div class="profileNameHeading">
+            <p>{{profileData.display_name}}</p>
+          </div>
+          <div class="rating" *ngIf="profileData.jobAvgRating">
+            <div class="rating-div">
+              <span class="rating-bigtext">{{profileData.jobAvgRating.toFixed(1)}}</span>
+              <span class="rating-outoftext">{{languageStrings.out_of ||'out of'}}<br> 5 {{languageStrings.stars ||'stars'}}</span>
+            </div>
+            <div class="star-container-bar">
+              <div class="filled-stars" [style.width]="(profileData.jobAvgRating / 5)*100 + '%'"><i *ngFor="let star of [0,1,2,3,4]" class="fa fa-star"></i></div>
+              <div class="unfilled-stars"><i *ngFor="let star of [0,1,2,3,4]" class="fa fa-star"></i></div>
+            </div>
+          </div>
+          <div class="profileNumberDiv">
+            <p>
+              {{profileData.nameFull || '-'}}
+              <!-- <span>{{profileData.email}}</span> -->
+            </p>
+          </div>
+          <div class="profileEmailDiv" *ngIf="profileData.display_merchant_phone">
+            <p>
+              <span>{{profileData.phone}}</span>
+            </p>
+          </div>
+          <div class="profileEmailDiv" *ngIf="profileData.email">
+            <p>
+              <span>{{profileData.email}}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  <div *ngIf="profileData && profileData.customerRatings && profileData.customerRatings.length > 0">
+  <div class="head">
+    <h3 class="pull-left">
+      <ng-container>{{languageStrings.ratings_reviews || 'Ratings & Reviews'}}</ng-container>
+    </h3>
+  </div>
+  <div class="clearfix"> </div>
+
+    <div class="review-container">
+      <div class="review-data" *ngFor="let review of profileData.customerRatings">
+        <div class="review">
+          <div class="headerDetails">
+            <div class="image">
+              <img [src]="review.vendor_image ? review.vendor_image :'https://cdn.ec2dashboard.com/task_images/KArL1576675174047-icon.png'" />
+            </div>
+            <div class="basicDetails">
+              <div class="reviewerName">
+                <span>
+                  {{review.first_name}}
+                </span>
+              </div>
+              <div class="rating">
+                <star-rating-comp [size]="'medium'" [readOnly]="true" [showHalfStars]="true"
+                [rating]="review.customer_rating?review.customer_rating:0" [starType]="'svg'"></star-rating-comp>
+              </div>
+            </div>
+          </div>
+          <div class="reviewerDescription">
+            <span>
+              {{review.customer_comment}}
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div *ngIf="profileData && (customFields1 && customFields1.length > 0 || customFields2 && customFields2.length > 0)">
+    <div class="head">
+      <h3 class="pull-left">
+        <ng-container>{{languageStrings.additional_details ||'Additional Details'}}</ng-container>
+      </h3>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row m-0">
+      <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 profileP">
+        <div class="row" *ngIf="customFields1.length">
+          <app-items [fields]="customFields1" (imagePopup)="imagePopup($event)"></app-items>
+        </div>
+        <div class="row box-large" *ngIf="customFields2.length">
+          <app-items [fields]="customFields2" (imagePopup)="imagePopup($event)"></app-items>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+</div>
+<app-modal [showCross]="true" [header]="imageData.display_name ? imageData.display_name: terminology.MERCHANT+' Logo'" *ngIf="openImagePopup" [modalType]="modalType" (esc)="hideimagePopup()"
+(onClose)="hideimagePopup()">
+  <div body style="padding: 15px 30px">
+      <div class="row">
+          <div class="col-12">
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+            <div>
+              <img *ngIf="imageData.value" [src]="imageData.value ||'https://cdn.ec2dashboard.com/task_images/KArL1576675174047-icon.png'" style="cursor:pointer; width :100%;" />
+              <img *ngIf="!imageData.value" [src]="imageData ||'https://cdn.ec2dashboard.com/task_images/KArL1576675174047-icon.png'" style="cursor:pointer; width :100%;" />
+            </div>
+        </div>
+      </div>
+  </div>
+</app-modal>

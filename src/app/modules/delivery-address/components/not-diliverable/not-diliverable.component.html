@@ -1,0 +1,17 @@
+
+<div class="not-diliverable">
+  <div class="outer">
+    <div class="inner">
+      <div class="err-img">
+        <img class="err-icon" src="assets/images/not-deliverable.png"  alt="store not delivering"/>
+      </div>
+      <div class="err-text">
+        {{languageStrings.sorry_this_merchant_does_not_deliver_to_your_selected_location || 'Sorry, this merchant does not deliver to your selected location.'}}
+        <a class="link" (click)="changeLocation()"><ng-container>{{languageStrings.change_location || 'Change Location'}}</ng-container></a>
+      </div>
+      <div class="err-link" (click)="showMore()" *ngIf="!isMerchantDomain">
+          {{languageStrings.show_more || 'SHOW MORE'}}
+      </div>
+    </div>
+  </div>
+</div>

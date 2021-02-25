@@ -1,0 +1,128 @@
+@import '../../../../theme.scss';
+@import '~assets/css/variables';
+.image-container{
+  height: calc(100vh - 90px);
+  // background-image: url('https://yelodotred.s3.amazonaws.com/task_images/12lD1531992734590-backgroundswiggy.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  align-content: flex-end;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 130px;
+  .logo {
+    display: flex;
+    justify-content: center;
+    img{
+      max-height: 50px;
+      max-width: calc(100% - 30px);
+    }
+  }
+  .heading{
+    color: $logo-heading-heading-font-color;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    h3{
+      font-size: 16px;
+      font-family: $proxima-semi-bold;
+      white-space: pre-wrap;
+      width: auto;
+    }
+  }
+  .search-component{
+    display: flex;
+    justify-content: center;
+  }
+  &.full-height{
+    height: calc(100vh);
+  }
+}
+// taking mobile first approach. Media queries will only contain ipad & above logic
+@media only screen and (min-width: 768px) {
+  .image-container{  
+    .heading{
+      h3{
+        font-size: 32px;
+      }
+    }
+  }
+}
+/* Medium Devices, Desktops */
+@media only screen and (min-width : 992px) {
+  .logo {
+    img{
+      max-height: 100px;
+    }
+  }
+  .heading{
+    h3{
+      font-size: 32px;
+      margin-bottom:15px;
+    }
+  }
+}
+
+/* Large Devices, Wide Screens */
+@media only screen and (min-width : 1200px) {
+  .image-container{   
+    //justify-content: flex-end;
+    // padding-bottom: 40px; 
+    .logo {
+      img{
+        max-height: 100px;
+      }
+    }
+    .heading{
+      h3{
+        font-size: 32px;
+        margin-bottom:30px;
+      }
+    }
+  }
+}
+.search-button {
+  font-family: $proxima-reg;
+  background-color: $autocomplete-btn-search-bg-color;
+  color: $autocomplete-btn-search-font-color;
+  border: 2px solid $autocomplete-btn-search-bg-color;
+  height: calc(#{$autocomplete-box-height});
+  width: 45%;
+  right: 18px;
+  border-radius: 1px;
+  top: 3px;
+
+
+  &:hover {
+    background-color: $autocomplete-btn-search-font-color;
+    color: $autocomplete-btn-search-bg-color;
+  }
+}
+.eqHeight{
+  display: flex !important;
+  flex-wrap: wrap !important;
+  width: 100% !important;
+  justify-content: space-between !important;
+
+}
+
+.eqHeight{
+  display: flex !important;
+  flex-wrap: wrap !important;
+  width: 100% !important;
+  justify-content: space-between !important;
+}
+
+.back-link{
+  font-size: 16px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  i{
+    font-size: 18px;
+    font-weight: bold;
+  }
+}

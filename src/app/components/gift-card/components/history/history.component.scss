@@ -1,0 +1,110 @@
+@import '~assets/css/variables';
+
+.history{
+  padding: 60px 8rem;
+  .history-1{
+    .transactions{
+      font-family: $proxima-reg;
+      font-size: 16px;
+      color: #474747;
+    }
+  }
+
+  .displayFlex{
+    display: flex;
+    justify-content: center;
+  }
+  .history-l {
+    max-height: 500px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    .list {
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 5px;
+      box-shadow: 1px 1px 1px 1px #dedede;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #fff;
+      .addedFrom {
+        display: flex;
+        align-items: center;
+        width:80%;
+        .icon {
+          .view {
+            height: 50px;
+            width: 50px;
+            border: 1px solid #d1d1d1;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 24px;
+            line-height: 50px;
+            i {
+              color: $color-theme;
+            }
+
+            i.yfn-group_copy{
+              font-size: 18px;
+            }
+          }
+        }
+        .addedFromL {
+          padding-left: 15px;
+          .added {
+            font-family: $proxima-reg;
+            font-size: 18px;
+            color: #474747;
+            margin-bottom: 2px;
+          }
+          .info{
+            font-family: $proxima-reg;
+            font-size: 14px;
+            color: #bababa;
+            margin-bottom: 2px;
+            word-break: break-all;
+            .balance{
+              //padding-left: 10px;
+            }
+          }
+        }
+      }
+      .transAmount{
+        width: 20%;
+        .amount{
+          font-family: $proxima-reg;
+          font-size: 18px;
+          color: #474747;
+          margin-bottom: 2px;
+        }
+        .date{
+          font-family: $proxima-reg;
+          font-size: 14px;
+          color: #bababa;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .history{
+    padding: 60px 0rem;
+    .transAmount{
+      width: 25%;
+    }
+    .addedFrom{
+      width: 75%;
+    }
+    .displayFlex{
+      padding: 0px;
+      .h-1{
+        padding: 0px;
+      }
+      .history-l{
+        padding: 0px;
+      }
+    }
+  }
+}

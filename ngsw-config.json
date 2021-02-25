@@ -1,0 +1,65 @@
+{
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "resources": {
+        "files": [
+          "/favicon.ico",
+          "/*.css",
+          "/*.js"
+        ]
+      }
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/assets/**"
+        ]
+      }
+    }
+  ],
+  "dataGroups": [
+    {
+      "name": "no-cache-api",
+      "urls": [
+        "/api/marketplace_vendor_login_via_access_token",
+        "/api/marketplace/marketplace_get_city_storefronts_v3"
+      ],
+      "cacheConfig": {
+        "maxSize": 0,
+        "maxAge": "0u",
+        "strategy": "freshness"
+      }
+    },
+    {
+      "name": "tasks-users-api",
+      "urls": [
+        "/api/**",
+        "https://maps.googleapis.com/maps/api/**"
+      ],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxSize": 20,
+        "maxAge": "1h",
+        "timeout": "10u"
+      }
+    },
+    {
+      "name": "stripe",
+      "urls": [
+        "https://js.stripe.com/v3/"
+      ],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxSize": 20,
+        "maxAge": "1h",
+        "timeout": "10u"
+      }
+    }
+  ]
+}

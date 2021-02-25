@@ -1,0 +1,493 @@
+<app-header  class="col-xs-12 header-size" [headerData]="headerData" [showAddressBarOnlyRestaurant]="true"></app-header>
+
+<div id="general_background" class="general_background_color select_category change-color-bg" [ngClass]="{'old_ui_select_category':!appConfig.new_store_page_enabled}">
+  <div class="row margin_zero select_category_cover card_big" *ngIf="restaurantInfo">
+    <div class="row col-lg-12 col-xs-12 col-md-12 col-sm-12 m-0 p-0"
+    *ngIf="formSettings.onboarding_business_type === 805 || (restaurantInfo && restaurantInfo.business_type === 2)">
+      <app-sub-header></app-sub-header>
+    </div>
+    <div *ngIf="noOffering">
+      <div class="mobile-view-div">
+        <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 bannerComponent1 p-0" [ngClass]="{'mg-t35': showAddressBarOnlyRestaurant}" id="banner-parent" >
+          <!-- Not offering Case -->
+            <div class="closedRestro hide-closed-mobile" *ngIf="restaurantInfo && !restaurantInfo.available && !restaurantInfo.scheduled_task">
+              <img src="assets/images/sleepy.svg"  />
+              <ng-container>{{terminology.STORE_CLOSED}}</ng-container>
+            </div>
+            <div class="closedRestro hide-closed-mobile" *ngIf="restaurantInfo && restaurantInfo.available && restaurantInfo.available_for_self_pickup  &&  (deliveryMethods==8 ||  deliveryMethods ==1)  && restaurantInfo.self_pickup && (!restaurantInfo.available_for_home_delivery  && !restaurantInfo.available_for_pick_and_drop) && (restaurantInfo.home_delivery || restaurantInfo.pick_and_drop) &&  !restaurantInfo.scheduled_task" >
+              <img src="assets/images/sleepy.svg"  />
+              <ng-container>{{terminology.STORE_DELIVERY_CLOSED}}</ng-container>
+            </div>
+            <div class="closedRestro hide-closed-mobile" *ngIf="restaurantInfo && restaurantInfo.available && !restaurantInfo.available_for_self_pickup  && restaurantInfo.self_pickup && deliveryMethods==2 && ((restaurantInfo.available_for_home_delivery || restaurantInfo.available_for_pick_and_drop) && (restaurantInfo.home_delivery|| restaurantInfo.pick_and_drop)) && !restaurantInfo.scheduled_task" >
+              <img src="assets/images/sleepy.svg"  /> 
+              <ng-container>{{terminology.STORE_PICKUP_CLOSED}}</ng-container>
+            </div>
+         <!-- top main division with banner and logo for web -->
+            <div class="new-main-banner" [ngStyle]="{'margin-top':(restaurantInfo && !restaurantInfo.available && !restaurantInfo.scheduled_task)?'40px':'auto'}">
+              <div class="new-logo-banner">
+                <!-- logo and info division -->
+                <div class="new-logo-content" *ngIf="!isPlatformServer">
+                  <div class="new-logo-div">
+                    <img class="store-logo-img" [src]="restaurantInfo && restaurantInfo.logo ? restaurantInfo.logo: 'assets/img/image-placeholder.svg'"
+                    [alt]="restaurantInfo.store_name + ' image'">
+                  </div>
+                  <div class="new-content-text" *ngIf="restaurantInfo">
+                    <h4 *ngIf="restaurantInfo.store_name && restaurantInfo.store_name.length > 35" data-placement="bottom" [tooltip]="restaurantInfo.store_name">{{restaurantInfo.store_name | truncate : 35 : '.'}}</h4>
+                    <h4 *ngIf="restaurantInfo.store_name && restaurantInfo.store_name.length <= 35">{{restaurantInfo.store_name | truncate : 35 : '.'}}</h4>
+                    <div  *ngIf="formSettings.display_merchant_address == 1 &&
+                    ((restaurantInfo.display_address &&
+                    restaurantInfo.display_address != '-') || (restaurantInfo.address &&
+                    restaurantInfo.address != '-'))">
+
+                       <a class="phone-location" *ngIf="restaurantInfo && restaurantInfo.latitude && restaurantInfo.longitude && ( restaurantInfo.display_address ? (restaurantInfo.display_address) :restaurantInfo.address).length>30" [tooltip]="restaurantInfo.display_address ? (restaurantInfo.display_address) : restaurantInfo.address" [href]="'http://maps.apple.com/maps?q='+restaurantInfo.latitude +','+restaurantInfo.longitude" target="_blank">
+                        <img  class="icon-img" src="assets/images/pin1.png">
+                       <p class="store-detail__card__row__address m-l-10">
+                      {{restaurantInfo.display_address ? (restaurantInfo.display_address) :
+                       restaurantInfo.address}}</p></a>
+                      
+                       <a class="phone-location" *ngIf="restaurantInfo && restaurantInfo.latitude && restaurantInfo.longitude && ( restaurantInfo.display_address ? (restaurantInfo.display_address) :restaurantInfo.address).length<=30" [href]="'http://maps.apple.com/maps?q='+restaurantInfo.latitude +','+restaurantInfo.longitude" target="_blank">
+                        <img  class="icon-img" src="assets/images/pin1.png">
+                       <p class="store-detail__card__row__address m-l-10">
+                      {{restaurantInfo.display_address ? (restaurantInfo.display_address) :
+                       restaurantInfo.address}}</p></a>
+                    </div>
+                    <div *ngIf="formSettings.display_merchant_phone == 1 && cardInfo && cardInfo.phone">
+                      <a class="phone-location" [href]="'tel:'+cardInfo.phone">
+                          <img class="icon-img" src="assets/images/call.png"> 
+                          <p class="store-detail__card__row__address m-l-5"> {{cardInfo.phone}}</p></a>
+                        
+                    </div>
+                    <div class="new-time-rate">
+                        <div class="store-detail__card__row__rating-container" *ngIf="appConfig.is_review_rating_enabled">
+                    <i class="fa fa-star clock-icon star-yellow"  *ngIf="!restaurantInfo.store_rating"></i>
+                    <i class="fa fa-star clock-icon"  *ngIf="restaurantInfo.store_rating" [ngClass]="{'star-red': restaurantInfo.store_rating <= 1 , 'star-yellow' : (restaurantInfo.store_rating > 1 && restaurantInfo.store_rating <= 3) , 'star-green' : restaurantInfo.store_rating > 3}"></i>
+                    <p class="store-detail__card__row__rating-container__rating hv-ud p-t-0"  (click)="showMerchantReviews()">
+                      <span>
+                        <span>{{ restaurantInfo.store_rating? restaurantInfo.store_rating.toFixed(1) :  languageStrings.rate_now || 'Rate Now' }}</span>
+                      </span>
+                    </p>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="new-logo-content" *ngIf="isPlatformServer">
+                  <app-catalogue-shimmer [shimmerType]="5" class="w-100" ></app-catalogue-shimmer>
+                  </div>
+              </div>
+              <!-- banner division -->
+              <div class="new-background-image">
+                <img *ngIf="isPlatformServer" src='assets/images/bannerShimmer.svg'>
+                <img *ngIf="!isPlatformServer && !showMultipleBanners && bannerImage" [src]="bannerImage" id="image-banner" alt="banner image">
+                <div class="carouselDiv" *ngIf="!isPlatformServer && showMultipleBanners && !mobileView" id="multiBanner">
+                    <div id="banner" class="carousel slide" data-ride="carousel">
+                      <ol class="carousel-indicators" *ngIf="newList && newList.length > 1">
+                            <li *ngFor="let newData of newList;let i = index;" data-target="#banner" [attr.data-slide-to]="i" [ngClass]="{'active' : i==0}"></li>
+                      </ol>
+                      <div class="carousel-inner">
+                        <div class="item" *ngFor="let newData of newList;let i = index;" [ngClass]="{'active' : i==0}" >
+                          <img [src]="newData.image" class="logo hidden-xs" alt="banner image"  (click)="getProductsOfBanners(newData.id,newData.has_product_mapping)"/>
+                          <img [src]="newData.mobile_web_image || newData.image" class="logo visible-xs" alt="banner image"  (click)="getProductsOfBanners(newData.id,newData.has_product_mapping)"/>
+                        </div>
+                      </div>
+                      <a *ngIf="newList.length > 1" class="left carousel-control" href="#banner" role="button" data-slide="prev" aria-label="go to previous slide" >
+                          <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        </a>
+                        <a *ngIf="newList.length > 1" class="right carousel-control" id='click-event' href="#banner" role="button" data-slide="next" aria-label="go to next slide">
+                          <i class="fa fa-angle-right" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                  </div>
+                <span class="banner-heading" *ngIf="restaurantInfo.description">{{restaurantInfo.description}}</span>
+                <!-- product search div -->
+                <div class="new-banner-footer" id="banner-footer" [ngStyle]="{'width':!(formSettings.enable_veg_non_veg_filter == 1 &&  restaurantInfo.custom_order_active_for_store && catalogueList && formSettings.is_custom_order_active && searchItems && !isPreorderTimeRequired)?'80%':'75%'}">
+                  <div class="">
+                      <form [formGroup]="form" *ngIf="langJson" class="store-detail__search__bar" id="search-bar">
+                          <input class="search-input-bar search-input" [ngStyle]="{ 'direction' : direction }"  formControlName="searchControl"
+                            placeholder="{{terminology.SEARCH_PRODUCT}}" autocomplete="off" attr.aria-label="{{terminology.SEARCH_PRODUCT}}">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </form>
+                  </div>
+
+
+
+                <ng-container *ngIf="formSettings.enable_veg_non_veg_filter == 1 && restaurantInfo.is_veg_filter_active">
+                    <div class="veg-filter btn-bars">
+                      <button type="button" class="store-detail__search__button" [ngStyle]="{ 'direction' : direction }">
+                        <label class="checkbox-label">
+                          <input id="checkbox1" type="checkbox" id="onlyVegCheck"  [(ngModel)]="onlyVegCheck" [ngModelOptions]="{standalone: true}" (change)="onVegOnlyCheckChange(onlyVegCheck)">
+                          <span class="checkbox-custom-rectangle"> </span>
+                        </label>
+                        <label class="veg veg-product" for="onlyVegCheck" [ngClass]="{'veg-selected' : onlyVegCheck}">{{terminology.VEG_ONLY || 'Veg Only'}}</label>
+
+                      </button>
+                    </div>
+                  </ng-container>
+
+
+
+                  <div *ngIf="restaurantInfo.custom_order_active_for_store && catalogueList && formSettings.is_custom_order_active &&  restaurantInfo.available && searchItems && !(restaurantInfo.self_pickup && (!restaurantInfo.home_delivery && !restaurantInfo.pick_and_drop)) && (restaurantInfo.merchant_as_delivery_manager || (restaurantInfo.merchant_as_delivery_manager ==0 && formSettings.is_marketplace_delivery_availabile))" class="btn-bars">
+                    <button type="button" class="store-detail__search__button" [ngStyle]="{ 'direction' : direction }"
+                      (click)="moveToCustomOrder()">
+                      <ng-container >{{terminology.CUSTOM_ORDER}} 
+                      </ng-container>
+                    </button>
+                  </div>
+
+                  <ng-container *ngIf="isPreorderTimeRequired">
+                      <div [ngClass]="formSettings.enable_veg_non_veg_filter == 1?'':'veg-filer-disable'">
+                          <div [hidden]="!isPreorderTimeRequired" class="preorder-btn-cvr" (mouseenter)="showPreorderInfo = true" (mouseleave)="showPreorderInfo = false">
+                            <button type="button" class="btn accept" appColor bg="true" [ngStyle]="{ 'direction' : direction }" class="store-detail__search__button"
+                              (click)="showPreorderTimeSelectionModal()" >
+                              <ng-container>{{languageStrings.schedule_order || 'Schedule Order'}}</ng-container>
+                            </button>
+                            <div class="preorder-popover" *ngIf="preOrderDatetime && showPreorderInfo">
+                              <i class="fa fa-caret-up caret-icon" aria-hidden="true"></i>
+                              <p class="preorder-time">{{languageStrings.pre_ordering_for || 'Pre ordering for'}} {{preOrderDatetime | dateTimeFormat : 'MMM d, y, h:mm a'}}</p>
+                              <p class="instant" *ngIf="restaurantInfo && restaurantInfo.available">{{languageStrings.click_for || 'Click for'}} <a class="instant_order" (click)="instantOrder()">{{ languageStrings.instant_order || 'Instant Order'}}</a></p>
+                            </div>
+                          </div>
+                        </div>
+              
+                  </ng-container>   
+
+
+                </div>
+              </div>
+            </div>
+
+  <!-- for mobile view top division logo and banner -->
+          <div class="row bannerDivMain hide-lg-view">
+            <!-- multiple banners -->
+            <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 bannerComponent1" *ngIf="showMultipleBanners">
+              <div class="bannerDiv-old-ui pb-0" [ngClass]="{'tapri-class-old-ui': ([151121,166930].includes(+restaurantInfo.storefront_user_id))}" *ngIf="showMultipleBanners && mobileView">
+                <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 multiBanners" *ngIf="newList && newList.length > 0" >
+                  <div class="carouselDiv">
+                    <div id="banner" class="carousel slide" data-ride="carousel">
+                      <ol class="carousel-indicators mobile_view_fix" *ngIf="newList && newList.length > 1">
+                            <li *ngFor="let newData of newList;let i = index;" data-target="#banner" [attr.data-slide-to]="i" [ngClass]="{'active' : i==0}"></li>
+                      </ol>
+                      <div class="carousel-inner">
+                        <div class="item" *ngFor="let newData of newList;let i = index;" [ngClass]="{'active' : i==0}">
+                          <img [src]="newData.image" class="logo hidden-xs h-270" alt="banner image"  (click)="getProductsOfBanners(newData.id,newData.has_product_mapping)"/>
+                          <img [src]="newData.mobile_web_image || newData.image" class="logo visible-xs h-270" alt="banner image"   (click)="getProductsOfBanners(newData.id,newData.has_product_mapping)"/>
+                        </div>
+                      </div>
+                      <a  class="left carousel-control" href="#banner" role="button" data-slide="prev" aria-label="go to previous slide" >
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+
+                      </a>
+                      <a  class="right carousel-control" id='click-event' href="#banner" role="button" data-slide="next" aria-label="go to next slide">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+
+                      </a>
+                    </div>
+                  </div>
+                  <div class="inner-search-div" [ngClass]="{'mult-banner-mobile':(showMultipleBanners)}">
+                      <div class="div-store-name">
+                          <div class="name mobile-store-ui" *ngIf="!([151121,166930].includes(+restaurantInfo.storefront_user_id)) && restaurantInfo.show_logo_description">
+                            <div>{{restaurantInfo.store_name | truncate : 50}}</div>
+                        </div>
+                          </div>
+                          <div class="phone-locaion-div" [ngClass]="{'icons-margin':!(appConfig.is_review_rating_enabled)}">
+                            
+                            <a class="links" *ngIf="restaurantInfo && restaurantInfo.latitude && restaurantInfo.longitude && formSettings.display_merchant_address == 1 &&
+                              ((restaurantInfo.display_address &&
+                              restaurantInfo.display_address != '-') || (restaurantInfo.address &&
+                              restaurantInfo.address != '-'))" [href]="'http://maps.apple.com/maps?q='+restaurantInfo.latitude +','+restaurantInfo.longitude" target="_blank">
+                                <img  class="icon-img" src="assets/images/pin.svg">
+                              </a>
+
+
+                        <div class="rate-box" *ngIf="appConfig.is_review_rating_enabled">
+                            <div class="store-detail__card__row__rating-container d-flex" >
+                              <span *ngIf="!restaurantInfo.store_rating" class="store-detail__card__row__rating-container__rating"  (click)="showMerchantReviews()">{{languageStrings.rate_now ||'Rate Now'}}</span>
+                              <i class="fa fa-star clock-icon" *ngIf="restaurantInfo.store_rating != 0" [ngClass]="{'star-red': restaurantInfo.store_rating <= 1 , 'star-yellow' : (restaurantInfo.store_rating > 1 && restaurantInfo.store_rating < 3) , 'star-green' : restaurantInfo.store_rating >= 3}"></i>
+                              <p class="store-detail__card__row__rating-container__rating" *ngIf="restaurantInfo.store_rating != 0"   (click)="showMerchantReviews()">
+                                <span>
+                                  <span>{{restaurantInfo.store_rating.toFixed(1)}}</span>
+                                </span>
+                              </p>
+                              </div>
+                            
+                                          </div>
+        
+                              <a class="links" *ngIf="formSettings.display_merchant_phone == 1 && cardInfo && cardInfo.phone" [href]="'tel:'+cardInfo.phone">
+                                <img class="icon-img" src="assets/images/call.png">
+                              </a>
+                          </div>
+                 
+                      
+                        <div class="d-flex preorder-cls" >
+                            <span class="preorder-btn" *ngIf="isPreorderTimeRequired" (click)="showPreorderTimeSelectionModal()">
+                                {{languageStrings.schedule_order || 'Schedule Order'}}</span>
+                                <span  class="preorder-btn" click)="instantOrder()" *ngIf="restaurantInfo && restaurantInfo.available && preOrderDatetime && isPreorderTimeRequired">
+                                {{languageStrings.instant_order || 'Instant Order'}}
+                                </span>
+
+                                
+                          <span class="custom-order-btn" *ngIf="restaurantInfo.custom_order_active_for_store && catalogueList &&  restaurantInfo.available  && formSettings.is_custom_order_active && searchItems && !(restaurantInfo.self_pickup && (!restaurantInfo.home_delivery && !restaurantInfo.pick_and_drop)) && (restaurantInfo.merchant_as_delivery_manager || (restaurantInfo.merchant_as_delivery_manager ==0 && formSettings.is_marketplace_delivery_availabile))"  (click)="moveToCustomOrder()">{{terminology.CUSTOM_ORDER}}</span> 
+                        </div>
+               
+                    </div>
+
+                  </div>
+  
+
+                </div>
+              </div>
+              <!-- single  banner -->
+              <div class="bannerDiv-old-ui" [ngClass]="{'tapri-class': ([151121,166930].includes(+restaurantInfo.storefront_user_id)),'mg-t20':showAddressBarOnlyRestaurant,'BannerDivmargin':(restaurantInfo && !restaurantInfo.available && !restaurantInfo.scheduled_task)}" *ngIf="!showMultipleBanners" [ngStyle]="{'background':restaurantInfo.mobile_banner_image?(restaurantInfo.show_logo_description ? 'linear-gradient(0deg, rgba(0, 0, 0, 0.40), rgba(0, 0, 0, 0.90)),url('+restaurantInfo.mobile_banner_image+')' : 'url('+restaurantInfo.mobile_banner_image+')'): (bannerImage ?(restaurantInfo.show_logo_description ? 'linear-gradient(0deg, rgba(0, 0, 0, 0.40), rgba(0, 0, 0, 0.90)),url('+bannerImage+')' : 'url('+bannerImage+')') :'grey')}">
+                  <div class="inner-search-div">
+                      <div class="div-store-name">
+                          <div class="name mobile-store-ui" *ngIf="!([151121,166930].includes(+restaurantInfo.storefront_user_id))">
+                            <div>{{restaurantInfo.store_name | truncate : 50}}</div>
+                        </div>
+                          </div>
+                          <div class="phone-locaion-div" [ngClass]="{'icons-margin':!(appConfig.is_review_rating_enabled)}">
+                              <a class="links"  *ngIf="formSettings.display_merchant_address == 1 &&
+                              ((restaurantInfo.display_address &&
+                              restaurantInfo.display_address != '-') || (restaurantInfo.address &&
+                              restaurantInfo.address != '-')) && restaurantInfo && restaurantInfo.latitude && restaurantInfo.longitude" [href]="'http://maps.apple.com/maps?q='+restaurantInfo.latitude +','+restaurantInfo.longitude" target="_blank">
+                                <img  class="icon-img" src="assets/images/pin.svg">
+                              </a>
+                              <div class="rate-box" *ngIf="appConfig.is_review_rating_enabled">
+          <div class="store-detail__card__row__rating-container d-flex" >
+            <span *ngIf="!restaurantInfo.store_rating" class="store-detail__card__row__rating-container__rating"  (click)="showMerchantReviews()">{{languageStrings.rate_now ||'Rate Now'}}</span>
+            <i class="fa fa-star clock-icon" *ngIf="restaurantInfo.store_rating != 0" [ngClass]="{'star-red': restaurantInfo.store_rating <= 1 , 'star-yellow' : (restaurantInfo.store_rating > 1 && restaurantInfo.store_rating < 3) , 'star-green' : restaurantInfo.store_rating >= 3}"></i>
+            <p class="store-detail__card__row__rating-container__rating" *ngIf="restaurantInfo.store_rating != 0"   (click)="showMerchantReviews()">
+              <span>
+                <span>{{restaurantInfo.store_rating.toFixed(1)}}</span>
+              </span>
+            </p>
+            </div>
+          
+                        </div>
+
+                              <a *ngIf="formSettings.display_merchant_phone == 1 && cardInfo && cardInfo.phone" class="links" [href]="'tel:'+cardInfo.phone">
+                                <img class="icon-img" src="assets/images/call.png">
+                              </a>
+                          </div>
+                        <div class="d-flex w-100 cls-t2" >     
+                          <span class="custom-order-btn" *ngIf="restaurantInfo.custom_order_active_for_store && catalogueList && restaurantInfo.available && formSettings.is_custom_order_active && searchItems && !(restaurantInfo.self_pickup && (!restaurantInfo.home_delivery && !restaurantInfo.pick_and_drop))  && (restaurantInfo.merchant_as_delivery_manager || (restaurantInfo.merchant_as_delivery_manager ==0 && formSettings.is_marketplace_delivery_availabile))"  (click)="moveToCustomOrder()">{{terminology.CUSTOM_ORDER}}</span>
+                      <div *ngIf="isPreorderTimeRequired" [ngClass]="formSettings.enable_veg_non_veg_filter == 1?'':'veg-filer-disable'" [ngStyle]="{'margin-left':(restaurantInfo.custom_order_active_for_store && catalogueList && formSettings.is_custom_order_active && searchItems)?'1rem':'0px'}">
+                          <div [hidden]="!isPreorderTimeRequired" class="preorder-btn-cvr" (mouseenter)="showPreorderInfo = true" (mouseleave)="showPreorderInfo = false">
+                            <button type="button" class="btn accept" appColor bg="true" [ngStyle]="{ 'direction' : direction }" class="store-detail__search__button"
+                              (click)="showPreorderTimeSelectionModal()" >
+                              <ng-container>{{languageStrings.schedule_order ||'Schedule Order' }}</ng-container>
+                            </button>
+                            <div class="preorder-popover" *ngIf="preOrderDatetime && showPreorderInfo">
+                              <i class="fa fa-caret-up caret-icon" aria-hidden="true"></i>
+                              <p class="preorder-time">{{languageStrings.pre_ordering_for || 'Pre ordering for' }} {{preOrderDatetime | dateTimeFormat : 'MMM d, y, h:mm a'}}</p>
+                              <p class="instant" *ngIf="restaurantInfo && restaurantInfo.available">{{languageStrings.click_for ||'Click for'}} <a class="instant_order" (click)="instantOrder()">{{languageStrings.instant_order || 'Instant Order'}}</a></p>
+                            </div>
+                          </div>
+                        </div>
+                        </div>
+               
+                    </div>
+        
+              </div>
+          </div>
+              </div>
+
+          <div class="rating-address-bar no-display" *ngIf="appConfig.new_store_page_enabled && (appConfig.is_review_rating_enabled || (formSettings.display_merchant_address == 1 &&
+                          ((restaurantInfo.display_address &&
+                          restaurantInfo.display_address != '-') || (restaurantInfo.address &&
+                          restaurantInfo.address != '-')))
+                          || (formSettings.display_merchant_phone == 1 && cardInfo.phone))">
+            <div class="rating-container"
+            [ngClass]="(formSettings.display_merchant_address == 1 &&
+                          ((restaurantInfo.display_address &&
+                          restaurantInfo.display_address != '-') || (restaurantInfo.address &&
+                          restaurantInfo.address != '-')))
+                          || (formSettings.display_merchant_phone == 1 && cardInfo.phone) ? 'w-50' : 'w-100'"
+            *ngIf="appConfig.is_review_rating_enabled">
+              <div class="rating-div" *ngIf="restaurantInfo.store_rating.toFixed(1) > 0">
+                <span class="rating-bigtext">{{restaurantInfo.store_rating.toFixed(1)}}</span>
+                <span class="rating-outoftext"><ng-container>{{languageStrings.out_of ||'out of'}}</ng-container><br> 5 <ng-container>{{languageStrings.stars || 'stars'}}</ng-container></span>
+              </div>
+              <div class="star-container-bar" *ngIf="restaurantInfo.store_rating.toFixed(1)> 0">
+                <div class="filled-stars" [style.width]="(restaurantInfo.store_rating / 5)*100 + '%'"><i *ngFor="let star of [0,1,2,3,4]" class="fa fa-star"></i></div>
+                <div class="unfilled-stars"><i *ngFor="let star of [0,1,2,3,4]" class="fa fa-star"></i></div>
+              </div>
+              <span class="rate-now-btn" (click)="showMerchantReviews()">{{languageStrings.rate_now || 'Rate Now'}}</span>
+            </div>
+            <div class="d-flex"
+            *ngIf="(formSettings.display_merchant_address == 1 &&
+                          ((restaurantInfo.display_address &&
+                          restaurantInfo.display_address != '-') || (restaurantInfo.address &&
+                          restaurantInfo.address != '-'))) || (formSettings.display_merchant_phone == 1 && cardInfo.phone)"
+            [ngClass]="{'flex-column justify-content-center align-items-center w-50': appConfig.is_review_rating_enabled,
+              'w-100 justify-content-around': !appConfig.is_review_rating_enabled, 'addr-border' : appConfig.is_review_rating_enabled}">
+              <div [ngClass]="{'d-flex w-100 justify-content-around': !appConfig.is_review_rating_enabled}">
+                <div *ngIf="formSettings.display_merchant_address == 1 &&
+                          ((restaurantInfo.display_address &&
+                          restaurantInfo.display_address != '-') || (restaurantInfo.address &&
+                          restaurantInfo.address != '-'))"
+                class="d-flex location-addr align-items-center" [ngClass]="{'mb-1': appConfig.is_review_rating_enabled}" [tooltip]="restaurantInfo.display_address ? restaurantInfo.display_address : restaurantInfo.address">
+                <img src="assets/img/location-store.svg">&nbsp;{{restaurantInfo.display_address ? (restaurantInfo.display_address | truncate :50) :
+                  restaurantInfo.address}}
+                </div>
+                <div *ngIf="formSettings.display_merchant_phone == 1 && cardInfo.phone" class="d-flex location-addr align-items-center">
+                  <img src="assets/img/telephone-store.svg">&nbsp;&nbsp;{{cardInfo.phone}}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- not offering  mobile view -->
+          <div class="closedMobileRestro hide-lg-view" *ngIf="restaurantInfo && !restaurantInfo.available && !restaurantInfo.scheduled_task" >
+            <img src="assets/images/sleepy.svg" class="m-r-1" />
+            <ng-container>{{terminology.STORE_CLOSED}}</ng-container>
+          </div>
+          <div class="closedMobileRestro hide-lg-view" *ngIf="restaurantInfo && restaurantInfo.available && restaurantInfo.available_for_self_pickup  && (deliveryMethods ==8 ||  deliveryMethods ==1) && restaurantInfo.self_pickup && (!restaurantInfo.available_for_home_delivery &&  !restaurantInfo.available_for_pick_and_drop) && (restaurantInfo.home_delivery || restaurantInfo.pick_and_drop)&& !restaurantInfo.scheduled_task">
+            <img src="assets/images/sleepy.svg" class="m-r-1" />
+            <ng-container>{{terminology.STORE_DELIVERY_CLOSED}}</ng-container>
+          </div>
+          <div class="closedMobileRestro hide-lg-view" *ngIf="restaurantInfo && restaurantInfo.available && !restaurantInfo.available_for_self_pickup  &&  restaurantInfo.self_pickup && deliveryMethods==2 && ((restaurantInfo.available_for_home_delivery || restaurantInfo.available_for_pick_and_drop) && (restaurantInfo.home_delivery || restaurantInfo.pick_and_drop)) && !restaurantInfo.scheduled_task">
+            <img src="assets/images/sleepy.svg" class="m-r-1" />
+            <ng-container>{{terminology.STORE_PICKUP_CLOSED}}</ng-container>
+          </div>
+
+          <!-- mobile view search -->
+          <div class="search-container hide-lg-view" [ngClass]="{'reverse-order': (hideCategory && !searchOn) || !restaurantInfo.has_categories || !dataBool || (current_category_depth > category_depth_limit && !searchOn)}">
+            
+              <form [formGroup]="form" *ngIf="langJson" class="search-container__form" [ngStyle]="{'width':(formSettings.enable_veg_non_veg_filter == 1 && restaurantInfo.is_veg_filter_active)?'67%':'100%','margin-right':(formSettings.enable_veg_non_veg_filter == 1 && restaurantInfo.is_veg_filter_active)?'9px':'0px'}"  [ngClass]="{'search-bar-laundry':laundry_flow, 'search-mobileView':!(formSettings.enable_veg_non_veg_filter == 1)}">
+                <div class="d-flex">
+                  <input class="form-control ng-untouched ng-pristine ng-valid search-container__form__input" [ngStyle]="{ 'direction' : direction }" formControlName="searchControl"
+                  placeholder="{{terminology.SEARCH_PRODUCT}}" autocomplete="off" attr.aria-label="{{terminology.SEARCH_PRODUCT}}">
+                  <span class="search-container__form__addon">
+                      <i class="fa fa-search"   aria-hidden="true"></i>
+                  </span>
+                </div>
+              </form>
+              <div class="search-container__veg-check d-flex" *ngIf="formSettings.enable_veg_non_veg_filter == 1 && restaurantInfo.is_veg_filter_active">
+                  <mat-slide-toggle *ngIf="formSettings.enable_veg_non_veg_filter == 1 && restaurantInfo.is_veg_filter_active" class="primary" [(ngModel)]="onlyVegCheck" [ngModelOptions]="{standalone: true}" (change)="onVegOnlyCheckChange($event)"><ng-container>{{terminology.VEG_ONLY || 'Veg Only'}}</ng-container></mat-slide-toggle>
+                </div>
+          </div>
+
+          <div class="container">
+          <!-- navigation path at top in case of n-level  -->
+          <div class="cls-home-cat" *ngIf="all_category_depth > category_depth_limit">
+            <ng-container *ngIf="categoryPathData">
+              <app-n-level-category-path [allCategoryName]="languageStrings.all || 'All'" [depthAllCategory]="all_category_depth" [depthLimit]="category_depth_limit" [categoryData]="categoryPathData" (categorySelected)="selectCategoryFromNLevel($event)" ></app-n-level-category-path>
+            </ng-container>
+          </div>
+
+          <div class="cls-home-cat" id="animateScrollDiv"  [ngClass]="{'locEnable':showAddressBarOnlyRestaurant}" [ngStyle]="{'grid-template-columns':!dataBool ? '700px 250px':'250px 700px 250px','width':'100%'}">
+            <div  [ngClass]="{'withoutAppCategory' : dataBool}" *ngIf="hideCategory"></div>
+            <!-- category section -->
+            <ng-container *ngIf="current_category_depth <= category_depth_limit">
+              <ng-container *ngIf="!categoryShimmer">
+                <app-category *ngIf="dataBool && !hideCategory" [categoryData]="loopData" (showSearchProducts)="updateSearchProducts($event)"
+                  (updateProduct)="changeCategory($event)" [catBgColor]='catBgColor'></app-category>
+              </ng-container>
+              <div class="hidden-xs hidden-sm category-shimmer" *ngIf="categoryShimmer">
+                <app-catalogue-shimmer [shimmerType]="1"></app-catalogue-shimmer>
+              </div>
+            </ng-container>
+
+            <div  class="scrollDiv w-100 d-flex" [ngStyle]="{'margin-top': dataBool ? '0px' : '0px'}">
+              <!--  Normal flow n-level-category and products section -->
+              <ng-container *ngIf="!prodname">
+                <!-- n-level category section  -->
+                  <ng-container *ngIf="current_category_depth > category_depth_limit && restaurantInfo.has_categories && !hideCategory">
+                    <app-n-level-category class="product-app" [categoryData]="loopData" (categorySelected)="selectCategoryFromNLevel($event)" [categoryDepthLimit]="category_depth_limit" *ngIf="!categoryShimmer"></app-n-level-category>
+                    <div class="product-app product-app-shimmer"  *ngIf="categoryShimmer">
+                      <app-catalogue-shimmer [shimmerType]="4"></app-catalogue-shimmer>
+                    </div>
+                  </ng-container>
+                  <!-- product listing section  -->
+                  <ng-container *ngIf="(current_category_depth <= category_depth_limit) || !restaurantInfo.has_categories || hideCategory">
+                    <app-product class="product-app" [ngClass]="{'product-app': productList && productList.length, 'product-app_without_product': !productList.length}"
+                      [hidden]="!productbool" *ngIf="!productShimmer && formSettings.onboarding_business_type !== 805" [productData]="productList" [cardInfo]="cardInfo" [searchProducts]="searchOn" [currentCategoryName]="catHead"
+                    [paginating]="paginating" [hasImages]="product_has_images" [isRestaurantActive]="restaurantInfo.available || restaurantInfo.scheduled_task" [layout_type]="product_layout_type"></app-product>
+                    <app-laundry-product class="product-app" [ngClass]="{'product-app': productList && productList.length, 'product-app_without_product': !productList || !productList.length}"
+                    [hidden]="!productbool" *ngIf="formSettings.onboarding_business_type === 805" [productData]="productList" [cardInfo]="cardInfo" [searchProducts]="searchOn" [currentCategoryName]="catHead"
+                    [paginating]="paginating" (askLocation)="askLocation()" [notDeliverable]="showNotDiliverable"></app-laundry-product>
+                    <div class="product-app product-app-shimmer" *ngIf="productShimmer">
+                      <app-catalogue-shimmer [shimmerType]="product_layout_type== 2 ? 3 : 2"></app-catalogue-shimmer>
+                    </div>
+                  </ng-container>
+              </ng-container>
+         <!-- in case product is shared -->
+              <ng-container *ngIf="prodname">
+                <ng-container>
+                  <app-product class="product-app" [ngClass]="{'product-app': productList && productList.length, 'product-app_without_product': !productList.length}"
+                    [hidden]="!productbool" *ngIf="!productShimmer && formSettings.onboarding_business_type !== 805" [productData]="productList" [cardInfo]="cardInfo" [searchProducts]="searchOn" [currentCategoryName]="catHead"
+                  [paginating]="paginating" [hasImages]="product_has_images" [isRestaurantActive]="restaurantInfo.available || restaurantInfo.scheduled_task" [layout_type]="product_layout_type"></app-product>
+                  <app-laundry-product class="product-app" [ngClass]="{'product-app': productList && productList.length, 'product-app_without_product': !productList || !productList.length}"
+                  [hidden]="!productbool" *ngIf="formSettings.onboarding_business_type === 805" [productData]="productList" [cardInfo]="cardInfo" [searchProducts]="searchOn" [currentCategoryName]="catHead"
+                  [paginating]="paginating" (askLocation)="askLocation()" [notDeliverable]="showNotDiliverable"></app-laundry-product>
+                  <div class="product-app product-app-shimmer" *ngIf="productShimmer">
+                    <app-catalogue-shimmer [shimmerType]="2"></app-catalogue-shimmer>
+                  </div>
+                </ng-container>
+            </ng-container>
+
+            <!-- cart section  -->
+              <app-cart *ngIf="!isPlatformServer && !cartShimmer && productbool" class="cart-app hidden-xs hidden-sm"
+                (askLocation)="askLocation()" [notDeliverable]="showNotDiliverable"></app-cart>
+              <div class="cart-app cart-shimmer hidden-xs hidden-sm" *ngIf="cartShimmer && (isPlatformServer || !((productbool && productList && productList.length) || ((!productList || !productList.length) && checkCartData && checkCartData.length)))">
+                <app-catalogue-shimmer [shimmerType]="1"></app-catalogue-shimmer>
+              </div>
+            </div>
+          </div>
+        </div>
+
+          <div class="fixed-bottom visible-xs visible-sm">
+            <app-cart *ngIf="(!isPlatformServer && productbool) || (checkCartData && checkCartData.length > 0)" class="cart-app"
+              (askLocation)="askLocation()" [notDeliverable]="showNotDiliverable"></app-cart>
+          </div>
+    </div>
+          <div *ngIf="!noOffering" class="ptb0-lr30 npf">
+              <div [ngStyle]="{ 'direction' : direction }">
+                <ng-container>{{languageStrings.catalog_not_enabled_for_this_offering || 'Catalog is not enabled for this offering.'}}</ng-container>
+              </div>
+            </div>
+            <div *ngIf="!productbool && !showNoProduct && !productShimmer" class="ptb0-lr30 text-center fs20 cls-t1">
+              <div class="text-capitalize" *ngIf="!formSettings.is_custom_order_active || (formSettings.is_custom_order_active && restaurantInfo.self_pickup && !restaurantInfo.self_pickup && !restaurantInfo.pick_and_drop)" >{{languageStrings.no_product_available || "No Product Available." }}</div>
+              <div class="no-prod-text" *ngIf="restaurantInfo && restaurantInfo.custom_order_active_for_store &&  restaurantInfo.available && formSettings.is_custom_order_active &&  !(restaurantInfo.self_pickup && (!restaurantInfo.home_delivery && !restaurantInfo.pick_and_drop))  && (restaurantInfo.merchant_as_delivery_manager || (restaurantInfo.merchant_as_delivery_manager ==0 && formSettings.is_marketplace_delivery_availabile))">
+
+                <span class="fs20">
+                    <ng-container *ngIf="customOrderDescription">{{terminology.READY_TO_PLACE_YOUR_ORDER+' '}}
+                      <ng-container>{{restaurantInfo.store_name}}</ng-container>
+                    </ng-container>
+                    <ng-container  *ngIf="!customOrderDescription">
+                    <ng-container>{{languageStrings.ready_place_your || 'Ready to Place your'}}</ng-container>
+                    <b>{{' '+terminology.ORDER+' '}}</b>
+                    <ng-container> {{languageStrings.with ||'with'}} {{restaurantInfo.store_name}}</ng-container>
+                    </ng-container>
+                    </span>
+                <span class="custom-order-but" (click)="moveToCustomOrder()" ><a class="tk-link"><ng-container>{{languageStrings.place ||'Place'}} </ng-container> {{' '+terminology.CUSTOM_ORDER}}</a></span>
+              </div>
+              <div class="no-prod-text" *ngIf="formSettings.is_custom_order_active && !restaurantInfo.custom_order_active_for_store && restaurantInfo.available &&  !(restaurantInfo.self_pickup && (!restaurantInfo.home_delivery && !restaurantInfo.pick_and_drop)) && (restaurantInfo.merchant_as_delivery_manager || (restaurantInfo.merchant_as_delivery_manager ==0 && formSettings.is_marketplace_delivery_availabile))">
+                <span class="fs18">{{languageStrings.could_not_find_what_you_looking_for ||'Couldn’t find what you were looking for'}}?</span>
+                <span class="fs20"><ng-container>{{languageStrings.dont_worry_have_got_your_back_place || 'Don’t worry we have got your back. Place a'}} </ng-container><b>{{' '+terminology.CUSTOM_ORDER+' '}}</b><ng-container>{{languageStrings.as_per_your_requirement || 'as per your requirement.'}}</ng-container></span>
+                <span class="custom-order-but" (click)="redirectToCustomOrder()" ><a class="tk-link"><ng-container>{{languageStrings.place || 'Place'}} </ng-container> {{' '+terminology.CUSTOM_ORDER}}</a></span>
+              </div>
+
+            </div>
+        </div>
+      </div>
+</div>
+    <app-footer *ngIf="restaurantInfo"></app-footer>
+
+    <app-order-placed-popup></app-order-placed-popup>
+    <app-preorder-time (onClose)="onClosePreorder()" [hideClose]="hideClosePreorder"
+    (onPreorderDateTime)="onPreorderDateTime($event)" [storeData]="restaurantInfo" *ngIf="showPreorderTimeSelection"></app-preorder-time>
+
+    <app-ask-for-delivery-address  *ngIf="showAskLocationPopup" (hide)="hideAskLocation()" (askToFetchLocation)="askToFetchLocation()"></app-ask-for-delivery-address>
+    <app-fetch-delivery-address class="hide-icon" *ngIf="showFetchLocationPopup" (hideFetchLocation)="hideFetchLocation()" (locationFetched)="locationFetched()"></app-fetch-delivery-address>
+    <app-not-diliverable *ngIf="showNotDiliverable" (changeLocationEvent)="changeLocation($event)"></app-not-diliverable>
+
+    <app-modal [modalType]="modalType" *ngIf="resturantOff">
+      <div body class="p-20">
+        <div [ngStyle]="{ 'direction' : direction }" class="restaurnat-close-popup">
+         <div> <img src="assets/images/sleepy.svg" style="margin-right:1rem;" />
+          <ng-container>{{languageStrings.sorry_merchant_closed_at_the_moment_try_again_later || 'Sorry Merchant is closed at the moment. Try again later.'}}</ng-container>
+         </div>
+          <div class="text-center"> <a (click)="navigateToList()" class="home-btn-close">{{ languageStrings.home || 'Home' }}</a></div>
+        </div>
+      </div>
+    </app-modal>

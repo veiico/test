@@ -1,0 +1,120 @@
+@import '~assets/css/variables';
+
+.tip{
+  width: 100%;
+  position: relative;
+  /* max-width: 335px; */
+  padding: 20px 10px;
+  /* margin-right: 3%; */
+  /* margin-top: 60px; */
+  background: #F3F3F3;
+  /* height: 250px; */
+  &::before{
+    background: linear-gradient(45deg,rgba(0,0,0,0) 33.333%,#F3F3F3 33.333%,#F3F3F3 66.667%,rgba(0,0,0,0) 66.667%),linear-gradient(-45deg,rgba(0,0,0,0) 33.333%,#F3F3F3 33.333%,#F3F3F3 66.667%,rgba(0,0,0,0) 66.667%);
+    background-size: 16px 35px;
+    content: "";
+    display: block;
+    position: absolute;
+    /* width: 91%; */
+    margin-top: -10px;
+    height: 10px;
+    z-index: 100;
+    /* margin-left: -10px; */
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+  }
+  .point{
+    .text{
+      font-family: Proximanova-Regular;
+      font-weight: 600;
+      font-size: 16px;
+      color: black;
+    }
+    .inputField{
+      position: relative;
+      .inputTip{
+        height: 40px;
+        border: 1px solid #ccc;
+        padding: 5px 10px;
+        color: #444;
+        font-size: 15px;
+        letter-spacing: normal;
+        word-spacing: normal;
+        text-transform: none;
+        text-indent: 0px;
+        text-shadow: none;
+        display: inline-block;
+        text-align: start;
+        margin: 0em;
+        background-color: white;
+        width: 70%;
+        font-family: Proximanova-Regular;
+      }
+      .tipbtn{
+        width: 30%;
+        height: 40px;
+        font-size: 15px;
+        background-color: $color-theme;
+        color: white;
+        font-family: Proximanova-Regular;
+        position: absolute;
+        right: 0px;
+        border: 1px solid $color-theme;
+      }
+    }
+  }
+  .info{
+    max-height: 225px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    hr{
+      margin-top: 25px;
+      margin-bottom: 15px;
+      border-top: 1px solid #ccc;
+    }
+    .tipHr{
+      margin-top: 7px;
+      margin-bottom: 7px;
+    }
+    .tipOption{
+      text-align: center;
+      font-family: Proximanova-Regular;
+      color: $color-theme;
+      font-size: 15px;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      user-select: none;
+      span.underlineHover {
+        -webkit-transform: perspective(1px) translateZ(0);
+        transform: perspective(1px) translateZ(0);
+        display: inline-block;
+        vertical-align: middle;
+        cursor: pointer;
+        &:before {
+          content: "";
+          position: absolute;
+          z-index: -1;
+          left: 0;
+          right: 100%;
+          bottom: 0;
+          background: $color-theme;
+          height: 2px;
+          -webkit-transition-property: right;
+          transition-property: right;
+          -webkit-transition-duration: 0.3s;
+          transition-duration: 0.3s;
+          -webkit-transition-timing-function: ease-out;
+          transition-timing-function: ease-out;
+        }
+        &:hover:before {
+          right: 0;
+        }
+      }
+    }
+  }
+}

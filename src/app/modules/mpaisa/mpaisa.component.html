@@ -1,0 +1,13 @@
+<div class="container-fluid mpaisa">
+    <div class="row" *ngIf="mpaisaPaymentUrl" style="padding: 10px">
+      <div class="col-md-12 text-center">
+        <h4>
+          <ng-container>MPaisa Payment</ng-container>
+        </h4>
+      </div>
+      <div class="col-md-12">
+        <iframe id="mpaisaIFrame" style="border: none" #mpaisaIFrame [src]="mpaisaPaymentUrl" height="610px"
+          width="100%"></iframe>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,16 @@
+<div class="gift-btn">
+  <div class="gift">
+    <div class="btnG" (click)="showMode('BUY')"
+         [ngClass]="{'selected': modeSelected == 'BUY', 'unSelected': modeSelected != 'BUY'}">
+      {{terminology.BUY}}
+    </div>
+    <div class="btnG" (click)="showMode('REEDEM')"
+         [ngClass]="{'selected': modeSelected == 'REEDEM', 'unSelected': modeSelected != 'REEDEM'}">
+      {{terminology.REDEEM}}
+    </div>
+    <div class="btnG" (click)="showMode('HISTORY')"
+         [ngClass]="{'selected': modeSelected == 'HISTORY', 'unSelected': modeSelected != 'HISTORY'}">
+      <ng-container >{{ languageStrings.history || "History"}}</ng-container>
+    </div>
+  </div>
+</div>

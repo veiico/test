@@ -1,0 +1,106 @@
+<div class="checkout_card">
+  <div class="chk_inr_hdng" [ngClass]="{'pl-20':isPlatformServer}">
+    <div>
+      <ng-container *ngIf="!isPlatformServer;else headingShimmer">
+        <p *ngIf="!deliveryOrPickup && terminology  && !laundry_pickup" class="chk_inr_hdng_txt">
+          <ng-container *ngIf="!customOrder">{{ languageStrings.delivery_details || 'Delivery Details'}}</ng-container>
+          <ng-container *ngIf="customOrder">{{terminology.DELIVER_TO}}</ng-container>
+        </p>
+        <p *ngIf="deliveryOrPickup && terminology  && !laundry_pickup" class="chk_inr_hdng_txt">
+          <ng-container *ngIf="!customOrder">{{ languageStrings.delivery_details || 'Delivery Details'}}</ng-container>
+          <ng-container *ngIf="customOrder">{{terminology.DELIVER_TO}}</ng-container>
+        </p>
+        <p *ngIf="terminology  && laundry_pickup" class="chk_inr_hdng_txt">
+          {{terminology.PICKUP_FROM || 'Pickup From'}}
+        </p>
+      </ng-container>
+      <ng-template #headingShimmer>
+        <div class="block pulsate" style="height: 30px"></div>
+      </ng-template>
+    </div>
+
+  </div>
+  <div class="addr-content" *ngIf="!isPlatformServer;else bodyShimmer">
+  <div class="Add_adress">
+    <button type="button" class="btn add-address" *ngIf="!selectedAddress && checkForAllFavType && savedAddresses.length"
+      (click)="openAddAddress()">
+      <!-- <i class="fa fa-map-marker" aria-hidden="true"></i> -->
+      <i class="glyphicon glyphicon-map-marker map-pin" aria-hidden="true"></i>
+      <ng-container > {{ languageStrings.add_address || 'Add Address'}}</ng-container>
+    </button>
+    </div>
+    <ng-container *ngIf="!selectedAddress; else elseTemplate">
+      <ng-container *ngIf="savedAddresses.length; else elseTemplate">
+        <div class="chk_cnt_div chk_form no-gutter m0" *ngIf="content">
+          <fav-location-model *ngFor="let address of savedAddresses;let i = index;" [styles]="content['address'].styles"
+            [readOnly]="true" [address]="address" (click)="onAddressClick(address,i)" (delete)="getDeleteData($event)"
+            (edit)="editAddress($event,address )" [laundry_pickup]="laundry_pickup" [laundry_delivery]="laundry_delivery"></fav-location-model>
+
+        </div>
+      </ng-container>
+      <ng-template #elseTemplate>
+        <div style="display:flex;flex-direction:column;margin:auto; justify-content:center;align-items:center;padding:20px;font-size:18px;"
+          class="text-center">
+          <!-- <div>
+            <span class="yf yf-no-address color-theme " style="font-size: 48px"> </span>
+          </div>
+          <div>
+            <ng-container >No Saved Addresses</ng-container>
+          </div> -->
+
+          <div class="Add_adress"> 
+            <button type="button" class="btn add-address" *ngIf="!savedAddresses.length && !isPlatformServer" (click)="openAddAddress()">
+              <!-- <i class="fa fa-map-marker" aria-hidden="true"></i> -->
+              <i class="glyphicon glyphicon-map-marker map-pin" aria-hidden="true"></i>
+              <ng-container > {{ languageStrings.add_address || 'Add Address'}}</ng-container>
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </ng-container>
+    <ng-template #elseTemplate>
+      <div class="chk_cnt_div selected-address m0" *ngIf="locationTypes">
+        <div class="container-fluid selected-address-inner">
+          <div class="icon">
+            <img class="loc-type-img"  [src]="locationTypes[selectedAddress.locType].icon" alt="Selected Address location type">
+          </div>
+          <div class="content">
+            <div class="title">
+
+              {{locationTypes[selectedAddress.locType].label}}
+            </div>
+
+            <div class="row address">
+
+              <div class="col-xs-12">
+                <p class="">{{selectedAddress.name}}</p>
+              </div>
+              <div class="col-xs-12" style="margin: 1rem 0;">
+                <p class="complete-address">{{selectedAddress.house? selectedAddress.house+',':''}}{{selectedAddress.address? selectedAddress.address:''}}{{selectedAddress.landmark ? ', '+selectedAddress.landmark :''}}{{selectedAddress.postal_code?', '+ selectedAddress.postal_code:''}}</p>
+              </div>
+
+              <button type="button" class="btn change-address" *ngIf="selectedAddress" (click)="onChangeClick()">
+                <!-- <i class="fa fa-map-marker" aria-hidden="true"></i> -->
+                <i class="glyphicon glyphicon-map-marker map-pin" aria-hidden="true"></i>
+                <ng-container > {{ languageStrings.change_address || 'Change Address'}}</ng-container>
+              </button>
+              <div class="col-xs-12 mt-5" *ngIf="laundry_pickup">
+                <p-checkbox label="{{languageStrings.make_delivery_details_same_pickup || 'Make Delivery details same as Pickup'}}"  [(ngModel)]="pickupDeliveryLaundryEqual"  (onChange)="markLaundryDeliverAsPickup($event)"></p-checkbox>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+  <ng-template #bodyShimmer>
+    <div class="addr-content" style="padding: 20px;">
+      <div class="block pulsate mb-10" style="width: 100%;"></div>
+      <div class="block pulsate mb-10" style="width: 90%;margin-bottom: 40px;"></div>
+      <div class="block pulsate mb-10" style="width: 85%;"></div>
+
+      <div class="block pulsate mb-10" style="width: 85%;"></div>
+      <div class="block pulsate" style="width: 85%;"></div>
+    </div>
+  </ng-template>
+</div>

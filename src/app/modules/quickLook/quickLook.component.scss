@@ -1,0 +1,18 @@
+@import '~assets/css/variables';
+
+.quickLook{
+  font-size: 15px;
+  font-family: $proxima-reg;
+  color: $color-white;
+  background-color: $color-theme;
+  transition: .5s;
+  border: 1px solid $color-theme;
+  height: 30px;
+  border-radius: 4px !important;
+  line-height: 15px;
+  &:hover{
+    color: $color-theme;
+    background-color: $color-white;
+    border: 1px solid $color-theme;
+  }
+}

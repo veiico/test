@@ -1,0 +1,52 @@
+<app-header style="height:85px;padding: 0px;" class="col-xs-12" [headerData]="headerData"></app-header>
+<div class="refer row">
+  <div class="col-xs-12">
+    <div class="heading">
+      <p class="title" [ngStyle]="{ 'direction' : direction }" >
+        {{terminology.REFERRAL}}
+      </p>
+      <hr class="line" [style.border-top-color]="appConfig.color" />
+    </div>
+  </div>
+  <div class="container center-p-p">
+    <div class="col-xs-12 col-sm-8 col-md-8 card-p">
+      <div class="col-xs-12 col-sm-12 col-md-12 center-p">
+        <img src="assets/img/referIcon.png" alt="refer icon" />
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-12 referText" style="margin:20px 0">
+        <p [innerHtml]="html || '-'">
+        </p>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-12 referText"  style="margin:20px 0">
+        <div class="referCode">
+          {{data.referral_code}}
+        </div>
+      </div>
+      <div>
+        <div class="col-xs-12 col-sm-12 col-md-12" style="text-align: center;">
+          <span style="margin:10px 0" [ngStyle]="{ 'direction' : direction }" ><ng-container>{{languageStrings.share_on || 'Share on' }}</ng-container></span>
+          <div class="col-xs-12 col-sm-12 col-md-12 center-p">
+            <a class="linkShare fb" (click) = "shareOnFb()"> 
+                <svg xmlns="http://www.w3.org/2000/svg" width="9" height="17"viewBox="0 0 9 17">
+                  <path fill="#FFF" fill-rule="evenodd" d="M5.69 5.704l.005-1.449c0-.755.055-1.16 1.184-1.16h2.09V.2H5.974C3.07.2 2.4 1.637 2.4 3.999l.003 1.705L.2 5.705V8.6h2.204V17h3.288l.002-8.4 2.985-.001L9 5.704H5.69z"/>
+              </svg>
+            </a>
+            <a class="linkShare twitter" (click) = "shareOnTwitter()"> 
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" viewBox="0 0 20 16">
+                  <path fill="#FFF" fill-rule="nonzero" d="M6.344 15.058c7.132 0 11.032-5.793 11.032-10.816 0-.164-.003-.328-.01-.491a7.801 7.801 0 0 0 1.933-1.969 7.853 7.853 0 0 1-2.226.599A3.83 3.83 0 0 0 18.778.278a7.872 7.872 0 0 1-2.462.923A3.91 3.91 0 0 0 13.486 0c-2.142 0-3.879 1.702-3.879 3.8 0 .299.034.59.101.867A11.085 11.085 0 0 1 1.715.696a3.734 3.734 0 0 0-.525 1.91 3.78 3.78 0 0 0 1.726 3.165 3.908 3.908 0 0 1-1.756-.476l-.001.049c0 1.84 1.337 3.378 3.11 3.726a3.956 3.956 0 0 1-1.75.065c.493 1.51 1.925 2.61 3.622 2.64a7.878 7.878 0 0 1-4.816 1.627c-.313 0-.621-.017-.925-.052a11.136 11.136 0 0 0 5.944 1.707"/>
+              </svg>              
+            </a>
+            <a class="linkShare whatsapp" (click) = "shareOnWhatsapp()"> 
+                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
+                  <path fill="#FFF" fill-rule="evenodd" d="M18.077 3.054A10 10 0 0 0 10.988.126C5.461.126.968 4.604.962 10.1c0 1.76.462 3.474 1.336 4.99L.876 20.263l5.316-1.387a10.066 10.066 0 0 0 4.791 1.215h.005c5.522 0 10.021-4.478 10.026-9.98a9.894 9.894 0 0 0-2.937-7.057zm-7.089 15.353c-1.5 0-2.965-.402-4.244-1.158l-.303-.182-3.152.823.84-3.062-.196-.316a8.23 8.23 0 0 1-1.274-4.41c0-4.575 3.74-8.292 8.334-8.292 2.225 0 4.316.866 5.892 2.43a8.233 8.233 0 0 1 2.437 5.866c-.005 4.579-3.744 8.301-8.334 8.301zm4.57-6.215c-.25-.124-1.48-.727-1.71-.813-.23-.082-.4-.125-.563.124-.168.249-.648.813-.793.976-.144.168-.293.187-.543.062-.25-.124-1.057-.387-2.013-1.239-.745-.66-1.245-1.478-1.394-1.727-.144-.249-.015-.383.11-.507.11-.11.25-.292.375-.436.125-.143.168-.248.25-.416.082-.167.043-.31-.02-.435-.062-.125-.561-1.354-.773-1.852-.202-.488-.408-.42-.562-.426-.144-.01-.313-.01-.48-.01a.923.923 0 0 0-.669.312c-.23.249-.875.851-.875 2.081s.9 2.411 1.024 2.579c.125.167 1.764 2.684 4.278 3.765a13.83 13.83 0 0 0 1.427.526c.6.192 1.144.163 1.576.101.481-.072 1.48-.603 1.692-1.187.207-.583.207-1.08.144-1.186-.062-.105-.23-.168-.48-.292z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<app-footer></app-footer>

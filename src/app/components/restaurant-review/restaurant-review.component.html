@@ -1,0 +1,194 @@
+<app-header style="height:85px;padding: 0px;" class="col-xs-12" [headerData]="headerData"></app-header>
+<div class="main-c row">
+  <!-- <div class="col-xs-12">
+    <div class="heading">
+      <p class="title" [ngStyle]="{ 'direction' : direction }">
+        <ng-container i18n>Ratings & Reviews</ng-container>
+      </p>
+     
+    </div>
+  </div> -->
+  <div class="container center-c">
+    <div class="row tile" style="padding: 0px; margin-top: 80px;" aria-hidden="false">
+      <div class="col-xs-12">
+        <div class="heading">
+          <p class="title" [ngStyle]="{ 'direction' : direction }">
+            <ng-container>{{languageStrings.ratings_reviews || 'Ratings & Reviews'}}</ng-container>
+          </p>
+         
+        </div>
+      </div>
+      <h2 class="reviewRating ng-binding"></h2>
+      <h6 class="reviewHeading" [ngStyle]="{ 'direction' : direction }">
+        <h2 class="reviewRating noOfStars ng-binding">
+          <span class="starsSpan">
+            {{cardInfo?cardInfo.store_rating.toFixed(1) : 0.0}} <span class="totalStars">
+              / 5</span> </span></h2>
+        <div>
+          <div>
+            <span *ngIf="reviewInfo.length" [ngStyle]="{ 'direction' : direction }" class="ratingNo ng-binding ReviewsNew"
+              aria-hidden="false">{{reviewInfo.length}}
+              <ng-container>{{languageStrings.reviews || 'Review(s)'}}</ng-container>
+            </span>
+            <span *ngIf="!reviewInfo.length" [ngStyle]="{ 'direction' : direction }" class="ratingNo ng-binding"
+              aria-hidden="false">
+              <ng-container>{{languageStrings.no_reviews || 'No review(s)'}}</ng-container>
+            </span>
+          </div>
+        </div>
+
+        <span *ngIf="!(cardInfo?cardInfo.my_rating:0) && data" class="addYourReview" (click)="showRatingDialog()" [ngStyle]="{ 'direction' : direction }">
+          <ng-container>{{languageStrings.add_your_review || 'Add Your Review'}}</ng-container>
+        </span>
+        <span *ngIf="cardInfo?cardInfo.my_rating:0" class="editRating" (click)="showRatingDialog()" [ngStyle]="{ 'direction' : direction }">
+          <ng-container>{{languageStrings.edit_rating_and_review || 'Edit rating & review'}}</ng-container>
+        </span>
+      </h6>
+      <div class="grphContainer">
+        <!-- <div style="display:inline-block">
+          <h2 class="reviewRating ng-binding">{{cardInfo?cardInfo.store_rating.toFixed(1) : 0.0}}</h2>
+        </div> -->
+        <!-- <div style="display:inline-block;padding-left:10px;padding-right:10px;"> -->
+        <!-- <div class="star-ratings">
+            <star-rating-comp [readOnly]="true" [rating]="cardInfo?cardInfo.store_rating:0" [starType]="'svg'"></star-rating-comp>
+          </div> -->
+        <!-- <div>
+            <span *ngIf="reviewInfo.length" [ngStyle]="{ 'direction' : direction }" class="ratingNo ng-binding" aria-hidden="false" style="">{{reviewInfo.length}}
+              <ng-container i18n>review(s)</ng-container>
+            </span>
+            <span *ngIf="!reviewInfo.length" [ngStyle]="{ 'direction' : direction }" class="ratingNo ng-binding" aria-hidden="false"
+              style="">
+              <ng-container i18n>No review(s)</ng-container>
+            </span>
+          </div>
+        </div> -->
+        <div class="row">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 review-rateTitle">
+            <!-- <span *ngIf="cardInfo?cardInfo.my_rating:0" [ngStyle]="{ 'direction' : direction }" aria-hidden="false">
+              <ng-container i18n>Your Review</ng-container>: </span>
+            <div *ngIf="cardInfo?cardInfo.my_rating:0" class="customRatingReviewdiv" aria-hidden="false" [ngClass]="{'green-bold': getColourGreen(cardInfo.my_rating), 'red-bold': getColourRed(cardInfo.my_rating), 'yellow-bold': getColourYellow(cardInfo.my_rating)}">
+              <i class="fa fa-star" aria-hidden="true"></i>
+              <span class="rating-reviewCount ng-binding">{{cardInfo.my_rating.toFixed(1)}}</span>
+            </div> -->
+          </div>
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top: 0px;">
+            <!-- ngRepeat: review in reviewInfo | limitTo: limit -->
+            <div class="row ng-scope" *ngFor="let review of reviewInfo" style="margin-bottom: 30px;">
+              <!--<div class="col-lg-1 col-md-1 col-sm-1 col-xs-12">&lt;!&ndash; ngIf: review.user_image &ndash;&gt;-->
+              <!--&lt;!&ndash; ngIf: !review.user_image &ndash;&gt;-->
+              <!--<div [ngStyle]="{'background':  review.color}" *ngIf="!review.user_image"-->
+              <!--class="ratingImage ng-binding ng-scope" style="background: rgb(148, 201, 101);">J-->
+              <!--</div>&lt;!&ndash; end ngIf: !review.user_image &ndash;&gt;</div>-->
+              <div class="sideSpacing col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 0px;">
+                <div class="row reviewDetails">
+                  <div>
+                    <div class="star-ratings">
+                      <star-rating-comp [readOnly]="true" [rating]="review.rating.toFixed(1)" [starType]="'svg'">
+                      </star-rating-comp>
+                    </div>
+
+                    <div style="padding-left: 6px;
+                            padding-top: 3px; margin-bottom: 12px;">
+                      <div class=" reviewDesciption" style="font-weight: bold;">
+                        <span class="ng-binding reviewCustomerName">{{review.customer_name}}</span>
+                      </div>
+
+                      <p class="ng-binding reviewOfCustomer">{{review.review}}</p>
+                    </div>
+                    <!-- <div>
+                              <span *ngIf="reviewInfo.length" [ngStyle]="{ 'direction' : direction }" class="ratingNo ng-binding" aria-hidden="false" style="">{{reviewInfo.length}}
+                                <ng-container i18n>review(s)</ng-container>
+                              </span>
+                              <span *ngIf="!reviewInfo.length" [ngStyle]="{ 'direction' : direction }" class="ratingNo ng-binding" aria-hidden="false"
+                                style="">
+                                <ng-container i18n>No review(s)</ng-container>
+                              </span>
+                            </div> -->
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+            <!-- end ngRepeat: review in reviewInfo | limitTo: limit -->
+          </div>
+          <div class="sideSpacing col-lg-12 col-md-12 col-sm-12 col-xs-12"
+            style="text-align: center;padding-bottom: 60px;" *ngIf="!reviewInfo.length">
+            <h3 [ngStyle]="{ 'direction' : direction }">
+              <ng-container>{{languageStrings.no_reviews_to_display ||'No Reviews to display.'}}</ng-container>
+            </h3>
+          </div>
+        </div>
+        <div *ngIf="showPaginating" class="pg-ldr-prt">
+          <div class="pg-ldr-cld">
+            <div class="pg-ldr-ctr">
+              <div class="pg-loader"
+                [ngStyle]="{'border-bottom-color': appConfig.color,'border-left-color': appConfig.color}"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="parent-dialog" *ngIf="dialog?.show">
+      <div class="content-dialog"  data-backdrop="static">
+
+        <div class="dialog-title">
+          <span style="line-height:1px; font-weight: bold;">{{dialog?.title || "Rate & Review"}}</span>
+        </div>
+        <div class="dialog-msg row col-md-12 col-sm-12" style="padding-left: 0px;">
+
+          <div class="col-md-2 col-sm-2 col-xs-12 imageDiv">
+            <img class="image" src="{{data.vendor_image}}"
+              onerror="this.src='assets/images/vendor-image-substitute.png';">
+            <p class="vendor-name">{{data.first_name}}</p>
+          </div>
+
+          <div class="col-md-10 col-sm-10 col-xs-12 fieldContainer">
+            <div class=" starContainerDiv" *ngIf="cardInfo?cardInfo.my_rating:0">
+              <div class="starContainerHeading"><ng-container>{{languageStrings.your_rating ||'Your Rating'}}</ng-container></div>
+              <star-rating-comp [size]="'large'" (onRatingChange)="onRatingChange($event)"
+                [rating]="cardInfo?cardInfo.my_rating:0" [starType]="'svg'"></star-rating-comp>
+            </div>
+
+            <div class=" starContainerDiv" *ngIf="!(cardInfo?cardInfo.my_rating:0)">
+              <div class="starContainerHeading"><ng-container>{{languageStrings.your_rating ||'Your Rating'}}</ng-container></div>
+              <star-rating-comp [size]="'large'" (onRatingChange)="onRatingChange($event)" [starType]="'svg'">
+              </star-rating-comp>
+            </div>
+            <textarea [(ngModel)]="dialog.value" maxlength="247"
+              style="width: 100% !important;height: 100px !important; border-radius: 4.4px !important;"
+              class="form-control" [class.has-error]="dialog.error && !dialog.value"
+              [ngClass]="{'cls-upcase':dialog.value}" 
+              placeholder="{{languageStrings.enter_your_feedback_atleast_140_characters || 'Enter your feedback (atleast 140 characters)'}}"
+              aria-label='Enter your feedback (atleast 140 characters)' rows="5" id="comment"></textarea>
+            <div class="error-msg" style="font-size: 14px;
+    color: red;
+    letter-spacing: 0.5px;
+    line-height: 24px;" *ngIf="dialog.error && !dialog.value">
+              <ng-container>{{languageStrings.this_field_required ||'This field is required'}}</ng-container>
+            </div>
+
+
+
+
+            <div class="dialog-action">
+              <div class="dialog-cancel btn btn-default" (click)="hideDialog()" [ngStyle]="{ 'direction' : direction }"
+                appBs>
+                <ng-container>{{languageStrings.cancel ||'Cancel'}}</ng-container>
+              </div>
+              <div class="dialog-ok btn btn-default" (click)="saveDialogData()" [ngStyle]="{ 'direction' : direction }"
+                appColor bg="'true'" appBs>
+                <ng-container>{{languageStrings.publish_review ||'Publish Review'}}</ng-container>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+      <div class="back-dialog"></div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

@@ -1,0 +1,95 @@
+<div class="view-bids" *ngIf="jobData">
+    <div class="head row">
+        <div class="col-lg-6 col-xs-12 col-sm-6 col-md-6 name">
+            {{jobData.name}}
+        </div>
+        <div class="col-lg-6 col-xs-12 col-sm-6 col-md-6 estimated" *ngIf="jobData.budget !== undefined">
+            <ng-container>{{languageStrings.estimated_project_bid || 'Estimated Project Bid'}}</ng-container>: {{currency}}{{jobData.budget |decimalConfig}}
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="list" *ngFor="let bid of bidsList; let i = index;">
+        <div class="list-container">
+            <div class="row"> 
+
+                <div class="col-lg-8 col-sm-8 col-md-8 col-xs-6">
+                    <div class="first">
+                        <div class = "firstinner">
+                        <div class="img">
+                            <img src="assets/img/tablet-and-laptop.svg"  aria-hidden="true" />
+                        </div>
+                        <div class="text">
+                            <ng-container *ngIf="bid.link">
+                                <a [href]="bid.link" target="_blank"class = "nameHyperlink">{{bid.display_name ? bid.display_name : bid.store_name}}</a>
+                            </ng-container>
+                            <ng-container *ngIf="!bid.link">
+                                {{bid.display_name ? bid.display_name : bid.store_name}}
+                            </ng-container>
+                        </div>
+                        </div>
+                        <div *ngIf="bid.link">
+                            <a [href]="bid.link" target="_blank"class = "nameHyperlink clickHyperlink">{{languageStrings.click_here_view_merchant_Profile || "Click here to view merchant's Profile"}}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-4 col-md-4 col-xs-6">
+                    <div class="bton">
+                        <button *ngIf="bid.bid_status!= 2" class="btn awardJob" mat-button (click)="proceedToCheckout(bid)"><ng-container>{{languageStrings.award_job || 'Award Job'}}</ng-container></button>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6 mt5" *ngIf="config && config.is_review_rating_enabled && bid.store_rating != 0">
+                    <div class="pull-left rating" aria-hidden="false">
+                        <star-rating-comp [readOnly]="true" [rating]="bid.store_rating" [showHalfStars]="true" [starType]="'svg'"></star-rating-comp>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6 mt5 amountDiv">
+                    <p class="amount" *ngIf="bid.bid_type != 2">{{currency}}{{bid.bid_amount |decimalConfig }}</p>
+                </div>
+
+                <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 proposal">
+                    <p class="projectProp">{{bid.proposal}}</p>
+                </div>
+
+                <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 mt45">
+                    <div class="col-lg-3 col-sm-6 col-md-6 col-xs-12">
+                        <p class="no-required">
+                            <ng-container>{{languageStrings.completed_jobs || 'Completed Jobs'}}</ng-container>: {{bid.total_projects_completed}}</p>
+                    </div>
+                    <!--<div class="col-lg-3 col-sm-6 col-md-6 col-xs-12">-->
+                    <!--<p class="address">U.S.A, Seattle</p>-->
+                    <!--</div>-->
+                    <div class="col-lg-3 col-sm-6 col-md-6 col-xs-12">
+                        <p class="posted">
+                            <img src="assets/img/time.svg" aria-hidden="true"/>
+                            <span>{{languageStrings.bid || 'Bid'}}</span> {{bid.creation_datetime | daysAgo}}
+                        </p>
+                    </div>
+                    <div *ngIf="showChatIcon" class="col-lg-3 col-sm-6 col-md-6 col-xs-12">
+                        <span (click)="startChat(bid.grouping_tags,bid.hippo_transaction_id,bid.user_id,bid.project_id,bid.store_name)" style="font-size: 24px;padding-right: 8px;">
+                                    <i class="fa  fa-commenting-o" aria-hidden="true"></i>
+                                  </span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="no-bid" *ngIf="result && bidsList && bidsList.length == 0">
+        <p>
+            <ng-container>{{languageStrings.no_bid_found || 'No Bid Found'}}.</ng-container>
+        </p>
+    </div>
+
+    <!--=========================loader for scroll=======================-->
+    <div *ngIf="showPaginating" class="pg-ldr-prt">
+        <div class="pg-ldr-cld">
+            <div class="pg-ldr-ctr">
+                <div class="pg-loader" [ngStyle]="{'border-bottom-color': config.color,'border-left-color': config.color}"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-footer></app-footer>

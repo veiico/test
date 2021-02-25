@@ -1,0 +1,33 @@
+<app-modal [showCross]="true" [modalType]="'modal-md'" [header]="productDetail.name" *ngIf="isDataAvailable" (onClose)="closeThePopup()">
+    <div body>
+      <!-- <div class="modalHeader">
+        <h1>{{productDetail.name || 'Product'}}</h1>
+      </div> -->
+
+      <div class="modalContent">
+        <div class="controls-container">
+          <form autocomplete="off" class="row" *ngIf="templateForm" [formGroup]="templateForm">
+            <div class="divs-wrapper">
+              <ng-container formArrayName="templates"
+                *ngFor="let template of templateForm.controls['templates']['controls'];let i=index">
+                <app-data-fields class="width-adjustment card-design" [indexId]="i" [template]="template" [currency]="currency"></app-data-fields>
+              </ng-container>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modalFooter">
+        <button mat-button class="dialog-ok btn" (click)="submitQuestionnaire()" appColor bg="'true'" appBs
+          [disabled]="templateForm && !templateForm.controls.templates.valid">
+          <ng-container>{{languageStrings.add || 'Add'}} </ng-container>
+          {{currency+' '+
+      (((productPrice + extraCharges.singleSelectPrice + extraCharges.multiSelectPrice + (productDetail.addOnPrice || 0))) |decimalConfig)}}
+        </button>
+        <!-- <button mat-button (click)="closeThePopup()" class="dialog-cancel btn" [ngStyle]="{ 'direction' : direction }"
+        appBs>
+        <ng-container i18n>Cancel</ng-container>
+      </button> -->
+      </div>
+      <!-- *ngIf="!addBtnTxt" -->
+    </div>
+  </app-modal>

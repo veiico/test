@@ -1,0 +1,86 @@
+<!-- <div class="col-md-12 backBtn" style="padding:0px" (click)="goToSummary()" >
+    <span>Show summary</span>
+</div> -->
+<div class="col-lg-12 col-sm-12 col-xs-12 col-md-12" style="padding:0px">
+    <div class="repeatProduct">
+        <div class="row">
+            <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6 field_column" style="word-break: break-all;" *ngFor="let field of otherArray">
+                <div class="col-md-12" *ngIf="(field.data_type === templateDataType.TEXT || field.data_type === templateDataType.EMAIL || field.data_type === templateDataType.TELEPHONE || field.data_type === templateDataType.NUMBER || field.data_type === templateDataType.SINGLE_SELECT || field.data_type === templateDataType.MULTI_SELECT ||field.data_type === templateDataType.CHECKBOX ||field.data_type === templateDataType.TEXTAREA || field.data_type === templateDataType.SINGLE_SELECT_DELIVERY_TEMPLATE )">
+                    <div class="col-md-12">
+                        <span class="field_title">{{field.display_name}}</span>
+                    </div>
+                    <div class="col-md-12 field_boldy">
+                        <span>{{field.value||'-'}}</span>
+                    </div>
+                </div>
+
+                <div class="col-md-12" *ngIf="(field.data_type === templateDataType.DATE_TIME || field.data_type === templateDataType.DATE_TIME_FUTURE || field.data_type === templateDataType.DATE_TIME_PAST)">
+                    <div class="col-md-12">
+                        <span class="field_title">{{field.display_name}}</span>
+                    </div>
+                    <div class="col-md-12 field_boldy">
+                        <span class="textStyle" *ngIf="field.value !=''">{{field.value |dateTimeFormat:'MMM d, y, h:mm a' || '-'}}</span>
+                        <span class="textStyle" *ngIf="field.value ==''">-</span>
+                    </div>
+                </div>
+                <div class="col-md-12" *ngIf="(field.data_type === templateDataType.DATE || field.data_type === templateDataType.DATE_FUTURE || field.data_type === templateDataType.DATE_PAST)">
+                    <div class="col-md-12">
+                        <span class="field_title">{{field.display_name}}</span>
+                    </div>
+                    <div class="col-md-12 field_boldy">
+                        <span class="textStyle" *ngIf="field.value !=''">{{field.value |dateTimeFormat:'MMM d, y'}}</span>
+                        <span class="textStyle" *ngIf="field.value ==''">-</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-6 col-xs-6 col-sm-6 col-md-6 field_column" style="word-break: break-all;" *ngFor="let opts of optionsArray">
+                <div class="col-md-12">
+                    <div class="col-md-12">
+                        <span class="field_title">{{opts.display_name}}</span>
+                    </div>
+
+                    <div class="col-md-12 field_boldy">
+                        <div *ngFor="let val of opts.selected_values">
+                            {{val.text}}
+                            <span class="pull-right">
+                                <span>{{currency}}</span>
+                                <span>{{val.cost | decimalConfig}}</span>
+                            </span>
+                        </div>
+                        <div *ngIf="opts.selected_values.length === 0">-</div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="col-md-12 col-xs-12 col-sm-12 field_column" *ngFor="let img of imageArray">
+                <div class="col-md-12">
+                    <div class="col-md-12">
+                        <span class="field_title">{{img.display_name}}</span>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row" *ngIf="img.data_type === templateDataType.IMAGE">
+                            <div class="col-md-3 col-sm-4 col-xs-4" style="margin-top:10px" *ngFor="let img of img.value">
+                                <img [src]="img" height=75px width="75px" [alt]="img.display_name +' value '+ img">
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="img.data_type === templateDataType.DOCUMENT">
+                            <div class="col-md-3 col-sm-4 col-xs-4" style="margin-top:10px" *ngFor="let doc of img.value">
+                                <a [href]="doc" download target="_blank">
+                                    <img src="assets/img/doc-icon.svg" height=50px width="50px" [alt]="img.display_name +' value '+ doc">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12" *ngIf="img.value.length === 0">
+                        -
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

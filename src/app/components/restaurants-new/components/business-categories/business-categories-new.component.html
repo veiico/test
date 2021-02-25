@@ -1,0 +1,66 @@
+<div class="business" *ngIf="(newList && newList.length > 0 && showCategories && !isPlatformServer) && (!businessCategoryPage || !showCategoriesBusinessCategoriesPage)  && !showBoxCategories; else serverShimmer" (touchstart)="swipe($event, 'start')" (touchend)="swipe($event, 'end',i)">
+  <p-carousel [value]="newList"  [breakpoint]="10" [numVisible]="numVisible" [ngClass]="{'lastPage': lastPage, 'firstPage': firstPage }" [responsive]="'true'"
+    (onPage)="onPage($event)">
+    <ng-template let-item pTemplate="item">
+      <div class="category-view" (click)="selectCategory(item)" [ngClass]="{'selected-item': item.id == selected || (item.id==-1 && selected == 0)}">
+        <div class="item">
+          <div>
+            <img [ngClass]="{'apply-theme-color': item.is_all_category, 'selected': item.id == selected || (item.id==-1 && selected == 0), 'notSelected': item.id != selected }" [src]="(item.thumb_list && item.thumb_list['200x200']) ? item.thumb_list['200x200'] : item.icon"
+              [alt]="item.name + ' image'" class="logo2" />
+
+          </div>
+        </div>
+        <div class="nameDiv pad-top">
+            <span class="web-view name1"
+            [ngClass]="{'text-selected': item.id == selected|| (item.id==-1 && selected == 0), 'notSelected': item.id != selected }">{{item.name}}</span>
+            <span class="mobile-view name1" [ngClass]="{'text-selected': item.id == selected || (item.id==-1 && selected == 0), 'notSelected': item.id != selected }">{{item.name | truncate : 12 : '...'}}</span>
+          </div>
+      </div>
+    </ng-template>
+  </p-carousel>
+</div> 
+<!-- business category page -->
+<div class="business-categories-page" *ngIf="(newList && newList.length > 0 && showCategories && !isPlatformServer) && businessCategoryPage && showCategoriesBusinessCategoriesPage  && showBoxCategories">
+    <div class="row-eq-height" *ngIf="!categoryHidden">
+      <ng-container *ngFor="let category of list;let index =index">
+        <div class="row-col-eq" *ngIf="!category.is_all_category">
+          <div class="grid-item" (click)="selectCategory(category)">
+            <div class="image_div">
+              <img [src]="category.icon" onerror="this.src='assets/img/image-placeholder.svg';"
+                [alt]="category.name + ' image'" class="image-cat" [alt]="category.name">
+            </div>
+            <div class="name_div">
+              <span>{{category.name}}</span>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+<ng-template #serverShimmer> 
+<ng-container *ngIf="isPlatformServer && !showCategoriesBusinessCategoriesPage">
+    <div class="main-shimmer-container">
+        <div class="category-shimmer" *ngFor="let item of serverList">
+          <img class="img-shimmer" src="assets/images/bsshimmer-no-boundaries.svg">
+        </div>
+    </div>
+</ng-container>
+<!-- business category page -->
+<ng-container *ngIf="isPlatformServer && showCategoriesBusinessCategoriesPage">
+  <div class="business-categories-page">
+        <div class="row-eq-height">
+          <ng-container *ngFor="let list of [1,2,3,4]">
+            <div class="row-col-eq">
+              <div class="grid-item">
+                <div class="image_div">
+                    <div class="image-cat pulsate block">   
+                      </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+</ng-container>
+</ng-template>

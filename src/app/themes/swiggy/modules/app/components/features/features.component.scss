@@ -1,0 +1,43 @@
+@import '../../../../theme.scss';
+@import '~assets/css/variables';
+.features-container{
+ background-color: $features-bg-color;
+ .feature-div{
+   display: flex;
+   padding: 100px 0;
+   justify-content: space-between;
+   flex-direction: column;
+   img{
+     max-height: 164px;
+     max-width: calc(100vw - 80px);
+     width: 100%;
+   }
+   .heading{
+     margin: 0px 0px 25px 0px;
+     font-size: 32px;
+     font-weight: 600;
+     color: $features-heading-font-color;
+   }
+   .description{
+     color: $features-description-font-color;
+     font-size: 20px;
+     font-family: $proxima-semi-bold;
+   }
+ }
+}
+// taking mobile first approach. Media queries will only contain ipad & above logic
+
+@media screen and (min-width: 768px) {
+ .features-container{
+   .feature-div{
+     flex-direction: row;
+     img{
+       max-height: 164px;
+       max-width: 312px;
+     }
+     &.reverse{
+       flex-direction: row-reverse;
+     }
+   }
+ }
+}

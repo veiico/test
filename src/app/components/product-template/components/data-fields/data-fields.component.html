@@ -1,0 +1,274 @@
+
+<ng-container [ngSwitch]="template.controls.data_type.value" [formGroup]="template">
+  <ng-container *ngSwitchCase="dynamicTemplateDataType.TEXT">
+    <div class="div-wrapper data-control">
+      <div class="label-wrapper" [ngStyle]="{ 'direction' : direction }"><label [for]="template.controls.key.value" class="fieldLabel p-0">{{template.controls.display_name.value}}<span class="err-star" *ngIf="template.controls.required.value">*</span></label></div>
+      <div class="p-0" [ngStyle]="{ 'direction' : direction }">
+        <input type="text" [ngStyle]="{ 'direction' : direction }" [id]="template.controls.key.value" formControlName="value" class="form-control" placeholder="{{template.controls.display_name.value}}">
+       <app-control-messages [control]="template.controls.value"></app-control-messages>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="dynamicTemplateDataType.TEXTAREA">
+    <div class=" div-wrapper data-control">
+      <div class="label-wrapper" [ngStyle]="{ 'direction' : direction }">  <label [for]="template.controls.key.value" class="fieldLabel  p-0">{{template.controls.display_name.value}}<span class="err-star" *ngIf="template.controls.required.value">*</span></label></div>
+      <div class="p-0" [ngStyle]="{ 'direction' : direction }">
+        <textarea [ngStyle]="{ 'direction' : direction }" [id]="template.controls.key.value" rows="10" formControlName="value" placeholder="{{template.controls.display_name.value}}"></textarea>
+       <app-control-messages [control]="template.controls.value"></app-control-messages>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="dynamicTemplateDataType.EMAIL">
+    <div class=" div-wrapper data-control">
+      <div class="label-wrapper" [ngStyle]="{ 'direction' : direction }"><label [for]="template.controls.key.value" class="fieldLabel  p-0">{{template.controls.display_name.value}}<span class="err-star" *ngIf="template.controls.required.value">*</span></label></div>
+      <div class="p-0" [ngStyle]="{ 'direction' : direction }">
+        <input [id]="template.controls.key.value" type="email" class="form-control" [ngStyle]="{ 'direction' : direction }" formControlName="value"
+          placeholder="{{template.controls.display_name.value}}" />
+       <app-control-messages [control]="template.controls.value"></app-control-messages>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="dynamicTemplateDataType.TELEPHONE">
+    <div class=" div-wrapper data-control">
+      <div class="label-wrapper" [ngStyle]="{ 'direction' : direction }"> <label class=" fieldLabel p-0" aria-hidden="true">{{template.controls.display_name.value}}<span class="err-star" *ngIf="template.controls.required.value">*</span></label></div>
+      <div class="p-0" [ngStyle]="{ 'direction' : direction }">
+        <int-phone-prefix #intlTelInput placeholder="{{template.controls.display_name.value}}" class="full-wd"
+          (dialCodeChange)="onDialCodeChange($event)" [locale]="'en'" formControlName="value"></int-phone-prefix>
+       <app-control-messages [control]="template.controls.value"></app-control-messages>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="dynamicTemplateDataType.CHECKBOX">
+    <div class=" div-wrapper data-control">
+      <div class="label-wrapper" [ngStyle]="{ 'direction' : direction }">  <label class="fieldLabel  p-0">{{template.controls.display_name.value}}<span class="err-star" *ngIf="template.controls.required.value">*</span></label> </div>
+      <div class="p-0" [ngStyle]="{ 'direction' : direction }">
+        <input class="checkbox-blue" formControlName="value" [id]="template.controls.key.value" type="checkbox" [value]="true">
+        <label [for]="template.controls.key.value">{{template.controls.display_name.value}}</label>
+       <app-control-messages [control]="template.controls.value"></app-control-messages>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="dynamicTemplateDataType.NUMBER">
+    <div class=" div-wrapper data-control">
+      <div class="label-wrapper" [ngStyle]="{ 'direction' : direction }">  <label  [for]="template.controls.key.value" class="fieldLabel  p-0">{{template.controls.display_name.value}}<span class="err-star" *ngIf="template.controls.required.value">*</span></label> </div>
+      <div class="p-0" [ngStyle]="{ 'direction' : direction }">
+        <input [ngStyle]="{ 'direction' : direction }" [id]="template.controls.key.value" type="number" formControlName="value" min="0" class="form-control" placeholder="{{template.controls.display_name.value}}">
+       <app-control-messages [control]="template.controls.value"></app-control-messages>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="dynamicTemplateDataType.SINGLE_SELECT">
+    <div class=" div-wrapper data-control">
+      <div class="label-wrapper" [ngStyle]="{ 'direction' : direction }"> <label class="singleSelectLabel  p-0"  [for]="template.controls.key.value">{{template.controls.display_name.value}}<span class="err-star" *ngIf="template.controls.required.value">*</span></label> </div>
+      <div class="p-0" [ngStyle]="{ 'direction' : direction }">
+        <p-dropdown (onChange)="onDropdownValueChange($event,template)" autocomplete="off" [ngStyle]="{ 'direction' : direction }" [options]="template.controls.option.value"
+          optionLabel="text" formControlName="value" placeholder="{{ languageStrings.select|| 'Select' }}"  [id]="template.controls.key.value">
+          <ng-template let-item pTemplate="selectedItem">
+            <span style="vertical-align:middle">{{item.value.text}} {{ item.value.cost?'- '+ currency+ ' ' +
+              (item.value.cost | decimalConfig):''}}</span>
+          </ng-template>
+          <ng-template let-item pTemplate="item">
+            <span style="vertical-align:middle">{{item.value.text}} {{ item.value.cost?'- '+ currency + ' ' +
+              (item.value.cost | decimalConfig):''}}</span>
+          </ng-template>
+        </p-dropdown>
+       <app-control-messages [control]="template.controls.value"></app-control-messages>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <ng-container *ngSwitchCase="dynamicTemplateDataType.MULTI_SELECT">
+    <div class=" div-wrapper p-0 data-control" [ngStyle]="{ 'direction' : direction }">
+      <div class="label-wrapper">  <label class="multiSelectLabel">{{template.controls.display_name.value}}<span class="err-star" *ngIf="template.controls.required.value">*</span></label> </div>
+      <ng-container *ngFor="let checkbox of template.controls.option.value;let i=index">
+        <div class="  checkboxes">
+          <input class="newCheckBox" [id]="template.controls.key.value + '_'+ i" type="checkbox" (change)="onMultiSelectValueChange($event,checkbox, template)">
+          <label [ngClass]="{ 'selectedItemsLabel' : checkbox.isSelected , 'unselectedItemsLabel' : !checkbox.isSelected}" [for]="template.controls.key.value + '_'+ i">{{checkbox.text}} {{checkbox.cost?'- '+currency+'
+            '+(checkbox.cost | decimalConfig):''}}</label>
+        </div>
+      </ng-container>
+      <div class=" ">
+       <app-control-messages [control]="template.controls.value"></app-control-messages>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="dynamicTemplateDataType.DROPDOWN">
+    <div class=" div-wrapper data-control">
+      <div class="label-wrapper" [ngStyle]="{ 'direction' : direction }">   <label class="fieldLabel  p-0"  [for]="template.controls.key.value">{{template.controls.display_name.value}}<span class="err-star" *ngIf="template.controls.required.value">*</span></label> </div>
+      <div class="p-0" [ngStyle]="{ 'direction' : direction }">
+        <p-dropdown autocomplete="off"  [id]="template.controls.key.value" [ngStyle]="{ 'direction' : direction }" [options]="template.controls.option.value"
+          optionLabel="text" formControlName="value" placeholder="{{template.controls.display_name.value}}" placeholder="{{languageStrings.select || 'Select'}}"></p-dropdown>
+       <app-control-messages [control]="template.controls.value"></app-control-messages>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <ng-container *ngSwitchCase="dynamicTemplateDataType.IMAGE">
+    <div class=" div-wrapper data-control">
+      <div class="label-wrapper" [ngStyle]="{ 'direction' : direction }">   <label class="fieldLabel  p-0" aria-hidden="true">{{template.controls.display_name.value}}<span class="err-star" *ngIf="template.controls.required.value">*</span></label> </div>
+      <div class="  p-0 image-container" [ngStyle]="{ 'direction' : direction }" style="width: 100%">
+        <input [id]="template.controls.key.value" type="file" accept="image/*" class="hidden" multiple (change)="onImageChnage($event)">
+        <!-- <label [for]="template.controls.key.value">
+          <img [src]="template.controls.value.value || 'assets/img/image-placeholder.svg' ">
+        </label> -->
+        <div style="display: block; width: 100%" class="image-label-images-container" [ngStyle]="{ 'direction' : direction }">
+          <label style="display: block" [for]="template.controls.key.value" class="label-for-btn">
+            <!-- <button class="btn btn-sm btn-upload"> <ng-container i18n>Upload Image</ng-container></button> -->
+            <img style="background: white" src="https://yelodotred.s3.amazonaws.com/task_images/Jy8k1568965387624-group62x.png">
+          </label>
+          <div *ngIf="template.controls.value.value.length > 0" class="d-flex uploadedImageBox">
+            <div *ngFor="let image of template.controls.value.value;let i=index" class="uploaded-image">
+              <img [src]="image" [alt]="'Uploaded Image ' + i">
+              <i class="fa fa-trash-o" (click)="removeImage(i)"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="  p-0">
+       <app-control-messages [control]="template.controls.value"></app-control-messages>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <ng-container *ngSwitchCase="dynamicTemplateDataType.DOCUMENT">
+    <div class=" div-wrapper data-control">
+      <div class="label-wrapper" [ngStyle]="{ 'direction' : direction }">  <label class="  p-0" aria-hidden="true">{{template.controls.display_name.value}}<span class="err-star" *ngIf="template.controls.required.value">*</span></label> </div>
+      <div class="  p-0 image-container" [ngStyle]="{ 'direction' : direction }">
+        <input [id]="template.controls.key.value" type="file" class="hidden" accept=".pdf" (change)="onImageChnage($event)">
+        <div class="image-label-images-container">
+          <label [for]="template.controls.key.value" class="label-for-btn">
+            <button class="btn btn-sm btn-upload"><ng-container>{{languageStrings.upload_document || 'Upload Document'}}</ng-container></button>
+          </label>
+          <div class="d-flex">
+            <div *ngFor="let doc of template.controls.value.value;let i=index" class="uploaded-image">
+              <a [href]="doc" download target="_blank">
+                  <img src="assets/img/doc-icon.svg" [alt]="'document' + i">
+              </a>
+              <i class="fa fa-trash-o" (click)="removeImage(i)"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="  p-0">
+       <app-control-messages [control]="template.controls.value"></app-control-messages>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Date -->
+  <ng-container *ngSwitchCase="dynamicTemplateDataType.DATE">
+    <div class=" div-wrapper data-control">
+      <div class="label-wrapper" [ngStyle]="{ 'direction' : direction }">   <label class="fieldLabel  p-0" [for]="template.controls.key.value">{{template.controls.display_name.value}}<span class="err-star" *ngIf="template.controls.required.value">*</span></label> </div>
+      <div class="p-0" [ngStyle]="{ 'direction' : direction }">
+        <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" [id]="template.controls.key.value" formControlName="value" [readonlyInput]="true"  placeholder="{{template.controls.display_name.value}}"></p-calendar>
+      </div>
+      <div class="p-0">
+       <app-control-messages [control]="template.controls.value"></app-control-messages>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <ng-container *ngSwitchCase="dynamicTemplateDataType.DATE_FUTURE">
+    <div class=" div-wrapper data-control">
+      <div class="label-wrapper" [ngStyle]="{ 'direction' : direction }">   <label  [for]="template.controls.key.value" class="fieldLabel  p-0">{{template.controls.display_name.value}}<span class="err-star" *ngIf="template.controls.required.value">*</span></label> </div>
+      <div class="p-0" [ngStyle]="{ 'direction' : direction }">
+        <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100"  [id]="template.controls.key.value" formControlName="value" [minDate]="minDateForFuture" [readonlyInput]="true"
+          placeholder="{{template.controls.display_name.value}}"></p-calendar>
+      </div>
+      <div class="  p-0">
+       <app-control-messages [control]="template.controls.value"></app-control-messages>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <ng-container *ngSwitchCase="dynamicTemplateDataType.DATE_PAST">
+    <div class=" div-wrapper data-control">
+      <div class="label-wrapper" [ngStyle]="{ 'direction' : direction }">   <label  [for]="template.controls.key.value" class="fieldLabel  p-0">{{template.controls.display_name.value}}<span class="err-star" *ngIf="template.controls.required.value">*</span></label> </div>
+      <div class="p-0" [ngStyle]="{ 'direction' : direction }">
+        <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100"  [id]="template.controls.key.value" formControlName="value" [maxDate]="maxDateForPast" [readonlyInput]="true"
+          placeholder="{{template.controls.display_name.value}}"></p-calendar>
+      </div>
+      <div class="  p-0">
+       <app-control-messages [control]="template.controls.value"></app-control-messages>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <ng-container *ngSwitchCase="dynamicTemplateDataType.TIME">
+    <div class=" div-wrapper data-control">
+      <div class="label-wrapper" [ngStyle]="{ 'direction' : direction }">  <label class="fieldLabel  p-0"  [for]="template.controls.key.value">{{template.controls.display_name.value}}<span class="err-star" *ngIf="template.controls.required.value">*</span></label> </div>
+      <div class="p-0" [ngStyle]="{ 'direction' : direction }">
+        <p-calendar  [id]="template.controls.key.value" formControlName="value"
+                     [hourFormat]="config.time_format === timeFormat.TWELVE_HOURS ? 12 : 24"
+                     [timeOnly]="true" [readonlyInput]="true"
+                     placeholder="{{template.controls.display_name.value}}"></p-calendar>
+      </div>
+      <div class="  p-0">
+       <app-control-messages [control]="template.controls.value"></app-control-messages>
+      </div>
+    </div>
+
+  </ng-container>
+
+
+  <ng-container *ngSwitchCase="dynamicTemplateDataType.DATE_TIME">
+    <div class=" div-wrapper data-control">
+      <div class="label-wrapper" [ngStyle]="{ 'direction' : direction }">  <label class="fieldLabel  p-0"  [for]="template.controls.key.value">{{template.controls.display_name.value}}<span class="err-star" *ngIf="template.controls.required.value">*</span></label> </div>
+      <div class="p-0" [ngStyle]="{ 'direction' : direction }">
+        <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100"  [id]="template.controls.key.value" [showTime]="true"
+                     [hourFormat]="config.time_format === timeFormat.TWELVE_HOURS ? 12 : 24"
+                     formControlName="value" [readonlyInput]="true"   placeholder="{{template.controls.display_name.value}}"></p-calendar>
+      </div>
+      <div class="  p-0">
+       <app-control-messages [control]="template.controls.value"></app-control-messages>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <ng-container *ngSwitchCase="dynamicTemplateDataType.DATE_TIME_FUTURE">
+    <div class=" div-wrapper data-control">
+      <div class="label-wrapper" [ngStyle]="{ 'direction' : direction }">   <label class="fieldLabel  p-0"  [for]="template.controls.key.value">{{template.controls.display_name.value}}<span class="err-star" *ngIf="template.controls.required.value">*</span></label> </div>
+      <div class="p-0" [ngStyle]="{ 'direction' : direction }">
+        <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" [id]="template.controls.key.value" [showTime]="true"
+                     [hourFormat]="config.time_format === timeFormat.TWELVE_HOURS ? 12 : 24"
+                     formControlName="value" [readonlyInput]="true"   [minDate]="minDateForDateTimeFuture"
+          placeholder="{{template.controls.display_name.value}}"></p-calendar>
+      </div>
+      <div class="  p-0">
+       <app-control-messages [control]="template.controls.value"></app-control-messages>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <ng-container *ngSwitchCase="dynamicTemplateDataType.DATE_TIME_PAST">
+    <div class=" div-wrapper data-control">
+      <div class="label-wrapper" [ngStyle]="{ 'direction' : direction }">  <label  [for]="template.controls.key.value" class="fieldLabel  p-0">{{template.controls.display_name.value}}<span class="err-star" *ngIf="template.controls.required.value">*</span></label> </div>
+      <div class="p-0" [ngStyle]="{ 'direction' : direction }">
+        <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100"  [id]="template.controls.key.value" [showTime]="true"
+                     [hourFormat]="config.time_format === timeFormat.TWELVE_HOURS ? 12 : 24"
+                     [maxDate]="maxDateForPast" [readonlyInput]="true" formControlName="value"
+          placeholder="{{template.controls.display_name.value}}"  ></p-calendar>
+      </div>
+      <div class="  p-0">
+       <app-control-messages [control]="template.controls.value"></app-control-messages>
+      </div>
+    </div>
+
+  </ng-container>
+
+</ng-container>

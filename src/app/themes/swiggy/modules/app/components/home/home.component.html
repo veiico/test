@@ -1,0 +1,7 @@
+<app-logo-heading *ngIf="content.logoHeader && content.logoHeader.is_enabled" [styles]="content" [data]="content.logoHeader.data"
+[fullHeight]="!(content.features && content.features.is_enabled) && !(content.flow && content.flow.is_enabled) && !(content.footer && content.footer.is_enabled)"></app-logo-heading>
+<app-features *ngIf="content.features && content.features.is_enabled" [styles]="content.features.styles" [data]="content.features.data"></app-features>
+<app-flow *ngIf="content.flow && content.flow.is_enabled" [styles]="content.flow.styles" [data]="content.flow.data"></app-flow>
+<app-footer *ngIf="content.footer && content.footer.is_enabled" [styles]="content.footer.styles" [data]="content.footer.data"></app-footer>
+<app-scroll-to-top *ngIf="content.scrollToTop && content.scrollToTop.is_enabled" [styles]="content.scrollToTop.styles" ></app-scroll-to-top>
+<router-outlet></router-outlet>

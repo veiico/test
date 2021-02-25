@@ -1,0 +1,18 @@
+<div class="error">
+  <div class="content">
+    <div>
+      <img src="assets/images/error.svg" style="height: 45%;width:45%;" />
+    </div>
+    <div>
+      <p class="page-not-found">{{languageStrings.page_not_found || 'Page Not Found'}}</p>
+    </div>
+    <div>
+      <p class="page-you-request">{{languageStrings.page_you_requested_could_not_found || 'The page you requested could not be found'}}</p>
+    </div>
+    <div>
+      <span class="heading" (click)="goToHome()">
+      <i class="yfn yfn-left-arrow" style="font-size: 18px;" aria-hidden="true" ></i> <ng-container>{{languageStrings.back_to_home || 'Back To Home'}}</ng-container>
+   </span>
+    </div>
+  </div>
+</div>

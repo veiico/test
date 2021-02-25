@@ -1,0 +1,88 @@
+@import '~assets/css/variables';
+
+.subscription{
+  margin-top: 10px;
+  .head{
+    font-family: $proxima-reg;
+    font-size: 22px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.7px;
+    text-align: center;
+    color: #464646;
+    margin: 0px;
+  }
+
+  .descriptionText{
+    font-family: $proxima-reg;
+    font-size: 22px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.7px;
+    text-align: center;
+    color: $color-theme;
+    margin: 0px;
+  }
+
+  .cashtext{
+    font-family: $proxima-reg;
+    font-size: 22px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.7px;
+    text-align: center;
+    color: #464646;
+    margin: 5px 0px;
+  }
+
+  .payStyle{
+    display: flex;
+    justify-content: center;
+    margin: 10px 0px;
+    div{
+      min-height: 120px;
+      min-width: 120px;
+      border: 2px solid var(--theme);
+      background-color: #fff;
+      border-radius: 50%;
+      text-align: center;
+      display: flex;
+      font-size: 24px;
+      align-items: center;
+      height: auto;
+      justify-content: center;
+      width: auto;
+    }
+  }
+
+  .payButton{
+    height: 48px;
+    border: solid 1px $color-theme;
+    font-family: $proxima-reg;
+    font-size: 16px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.7px;
+    color: #fff;
+    background-color: $color-theme;
+    transition: 0.5s;
+    margin: 10px 0px;
+    min-width: 185px;
+    .amount{
+      padding-left: 10px;
+    }
+    &:hover{
+      border: 1px solid $color-theme;
+      background-color: #fff;
+      color: $color-theme;
+    }
+  }
+}

@@ -1,0 +1,65 @@
+<div class="promo-list" *ngIf="_list">
+
+  <div class="promoList">
+    <div *ngFor="let promo of _list.PROMOS;let i = index;">
+      <div class="promos">
+        <div class="radioCheck">
+          <div *ngIf="!promo.selected" class="text-left" (click)="setPromoId(i)">
+            <svg width="22" height="22" viewBox="0 0 22 22">
+              <path fill="#000" fill-rule="nonzero" d="M11 22C4.925 22 0 17.075 0 11S4.925 0 11 0s11 4.925 11 11-4.925 11-11 11zm0-.846c5.608 0 10.154-4.546 10.154-10.154S16.608.846 11 .846.846 5.392.846 11 5.392 21.154 11 21.154z"
+                    opacity=".3" />
+            </svg>
+          </div>
+          <div *ngIf="promo.selected" (click)="removePromoId(i)" class="text-left">
+            <svg width="22" height="22" viewBox="0 0 22 22">
+              <g fill="none" fill-rule="nonzero">
+                <path fill="#82C548" d="M11 22C4.925 22 0 17.075 0 11S4.925 0 11 0s11 4.925 11 11-4.925 11-11 11z" />
+                <path fill="#FFF" d="M14.993 7.742a.805.805 0 0 1 1.151 0 .818.818 0 0 1 0 1.146l-5.852 5.939a.803.803 0 0 1-1.147 0l-3.193-3.28a.813.813 0 0 1-.012-1.155.805.805 0 0 1 1.152 0l2.625 2.702 5.276-5.352z" />
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div class="text">
+          <p class="name">{{promo.code}}</p>
+          <p class="description" *ngIf="promo.isPromo">{{promo.description}}</p>
+        </div>
+      </div>
+      <div *ngIf="i != _list.PROMOS.length - 1;">
+        <hr/>
+      </div>
+
+    </div>
+  </div>
+
+  <div *ngIf="_list.REFERRAL.length">
+    <hr/>
+  </div>
+
+  <div class="referral promoList">
+    <div *ngFor="let referral of _list.REFERRAL;let i = index;">
+      <div class="promos">
+        <div class="radioCheck">
+          <div *ngIf="!referral.selected" class="text-left" (click)="setReferral(i)">
+            <svg width="22" height="22" viewBox="0 0 22 22">
+              <path fill="#000" fill-rule="nonzero" d="M11 22C4.925 22 0 17.075 0 11S4.925 0 11 0s11 4.925 11 11-4.925 11-11 11zm0-.846c5.608 0 10.154-4.546 10.154-10.154S16.608.846 11 .846.846 5.392.846 11 5.392 21.154 11 21.154z"
+                    opacity=".3" />
+            </svg>
+          </div>
+          <div *ngIf="referral.selected" (click)="removeReferralId(i)" class="text-left">
+            <svg width="22" height="22" viewBox="0 0 22 22">
+              <g fill="none" fill-rule="nonzero">
+                <path fill="#82C548" d="M11 22C4.925 22 0 17.075 0 11S4.925 0 11 0s11 4.925 11 11-4.925 11-11 11z" />
+                <path fill="#FFF" d="M14.993 7.742a.805.805 0 0 1 1.151 0 .818.818 0 0 1 0 1.146l-5.852 5.939a.803.803 0 0 1-1.147 0l-3.193-3.28a.813.813 0 0 1-.012-1.155.805.805 0 0 1 1.152 0l2.625 2.702 5.276-5.352z" />
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div class="text">
+          <p class="name">{{referral.code}}</p>
+        </div>
+      </div>
+      <div *ngIf="i != _list.REFERRAL.length - 1;">
+        <hr/>
+      </div>
+  </div>
+</div>

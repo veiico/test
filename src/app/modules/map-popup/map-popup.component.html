@@ -1,0 +1,32 @@
+<app-modal [modalType]="modalType.LARGE" (esc)="hideTempltePopup()" (onClose)="hideTempltePopup()">
+  <!--header="View custom fields"-->
+  <div body>
+    <div *ngIf="is_google_map">
+    <agm-map [latitude]="lat" [longitude]="lng" [zoom]="15" [styles]="mapStyle" [minZoom]="8" [scrollwheel]="false">
+      <agm-marker [latitude]="lat" [longitude]="lng" [markerDraggable]="true" (dragEnd)="getDraggedPosition($event)">
+        <!--<agm-info-window>{{this.formattedAddress}}</agm-info-window>-->
+      </agm-marker>
+    </agm-map>
+  </div>
+  <div *ngIf="!is_google_map" id="map"></div>
+
+    <div class="autoSearch">
+      <form [formGroup]="mapAddressForm">
+        <div>
+          <app-jw-google-autocomplete #search class="form-control yl-field-input"
+            type="text" placeholder="{{languageStrings.enter_address || 'Enter address'}}" autocorrect="off"
+            autocapitalize="off"spellcheck="off" id="mapPopupAddress" formControlName="getAddressFromMap"
+            (latLng)="onLatLngEvent($event)" (modelChange)="clearLatLng()">
+          </app-jw-google-autocomplete>
+          <!-- <input type="text" autocomplete="off" #searchMapPop id="mapPopupAddress" formControlName="getAddressFromMap"
+            class="form-control" i18n-placeholder aria-label="Address" placeholder="Address" /> -->
+        </div>
+      </form>
+    </div>
+    <div class="buttonAccept">
+      <button type="button" class="btn accept" appColor bg="true" (click)="changePosition()">
+        <ng-container>{{languageStrings.accept || 'Accept'}} </ng-container>
+      </button>
+    </div>
+  </div>
+</app-modal>

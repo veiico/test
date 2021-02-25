@@ -1,0 +1,17 @@
+<div id="flow" class="flow-container">
+  <div class="title row">
+    <h2>{{title}}</h2>
+  </div>
+  <div class="container">
+    <div class="row-line" *ngFor="let row of rows;let first=first;let last=last; let even=even;let odd=odd" 
+    [ngClass]="{'first':first,'last':last,'odd':odd,'even':even}">
+      <div class="flow-item" *ngFor="let item of row" [ngClass]="{'single-item': row.length==1}">
+        <div class="image">
+          <img [src]="item.image">
+        </div>
+        <div class="heading">{{item.heading}}</div>
+        <div class="description">{{item.description}}</div>
+      </div>
+    </div>
+  </div>
+</div>

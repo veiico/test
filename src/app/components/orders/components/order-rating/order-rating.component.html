@@ -1,0 +1,20 @@
+<div class="dialog-msg">
+  <div class="starContainer">
+    <star-rating-comp [size]="'large'" [rating]="ratingGiven" (onRatingChange)="onRatingChange($event)" [starType]="'svg'">
+    </star-rating-comp>
+  </div>
+      <textarea [(ngModel)]="review" maxlength="247" style="width: 100% !important;height: 100px !important;"
+                class="form-control" [ngClass]="{'cls-upcase': review}"
+                 placeholder="{{languageStrings.enter_review_maximum_characters_250 || 'Enter a review (maximum characters can be 250)'}}"
+                aria-label="Enter a review (maximum characters can be 250)" rows="5" id="comment"></textarea>
+</div>
+<hr class="p-hr">
+<div class="dialog-action">
+  <div class="dialog-cancel btn btn-default"
+       (click)="orderForRating.is_job_rated == 0 ? skipReview() : hideRatingDialog()" appBs>
+    <ng-container >{{ languageStrings.cancel || "Cancel"}}</ng-container>
+  </div>
+  <div class="dialog-ok btn btn-default" (click)="saveDialogData()" appColor bg="'true'" appBs>
+    <ng-container >{{ languageStrings.save || "Save"}}</ng-container>
+  </div>
+</div>

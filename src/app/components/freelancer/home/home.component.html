@@ -1,0 +1,43 @@
+<div class="home" *ngIf="config" id="home">
+    <div class="fetch-location" id="fetchLocation" [ngStyle]="{'background-image': config && config.background_image ? getBackgroundImage() : 'url(assets/img/background-home.jpg)'}">
+        <div class="row">
+            <div class="col-lg-12 col-sm-6 col-xs-12 col-md-12">
+                <div class="location-div ">
+                    <div class="heading ">
+                        <h1 class="text-center">
+                            {{config ? config.app_description : 'We get what you love'}}
+                        </h1>
+                    </div>
+                    <!-- <div class="buttons ">
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <a [href]="merchant_url" target="_blank">
+                                <button mat-button class="cart-btn btn btn-default btn-block ripple freelancer-btn" appColor hoverbgSimple="true">
+                                <ng-container i18n> Want to Work </ng-container>
+
+                              </button>
+                            </a>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <button (click)="triggerScrollTo()" mat-button class="cart-btn btn btn-default btn-block ripple freelancer-btn" appColor hoverbgSimple="true">
+                                <ng-container i18n> Want to Hire </ng-container>
+                                      </button> </div>
+
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="categories" *ngIf="!isPlatformServer">
+        <app-first-level-cat [categoryList]="categories"></app-first-level-cat>
+    </div>
+
+    <!-- server shimmer -->
+    <app-shimmer *ngIf="isPlatformServer"></app-shimmer>
+
+    <div class="scrollArrow" (click)="triggerScrollTo(scrollTop)">
+        <img src="assets/img/bottom-arrow.svg" alt="scroll to top button" [ngClass]="{'rotateZero': !scrollTop, 'rotatePositive': scrollTop}" />
+    </div>
+
+</div>
+<app-footer></app-footer>

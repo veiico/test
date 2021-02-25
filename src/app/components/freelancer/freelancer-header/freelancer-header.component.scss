@@ -1,0 +1,39 @@
+@import '~assets/css/switch';
+@import '~assets/css/variables';
+#myNavbarWithoutLogin {
+    ul {
+        li {
+            margin-right: 20vh;
+        }
+    }
+}
+
+.btn-freelance {
+    background-color: transparent !important;
+}
+
+.navHeightFreelance {
+    height: 75px;
+    .btn {
+        color: white;
+    }
+}
+
+.loginBtnFreelance {
+    font-family: $mont-med;
+    font-size: 14px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: right;
+    color: #ffffff;
+    background-color: transparent;
+    outline: none;
+    padding: 5px 10px;
+    margin: 10px 0px;
+    cursor: pointer;
+    border: solid 1px #ffffff;
+    border-radius: 10px;
+}

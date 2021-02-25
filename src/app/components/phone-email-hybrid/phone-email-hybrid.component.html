@@ -1,0 +1,30 @@
+
+<form [formGroup]="form"  autocomplete="false" name="forgotPasswordForm">
+
+<label class="control-label fs16 model-label" aria-hidden="true"  [ngStyle]="{ 'direction' : direction }">
+    <ng-container>{{languageStrings.email_or_phone || "Email or Phone"}}</ng-container><span style="color:red">*</span>
+</label>
+
+<div class="input-group">
+    <span class="input-group-addon add-on-set">
+        <div class="dropdown" *ngIf="form.controls.is_phone.value">
+            <button (click)="toggleShowList()" class="dropbtn btn">
+                <span class="flag flag-{{selectedCountryCode}}"></span>
+            </button>
+            <div *ngIf="showList" class="dropdown-content" #scrollElement>
+                <a *ngFor="let country of countries" class="list-group-item" (click)="flagSelect(country)">
+                    <span class="flag flag-{{country.countryCode}}"></span>
+                    <span class="country-name">{{countryName[country.countryCode]}}
+                        <span class="dial-code">+ {{country.dialCode}}</span>
+                    </span>
+                </a>
+            </div>
+        </div>
+        <ng-container *ngIf="!form.controls.is_phone.value">
+            <i class="glyphicon glyphicon-envelope" aria-hidden="true"></i>
+        </ng-container>
+    </span>
+   <!-- id="fugu-phone"  -->
+    <input type="text"  aria-label="Enter phone or email"  class="form-control input-style fugu-tel-input" [ngStyle]="{ 'direction' : direction }" placeholder="{{languageStrings.email_or_phone || 'Email or Phone'}}" formControlName="phone_email"  (blur)="onTouched()">
+</div>
+</form>

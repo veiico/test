@@ -1,0 +1,56 @@
+
+@import '~assets/css/variables';
+.parentdrop {
+    position: relative;
+    margin-right: 5px;
+    top: 5px;
+  font-family: $proxima-reg;
+}
+
+.select-cc {
+    height: 28px;
+    width: 100%;
+  font-family: $proxima-reg;
+    border: transparent;
+    padding: 0px 5px;
+    display: flex;
+    margin-bottom: 0;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    white-space: nowrap;
+    font-size: 18px;
+    line-height: 1.42857;
+    
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    .caret{
+      margin-top: 10px;
+    }
+}
+
+.cc-child {
+    background-color: #fff;
+    border: 1px solid #eee;
+    
+    position: absolute;
+    width: 60px;
+    z-index: 1;
+    max-height: 135px;
+    overflow-y: auto;
+    cursor: pointer;
+    text-align: center;
+  font-family: $proxima-reg;
+    span{
+    }
+}
+
+// .selected{
+//     // background-color: #e13d36;
+//     // color:#fff;
+// }

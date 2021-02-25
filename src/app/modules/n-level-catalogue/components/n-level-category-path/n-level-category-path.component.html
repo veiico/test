@@ -1,0 +1,12 @@
+<div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 breadCrumbList" *ngIf="categoryPathArray && categoryPathArray.length > 0">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" *ngFor="let paths of categoryPathArray;let j = index">
+                <div>
+                    <a (click)="selectCategory(paths, j)">{{paths.name}}</a>
+                    <i class="fa fa-caret-right" *ngIf="(j+1) < categoryPathArray.length" aria-hidden="true"></i>
+                </div>
+            </li>
+        </ol>
+    </nav>
+</div>

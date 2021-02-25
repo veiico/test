@@ -1,0 +1,154 @@
+<form *ngIf="!isPlatformServer" [formGroup]="appointmentForm" (ngSubmit)="onSubmit(appointmentForm.value)" class="login-form">
+    <div class="checkout_card">
+
+        <!-- ====================== appointment details ====================== -->
+        <div>
+            <div class="chk_inr_hdng">
+                <img src="assets/img/pickup-heading.svg"  aria-hidden="true" alt="pickup" />
+                <p class="chk_inr_hdng_txt"  [ngStyle]="{ 'direction' : direction }" ><ng-container >{{languageStrings.appointment_details ||"Appointment Details"}}</ng-container></p>
+            </div>
+            <div class="chk_cnt_div chk_form no-gutter m0">
+
+                <div class="chk_form_col" *ngFor="let data  of templateData;"
+                     [ngSwitch]="data.data_type"  [ngClass]="{'hide':(data.app_side === '2' || data.data_type ==='Checklist' || data.display_name === 'Task Details' || data.display_name === 'subtotal'|| data.display_name === 'start time' || data.display_name === 'end time')}">
+
+                    <div *ngIf="data.data_type ==='Barcode' || data.data_type === 'Text'">
+                        <label [for]="data.label" class="chk-lable">{{data.display_name}}</label><br>
+                        <div class="chk_hidden_space cf-col">
+                            <input autocomplete="off" [id]="data.label" (keydown)="checkRead(data.app_side,$event)" [ngClass]="{'has-error': (!appointmentForm.controls[data.label].valid && appointmentForm.controls[data.label].touched)}"
+                                class="chk-input" type="text" [placeholder]="'Enter '+data.display_name.toLowerCase()" [formControlName]="data.label"
+                                [class.half-opacity]="data.app_side==='0'" />
+                            <app-control-messages [control]="appointmentForm.controls[data.label]"></app-control-messages>
+                        </div>
+                    </div>
+                    <div *ngSwitchCase="'Number'">
+                        <label class="chk-lable" [for]="data.label">{{data.display_name}}</label><br>
+                        <div class="chk_hidden_space cf-col">
+                            <input autocomplete="off"  [id]="data.label" (keydown)="checkRead(data.app_side,$event)" [ngClass]="{'has-error': (!appointmentForm.controls[data.label].valid && appointmentForm.controls[data.label].touched)}"
+                                class="chk-input" type="text" [placeholder]="'Enter '+data.display_name.toLowerCase()" [formControlName]="data.label"
+                                [class.half-opacity]="data.app_side==='0'" appNumberOnly />
+                            <app-control-messages [control]="appointmentForm.controls[data.label]"></app-control-messages>
+                        </div>
+                    </div>
+                    <div *ngSwitchCase="'pickupAddress'">
+                        <label class="chk-lable"  [for]="data.label">{{data.display_name}}</label><br>
+                        <div class="chk_hidden_space cf-col" [ngStyle]="{ 'direction' : direction }">
+                            <input   [id]="data.label" [ngClass]="{'has-error': (!appointmentForm.controls[data.label].valid && appointmentForm.controls[data.label].touched)}"
+                                class="chk-input" type="text"  placeholder="Add address" autocorrect="off" autocapitalize="off"
+                                spellcheck="off" type="text" #pickUpSearch [formControlName]="data.label" [class.half-opacity]="data.app_side==='0'"
+                            />
+                            <app-control-messages [control]="appointmentForm.controls[data.label]"></app-control-messages>
+                        </div>
+
+                    </div>
+                    <div *ngSwitchCase="'Telephone'">
+                        <label class="chk-lable"  [for]="data.label">{{data.display_name}}</label><br>
+                        <div class="chk_hidden_space cf-col">
+                            <div class="user-contact" [ngClass]="{'has-error': (!appointmentForm.controls[data.label].valid && appointmentForm.controls[data.label].touched)}">
+                                <app-drop-down-list [list]="countries" (updateValue)="updatCC($event,data.label)" [(childStatus)]="childStatus"></app-drop-down-list>
+                                <input  [id]="data.label" autocomplete="off" [ngStyle]="{ 'direction' : direction }" (keydown)="checkRead(data.app_side,$event)" class="chk-input" type="text"  placeholder="{{languageStrings.enter_phone_number || 'Enter phone number'}}" maxlength="13" [formControlName]="data.label" [class.half-opacity]="data.app_side==='0'" appNumberOnly
+                                />
+                            </div>
+                            <app-control-messages [control]="appointmentForm.controls[data.label]"></app-control-messages>
+                        </div>
+                    </div>
+
+
+                    <div *ngSwitchCase="'Email'">
+                        <label class="chk-lable"  [for]="data.label">{{data.display_name}}</label><br>
+                        <div class="chk_hidden_space cf-col">
+                            <input autocomplete="off"  [id]="data.label" (keydown)="checkRead(data.app_side,$event)" [ngClass]="{'has-error': (!appointmentForm.controls[data.label].valid && appointmentForm.controls[data.label].touched)}"
+                                class="chk-input" type="email" [placeholder]="'Enter '+data.display_name.toLowerCase()" [formControlName]="data.label"
+                                [class.half-opacity]="data.app_side==='0'" no-space/>
+                            <app-control-messages [control]="appointmentForm.controls[data.label]"></app-control-messages>
+                        </div>
+                    </div>
+
+                    <div *ngSwitchCase="'Dropdown'">
+                        <label class="chk-lable" [for]="data.label">{{data.display_name}}</label><br>
+                        <div class="chk_hidden_space cf-col">
+                            <select class="chk-input"  [formControlName]="data.label" [id]="data.label"
+                                [ngClass]="{'has-error': (!appointmentForm.controls[data.label].valid && appointmentForm.controls[data.label].touched)}"  >
+                                <option value="" style="display:none;" [ngStyle]="{ 'direction' : direction }"><ng-container >{{ languageStrings.select || "Select"}}</ng-container> {{data.display_name}}</option>
+                                <option [attr.value]="option.value" *ngFor="let option of data.ddOptions;let oindex = index;" [attr.selected]="!oindex ? true :null">{{option.label}}</option>
+                            </select>
+                            <app-control-messages [control]="appointmentForm.controls[data.label]"></app-control-messages>
+                        </div>
+                    </div>
+
+                    <div *ngSwitchCase="'Checklist'">
+                        <label class="chk-lable">{{data.display_name}}</label><br>
+                        <div class="chk_hidden_space cf-col">
+                            <!-- <ng-select [multiple]="true" [allowClear]="true" [options]="data.ddOptions" [placeholder]="data.display_name" [formControlName]="data.label"
+                                [ngClass]="{'has-error': (!appointmentForm.controls[data.label].valid && appointmentForm.controls[data.label].touched)}">
+                            </ng-select> -->
+                            <app-control-messages [control]="appointmentForm.controls[data.label]"></app-control-messages>
+                        </div>
+                    </div>
+
+                    <div *ngSwitchCase="'URL'">
+                        <label class="chk-lable"  [for]="data.label">{{data.display_name}}</label><br>
+                        <div class="chk_hidden_space cf-col pos-rel">
+                            <input autocomplete="off"  [id]="data.label" (keydown)="checkRead(data.app_side,$event)" [ngClass]="{'has-error': (!appointmentForm.controls[data.label].valid && appointmentForm.controls[data.label].touched)}"
+                                class="chk-input" type="url" [placeholder]="'Enter '+data.display_name.toLowerCase()" [formControlName]="data.label" [class.half-opacity]="data.app_side==='0'" no-space
+                            />
+                            <app-control-messages [control]="appointmentForm.controls[data.label]"></app-control-messages>
+                        </div>
+                    </div>
+                    <div *ngSwitchCase="'pickupTime'">
+                        <label class="chk-lable"  [for]="data.label">{{data.display_name}}</label><br>
+                        <div class="chk_hidden_space" [ngStyle]="{ 'direction' : direction }">
+                            <input autocomplete="off"  [id]="data.label" (keydown)="checkRead(data.app_side,$event)" [ngClass]="{'has-error': (!appointmentForm.controls[data.label].valid && appointmentForm.controls[data.label].touched)}"
+                                class="chk-input" type="text" daterangepicker [options]="startTimeOptions" (selected)="selectedStartDate($event)"
+                                readonly  placeholder="Enter date" />
+                        </div>
+                    </div>
+                    <div *ngSwitchCase="'deliveryTime'" [ngStyle]="{ 'direction' : direction }">
+                        <label class="chk-lable"  [for]="data.label">{{data.display_name}}</label><br>
+                        <div class="chk_hidden_space">
+                            <input autocomplete="off"  [id]="data.label" (keydown)="checkRead(data.app_side,$event)" [ngClass]="{'has-error': (!appointmentForm.controls[data.label].valid && appointmentForm.controls[data.label].touched)}"
+                                class="chk-input" type="text" daterangepicker [options]="endTimeOptions" (selected)="selectedEndDate($event)"
+                                readonly  placeholder="Enter date" />
+                        </div>
+                    </div>
+                    <div *ngIf="data.data_type === 'Date' || data.data_type === 'Date-Future' || data.data_type === 'Date-Past' || data.data_type === 'Date-Time'
+                                                                                || data.data_type === 'Datetime-Future' || data.data_type === 'Datetime-Past' ">
+                        <label class="chk-lable" [for]="data.label">{{data.display_name}}</label><br>
+                        <div class="chk_hidden_space" [ngStyle]="{ 'direction' : direction }">
+                            <input autocomplete="off" [id]="data.label" (keydown)="checkRead(data.app_side,$event)" [ngClass]="{'has-error': (!appointmentForm.controls[data.label].valid && appointmentForm.controls[data.label].touched)}"
+                                class="chk-input" type="text" daterangepicker [options]="dateOptions[data.data_type.replace('-', '_')]"
+                                (selected)="selectedDate($event,data.label)" readonly  placeholder="Enter date" />
+                        </div>
+                    </div>
+
+                    <div *ngSwitchCase="'Checkbox'">
+                        <label class="chk-lable" [for]="data.label">{{data.display_name}}</label><br>
+                        <div class="chk_hidden_space">
+                            <input autocomplete="off" [id]="data.label" (keydown)="checkRead(data.app_side,$event)" [ngClass]="{'has-error': (!appointmentForm.controls[data.label].valid && appointmentForm.controls[data.label].touched)}"
+                                class="c_bx" type="checkbox" [formControlName]="data.label" [class.half-opacity]="data.app_side==='0'"
+                            />
+                            <app-control-messages [control]="appointmentForm.controls[data.label]"></app-control-messages>
+                        </div>
+                    </div>
+
+                    <div *ngSwitchCase="'Image'">
+                        <label class="chk-lable" [for]="data.label">{{data.display_name}}</label><br>
+                        <div style="display:inline-block">
+                            <input autocomplete="off" [id]="data.label" (keydown)="checkRead(data.app_side,$event)" class="hidden-input" type="file" [id]="data.label" #fileUpload (change)="get_img($event,data.label)" />
+                            <div class="img_inpt" *ngFor="let images of imageSrc[data.label];let i = index;">
+                                <img [src]="images" [alt]="data.display_name + ' value ' + i"/>
+                                <div class="r-img" (click)="removeImage(data.label,i)"><i class="fa fa-times" aria-hidden="true"></i></div>
+                            </div>
+                            <label [for]="data.label">
+                                <div class="add_img_lbl" [ngClass]="{'has-error': (data.required &&  appointmentForm.controls[data.label].touched) && imageBool[data.label]}">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="error-msg" [ngStyle]="{ 'direction' : direction }" *ngIf="(data.required &&  appointmentForm.controls[data.label].touched) && imageBool[data.label]" ><ng-container >{{ languageStrings.image_required ||"Image is required"}}</ng-container></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

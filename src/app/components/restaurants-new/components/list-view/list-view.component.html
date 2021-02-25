@@ -1,0 +1,209 @@
+<div class="listView">
+  <div class="sticky-top" [ngClass]="{'container p-0': !config.nlevel_enabled || (categoryDataChild && categoryDataChild.length == 0), 'marginLeftZeroCategory': config.nlevel_enabled == 1 && categoryDataChild && categoryDataChild.length > 0,'row-eq-height':!mapInitCheck}">
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <app-last-level-categories [categoryData]="categoryDataChild" *ngIf="categoryDataChild && categoryDataChild.length > 0"></app-last-level-categories>
+    </div>
+
+    <!-- bussiness categories -->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <app-business-categories (hideCategoryPage)="hideCategories($event)"></app-business-categories>
+    </div>
+
+
+  </div>
+  <div  [ngClass]="{'container p-0': !config.nlevel_enabled || (categoryDataChild && categoryDataChild.length == 0), 'marginLeftZeroCategory': config.nlevel_enabled == 1 && categoryDataChild && categoryDataChild.length > 0,'row-eq-height':!mapInitCheck}">
+  <!-- category name division -->
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="filters" *ngIf="(categoryHidden || !showCategoriesBusinessCategoriesPage)">
+    <div class="row">
+      <div class="col-md-12 filter-triggers">
+        <div class="selected-category pull-left text-left" *ngIf="categoryName && businessData && businessData.data">
+          <span class="cat-name"><b>{{categoryName}}</b></span>
+          <!-- <span class="cat-list"> ({{businessData.data.length || '0'}} {{terminology.BUSINESSES}})</span> -->
+        </div>
+
+          <!-- map view  button-->
+          <div class="viewmaplist">
+            <div class="viewmp" *ngIf="config.map_view">
+              <a *ngIf="!mapViewFlag" (click)="goToMapView(true)">
+                <i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>
+                <span class="hideText"><ng-container *ngIf="languageStrings.map_view">{{languageStrings.map_view ||'Map View'}}</ng-container></span>
+              </a>
+
+              <a *ngIf="mapViewFlag " (click)="goToMapView(false)">
+                  <i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i> 
+                  <span class="hideText"><ng-container *ngIf="languageStrings.list_view">{{languageStrings.list_view ||'List View'}}</ng-container></span>
+                </a>
+              </div> 
+            <div class="filter-column" *ngIf="showFilterIcon" (click)="showFilterArea = !showFilterArea">
+              <span class="filter-icon">
+                <span class="yfn yfn-controls-1"></span>
+                <span class="filter-text">{{languageStrings.filters || "Filters"}}</span></span>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+     <!-- stores map view -->
+    <div *ngIf="config.map_view && (categoryHidden || !showCategoriesBusinessCategoriesPage)">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="mapInitCheck">
+        <app-map-view [lat]="lat" [lng]="lng"></app-map-view>
+      </div>
+    </div>
+
+     <!-- stores list View -->
+  <div class="container p-0 d-flex flex-wrap">
+    <ng-container *ngIf="!isPlatformServer && businessData  && businessData.data && !mapInitCheck && (categoryHidden || !showCategoriesBusinessCategoriesPage)">
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 card_parent row-col-eq" *ngFor="let item of businessData.data">
+        <div class="card" (click)="navigate(item)">
+          <div class="card_inner">
+            <restaurant-tags  *ngIf="content && content.preorder_tag" [previewOn]="previewOn" [item]="item" [data]="content"></restaurant-tags>
+            <div class="card_image">
+              <img class="card_image_view" [src]="item.thumb_url || item.logo || 'assets/img/image-placeholder.svg'">
+            </div>
+            <div class="card_right">
+              <div class="top-div">
+                <p class="card_heading" [style.color]="config ? config.color: ''" [ngClass]="{'marginBottomStore':!item.description, 'marginBZero':item.description}" >{{item.store_name}}</p>
+                <p class="card_distance marginBottomStore" *ngIf="content.show_location && content.show_location.is_enabled">{{item.display_address?item.display_address:item.address }}</p>
+              </div>
+              <!-- Divider Line -->
+              <div *ngIf="(config.is_review_rating_enabled && content.show_rating && content.show_rating.is_enabled) || (item.minimum_self_pickup_amount && deliveryMode==2) || (item.merchantMinimumOrder && deliveryMode==1) || (content.show_location && content.show_location.is_enabled && item.distance ) || ((deliveryContent && deliveryContent.show_delivery_time && deliveryContent.show_delivery_time.is_enabled) && (item.combined_time || item.order_preparation_time || item.merchant_delivery_time || item.delivery_time))">
+                <hr class="d-line">
+              </div>
+              <div class="bottom">
+                <div class="bottom-div">
+                  <!-- Delivery time -->
+                  <ng-container *ngIf="(deliveryContent && deliveryContent.show_delivery_time && deliveryContent.show_delivery_time.is_enabled)">
+                    <!-- home delivery -->
+                    <p class="card_order_prep marginBottomStore mg-st" *ngIf="deliveryMode === 1 && item.combined_time && item.business_type === 1 && ((config.onboarding_business_type === onboardingBusinessType.FOOD) || (config.onboarding_business_type === onboardingBusinessType.GROCERIES)) && config.business_model_type === 'HYPERLOCAL_PRODUCT'" >
+                      {{item.combined_time | minutesDaysPipe}}
+                    </p>
+                    <!-- self pickup -->
+                    <p class="card_order_prep marginBottomStore" *ngIf="deliveryMode === 2 && item.business_type === 1 && ((config.onboarding_business_type === onboardingBusinessType.FOOD) || (config.onboarding_business_type === onboardingBusinessType.GROCERIES)) && config.business_model_type === 'HYPERLOCAL_PRODUCT' && item.order_preparation_time" >
+                      <span class="mg-st">
+                        {{item.order_preparation_time | minutesDaysPipe}}
+                      </span>
+                    </p>
+                    <!-- check for delivery inside store -->
+                    <p class="card_order_prep marginBottomStore mg-st " *ngIf="!deliveryMode && item.business_type === 1 && config.onboarding_business_type === onboardingBusinessType.FOOD && config.business_model_type === 'HYPERLOCAL_PRODUCT'" >
+                      <span *ngIf="item.home_delivery && item.self_pickup && item.combined_time"> {{item.combined_time | minutesDaysPipe}}</span>
+                      <span *ngIf="item.home_delivery && !item.self_pickup">
+                        <span *ngIf="item.merchant_delivery_time && item.merchant_as_delivery_manager">
+                          {{item.merchant_delivery_time | minutesDaysPipe}}
+                        </span>
+                        <span *ngIf="item.delivery_time && !item.merchant_as_delivery_manager">
+                          {{item.delivery_time | minutesDaysPipe}}
+                        </span>
+
+                      </span>
+                      <span *ngIf="!item.home_delivery && item.self_pickup">
+                        <span *ngIf="item.order_preparation_time">
+                          {{item.order_preparation_time | minutesDaysPipe}}
+                        </span>
+                      </span>
+                    </p>
+                  </ng-container>
+                  <!-- Distance -->
+                    <p class="card_address marginBottomStore mg-st"  *ngIf="content.show_location && content.show_location.is_enabled" >{{item.distance}}</p>
+                </div>
+                <div class="bottom-div" *ngIf="config.delivery_by_merchant">
+                  <!-- Merchant as Delivery Manager -->
+                  <div class="card_address">
+                    <p class="card_address marginBottomStore">{{terminology.DELIVERY || 'Delivery'}} <ng-container>{{languageStrings.by || "By"}}</ng-container>
+                    <ng-container  *ngIf="!item.merchant_as_delivery_manager">{{terminology.AGENT || 'Agent'}}</ng-container>
+                    <ng-container  *ngIf="item.merchant_as_delivery_manager">{{terminology.MERCHANT || 'Merchant'}}</ng-container>
+                    </p>
+                  </div>
+                </div>
+                <div class="bottom-div">
+                  <!-- Delivery Charges -->
+                  <div class="card_address" *ngIf="config.show_delivery_charge_on_list_page">
+                    <ng-container *ngIf="item.delivery_charge"><ng-container>{{terminology.DELIVERY_CHARGE || 'Delivery Charge'}}</ng-container>: {{( config.is_multi_currency_enabled ? item.payment_settings.symbol :  currency )+ '' + ( item.delivery_charge || "14.500"
+                    |decimalConfig)}}</ng-container>
+                    <ng-container *ngIf="!item.delivery_charge"><ng-container>{{languageStrings.free || "Free"}}</ng-container>&nbsp;{{terminology.DELIVERY || 'Delivery'}}</ng-container>
+                  </div>
+                </div>
+                <div class="bottom-div">
+                  <!-- Rating  -->
+                  <div class="store_rating" *ngIf="config.is_review_rating_enabled && content.show_rating && content.show_rating.is_enabled"
+                    aria-hidden="false">
+                    <i class="fa fa-star" *ngIf="item.store_rating != 0" [ngClass]="{'star-red': item.store_rating <= 1 , 'star-yellow' : (item.store_rating > 1 && item.store_rating < 3) , 'star-green' : item.store_rating >= 3}"></i>
+                    <p *ngIf="item.store_rating != 0" >{{item.store_rating.toFixed(1)}}</p>
+                    <!-- <p class="no-rating-text" *ngIf="item.store_rating == 0">
+                      {{content.show_rating.data.rating_default_text}}
+                    </p> -->
+                  </div>
+                  <!-- Minimum Order -->
+                  <div class="card_address d-flex-center">
+                    <span class="dot" [ngStyle]="{'margin':(config.is_review_rating_enabled && content.show_rating && content.show_rating.is_enabled && item.store_rating != 0)? '0 10px':'0px 8px 0px 0px' }" *ngIf="config.is_review_rating_enabled && content.show_rating && content.show_rating.is_enabled && (item.minimum_self_pickup_amount && deliveryMode==2 || item.merchantMinimumOrder && deliveryMode==1)"></span>
+                    <!-- <i class="fa fa-circle" ></i> -->
+                    <p *ngIf="item.minimum_self_pickup_amount && deliveryMode==2">
+                      <ng-container>{{languageStrings.min || "Min."}}</ng-container> {{( config.is_multi_currency_enabled ? item.payment_settings.symbol :  currency )+ '' + (item.minimum_self_pickup_amount
+                         |decimalConfig)}}
+                    </p>
+                    <p *ngIf="item.merchantMinimumOrder && deliveryMode==1">
+                      <ng-container>{{languageStrings.min || "Min."}}</ng-container> {{( config.is_multi_currency_enabled ? (item.payment_settings ? item.payment_settings.symbol : '') :  currency ) + '' + (item.merchantMinimumOrder)}}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div *ngIf="paginatingList && paginatingList.show &&  !loader.active" class="pg-ldr-prt">
+        <div class="pg-ldr-cld">
+          <div class="pg-ldr-ctr">
+            <div class="pg-loader" [ngStyle]="{'border-bottom-color': config.color,'border-left-color': config.color}"></div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- stores' shimmer  -->
+    <ng-container *ngIf="isPlatformServer && !showCategoriesBusinessCategoriesPage">
+      <div class="w-100">
+        <app-list-shimmer></app-list-shimmer>
+      </div>
+    </ng-container>
+
+  </div>
+
+  <!-- filter slide -->
+  <div class="col-md-12">
+    <div class="overlay-area" *ngIf="showFilterArea"></div>
+    <div class="filter-area" [@slideInOutState]="!showFilterArea">
+      <app-restaurant-filter></app-restaurant-filter>
+    </div>
+  </div>
+
+  <!-- conditional cases, in case of stores count is 0 -->
+  <div class="container">
+  <div *ngIf="result && businessData && businessData.data && businessData.data.length == 0 && !mapInitCheck && !businessEnabled && deliveryMode==1 && !loader.active && (categoryHidden || !showCategoriesBusinessCategoriesPage)" class="col-lg-12 col-xs-12 col-md-12 col-sm-12 no-restaurants-map no-location-map">
+    <img src="assets/img/no-location.svg" class="no-location">
+    <h3 class="fs18" *ngIf="terminology " [ngStyle]="{ 'direction' : direction }" >
+      <ng-container>{{languageStrings.sorry_we_do_not_serve_in_this_area_please_check_back_later || "Sorry, we do not serve in this area. Please check back later."}}</ng-container>
+    </h3>
+  </div>
+  <div *ngIf="result && businessData && businessData.data && businessData.data.length == 0  && !mapInitCheck && !businessEnabled && deliveryMode==2 && !loader.active && (categoryHidden || !showCategoriesBusinessCategoriesPage)" class="col-lg-12 col-xs-12 col-md-12 col-sm-12 no-restaurants-map no-location-map">
+    <img src="assets/img/no-marketplace-found.svg" class="no-location">
+    <h3 class="fs18" [ngStyle]="{ 'direction' : direction }">
+      {{languageStrings.currently_no_restaurant_is_available_for_self_pickup || "Currently, no restaurant is available for Self pickup."}}
+    </h3>
+  </div>
+  <div *ngIf="result && businessData && businessData.data && businessData.data.length == 0  && !mapInitCheck && !businessEnabled && deliveryMode==8 && !loader.active && (categoryHidden || !showCategoriesBusinessCategoriesPage)" class="col-lg-12 col-xs-12 col-md-12 col-sm-12 no-restaurants-map no-location-map">
+    <img src="assets/img/no-marketplace-found.svg" class="no-location">
+    <h3 class="fs18" [ngStyle]="{ 'direction' : direction }">
+    {{languageStrings.currently_no_restaurant_is_available_for_pickup_and_drop || "Currently, no restaurant is available for Pickup and Drop" }}
+    </h3>
+  </div>
+  <div *ngIf="result && businessData && businessData.data && businessData.data.length == 0 && businessEnabled && !mapInitCheck && (categoryHidden || !showCategoriesBusinessCategoriesPage)" class="col-lg-12 col-xs-12 col-md-12 col-sm-12 no-restaurants-map no-location-map">
+    <img src="assets/img/no-marketplace-found.svg" class="no-location">
+    <h3 class="fs18" [ngStyle]="{ 'direction' : direction }">{{languageStrings.no_merchant_to_display_for_the_selected_category || "No Merchant to display for the selected category"}}</h3>
+  </div>
+</div>
+</div>

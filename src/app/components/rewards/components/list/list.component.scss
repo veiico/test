@@ -1,0 +1,250 @@
+@import '~assets/css/variables';
+
+.main-c {
+  //height: 100%;
+  height: auto;
+  min-height: calc(100vh - 180px);
+  padding-bottom: 20px;
+}
+.heading {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.title {
+  text-align: center;
+  display: inline-block;
+  font-family: ProximaNova;
+  font-size: 25px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #333333;
+}
+
+.line {
+  margin: 0 auto;
+  width: 50px;
+}
+
+.containerOrder {
+  max-width: 1400px;
+  margin: auto;
+}
+
+.row-eq-height{
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  .row-col-eq{
+    margin-bottom: 20px;
+    position: relative;
+  }
+}
+
+/deep/ bs-tooltip-container .tooltip-inner{
+  max-width: 350px !important;
+}
+
+.card {
+  border-radius: 5.4px;
+  box-shadow: 0 0 14px 0 rgba(0, 0, 0, 0.07);
+  background-color: #ffffff;
+  padding: 15px;
+  min-height: 230px;
+  border: 2px solid $color-white;
+}
+.borderSelect{
+  border: 2px solid $color-theme;
+}
+
+.selected{
+  position: absolute;
+  top:-10px;
+  left:35px;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background-color: green;
+  &::before{
+    line-height: 23px;
+    content: '\2713';
+    text-align: center;
+    padding: 5px 6px;
+    color: white;
+  }
+}
+
+.dFlex{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.name{
+  font-family: $proxima-reg;
+  font-size: 23.4px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: 0px;
+  color: #000000;
+}
+
+.valid {
+  font-family: $proxima-reg;
+  font-size: 11px;
+  font-weight: 300;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: 0px;
+  color: #3d3d3d;
+}
+
+.readMore{
+  font-family: $proxima-semi-bold;
+  font-size: 9px;
+  font-weight: 300;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: 0px;
+  color: $color-theme;
+}
+
+.description{
+  margin-top: 6px;
+  text-overflow: ellipsis;
+  overflow-wrap: break-word;
+}
+
+.mt-10{
+  margin-top: 10px;
+}
+
+.cashback{
+  font-family: $proxima-reg;
+  font-size: 12.6px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: 0px;
+  color: #000000;
+}
+
+.logo{
+  font-size: 30px;
+
+}
+
+.colorSelect{
+  color: $color-theme !important;
+}
+
+.activated{
+  font-family: $proxima-semi-bold;
+  font-size: 12.6px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: 0px;
+  color: $color-theme;
+}
+
+.noPlan{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 20px;
+  .logo{
+    height: 150px;
+    img{
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height:auto;
+    }
+    p{
+      font-family: $proxima-reg;
+      font-size: 18px;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: 0px;
+      color: #9e9e9e;
+      margin-top: 10px;
+    }
+  }
+}
+
+.activate{
+  button{
+    width: 110px;
+    height: 28px;
+    font-family: $proxima-reg;
+    border-radius: 1.4px;
+    line-height: 16px;
+    border: solid 0.7px #000000;
+    background-color: #ffffff;
+    transition: .5s all;
+    &:hover{
+      background-color: $color-theme;
+      color: $color-white;
+      border: solid 0.7px $color-theme;
+    }
+  }
+}
+
+.modal-padding{
+  padding: 15px;
+  .fa{
+    cursor: pointer;
+  }
+  .text{
+    font-size: 20px;
+    line-height: 30px;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    text-align: center;
+    color: #333333;
+    margin-bottom: 20px;
+    display: inline-block;
+  }
+
+  .addMoney{
+    font-size: 16px;
+    font-family: $proxima-reg;
+    color: white;
+    background-color: $color-theme;
+    border: 1px solid $color-theme;
+    &:hover{
+      color: $color-theme;
+      background-color: white;
+      border: 1px solid $color-theme;
+    }
+  }
+  .showProcess{
+    padding: 20px;
+    p{
+      text-align: center;
+      font-size: 15px;
+      font-family: $proxima-reg;
+      font-weight: bold;
+    }
+  }
+}
+
+:host /deep/ app-limelight payment-limelight .message-content-payment.setWidth {
+  width: 65% !important;
+}
+
+:host /deep/ app-two-checkout payment-twocheckout .message-content-payment.setWidth {
+  width: 65% !important;
+}

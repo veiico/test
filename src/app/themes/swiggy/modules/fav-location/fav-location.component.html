@@ -1,0 +1,16 @@
+<app-header style="height:85px;padding: 0px;" [showSearch]="false" class="col-xs-12" [headerData]="config"></app-header>
+<div class="container parent-checkout">
+  <p class="text-center heading-information">Personal Information</p>
+  <div class="row">
+    <div class="col-xs-12 col-md-6">
+      <p class="text-center heading-information">Add New Addresses</p>
+      <add-fav-location [styles]="content['add'].styles" (save)="onAddressSave($event)" [address]="selectEditAddress"></add-fav-location>
+    </div>
+    <div class="col-12 col-md-3 col-md-push-3">
+      <p class="text-center heading-information" *ngIf="locations.length">Saved Addresses</p>
+      <fav-location-model *ngFor="let address of locations;" [styles]="content['address'].styles"
+       [address]="address" (edit)="onAddressEdit($event)" (delete)="fetchLocations()"></fav-location-model>
+    </div>
+  </div>
+</div>
+<!-- <app-footer-new></app-footer-new> -->

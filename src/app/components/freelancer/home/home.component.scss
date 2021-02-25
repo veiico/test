@@ -1,0 +1,158 @@
+//.location-div{
+//  margin: 40vh auto 28vh auto !important
+//}
+@import '~assets/css/variables';
+.home {
+    position: relative;
+}
+
+.margin-location {
+    margin: 35vh auto 28vh 10vh;
+}
+
+.heading {
+    .text-left {
+        text-align: left !important;
+        font-family: $mont-med !important;
+        font-size: 45px !important;
+        font-weight: bold;
+        font-style: normal;
+        font-stretch: normal;
+    }
+}
+
+.fetch-location {
+    .location-div {
+        // margin: 40vh auto 28vh 10vh !important;
+        margin: auto auto 28vh auto !important;
+    }
+}
+
+#home {
+    .fetch-location {
+        min-height: calc( 70vh);
+        //background-position: top !important;
+    }
+    .location-div {
+        max-width: 100% !important;
+    }
+    .location-div {
+        max-width: 100% !important;
+    }
+}
+
+// .buttons {
+//     display: inline-flex;
+// }
+.freelancer-btn {
+    color: #2296ff !important;
+    font-family: $mont-med;
+    background-color: #ffffff !important;
+    
+    border: none !important;
+    font-size: 16px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    padding: 20px;
+    letter-spacing: 0.6px;
+}
+
+.scrollArrow {
+    cursor: pointer;
+    position: fixed;
+    bottom: 80px;
+    right: 25px;
+    text-align: center;
+    padding: 12px 10px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    z-index: 1020;
+    background-color: #fff;
+    cursor: pointer;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .06), 0 2px 5px 0 rgba(0, 0, 0, .2);
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .06), 0 2px 5px 0 rgba(0, 0, 0, .2);
+    img {
+        transition: .5s all;
+    }
+    .scroll {
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        color: white;
+    }
+}
+
+.rotatePositive {
+    -webkit-transform: rotate(180deg);
+    /* Chrome and other webkit browsers */
+    -moz-transform: rotate(180deg);
+    /* FF */
+    -o-transform: rotate(180deg);
+    /* Opera */
+    -ms-transform: rotate(180deg);
+    /* IE9 */
+    transform: rotate(180deg);
+    /* W3C compliant browsers */
+}
+
+.rotateZero {
+    -webkit-transform: rotate(0deg);
+    /* Chrome and other webkit browsers */
+    -moz-transform: rotate(0deg);
+    /* FF */
+    -o-transform: rotate(0deg);
+    /* Opera */
+    -ms-transform: rotate(0deg);
+    /* IE9 */
+    transform: rotate(0deg);
+    /* W3C compliant browsers */
+}
+
+form {
+    .input-group input {
+        height: 46px !important;
+    }
+    .input-group-addon {
+        font-size: 24px;
+        background: #fff;
+        border-right: 0px;
+        cursor: pointer;
+        border-radius: 0px;
+    }
+    input {
+        border-left: 0px;
+        border-radius: 0px;
+    }
+}
+
+
+/******************************************
+**************single select****************
+******************************************/
+
+.home /deep/.ui-dropdown {
+    width: 100% !important;
+    height: 46px;
+    border-radius: 0px !important;
+    font-family: $proxima-reg !important;
+}
+
+.home /deep/.ui-dropdown label.ui-dropdown-label {
+    cursor: pointer;
+    height: 46px !important;
+    line-height: 35px !important;
+    border-radius: 0px !important;
+    padding: 6px 12px !important;
+}
+
+// /deep/.ui-state-default {
+//     border: 0px !important;
+// }
+
+.home /deep/.ui-dropdown .ui-dropdown-trigger {
+    width: 2.5em !important;
+    border: 0px !important;
+}

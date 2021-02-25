@@ -1,0 +1,16 @@
+<app-header class="col-xs-12" style="height:85px;padding: 0px;" [headerData]="appConfig"></app-header>
+<div class="pages-wrapper">
+  <div class="container-fluid pt-5 pb-5">
+    <div class="container-fluid terms-condition-detail" *ngIf="showPageData == 'success'" [innerHTML]="pageData | Sanitize: 'HTML'">
+    </div>
+
+    <div class="container-fluid error-page" *ngIf="showPageData == 'error'">
+      <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+      <div>
+        {{languageStrings.sorry_no_page_found || 'Sorry. No Page Found'}}
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

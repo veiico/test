@@ -1,0 +1,33 @@
+<app-header style="height:85px;padding: 0px;" class="col-xs-12" [headerData]="headerData"></app-header>
+<div class="refer row">
+  <div class="col-xs-12">
+    <div class="heading">
+      <p class="title" [ngStyle]="{ 'direction' : direction }" ><ng-container>{{languageStrings.refer_and_earn || 'Refer and Earn'}}</ng-container></p>
+      <hr class="line" [style.border-top-color]="appConfig.color" />
+    </div>
+  </div>
+  <div class="container center-p-p">
+    <div class="col-xs-12 col-sm-8 col-md-8 card-p">
+      <div class="col-xs-12 col-sm-12 col-md-12 center-p">
+        <img src="assets/img/referIcon.png" alt="refer icon" />
+      </div>
+      <div class="col-xs-12" *ngIf="showRefer">
+        <p class="text-center">{{languageStrings.no_referral_found || 'No referral found.'}}</p>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-12 referText" style="margin:20px 0">
+        <p *ngIf="referralData && !showRefer">
+          {{referralData.sender_description}}
+        </p>
+        <!--<p>How it works?</p>-->
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-12 referText"  style="margin:20px 0">
+        <div class="referCode" *ngIf="referralData && !showRefer">
+          {{referralData.referral_code}}
+        </div>
+        <!--<p style="font-size: 12px; opacity: 50%;padding-top: 5px;">tap the box to copy the referral code</p>-->
+      </div>
+    </div>
+  </div>
+
+</div>
+<app-footer></app-footer>

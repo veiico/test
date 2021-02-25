@@ -1,0 +1,231 @@
+<div class="payment" *ngIf="terminology && billInfo">
+  <p class="details" [ngStyle]="{ 'direction' : direction }">
+    <ng-container >{{ languageStrings.make_payment || "Make Payment"}}</ng-container>
+  </p>
+  <div class="row">
+    <div class="col-lg-8 col-xs-12 col-sm-8 col-md-8">
+      <div class="bill">
+        <div class="heading">
+          <h5 [ngStyle]="{ 'direction' : direction }">
+            <!--<i class="fa fa-home" aria-hidden="true"></i>-->
+            <img src="assets/img/bill-icon.svg" alt="bill icon" />
+            <ng-container>{{terminology.BILL_SUMMARY}}</ng-container>
+          </h5>
+        </div>
+        <div class="detailsOther">
+          <div>
+            <span class="text">
+              <ng-container >{{ languageStrings.subtotal || "Subtotal"}}</ng-container>
+            </span>
+            <span class="value">
+              {{currency+''}}{{billInfo.ACTUAL_AMOUNT | decimalConfig}}
+            </span>
+          </div>
+        </div>
+        <div class="detailsOther mt-5" *ngIf="billInfo &&
+        (billInfo.DELIVERY_CHARGE || (billInfo.autoAppliedPromoOnDelivery && billInfo.autoAppliedPromoOnDelivery.length))">
+          <div>
+            <span class="text">
+              <ng-container>{{ terminology.DELIVERY_CHARGE || 'Delivery Charge'}}</ng-container>
+            </span>
+            <span class="value">
+              <span *ngIf="billInfo.DELIVERY_CHARGE_AFTER_DISCOUNT !== undefined ;else dcWithoutDiscount">{{currency+''}}{{billInfo.DELIVERY_CHARGE_AFTER_DISCOUNT|decimalConfig}}</span>
+              <ng-template #dcWithoutDiscount>{{currency+''}}{{(billInfo.DELIVERY_CHARGE || 0) | decimalConfig}}</ng-template>
+            </span>
+          </div>
+
+          <div class="auto_promo_div" *ngIf="billInfo.autoAppliedPromoOnDelivery && billInfo.autoAppliedPromoOnDelivery.length">
+            <p class="auto_promo" *ngFor="let promo of billInfo.autoAppliedPromoOnDelivery">{{'('+promo.description+')'}}</p>
+          </div>
+        </div>
+        <div class="detailsOther" *ngIf="paylater_transaction && transcationAmount">
+          <div>
+            <span class="text">
+              <ng-container >{{terminology.TRANSACTION_CHARGE || 'Transaction Charge'}}</ng-container>
+            </span>
+            <span class="value">
+              {{currency+''}}{{billInfo.TRANSACTIONAL_CHARGES_INFO.PAYLATER.transaction_charges | decimalConfig}}
+            </span>
+          </div>
+        </div>
+        <!-- <div class="pmnt_crt_div_bb" *ngIf="paylater_transaction">
+          <div class="pmnt_crt_div">
+            <div class="pt_name text-capitalize">{{terminology.TRANSACTION_CHARGE || 'Transaction Charge'}}</div>
+            <div class="pt_val">
+              <span>{{currency+' '}}{{billInfo.TRANSACTIONAL_CHARGES_INFO.PAYLATER.transaction_charges|decimalConfig}}</span>
+            </div>
+          </div>
+        </div> -->
+        <div class="detailsOther mt-5" *ngFor="let tax of billInfo.USER_TAXES">
+          <div>
+            <span class="text" *ngIf="!tax.tax_type">
+              <ng-container>{{tax.tax_name+' @ '+tax.tax_percentage+'%'}}</ng-container>
+            </span>
+            <span class="text" *ngIf="tax.tax_type">
+              <ng-container>{{tax.tax_name}}</ng-container>
+            </span>
+            <span class="value">
+              {{currency+''}}{{tax.tax_amount|decimalConfig}}
+            </span>
+          </div>
+        </div>
+        <div class="detailsOther mt-5" *ngIf="billInfo && billInfo.DISCOUNT">
+          <div>
+            <span class="text">
+              <ng-container >{{ languageStrings.discount || "Discount"}}</ng-container>
+            </span>
+            <span class="value">
+              -{{currency+''}}{{billInfo.DISCOUNT | decimalConfig}}
+            </span>
+          </div>
+
+          <div class="auto_promo_div" *ngIf="billInfo && billInfo.autoAppliedPromoOnSubtotal && billInfo.autoAppliedPromoOnSubtotal.length">
+            <p class="auto_promo" *ngFor="let promo of billInfo.autoAppliedPromoOnSubtotal">{{'('+promo.description+')'}}</p>
+          </div>
+
+        </div>
+        <div class="detailsOther mt-5" *ngIf="billInfo && billInfo.TIP">
+          <div>
+            <span class="text">
+              <ng-container>{{terminology.TIP}}</ng-container>
+            </span>
+            <span class="value">
+              {{currency+''}}{{billInfo.TIP | decimalConfig}}
+            </span>
+          </div>
+        </div>
+        <div class="detailsOther mt-5" *ngIf="billInfo && billInfo.ADDITIONAL_AMOUNT">
+          <div>
+            <span class="text">
+              <ng-container >{{ languageStrings.additional_amount || "Additional Amount"}}</ng-container>
+            </span>
+            <span class="value">
+              {{currency+''}}{{billInfo.ADDITIONAL_AMOUNT | decimalConfig}}
+            </span>
+          </div>
+        </div>
+        <div class="detailsOther mt-5" *ngIf="billInfo && billInfo.LOYALTY_POINT_USED">
+          <div>
+            <span class="text">
+              {{terminology.LOYALTY_POINT}}
+              <ng-container >{{ languageStrings.redeemed || "Redeemed"}}</ng-container> ({{billInfo.LOYALTY_POINT_USED}})
+            </span>
+            <span class="value">
+              -{{currency+''}}{{billInfo.LOYALTY_POINT_DISCOUNT | decimalConfig}}
+            </span>
+          </div>
+        </div>
+        <div class="totalDetailsOther" *ngIf="!paylater_transaction && !transcationAmount">
+          <div>
+            <hr/>
+          </div>
+          <div>
+            <span class="text">
+              <ng-container >{{ languageStrings.total || "Total"}}</ng-container>
+            </span>
+            <span class="value">
+              {{currency+''}}{{billInfo.NET_PAYABLE_AMOUNT | decimalConfig}}
+            </span>
+          </div>
+        </div>
+        <div class="totalDetailsOther" *ngIf="paylater_transaction && transcationAmount">
+          <div>
+            <hr/>
+          </div>
+          <div>
+            <span class="text">
+              <ng-container >{{ languageStrings.total || "Total"}}</ng-container>
+            </span>
+            <span class="value">
+              {{currency+''}}{{billInfo.TRANSACTIONAL_CHARGES_INFO.PAYLATER.total_charges | decimalConfig}}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="promo">
+        <div *ngIf="(billInfo.PROMOS && billInfo.PROMOS.length) || (billInfo.REFERRAL && billInfo.REFERRAL.length)">
+          <div class="heading">
+            <h5 [ngStyle]="{ 'direction' : direction }">
+              <!--<i class="fa fa-home" aria-hidden="true"></i>-->
+              <img src="assets/img/promotions-icon.svg" alt="bill icon" />
+              <ng-container >{{ languageStrings.promotion || 'Promotion(s)'}}</ng-container>
+            </h5>
+          </div>
+          <div class="">
+            <app-promo-list [list]="billInfo" [selectedPromoReferral]="selectedReferralPromo" (selectedItem)="selectedPromo($event)"></app-promo-list>
+          </div>
+        </div>
+        <div class="promo-enter hidden-sm hidden-lg hidden-md" *ngIf="referralStatus || billInfo.SHOW_PROMO_BTN">
+          <app-promo-enter [list]="billInfo" (selectedItem)="selectedPromo($event)"></app-promo-enter>
+        </div>
+        <!-- uncomment when loyalty points are live from backend -->
+        <!-- <div class="promo-enter hidden-sm hidden-lg hidden-md" *ngIf="formSettings.is_loyalty_point_enabled && +billInfo.ACTUAL_AMOUNT">
+          <app-laundry-loyalty [list]="billInfo" (enteredPoint)="loyaltyPoints($event)"></app-laundry-loyalty>
+        </div> -->
+        <div class="promo-enter hidden-sm hidden-lg hidden-md" *ngIf="(billInfo && billInfo.TIP_ENABLE_DISABLE)">
+          <app-tip [list]="billInfo" (enteredTip)="tipAdded($event)"></app-tip>
+        </div>
+      </div>
+
+      <div class="promo paymentMethod">
+        <div>
+          <div class="heading">
+            <h5 [ngStyle]="{ 'direction' : direction }">
+              <!--<i class="fa fa-home" aria-hidden="true"></i>-->
+              <img src="assets/img/payment-icon.svg" alt="payment icon" /> {{terminology.PAYMENT_METHOD}}
+            </h5>
+          </div>
+          <div class="">
+            <app-enabled-payment-methods [list]="billInfo" [hideCash]="'false'" [hidePayLater]="'false'" [paymentFor]="'0'" [triggerPayment]="triggerPayment"
+              [walletDetails]="walletDetails" (paymentResponse)="paymentResponse($event)" (selectedMethod)="paymentMethod($event)"
+              [getOrderCreationPayload]="getOrderCreationPayload"></app-enabled-payment-methods>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4 col-sm-4 col-xs-12 col-md-4">
+      <div class="promo-enter hidden-xs" *ngIf="referralStatus || billInfo.SHOW_PROMO_BTN">
+        <app-promo-enter [list]="billInfo" (selectedItem)="selectedPromo($event)"></app-promo-enter>
+      </div>
+      <!-- uncomment when loyalty points are live from backend -->
+      <!-- <div class="promo-enter hidden-xs" *ngIf="formSettings.is_loyalty_point_enabled && +billInfo.ACTUAL_AMOUNT">
+        <app-laundry-loyalty [list]="billInfo" (enteredPoint)="loyaltyPoints($event)"></app-laundry-loyalty>
+      </div> -->
+      <div class="promo-enter hidden-xs" *ngIf="(billInfo && billInfo.TIP_ENABLE_DISABLE)">
+        <app-tip [list]="billInfo" (enteredTip)="tipAdded($event)"></app-tip>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-20" *ngIf="showPayButton">
+    <div class="col-lg-12 text-right">
+      <button class="btn continueBtn" type="button" (click)="Pay()" [ngStyle]="{ 'direction' : direction }">
+        <ng-container>{{terminology.PAY}}</ng-container> {{currency}} {{billInfo.NET_PAYABLE_AMOUNT | decimalConfig}}</button>
+    </div>
+  </div>
+</div>
+
+<div class="razorpay" *ngIf="razorPayUrl">
+  <div class="row" style="padding: 10px">
+    <div class="col-md-12">
+      <iframe #iframe id="razorPayPop" style="border: none" #razorPayPop [src]="razorPayUrl" height="610px" width="100%" (load)="getContentRazorpay(razorPayPop)"></iframe>
+    </div>
+  </div>
+</div>
+
+<app-modal *ngIf="transactional_check" [modalType]="'modal-sm'">
+  <div body>
+    <div class="row" style="padding: 10px">
+      <div class="col-md-12 text-center">
+        <h4>
+          <ng-container>{{ languageStrings.transaction_charge_be_added_for_this  || 'Transaction Charge will be added for this payment'}} </ng-container>
+        </h4>
+      </div>
+      <div class="col-md-12 text-right wallet-action-btn" style="padding: 17px">
+        <button class="btn btn-primary add-now-btn" (click)="addTransactional()">{{ languageStrings.add_to_continue || "Add to Continue"}}</button>
+      </div>
+    </div>
+  </div>
+</app-modal>

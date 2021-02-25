@@ -1,0 +1,103 @@
+@import "~assets/css/variables";
+:host /deep/ .ui-dropdown .ui-dropdown-panel .ui-dropdown-items {
+  padding: 0;
+}
+:host /deep/ .ui-dropdown .ui-dropdown-panel {
+  z-index: 2 !important;
+  background-color: white;
+}
+:host /deep/ .ui-dropdown {
+  padding-right: 30px;
+}
+:host /deep/ .ui-dropdown .ui-dropdown-panel .ui-dropdown-items li {
+  padding: 5px !important;
+  border-left: 0px solid transparent;
+  label {
+    margin: 0;
+  }
+  &:hover {
+    //border-left: 2px solid $color-blue;
+    background-color: #d9eeff;
+  }
+  color: $heading-font-color;
+}
+:host /deep/ p-dropdown {
+  .ui-dropdown {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 9px;
+    padding-right: 30px;
+    // width: 100%!important;d
+    background-color: #fff;
+    max-width: 100%;
+    line-height: normal;
+    // width:100%!important;
+    &:hover{
+        border-color: #ddd;
+        background-color: #fff;
+        color: #212121;
+    }
+    .ui-dropdown-label {
+      color: $heading-font-color;
+      margin: 0;
+      font-size: 14px;
+      label {
+        margin-bottom: 0;
+        font-size: 14px;
+        color: $heading-font-color;
+      }
+    }
+  }
+  &.full-width {
+    .ui-dropdown {
+      width: 100% !important;
+    }
+  }
+}
+:host /deep/ .ui-state-disabled {
+  background-color: var(--gray) !important  ;
+  color: $heading-font-color !important;
+  opacity: 0.5;
+}
+:host /deep/ .ui-dropdown .ui-dropdown-trigger {
+  right: 4px;
+  .ui-dropdown-trigger-icon {
+    color: $heading-font-color;
+    //font-size: 20px;
+    height: 16px;
+    width: 16px;
+    //border: 1px solid black;
+  }
+}
+
+:host /deep/ p-dropdown:not(.no-border) .ui-dropdown .ui-dropdown-label {
+  padding: 0 5px;
+  margin: 0;
+  font-size: 14px;
+  color: $heading-font-color;
+}
+:host
+  /deep/
+  .ui-dropdown
+  .ui-dropdown-panel
+  .ui-dropdown-items
+  li.ui-state-highlight {
+  background-color: $color-blue;
+  color: white;
+}
+
+:host /deep/ .ui-dropdown .ui-dropdown-trigger .fa {
+  color: $heading-font-color;
+}
+
+:host /deep/ .ui-dropdown {
+  border: solid 1px $color-light-gray;
+}
+
+:host /deep/ p-dropdown {
+  &.full-width {
+    .ui-dropdown {
+      width: 100% !important;
+    }
+  }
+}

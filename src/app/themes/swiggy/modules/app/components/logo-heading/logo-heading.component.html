@@ -1,0 +1,26 @@
+<div id="logoHeader" class="image-container" [ngStyle]="{'background-image': 'url(' + data.bg_image + ' )' }" [ngClass]="{'full-height':fullHeight}">
+
+  <div class="logo">
+    <img [src]="data.logo">
+  </div>
+  <div class="heading">
+    <h3 class="col-lg-8 col-sm-8 col-xs-12">{{data.heading}}</h3>
+  </div>
+  <!-- search component -->
+  
+  <div class="search-component"  [@slideInOutState]="!showFindBusiness" style="z-index:20">
+    <app-autocomplete [showDateRange]="showDateRange" class="col-xs-12 col-sm-7" 
+    [ngClass]="{'col-md-5 col-lg-4':!showDateRange , 'col-md-7 col-lg-5': showDateRange}"></app-autocomplete>  
+  </div>
+  <div class="search-component" *ngIf="showDefaultCustom">
+    <div class="col-xs-12 col-sm-7" [ngClass]="{'col-md-5 col-lg-4':!showDateRange , 'col-md-7 col-lg-5': showDateRange}">
+      <div class="eqHeight" *ngIf="!showFindBusiness">
+          <button class="search-button" type="button" (click)="goToCustomCheckout()">{{terminology.CUSTOM_ORDER}}</button>
+        <button class="search-button" type="button" (click)="showFindBusiness=true" >{{terminology.GO_TO_MARKETPLACE}}</button>
+      </div>
+      <div class="text-center back-link" *ngIf="showFindBusiness && showDefaultCustom"> 
+          <span (click)="showFindBusiness=false" ><i class="fa fa-angle-left" aria-hidden="true"></i> <ng-container>{{languageStrings.back || 'Back'}}</ng-container></span> 
+       </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,111 @@
+.d-flex {
+  display: flex;
+}
+
+.f-c {
+  flex-direction: column;
+}
+
+form.checkout {
+  text-align: center;
+  border: 2px solid #eee;
+  border-radius: 8px;
+  padding: 1rem 2rem;
+  background: white;
+  width: 800px;
+  font-family: ProximaNova-Regular;
+  color: #525252;
+  font-size: 16px;
+  overflow: scroll;
+}
+
+.StripeElement {
+  background-color: white;
+  padding: 8px 12px;
+  
+  border: 1px solid transparent;
+  box-shadow: 0 1px 3px 0 #e6ebf1;
+  -webkit-transition: box-shadow 150ms ease;
+  transition: box-shadow 150ms ease;
+}
+
+.StripeElement--focus {
+  box-shadow: 0 1px 3px 0 #cfd7df;
+}
+
+.StripeElement--invalid {
+  border-color: #fa755a;
+}
+
+.StripeElement--webkit-autofill {
+  background-color: #fefde5 !important;
+}
+
+input#billing {
+  padding-left: 1rem;
+  border: 0;
+  box-shadow: 1px 0px 3px 1px #80808029 !important;
+  -webkit-box-shadow: 1px 0px 3px 1px #80808029 !important;
+  height: 4rem;
+  font-size: 1.35rem;
+  margin-bottom: 1.5rem;
+  -webkit-appearance: none;
+}
+
+input#billing:focus {
+  border: 0;
+  outline: 0;
+}
+
+div#cityDiv {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+span#mandatory {
+  color: red;
+  text-align: left;
+  font-size: 1.35rem;
+}
+
+.mainDiv {
+  padding-top: 100px !important;
+  justify-content: center;
+  overflow: scroll;
+}
+
+.city1 {
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+}
+
+@media (max-width:768px) {
+  form.checkout {
+    width: 70%;
+  }  
+}
+
+@media (max-width: 414px) {
+  form.checkout {
+    width: 100%;
+  }
+
+  div#cityDiv {
+    flex-direction: column;
+  }
+
+  input#billing {
+    width: 100% !important;
+  }
+
+  .mainDiv {
+    padding: 15px 0px;
+  }
+
+  .city1 {
+    width: 100% !important;
+    margin-bottom: 1rem;
+  }
+}

@@ -1,0 +1,126 @@
+<div class="review" *ngIf="langJson && terminology">
+  <p class="details" [ngStyle]="{ 'direction' : direction }"><ng-container>{{languageStrings.review_your_order || 'Review Your Order'}}</ng-container></p>
+  <div class="row">
+    <div class="col-lg-6 col-xs-12 col-sm-6 col-md-6">
+      <div class="heading">
+        <h5 [ngStyle]="{ 'direction' : direction }">
+          <i class="fa fa-home" aria-hidden="true"></i>
+          <ng-container>{{languageStrings.pickup_details || 'Pickup Details'}}</ng-container>
+        </h5>
+      </div>
+      <div class="detailsOther">
+        <p class="name" [ngStyle]="{ 'direction' : direction }">{{stepsArray[0].data[0].name}} |
+          +{{stepsArray[0].data[0].country_code}} {{stepsArray[0].data[0].phone}}</p>
+        <p class="rest" [ngStyle]="{ 'direction' : direction }">{{stepsArray[0].data[0].landmark}}</p>
+        <p class="rest" [ngStyle]="{ 'direction' : direction }">{{stepsArray[0].data[0].flat ? stepsArray[0].data[0].flat + ',' + stepsArray[0].data[0].address
+          : stepsArray[0].data[0].address}}</p>
+      </div>
+    </div>
+    <div class="col-lg-6 col-xs-12 col-sm-6 col-md-6">
+      <div class="heading">
+        <h5 [ngStyle]="{ 'direction' : direction }">
+          <i class="fa fa-home" aria-hidden="true"></i>
+          <ng-container>{{languageStrings.delivery_details || 'Delivery Details'}}</ng-container>
+        </h5>
+      </div>
+      <div class="detailsOther">
+        <p class="name" [ngStyle]="{ 'direction' : direction }">{{stepsArray[1].data[0].name}} |
+          +{{stepsArray[1].data[0].country_code}} {{stepsArray[1].data[0].phone}}</p>
+        <p class="rest" [ngStyle]="{ 'direction' : direction }">{{stepsArray[1].data[0].landmark}}</p>
+        <p class="rest" [ngStyle]="{ 'direction' : direction }">{{stepsArray[1].data[0].flat ? stepsArray[1].data[0].flat + ',' + stepsArray[1].data[0].address
+          : stepsArray[1].data[0].address}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12">
+      <div class="heading">
+        <h5 [ngStyle]="{ 'direction' : direction }">
+          <i class="fa fa-calendar" aria-hidden="true"></i>
+          <ng-container>{{languageStrings.timings || 'Timings'}}</ng-container>
+        </h5>
+      </div>
+      <div class="detailsOther">
+        <p class="rest" [ngStyle]="{ 'direction' : direction }">
+          <span class="name">{{terminology.PICKUP}}:&nbsp;&nbsp;</span>
+          <span>{{pickSlots.start_time | dateTimeFormat: 'dd LLL':'+0000'}} | {{pickSlots.start_time | dateTimeFormat: 'shortTime':'+0000'}} to {{pickSlots.end_time | dateTimeFormat: 'shortTime':'+0000'}}</span>
+        </p>
+        <p class="rest" [ngStyle]="{ 'direction' : direction }">
+          <span class="name">{{terminology.DELIVERY}}:&nbsp;&nbsp;</span>
+          <span>{{deliverySlots.start_time | dateTimeFormat: 'dd LLL':'+0000'}} | {{deliverySlots.start_time | dateTimeFormat: 'shortTime':'+0000'}} to {{deliverySlots.end_time | dateTimeFormat: 'shortTime':'+0000'}}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="products && products.length">
+    <div class="heading col-lg-12 col-sm-12 col-md-12 col-xs-12">
+      <h5 [ngStyle]="{ 'direction' : direction }">
+        <ng-container>{{terminology.PRODUCTS}}</ng-container>
+      </h5>
+      <div class="col-lg-6 col-sm-6 col-xs-12 col-md-6 product" *ngFor="let product of products; let i = index;">
+        <p [ngStyle]="{ 'direction' : direction }">
+          {{product.name}}
+        <span class="pull-right">
+          <div class="p-action-btn">
+            <div style="display: flex">
+              <div appBs class="p-minus" (click)="decreaseQuantity(product, i)">
+                <svg width="10" height="7" viewBox="0 0 10 2">
+                  <path fill="#858585" fill-rule="nonzero" d="M0 1.75h10V.25H0z" />
+                </svg>
+              </div>
+              <div class="p-quantity">
+                {{product.quantity}}
+              </div>
+              <div class="p-plus" [style.background-color]="formSettings.btn_color?formSettings.btn_color:'#1a9943'"
+                   appBs (click)="increaseQuantity(product, i)">
+                <svg width="9" height="9" viewBox="0 0 10 10">
+                  <path fill="#FFF" fill-rule="nonzero" d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+                </svg>
+              </div>
+          </div>
+        </div>
+        </span>
+        <span class="detailsOther">
+            <div class="rest">{{currency}} {{product.price | decimalConfig}} <ng-container *ngIf="product.unit_type >1">{{'/ '+priceType[product.unit_type].name}}</ng-container></div>
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="heading col-lg-12 col-sm-12 col-md-12 col-xs-12">
+      <h5 [ngStyle]="{ 'direction' : direction }">
+        <ng-container>{{terminology.NOTES}}</ng-container>
+      </h5>
+    </div>
+    <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12">
+      <textarea class="form-control description" style="margin-bottom: 10px;"
+                [(ngModel)]="description"
+                (change)="enterDescription()"
+             placeholder="{{languageStrings.enter_your_notes_here || 'Enter your notes here'}}"
+                aria-label='Enter your notes here'
+                [ngStyle]="{ 'direction' : direction }"></textarea>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="showCheckoutTemplate">
+    <div class="heading col-lg-12 col-sm-12 col-md-12 col-xs-12">
+      <h5 [ngStyle]="{ 'direction' : direction }">
+        <ng-container>{{terminology.CHECKOUT_TEMPLATE || 'Additional Information'}}</ng-container>
+      </h5>
+    </div>
+    <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12">
+      <app-checkout-template #checkoutTemplate (updatePrice)="onCheckoutTemplateEvent($event)"
+      [checkoutType]="checkoutTemplateType.NORMAL_ORDER"></app-checkout-template>
+    </div>
+  </div>
+
+  <div class="row mt-20">
+    <div class="col-lg-12 text-right">
+      <!-- (click)="confirmOrder()" -->
+      <button class="btn continueBtn" type="button"
+              (click)="continueOption()"
+              [ngStyle]="{ 'direction' : direction }"><ng-container>{{languageStrings.confirm_order || 'Confirm Order'}}</ng-container> {{currency}} {{cartValue | decimalConfig}}</button>
+    </div>
+  </div>
+</div>

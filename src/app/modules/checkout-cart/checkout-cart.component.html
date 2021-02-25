@@ -1,0 +1,545 @@
+<div class="checkout_card cartSideColor storeCard">
+  <div class="cart-ready">
+    <span class="chk_inr_hdng_txt ">{{ languageStrings.your_cart_is_ready || 'Your cart is ready'}}
+      <!-- <span class="lowercase">{{terminology.CART || 'cart'}}</span> is ready -->
+    </span>
+      <div class="buttons-parent">
+        <span class="text-capitalize clearCart" (click)="returnCatalogue()">
+          <!-- <i class="fa fa-arrow-left"></i> -->
+          <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+            y="0px" width="13.394px" height="13.394px" viewBox="0 0 489.394 489.394"
+            style="enable-background:new 0 0 489.394 489.394;" xml:space="preserve">
+            <g>
+              <path [attr.fill]="appConfig.color" d="M375.789,92.867H166.864l17.507-42.795c3.724-9.132,1-19.574-6.691-25.744c-7.701-6.166-18.538-6.508-26.639-0.879
+                  L9.574,121.71c-6.197,4.304-9.795,11.457-9.563,18.995c0.231,7.533,4.261,14.446,10.71,18.359l147.925,89.823
+                  c8.417,5.108,19.18,4.093,26.481-2.499c7.312-6.591,9.427-17.312,5.219-26.202l-19.443-41.132h204.886
+                  c15.119,0,27.418,12.536,27.418,27.654v149.852c0,15.118-12.299,27.19-27.418,27.19h-226.74c-20.226,0-36.623,16.396-36.623,36.622
+                  v12.942c0,20.228,16.397,36.624,36.623,36.624h226.74c62.642,0,113.604-50.732,113.604-113.379V206.709
+                  C489.395,144.062,438.431,92.867,375.789,92.867z" />
+            </g>
+          </svg>
+          <span >{{languageStrings.return || 'Return'}} </span>
+        </span>
+        <span class="text-capitalize clearCart" (click)="clearCart()" *ngIf="cartData.length">
+          <i class="fa fa-close"></i> {{languageStrings.clear || 'Clear'}}
+        </span>
+      </div>
+  </div>
+
+  <div class="cart-details-container">
+    <!-- Logo & store details -->
+    <div class="store-details-container pl-15 pr-15">
+      <img [src]="storeData.logo || 'assets/img/image-placeholder.svg'"
+      [alt]="storeData.store_name">
+      <div *ngIf="!isPlatformServer;else storeNameShimmer" style="overflow: hidden;">
+        <!-- <p class="store-name">{{storeData.store_name}}</p> -->
+        <p class="store-name" [tooltip]="storeData.store_name?storeData.store_name:''" data-placement="bottom">{{storeData.store_name}}</p>
+        <!-- <p class="store-address">{{storeData.display_address}}</p> -->
+        <p class="store-address" *ngIf="appConfig.display_merchant_address" [tooltip]="storeData.display_address?storeData.display_address:''" >{{storeData.display_address}}</p>
+      </div>
+      <ng-template #storeNameShimmer>
+        <div>
+          <div class="block pulsate" style='width:170px;margin-bottom:17px'></div>
+          <div class="block2 pulsate" style='width:120px'></div>
+          <div class="block2 pulsate" style='width:80px'></div>
+        </div>
+      </ng-template>
+    </div>
+
+    <div class="pl-15 pr-15 checkout-items">
+      <div *ngFor="let product of cartData;let i = index;trackBy:productsTrackBy">
+        <div class="chk_crt_div item">
+          <div class="image col-lg-1 p-0">
+            <img  *ngIf="appConfig.enable_veg_non_veg_filter === 1 && (product.is_veg === 1 || product.is_veg === 0)" [src]="product.is_veg?'assets/img/veg.jpg':'assets/img/non_veg.jpg'" class="veg-only"   [ngClass]="{'veg-img':appConfig.is_product_image_visible_on_checkout && product.image_url}" alt="veg nonveg symbol">
+                 <img  *ngIf="appConfig.is_product_image_visible_on_checkout && product.image_url && appConfig.onboarding_business_type != onboardingBusinessType.LAUNDRY" [src]="product.image_url" class="product-img">
+          </div>
+
+          <div class="cc_name col-lg-9 col-md-6 col-xs-8 p-0">
+            <!-- <p style="margin:0;" class="cc_name_para">{{product.name}}</p> -->
+            <p [tooltip]="product.name?product.name:''" class="cc_name_para" data-placement="bottom">{{product.name}}</p>
+
+
+
+            <p *ngIf="product.customizations && product.customizations.length" class="app-sub-item addons-text">
+              {{product.customizations | join : ',' : 'name'}}
+              <span class="edit-customization" *ngIf = "appConfig && appConfig.business_type == business_type.PRODUCT_MARKETPLACE"><i class="fa fa-pencil" (click)="editCustomization(product,i)"> </i></span>
+            </p>
+            <span class="amount" *ngIf="appConfig.show_product_price == 1 || product.showPrice > 0">{{currency +''}} {{(product.quantity * product.showPrice)|decimalConfig}}</span>
+          </div>
+
+          <div class="cc_total col-lg-6 col-md-6 col-xs-5 p-0" style="justify-content: flex-end">
+            <div style="display: flex;justify-content: flex-end;">
+              <app-item-button [product]="product" [index]="i" [loaders]="loaders.asObservable()" (quantityChange)="onQuantityChange(product)"></app-item-button>
+            </div>
+            <!-- <div style="display: flex;justify-content: flex-end;">
+              <app-item-buttonmax [product]="product" [index]="i" [loaders]="loaders.asObservable()" (quantityChange)="onQuantityChange(product)"></app-item-buttonmax>
+            </div> -->
+            <div>
+              <!-- <div class="text-right">
+                <span class="amount" *ngIf="appConfig.show_product_price == 1 || product.showPrice > 0">{{currency +''}} {{(product.quantity * product.showPrice)|decimalConfig}}</span>
+              </div> -->
+              <!-- <span [ngStyle]="{ 'direction' : direction }" *ngIf="appConfig.business_type == 2 && product.unit_type > 1 && (appConfig.show_product_price == 1 || product.showPrice > 0)"
+                style="font-size: 13px;font-weight: 600;">
+                / {{product.unit}}
+                <span *ngIf="product.unit_type == 2" style="font-weight: 600;">
+                  <ng-container i18n>minute(s)</ng-container>
+                </span>
+                <span *ngIf="product.unit_type == 3" style="font-weight: 600;">
+                  <ng-container i18n>hour(s)</ng-container>
+                </span>
+                <span *ngIf="product.unit_type == 4 && appConfig.business_model_type != 'RENTAL'" style="font-weight: 600;">
+                  <ng-container i18n>day(s)</ng-container>
+                </span>
+                <span *ngIf="product.unit_type == 4 && appConfig.business_model_type == 'RENTAL'" style="font-weight: 600;">
+                  <ng-container i18n>night(s)</ng-container>
+                </span>
+                <span *ngIf="product.unit_type == 5" style="font-weight: 600;">
+                  <ng-container i18n>week(s)</ng-container>
+                </span>
+                <span *ngIf="product.unit_type == 6" style="font-weight: 600;">
+                  <ng-container i18n>month(s)</ng-container>
+                </span>
+                <span *ngIf="product.unit_type == 7" style="font-weight: 600;">
+                  <ng-container i18n>year(s)</ng-container>
+                </span>
+                <span *ngIf="product.unit_type == 8" style="font-weight: 600;">
+                  <ng-container i18n>Kg(s)</ng-container>
+                </span>
+                <span *ngIf="product.unit_type == 9" style="font-weight: 600;">
+                  <ng-container i18n>Pounds(s)</ng-container>
+                </span>
+                <span *ngIf="product.unit_type == 10" style="font-weight: 600;">
+                  <ng-container i18n>Person(s)</ng-container>
+                </span>
+                <span *ngIf="product.unit_type == 11" style="font-weight: 600;">
+                  <ng-container i18n>Kilometer(s)</ng-container>
+                </span>
+                <span style="position: relative;" #pirceTip *ngIf="product && product.variablePrice && product.variablePrice.length > 1"
+                  (mouseenter)="op.show($event)" (mouseleave)="op.hide($event)" class="pirce-tip">
+                  <i class="fa fa-info-circle" style="cursor:pointer;"></i>
+                  <p-overlayPanel [appendTo]="pirceTip" [showCloseIcon]="'true'" [dismissable]="'true'" #op>
+                    <div class="price-list">
+                      <div *ngFor="let price of product.variablePrice">
+                        <div>{{currency + ((price.price |decimalConfig) || '0') + ' / ' + priceTypeConst[price.price_type].name}}</div>
+                      </div>
+                    </div>
+                  </p-overlayPanel>
+                </span>
+
+              </span> -->
+            </div>
+          </div>
+        </div>
+
+        <div class="chk_crt_div item" *ngIf="appConfig.business_type == 2 && product.unit_type > 1 &&
+            billData && billData.productTotalForService">
+          <div class="cc_name col-lg-6 col-md-6 col-xs-7 p-0">
+              <p style="margin:0;">{{ languageStrings.total_price || "total price"}}</p>
+          </div>
+          <div class="text-right cc_total cc_service_total justify-content-end col-lg-6 col-md-6 col-xs-5 p-0" >
+            <span style="position: relative;" #container (mouseenter)="op.show($event)" (mouseleave)="op.hide($event)" *ngIf="billData.BILL_BREAKUP && billData.BILL_BREAKUP.length">
+              <i class="fa fa-info-circle" style="cursor:pointer;"></i>
+              <p-overlayPanel [appendTo]="container" [showCloseIcon]="'true'" [dismissable]="'true'" #op>
+                <div class="price-list">
+                  <div *ngFor="let billData of billData.BILL_BREAKUP">
+                    <div *ngIf="billData.unit > 0">{{currency + (((billData.price * billData.unit) |decimalConfig) || '0') + ' @ ' + ((billData.price
+                      |decimalConfig) || '0') + ' / ' + priceTypeConst[billData.price_type].name + ' x ' + billData.unit}}</div>
+                  </div>
+                </div>
+              </p-overlayPanel>
+            </span>
+            <p style="margin:0; margin-right: 5px;">{{currency +''}} {{billData.productTotalForService|decimalConfig}}</p>
+          </div>
+        </div>
+
+          <div *ngIf="product.tax" class="row">
+            <div *ngFor="let tax of product.tax">
+              <p class="col-lg-6 col-md-6 col-sm-6 col-xs-6" [ngStyle]="{ 'direction' : direction }">
+                {{tax.tax_name}}
+                <span class="tax-percantage" *ngIf="!tax.tax_type">@ {{tax.tax_percentage}}%</span>
+              </p>
+              <p class="text-right col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                {{currency +''}} {{tax.tax_amount|decimalConfig}}
+              </p>
+            </div>
+          </div>
+
+
+
+        <div *ngIf="product.start_time && product.dateFlag" class="durationFormat">
+          {{ languageStrings.duration || 'Duration'}}: {{product.start_time | dateTimeFormat:'MMM d, y, h:mm':'+0000'}}
+          <span *ngIf="(product.end_time && appConfig.pd_or_appointment == 2 && product.unit_type != 1)">- {{product.end_time | dateTimeFormat:'h:mm a':'+0000'}}</span>
+          <span *ngIf="(product.end_time && appConfig.pd_or_appointment == 1 && product.unit_type != 1)">- {{product.end_time | dateTimeFormat:'h:mm a':'+0000'}}</span>
+          <span *ngIf="product.end_time && appConfig.pd_or_appointment == 1 && product.unit_type == 1 && product.enable_tookan_agent">- {{product.end_time | dateTimeFormat:'h:mm a':'+0000'}}</span>
+          <span *ngIf="(product.end_time && appConfig.pd_or_appointment == 2 && product.unit_type == 1)">- {{product.end_time | dateTimeFormat:'h:mm a':'+0000'}}</span>
+        </div>
+        <div *ngIf="product.start_time && !product.dateFlag" class="durationFormat">
+          {{ languageStrings.duration || 'Duration'}}: {{product.start_time | dateTimeFormat:'MMM d, y, h:mm':'+0000'}}
+          <span *ngIf="(product.end_time && appConfig.pd_or_appointment == 2 && product.unit_type != 1)">- {{product.end_time | dateTimeFormat:'MMM d, y, h:mm':'+0000'}}</span>
+          <span *ngIf="(product.end_time && appConfig.pd_or_appointment == 1 && product.unit_type != 1)">- {{product.end_time | dateTimeFormat:'MMM d, y, h:mm':'+0000'}}</span>
+          <span *ngIf="product.end_time && appConfig.pd_or_appointment == 1 && product.unit_type == 1 && product.enable_tookan_agent">- {{product.end_time | dateTimeFormat:'MMM d, y, h:mm':'+0000'}}</span>
+          <span *ngIf="(product.end_time && appConfig.pd_or_appointment == 2 && product.unit_type == 1)">- {{product.end_time | dateTimeFormat:'MMM d, y, h:mm':'+0000'}}</span>
+        </div>
+        <div class="auto_promo_div"  *ngIf="product && product.surge_amount">
+            <p class="auto_promo" style="color: red;">  (
+                <ng-container>{{terminology.SURGE || 'Surge'}}</ng-container>
+                <span>{{currency +''}} {{(product.surge_amount * product.quantity)|decimalConfig}} </span>
+                )
+                <span style="font-size: 16px;">&uarr;</span></p>
+          </div>
+        <div *ngIf="product.return_enabled" class="durationFormat">
+          <mat-checkbox class="primary" (change)="onReturnFlowSelect($event)"> {{languageStrings.pickup_and_delivery_return_flow_available_with_this_service || 'Pick-up and delivery return flow is available with this service'}}</mat-checkbox>
+        </div>
+        <div *ngIf="product.minimum_quantity>1" class=" min-qty durationFormat">
+
+          <ng-container>{{languageStrings.minimum_quantity || 'Minimum Quantity'}}</ng-container> {{product.minimum_quantity}}
+        </div>
+        <div *ngIf="product.maximum_quantity>0" class=" min-qty durationFormat">
+          <ng-container>{{languageStrings.maximum_quantity || 'Maximum Quantity'}}</ng-container> {{product.maximum_quantity}}
+        </div>
+        <hr [ngClass]="{'chk_ci_sep_checkout': i < cartData.length - 1 , 'chk_sub_sep': i == cartData.length - 1 }" />
+      </div>
+    </div>
+
+    <app-side-orders *ngIf="showSideOrder && sideOrderProducts && sideOrderProducts.length>0" (addProduct)="addProduct($event)"
+      [sideOrders]="sideOrderProducts"></app-side-orders>
+
+
+    <div class="pl-15 pr-15" *ngIf="!showBillDataShimmer;else billDataShimmer">
+      <div class="chk_subtl_div" *ngIf="appConfig.show_product_price == 1 || totalCountDisplay > 0">
+        <div>
+          <div class=" col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <p class="chk_subtl_txt col-lg-5 col-md-5 col-sm-5 col-xs-5" [ngStyle]="{ 'direction' : direction }">
+              <ng-container>{{ languageStrings.subtotal || "Subtotal"}} </ng-container>
+            </p>
+            <!-- *ngIf="appConfig.business_model_type === 'RENTAL'" -->
+            <p class="chk_subtl_val theme-font-color col-lg-6 col-md-6 col-sm-6 col-xs-6" *ngIf="appConfig.business_model_type !== 'ECOM'">{{currency +''}} {{billData.ACTUAL_AMOUNT|decimalConfig}}
+
+              <!-- <span style="position: relative;" #container (mouseenter)="op.show($event)" (mouseleave)="op.hide($event)" *ngIf="billData && billData.BILL_BREAKUP && billData.BILL_BREAKUP.length">
+                <i class="fa fa-info-circle" style="cursor:pointer;"></i>
+                <p-overlayPanel [appendTo]="container" [showCloseIcon]="'true'" [dismissable]="'true'" #op>
+                  <div class="price-list">
+                    <div *ngFor="let billData of billData.BILL_BREAKUP">
+                      <div *ngIf="billData.unit > 0">{{currency + (((billData.price * billData.unit) |decimalConfig) || '0') + ' @ ' + ((billData.price
+                        |decimalConfig) || '0') + ' / ' + priceTypeConst[billData.price_type].name + ' x ' + billData.unit}}</div>
+                    </div>
+                  </div>
+                </p-overlayPanel>
+              </span> -->
+
+            </p>
+            <p class="chk_subtl_val theme-font-color col-lg-6 col-md-6 col-sm-6 col-xs-6" *ngIf="appConfig.business_model_type === 'ECOM'">{{currency +''}} {{totalCountDisplay|decimalConfig}}
+            </p>
+
+
+          </div>
+          <!-- taxes -->
+          <div class=" col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngFor="let tax of billData.USER_TAXES;">
+            <p class="chk_subtl_txt col-lg-5 col-md-5 col-sm-5 col-xs-5" [ngStyle]="{ 'direction' : direction }">
+              {{tax.tax_name}}
+              <span class="tax-percantage" *ngIf="!tax.tax_type">@ {{tax.tax_percentage}}%</span>
+            </p>
+            <p class="chk_subtl_val theme-font-color col-lg-6 col-md-6 col-sm-6 col-xs-6">{{currency +''}} {{tax.tax_amount|decimalConfig}}
+            </p>
+          </div>
+          <div class=" col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="selectedDeliveryMethod!=2 && ( billData.DELIVERY_CHARGE_AFTER_DISCOUNT !== undefined || billData.DELIVERY_CHARGE) ">
+            <p class="chk_subtl_txt col-lg-5 col-md-5 col-sm-5 col-xs-5" [ngStyle]="{ 'direction' : direction }">
+              <ng-container>{{terminology.DELIVERY_CHARGE || 'Delivery Charges'}}</ng-container>
+            </p>
+            <p class="chk_subtl_val theme-font-color col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <span *ngIf="billData.DELIVERY_CHARGE;else free">{{currency +''}}
+                <span *ngIf="billData.DELIVERY_CHARGE_AFTER_DISCOUNT !== undefined ;else dcWithoutDiscount">{{billData.DELIVERY_CHARGE_AFTER_DISCOUNT|decimalConfig}}</span>
+                <ng-template #dcWithoutDiscount>{{billData.DELIVERY_CHARGE|decimalConfig}}</ng-template>
+              </span>
+              <ng-template #free>
+                <span class="free">{{languageStrings.free || "Free"}}</span>
+              </ng-template>
+            </p>
+
+            <div class="auto_promo_div" *ngIf="billData && billData.autoAppliedPromoOnDelivery && billData.autoAppliedPromoOnDelivery.length">
+              <p class="auto_promo" *ngFor="let promo of billData.autoAppliedPromoOnDelivery">{{'('+promo.description+')'}}</p>
+            </div>
+
+          </div>
+          <div class=" col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="billData.ADDITIONAL_AMOUNT">
+            <p class="chk_subtl_txt col-lg-5 col-md-5 col-sm-5 col-xs-5" [ngStyle]="{ 'direction' : direction }">
+              <ng-container>{{languageStrings.additional_amount || 'Additional Amount'}} </ng-container>
+            </p>
+            <p class="chk_subtl_val theme-font-color col-lg-6 col-md-6 col-sm-6 col-xs-6">{{currency +''}} {{billData.ADDITIONAL_AMOUNT| decimalConfig}}
+            </p>
+          </div>
+<div class="clearfix"></div>
+        </div>
+      </div>
+    </div>
+    <ng-template #billDataShimmer>
+      <div class="pl-15 pr-15">
+        <div class="chk_subtl_div skeleton-loader"></div>
+      </div>
+    </ng-template>
+
+    <div class="chk_total_div pl-15">
+      <div class="">
+        <p class="chk_total_txt col-lg-5 col-md-5 col-xs-6 col-sm-6" [ngStyle]="{ 'direction' : direction }">
+          <ng-container>{{languageStrings.total ||'Total'}}</ng-container>
+        </p>
+        <p class="chk_total_val theme-font-color col-lg-6 col-md-6 col-xs-6 col-sm-6">{{currency +''}} {{billData.NET_PAYABLE_AMOUNT|decimalConfig}}
+        </p>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+  </div>
+  <div class="suggestion">
+    <i class="yf yf-ic-chat notes-icon"></i>
+    <input class="form-control suggestion-text" (change)="onSetNotes()" [(ngModel)]="notes" [placeholder]="terminology['ORDER_REMARKS'] || 'Any Suggestions?'"
+    [attr.aria-label]="terminology['ORDER_REMARKS'] || 'Any Suggestions?'">
+  </div>
+</div>
+
+
+<!-- Remove cart item popup -->
+<app-modal class="container" modalType="'modal-md'" header="{{languageStrings.remove_item || 'Remove Item'}}" (esc)="removeCartItemPopup = false"
+           (onClose)="removeCartItemPopup = false"
+  *ngIf="removeCartItemPopup">
+  <div body>
+    <div class="row" style="padding: 15px">
+      <div class="col-md-12" style="height: 90px;padding:15px">
+        <h4 class="dialog-msg">
+          <ng-container> {{messageRemoveItem}}</ng-container>
+        </h4>
+      </div>
+      <div class="col-md-12" style="padding:0px">
+        <div class="modal-footer dialog-action">
+          <button class="dialog-cancel btn btn-default" mat-button (click)="onRemoveSelected(selectedCartItemId,selectedCartItemIndex,selectedOperationMethod,0)"
+            [ngStyle]="{ 'direction' : direction }">
+            <ng-container>{{languageStrings.retain || 'Retain'}}</ng-container>
+          </button>
+          <button class="dialog-ok btn btn-default" mat-button (click)="onRemoveSelected(selectedCartItemId,selectedCartItemIndex,selectedOperationMethod,1)"
+            [ngStyle]="{ 'direction' : direction }" appColor bg="'true'">
+            <ng-container>{{languageStrings.remove || "Remove"}}</ng-container>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-modal>
+
+<app-modal class="container modalIcon" modalType="'modal-md'" (onClose)="showClearCartPopup = false" (esc)="showClearCartPopup = false" *ngIf="showClearCartPopup">
+    <div body>
+            <div class="row clearCartRow">
+                    <div class="col-md-12 p-0">
+                            <h4 class="dialog-msg">
+                                <ng-container> {{languageStrings.do_you_want_clear_your_cart || 'Do you want to clear your Cart'}} ?</ng-container>
+                            </h4>
+                    </div>
+                    <div class="col-md-12 btnsDiv" style="">
+                            <div class="modal-footer dialog-action">
+                                    <button class="dialog-cancel btn btn-default yesNoBtn" (click)="clearCartData()">
+                                            <ng-container>{{languageStrings.yes || 'Yes' }}</ng-container>
+                                    </button>
+                                    <button class="dialog-ok btn btn-default primary-theme-btn yesNoBtn"
+                        [ngStyle]="{ 'direction' : direction }" (click)="doNotClearCart()">
+                        <ng-container>{{languageStrings.no || 'No' }}</ng-container>
+                    </button>
+
+                            </div>
+                    </div>
+
+            </div>
+
+    </div>
+
+</app-modal>
+<app-modal class="container addon-container" modalType="modalType" [header]="currentProduct?.name" *ngIf="currentProduct">
+<div body>
+  <!-- <div class="cls-cust-head">
+    <div class="cls-cust-n pl-25">
+      <p *ngIf="formSetting.show_product_price == 1 || currentProduct.price > 0">{{currency+'
+        '+currentProduct.layout_data.lines[2] ? currentProduct.layout_data.lines[2].data : ''}}</p>
+    </div>
+  </div> -->
+  <div class="cls-cust-body">
+    <div class="cls-cust-main-div"
+      style="word-break: break-all;"
+      *ngIf="currentProduct.long_description">
+      <div [innerHtml]="currentProduct.long_description"
+        class="long_description cls-pcust-head"> </div>
+    </div>
+    <div class="cls-cust-main-div"
+      *ngFor="let custom of currentProduct.customization;let custIndex = index;">
+      <p class="cls-pcust-head">{{custom.name | truncate : 100 : '.'}}
+        <span style="font-size:10px;text-transform: none"
+          *ngIf="!custom.is_check_box">(<ng-container>{{languageStrings.select_any ||'Select any'}} 1</ng-container>)</span>
+        <span style="font-size:10px;text-transform: none"
+          *ngIf="custom.is_check_box">{{(custom.minimum_selection
+          >1) && custom.minimum_selection_required ?  languageStrings.select_any || 'Select any'
+          +custom.minimum_selection+ ')':(languageStrings.optional || 'Optional')}}</span>
+
+      </p>
+
+      <div class="cls-cust-option"
+        *ngFor="let option of custom.customize_options;let optionIndex = index;">
+        <div class="cls-cust-check"
+          (click)="changeExtrasStatus(currentProduct.product_id,custom,custIndex,optionIndex,customizedObj[currentProduct.product_id].customization[custIndex].customize_options[optionIndex].is_default)">
+          <svg width="10"
+            height="12"
+            viewBox="0 0 10 7"
+            *ngIf="customizedObj[currentProduct.product_id].customization[custIndex].customize_options[optionIndex].is_default">
+            <path [attr.fill]="appConfig.color"
+              fill-rule="nonzero"
+              d="M3.598 6.906a.808.808 0 0 1-.561-.223L.232 3.991a.74.74 0 0 1 0-1.076.817.817 0 0 1 1.122 0l2.244 2.153L8.646.223a.817.817 0 0 1 1.122 0 .74.74 0 0 1 0 1.077l-5.61 5.383a.808.808 0 0 1-.56.223z" />
+          </svg>
+        </div>
+        <div style="flex: 1 1 0%; margin-right: 10px;cursor:pointer"
+          (click)="changeExtrasStatus(currentProduct.product_id,custom,custIndex,optionIndex,customizedObj[currentProduct.product_id].customization[custIndex].customize_options[optionIndex].is_default)">
+          <span>{{option.name}}</span>
+        </div>
+        <div class="txt-right"
+          *ngIf="option.price > 0">
+          <span><span class="optionalPrice">+</span>{{currency+' '+ (option.price |decimalConfig)}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="cls-cust-main-div"
+      *ngIf="sessionService.get('config').side_order && sessionService.get('config').onboarding_business_type === 804">
+      <p class="cls-pcust-head side-heading"
+        *ngIf="sideOrderProducts && sideOrderProducts.length>0">{{languageStrings.side_order || 'Side Order'}}</p>
+
+      <div class="side-products"
+        *ngFor="let product of sideOrderProducts;let i = index;">
+        <div [ngClass]="{'side-order-parent-div' : i!=0}"
+          *ngIf="i==0 || (product.parent_category_id!=sideOrderProducts[i-1].parent_category_id)">
+          <p class="side-order-parent">{{product.parent_category_name}}</p>
+        </div>
+        <div class="side-product-name">
+          <div>{{product.name}}</div>
+          <div class="p-action-btn">
+
+            <div style="display: flex;">
+              <div class="p-minus"
+                (click)="decreamentSideOrderQuantity(product.product_id,i)"
+                [ngStyle]="{'visibility':(sideOrderProductBool[product.product_id]) ? 'visible':'hidden'}"
+                appBs>
+                <svg width="10"
+                  height="7"
+                  viewBox="0 0 10 2">
+                  <path fill="#858585"
+                    fill-rule="nonzero"
+                    d="M0 1.75h10V.25H0z" />
+                </svg>
+              </div>
+              <div [ngStyle]="{'visibility':(sideOrderProductBool[product.product_id]) ? 'visible':'hidden'}"
+                class="p-quantity custom">
+                <span *ngIf="checkUniq(product)"></span>
+                <input appNumberOnly
+                  maxlength="4"
+                  [disabled]="!product?.isUniq"
+                  [ngStyle]="{'visibility':(sideOrderProductBool[product.product_id]) ? 'visible':'hidden'}"
+                  class="p-quantity inputBulkOrderClass"
+                  [value]="sideOrderProductData[product.product_id] ? sideOrderProductData[product.product_id].quantity : 0"
+                  (blur)="onBlurSideOrderInputFun(product,product.product_id,i,$event.target.value)">
+              </div>
+              <div *ngIf="sideOrderProductBool[product.product_id] && !(product.menu_enabled_product==0)"
+                class="p-plus"
+                [style.background-color]="appConfig.btn_color?appConfig.btn_color:'#1a9943'"
+                appBs
+                (click)="increaseSideOrderQuantity(product,product.product_id,i)">
+                <!--appColor bg='true'-->
+                <svg width="9"
+                  height="9"
+                  viewBox="0 0 10 10">
+                  <path fill="#FFF"
+                    fill-rule="nonzero"
+                    d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+                </svg>
+              </div>
+              <div *ngIf="!sideOrderProductBool[product.product_id] && !(product.menu_enabled_product==0)"
+                class="p-plus"
+                [style.background-color]="appConfig.btn_color?appConfig.btn_color:'#1a9943'"
+                appBs
+                (click)="addSideOrder(product,i)">
+
+                <svg width="9"
+                  height="9"
+                  viewBox="0 0 10 10">
+                  <path fill="#FFF"
+                    fill-rule="nonzero"
+                    d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+                </svg>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="side-product-detail">
+          <span class="desc"
+            [ngClass]="{'side-order-desc' : product.description}">{{product.description ? '(' : ''}}
+            {{product.description}} {{product.description ?
+            ')' : ''}}</span>
+          <span class="amount"> {{currency + '' + (product.price |decimalConfig)}}</span>
+        </div>
+        <div class="min-check w-100 min_error">
+          <div
+            *ngIf="sideOrderProductData[product.product_id] && sideOrderProductData[product.product_id].minimum_quantity>1 && (sideOrderProductData[product.product_id].minimum_quantity > sideOrderProductData[product.product_id].quantity)"
+            class="w-100 text-right">
+            <ng-container>{{languageStrings.minimum_quantity || 'Minimum Quantity'}}</ng-container> {{product.minimum_quantity}}
+          </div>
+          <div *ngIf="sideOrderProductData[product.product_id] && sideOrderProductData[product.product_id].maximum_quantity>1 && (sideOrderProductData[product.product_id].maximum_quantity > sideOrderProductData[product.product_id].quantity)"
+            class="w-100 text-right">
+            <ng-container>{{languageStrings.maximum_quantity || 'Maximum Quantity'}}</ng-container> {{product.maximum_quantity}}
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <button mat-button
+      class="dialog-cancel btn"
+      (click)="resetDialog()"
+      appBs>{{languageStrings.cancel || 'Cancel'}}</button>
+    <!--[ngStyle]="{ 'direction' : direction }"-->
+    <button mat-button
+      class="dialog-ok btn"
+      (click)="addCustomization(0)"
+      appColor
+      bg="'true'"
+      *ngIf="addBtnTxt"
+      appBs
+      [disabled]="currentProduct.quantity <= 0">
+      <ng-container *ngIf="currentProduct.is_product_template_enabled == 0 && (appConfig.theme_enabled == 0)">
+        {{addBtnTxt}}
+        <ng-container>{{languageStrings.for || 'for'}}</ng-container>
+      </ng-container>
+      <ng-container *ngIf="!(currentProduct.is_product_template_enabled == 0 && (this.appConfig.theme_enabled == 0))">
+        <ng-container>{{languageStrings.next || 'Next'}}</ng-container>
+      </ng-container>
+      {{currency+'
+      '+(((currentProduct.totalPrice*currentProduct.quantity) + sideOrderTotalAmount) |decimalConfig)}}
+    </button>
+    <!--[ngStyle]="{ 'direction' : direction }"-->
+    <button mat-button
+      class="dialog-ok btn"
+      (click)="addCustomization(0)"
+      appColor
+      bg="'true'"
+      appBs
+      *ngIf="!addBtnTxt"
+      [disabled]="currentProduct.quantity <= 0">
+      <ng-container *ngIf="currentProduct.is_product_template_enabled == 0 && (appConfig.theme_enabled == 0)">{{languageStrings.add_for || 'Add for'}}</ng-container>
+      <ng-container *ngIf="!(currentProduct.is_product_template_enabled == 0 && (appConfig.theme_enabled == 0))">{{languageStrings.next || 'Next'}}</ng-container>
+      {{currency+' '+(((currentProduct.totalPrice*currentProduct.quantity) + sideOrderTotalAmount) |decimalConfig)}}
+    </button>
+    <!--[ngStyle]="{ 'direction' : direction }"-->
+    <div class="text-center min_sel_error">
+      <span>{{minSelectAddonError}}</span>
+      <span>{{maxSelectAddonError}}</span>
+    </div>
+    <div class="text-center min_sel_error">
+      <span>{{minSingleSelectAddonError}}</span>
+    </div>
+  </div>
+</div>
+</app-modal>
+<app-mandatory-items></app-mandatory-items>

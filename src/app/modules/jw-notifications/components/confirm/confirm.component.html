@@ -1,0 +1,16 @@
+<div id="alertPopupContainer" [@layer]>
+  <div id="alertPopup" [@scale]>
+    <!-- <div class="header">{{confirmationService.header}}</div> -->
+    <div class="body">{{confirmationService.message}}</div>
+    <div class="footer">
+      <button class="btn btn-ok submit-btn" (click)="onNoClick($event)">
+        <ng-container *ngIf="!confirmationService.rejectBtnText">{{languageStrings.cancel || 'Cancel'}}</ng-container>
+        <ng-container *ngIf="confirmationService.rejectBtnText">{{confirmationService.rejectBtnText}}</ng-container>
+      </button>
+      <button class="btn btn-ok submit-btn" (click)="onYesClick($event)">
+        <ng-container *ngIf="!confirmationService.confirmBtnText">{{languageStrings.confirm || 'Confirm'}}</ng-container>
+        <ng-container *ngIf="confirmationService.confirmBtnText">{{confirmationService.confirmBtnText}}</ng-container>
+      </button>
+    </div>
+  </div>
+</div>

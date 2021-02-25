@@ -1,0 +1,26 @@
+<div class="schedule">
+  <div class="row m0">
+    <div class="pickupSchedule col-lg-6 col-sm-6 col-md-6 col-xs-12">
+      <p class="details" [ngStyle]="{ 'direction' : direction }"><ng-container>{{languageStrings.select_pickup_time || 'Select a pickup Time'}}</ng-container></p>
+      <app-laundry-calendar [numberOfDays]="numberOfDays"
+                             [type]="'pickup'"
+                             (selectedValues)="selectedValues($event)"
+                             [selectedSlots]="pickSlots" [customOrder]="customOrder"></app-laundry-calendar>
+    </div>
+    <div class="deliverySchedule col-lg-6 col-sm-6 col-md-6 col-xs-12">
+      <p class="details" [ngStyle]="{ 'direction' : direction }"><ng-container>{{languageStrings.select_delivery_time || 'Select a delivery Time'}}</ng-container></p>
+      <app-laundry-calendar [numberOfDays]="numberOfDays"
+                             [type]="'delivery'"
+                             (selectedValues)="selectedValues($event)"
+                             [changeSlot]="changeSlot"
+                             [selectedSlots]="deliverySlots" [customOrder]="customOrder"></app-laundry-calendar>
+    </div>
+  </div>
+  <div class="row mt-20 m0">
+    <div class="col-lg-12 text-right continue" *ngIf="!customOrder">
+      <button class="btn continueBtn" type="button"
+              (click)="continueOption()"
+              [ngStyle]="{ 'direction' : direction }"><ng-container>{{languageStrings.next || 'Next'}}</ng-container></button>
+    </div>
+  </div>
+</div>

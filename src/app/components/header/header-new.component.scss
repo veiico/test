@@ -1,0 +1,700 @@
+@import '~assets/css/switch';
+@import '~assets/css/variables';
+
+.close{
+  position: absolute;
+  margin: -5px 12px;
+  z-index: 2;
+  right: 0;
+  font-size: 44px;
+  font-weight: 300;
+}
+
+.top-header{
+  background: $header-bg-color;
+  height: 7rem;
+  border-bottom: 2px solid $header-bg-color;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1005;
+  -webkit-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
+  padding: 0rem 1rem;
+}
+.merchant-link{
+  word-break: break-word;
+  a{
+    span{
+      max-width: 100%;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      text-align: center;
+    }
+  }
+}
+.fa-angle-left{
+  color: var(--header_font_color);
+  font-size: 25px;
+  font-weight: bolder;
+  margin-right: 1rem;
+}
+.fa-user-o{
+  font-weight: 600;
+}
+:host /deep/ app-phone-email-hybrid {
+  input{
+    border-radius: 0 5px 5px 0 !important;
+  }
+  .flagInput{
+    border-radius: 5px 0 0 5px !important;
+  }
+}
+.top-header.heightHeader{
+  height: 10rem;
+}
+
+.header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 60px
+}
+.forgotButton{
+  border-radius: 5px;
+  color: $color-white;
+  border-color: $color-theme;
+  background-color: $color-theme;
+}
+.merchant-logo {
+  cursor: pointer;
+  .logo{
+    text-decoration: none;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    img{
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+}
+
+@media only screen and (max-width:576px) {
+.merchant-link{
+  display: none !important;
+}
+
+  .nav-left .white-theme .autoCompleteGoogle form .input-group app-jw-google-autocomplete, .deliveryShowAt700 .white-theme .autoCompleteGoogle form .input-group app-jw-google-autocomplete {
+    background-color: #f9f8f8 !important
+  }
+ 
+}
+
+.nav-left,.deliveryShowAt700 {
+  /deep/.autoCompleteGoogle{
+    position: relative;
+    border-radius: 3px;
+  }
+  /deep/.autoCompleteGoogle .errorpop,/deep/.autoCompleteGoogle .infopop{
+    width: 100%;
+    color: #842029;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+    position: absolute;
+    &::before{
+      content: " ";
+      border: 9px solid transparent;
+      position: absolute;
+      bottom: 100%;
+      border-bottom: 7px solid #f5c2c7;
+    }
+    &::after{
+      content: " ";
+      border: 9px solid transparent;
+      position: absolute;
+      bottom: 100%;
+      border-bottom: 7px solid transparent;
+      width: 100%;
+    }
+
+    div.cross-class{
+      top: 12px;
+      position: absolute;
+      right: 20px;
+    }
+  }
+
+
+
+  /deep/.autoCompleteGoogle .errorpop .dFlex {
+    span i.fa.fa-times-circle, span i.fa.fa-info-circle {
+      display: none;
+    }
+    span {
+      margin-left: 0 !important;
+    }
+
+
+  }
+
+
+  /deep/.autoCompleteGoogle app-control-messages div.errorR{
+    padding-left: 10px !important;
+    position: absolute;
+    background: red;
+    width: 100%;
+    padding: 10px;
+    color: white !important;
+    &::before{
+      content: " ";
+      border: 9px solid transparent;
+      position: absolute;
+      bottom: 100%;
+      border-bottom: 7px solid red;
+    }
+    &::after{
+      content: " ";
+      border: 9px solid transparent;
+      position: absolute;
+      bottom: 100%;
+      border-bottom: 7px solid transparent;
+      width: 100%;
+    }
+
+  }
+
+
+
+  /deep/.autoCompleteGoogle .auto-detect{
+    background-color: transparent !important;
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+    color: $color-white;
+    border: 1px solid #fff;
+    height: 35px !important;
+    span i {
+      top: 0 !important;
+      color: $header-color !important; 
+    }
+    span .load-span{
+      font-size: 12px;
+      margin-left: 12px;
+      color: $header-color; 
+    }
+  }
+
+  @media only screen and (min-width: 768px) {
+    /deep/.autoCompleteGoogle .auto-detect {
+      width: 130px !important;
+    }
+    .white-theme /deep/.autoCompleteGoogle .auto-detect{
+      width: 130px !important;
+    }
+    .white-theme /deep/.autoCompleteGoogle .auto-detect{
+      width: 130px !important;
+    }
+  }
+  .white-theme /deep/.autoCompleteGoogle .auto-detect{
+    background-color: $color-theme !important;
+    color: $color-white;
+    border: none;
+    span i {
+      color: $color-white !important; 
+    }
+    span .load-span {
+      color: $color-white !important;
+    }
+  }
+
+
+
+  /deep/.autoCompleteGoogle form .input-group {
+    border-radius: 3px;
+  }
+  .white-theme /deep/.autoCompleteGoogle .auto-detect{
+    background-color: $color-theme !important;
+    color: $color-white;
+    border: none;
+    span i {
+      color: $color-white !important; 
+    }
+    span .load-span {
+      color: $color-white !important;
+    }
+  }
+
+  /deep/.autoCompleteGoogle form .input-group {
+    border-radius: 3px;
+  }
+  .white-theme /deep/.autoCompleteGoogle form .input-group {
+    // border: 1px solid #f9f8f8;
+  }
+
+  /deep/.autoCompleteGoogle form .input-group app-jw-google-autocomplete{
+    background-color: #fff !important ;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    height: 35px !important;
+    width: 100% !important;
+    font-weight: 500;
+  }
+
+  .white-theme /deep/.autoCompleteGoogle form .input-group app-jw-google-autocomplete {
+    background-color: #f9f8f8 !important;
+  } 
+
+  @media only screen and (min-width: 768px) {
+   /deep/.autoCompleteGoogle form .input-group app-jw-google-autocomplete {
+    width: 350px !important;
+   }
+   
+   .width350  /deep/.autoCompleteGoogle form .input-group app-jw-google-autocomplete {
+    width: 280px !important;
+   }
+
+   .white-theme /deep/.autoCompleteGoogle form .input-group app-jw-google-autocomplete {
+    background-color: #f9f8f8 !important;
+  }
+  }
+
+
+
+  /deep/.autoCompleteGoogle form .input-group app-jw-google-autocomplete div input{
+    padding-left: 10px !important;
+    color: #191919;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    padding-right: 20px;
+    font-weight: 400;
+  }
+}
+
+.nav-left{
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  position: relative;
+  top:0;
+  left:0;
+}
+
+.nav-right{
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  position: relative;
+  top:0px;
+  right:0px;
+  .items{
+    display: flex;
+    list-style-type: none;
+    align-items: center;
+    flex-direction: row;
+    height: 100%;
+    position: relative;
+    right: 0;
+    top: 0;
+    margin-bottom: 0px;
+    box-shadow: none;
+    li:not(.drop){
+      display: flex;
+      align-items: center;
+      height: 100%;
+      width: auto;
+      position: relative;
+      a:not(.dropAnchor){
+        padding: 5px 15px;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: $header-color;
+        i{
+          margin-right: 5px;
+          font-size: 18px;
+        }
+        &:hover:not(.notification){
+          opacity: 0.7;
+        }
+      }
+
+      .profileDrop {
+        i {
+          padding: 1rem;
+          /* border: 1px solid red; */
+          border-radius: 40px;
+          width: 30px;
+          height: 30px;
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+          background: $header-bg-color;
+          color: var(--header_font_color);
+          margin-right: 0.5rem;
+        }
+        img{
+          height: 30px;
+          width:30px;
+          border-radius:50%;
+          margin-right: 5px;
+        }
+      }
+    }
+    .dropdown-menu {
+      top: 47px;
+      border-radius: 0;
+      left: -1.5rem;
+      background: $header-bg-color;
+      li.drop{
+        a.dropAnchor {
+          cursor: pointer;
+          color: $header-color;
+          width: 155px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          padding: 3px 15px;
+          &:hover{
+            background: #fff;
+            color: $color-theme !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+.deliveryShowAt700{
+  display: none !important;
+}
+
+.dFlex{
+  display: flex;
+  align-items: center;
+}
+
+.ml-10{
+  margin-left: 10px;
+}
+.ml-5{
+  margin-left: 5px;
+}
+
+.deliveryMode{
+  margin-left: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.pt-10{
+  padding-top: 10px;
+}
+
+.switchA{
+  display:flex;
+  justify-content:space-between;
+  align-items: center;
+  white-space: inherit;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+@media only screen and (min-width: 768px) {
+  .top-header {
+    padding: 5px 3rem;
+    height: 75px !important;
+    display: flex;
+    align-items: center;
+  }
+}
+
+@media only screen and (max-width: 1300px) {
+  .items{
+    li {
+      a {
+        padding: 1px 10px !important;
+        i{
+          margin-right: 0px !important;
+        }
+        .hideText{
+          display: none;
+        }
+      }
+    }
+  }
+  .dropdown-menu {
+    li.drop{
+      a.dropAnchor {
+        padding: 3px 10px !important;
+      }
+    }
+  }
+}
+/* Style the subnav content - positioned absolute */
+.subnav-content {
+  display: none;
+  max-height: 210px;
+  overflow: auto;
+  background: $header-bg-color;
+  width: 100%;
+  z-index: 1;
+}
+/* When you move the mouse over the subnav container, open the subnav content */
+// .subnav:hover .subnav-content {
+//   display: block;
+//   opacity: 1;
+// }
+.subnavbtn{
+  display: flex !important;
+  width: 155px;
+  justify-content: space-between !important;
+}
+.subnav-content > a{
+  cursor: pointer;
+  opacity: 1;
+  color: $header-color;  
+  border-radius: 0px !important;
+  max-width: 155px;
+  margin-right: 0px !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block !important;
+  padding-top: 1px !important;
+  padding-bottom: 0 !important;
+  height: 25px !important;
+  &:hover{
+    background: white !important;
+    opacity: 1 !important;
+    color: $color-theme !important;
+  }
+}
+@media only screen and (max-width: 1090px) {
+  
+  .deliveryHideAt700{
+    display: none;
+  }
+  .white-theme.deliveryShowAt700 /deep/ .autoCompleteGoogle .auto-detect {
+    background-color: $color-theme !important;
+    border: none;
+    span i {
+      color: $color-white !important; 
+    }
+    span .load-span {
+      color: $color-white !important;
+    }
+
+  }
+
+  .white-theme.deliveryShowAt700 /deep/.autoCompleteGoogle form .input-group app-jw-google-autocomplete {
+    background-color: #f9f8f8 !important;
+  }
+
+  .deliveryShowAt700{
+    display: flex !important;
+    height: 40px !important;
+    .width32{
+      width: 32%;
+    }
+    .width64{
+      width: 100%;
+    }
+    .width80{
+      width: 100% !important;
+      margin-left: 0px;
+    }
+
+   
+
+    /deep/.autoCompleteGoogle app-control-messages div.errorR{
+      padding-left: 10px !important;
+    }
+    /deep/.autoCompleteGoogle form .input-group app-jw-google-autocomplete div input{
+      // padding-left: 0px !important;
+    }
+   
+    /deep/.autoCompleteGoogle .errorpop,/deep/.autoCompleteGoogle .infopop{
+      margin-left: 0px !important;
+    }
+  }
+  .deliveryMode{
+    margin-left: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+}
+
+
+
+@media only screen and (max-width: 1200px) { 
+  .top-header{
+    height: auto !important;
+    flex-direction: column;
+    min-height: 85px;
+
+  }
+}
+
+@media only screen and (max-width: 750px) {
+  /deep/.autoCompleteGoogle .auto-detect{
+    width: 18% !important;
+    span i {
+      color: $header-color !important;
+    }
+    span .load-span{
+     display: none;
+    }
+  }
+
+  .white-theme /deep/.autoCompleteGoogle .auto-detect{
+    background-color: $color-theme !important;
+    color: $color-white;
+    border: none;
+    span i {
+      color: $color-white !important; 
+    }
+    span .load-span {
+      color: $color-white !important;
+    }
+  }
+} 
+
+
+
+@media only screen and (max-width: 1255px) { 
+ .newDeliveryModes {
+   height: 40px;
+ }
+}
+
+@media only screen and (max-width: 361px) {
+  /deep/.autoCompleteGoogle .auto-detect{
+    width: 5rem!important;
+    span .locateme-logo {
+      width: 17px;
+      height: 17px;
+    }
+
+  }
+  .white-theme /deep/.autoCompleteGoogle .auto-detect{
+    background-color: $color-theme !important;
+    color: $color-white;
+    border: none;
+    span i {
+      color: $color-white !important; 
+    }
+  }
+}
+@media only screen and (max-width: 411px) {
+  /deep/.autoCompleteGoogle .auto-detect{
+    width: 5rem!important;
+    span .locateme-logo {
+      width: 17px;
+      height: 17px;
+    }
+
+  }
+
+  .white-theme /deep/.autoCompleteGoogle .auto-detect{
+    background-color: $color-theme !important;
+    color: $color-white;
+    border: none;
+    span i {
+      color: $color-white !important; 
+    }
+  }
+
+  /deep/.autoCompleteGoogle .errorpop,/deep/.autoCompleteGoogle .infopop{
+    font-size: 11px;
+  }
+
+  /deep/.autoCompleteGoogle form .input-group app-jw-google-autocomplete div input{
+    font-size: 13px;
+  }
+
+  /deep/.autoCompleteGoogle app-control-messages div.errorR{
+    font-size: 13px;
+    width: 54%;
+  }
+
+
+}
+@media only screen and (max-width: 1200px)
+{
+  .nav-right .items .dropdown-menu {
+    top: 47px;
+  }
+}
+
+@media only screen and (max-width: 768px)
+{
+  .nav-right .items .dropdown-menu {
+    left: -8.8rem;
+  }
+}
+
+@media only screen and (min-width: 415px) and (max-width: 768px) {
+  .top-header {
+    padding: 5px 3rem;
+  }
+
+}
+
+.white-theme /deep/app-delivery-modes div.newDeliveryModes div.delivery-mode-heading {
+  background-color: #f9f8f8 !important;
+}
+
+
+
+/deep/ .autoCompleteGoogleForm {
+  @media only screen and (min-width:750px) {
+    i{
+      position: absolute;
+    }
+  }
+}
+
+/deep/.errorpop,/deep/.infopop{
+  position: relative;
+  div.cross-class{
+    top: 12px;
+    position: absolute;
+    right: 20px;
+  }
+}
+
+@media only screen and (max-width:414px) {
+  /deep/.errorpop,/deep/.infopop{
+  div.cross-class{
+    top: 10px !important;
+    right: 10px !important;
+  }
+}
+}
+
+/deep/app-delivery-modes .newDeliveryModes .dropdown-menu{
+  min-width: auto !important;
+}
+@media only screen and (max-width: 768px)
+{
+  .top-header
+  {
+  min-height:65px!important;
+  padding-bottom: 0px;
+  }
+}

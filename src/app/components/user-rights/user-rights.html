@@ -1,0 +1,36 @@
+<app-header style="height:85px;padding: 0px;" class="col-xs-12" [headerData]="headerData" *ngIf="!ecomView"></app-header>
+<div class="userRights row">
+  <div class="col-xs-12">
+    <div class="heading col-lg-12 col-sm-12 col-md-12 col-xs-12">
+      <p class="title text-capitalize">{{languageStrings.gdpr_customer_rights ||'GDPR Customer Rights'}}</p>
+      <hr class="line" style="border-top-color: var(--theme);">
+    </div>
+  </div>
+  <div class="row container">
+    <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12 col-lg-offset-3 col-sm-offset-3 col-md-offset-3 col-xs-offset-0">
+      <form role="form" [formGroup]="userRightsForm"
+            autocomplete="off" style="padding-top:30px">
+        <div class="form-group">
+          <select class="form-control" autocomplete="off" [ngStyle]="{ 'direction' : direction }"
+                  aria-label= 'Pick an option'
+                  required="required" formControlName="userRightOption" (change)="getChangedRight()">
+            <option value="0" selected disabled ><ng-container>{{languageStrings.pick_an_option || 'Pick an option'}}</ng-container></option>
+            <option *ngFor="let right of userRights" [value]="right.id">{{right.name}}</option>
+          </select>
+          <app-control-messages [control]="userRightsForm.controls.userRightOption"></app-control-messages>
+          <div *ngIf="errorMessage !== null" style="color: red" class="errorR">{{errorMessage}}</div>
+        </div>
+        <div class="form-group">
+          <textarea class="form-control" autocomplete="off" rows="10" maxlength="500" aria-label='Enter Reason'
+                    formControlName="description" placeholder="{{languageStrings.enter_reason ||'Enter Reason'}}" [ngStyle]="{ 'direction' : direction }"></textarea>
+          <app-control-messages [control]="userRightsForm.controls.description"></app-control-messages>
+        </div>
+        <div class="text-left">
+          <button type="submit" class="btn btn-red" name="Submit" [ngStyle]="{ 'direction' : direction }" appBs appColor bg='true' (click)="registerUserRights()" [disabled]="!userRightsForm.valid || userRightsForm.value.userRightOption == 0" ><ng-container>{{languageStrings.submit ||'Submit'}}</ng-container></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

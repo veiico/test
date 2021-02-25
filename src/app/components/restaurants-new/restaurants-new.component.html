@@ -1,0 +1,6 @@
+<div class="headerDiv"><app-header class="col-xs-12 p-0 rest-view" [headerData]="headerData" [showAddressBarOnlyRestaurant]="showAddressBar"></app-header></div>
+<div class="mobileHeaderMargin">
+  <app-banner [showAutoComplete]="'false'" *ngIf="merchantFlag"></app-banner>
+  <app-restaurants></app-restaurants>
+</div>
+<!-- <router-outlet></router-outlet> -->

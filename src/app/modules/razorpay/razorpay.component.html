@@ -1,0 +1,15 @@
+<!--<app-razor-pay [loginResponse]="loginResponse" [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"-->
+               <!--[triggerPayment]="triggerPayment" (paymentMadeResponse)="paymentMadeResponse($event)"></app-razor-pay>-->
+
+<div class="razorpay" *ngIf="razorPayUrl">
+  <!--<h5>Razor Pay</h5>-->
+  <div class="row" style="padding: 10px">
+    <!--<div class="col-md-12 text-right">-->
+      <!--<span (click)="close3dver()" class="fa fa-times" [ngStyle]="{'direction':direction}"></span>-->
+    <!--</div>-->
+    <div class="col-md-12">
+      <iframe id="razorPayPop" style="border: none" #razorPayPop [src]="razorPayUrl" height="610px" width="100%"
+              (load)="getContentRazorpay(razorPayPop)"></iframe>
+    </div>
+  </div>
+</div>

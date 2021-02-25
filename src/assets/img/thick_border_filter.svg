@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="160px" height="161px" viewBox="0 0 160 161" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.3 (57544) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M0.477099237,77.6639344 L0.477099237,88.7295082 L33.4923664,88.7295082 L33.4923664,77.6639344 L0.477099237,77.6639344 Z M0.477099237,11.2704918 L0.477099237,22.3360656 L55.5025445,22.3360656 L55.5025445,11.2704918 L0.477099237,11.2704918 Z M55.5025445,99.795082 L55.5025445,88.7295082 L99.5229008,88.7295082 L99.5229008,77.6639344 L55.5025445,77.6639344 L55.5025445,66.5983607 L44.4974555,66.5983607 L44.4974555,99.795082 L55.5025445,99.795082 Z M22.4872773,33.4016393 L22.4872773,44.4672131 L0.477099237,44.4672131 L0.477099237,55.5327869 L22.4872773,55.5327869 L22.4872773,66.5983607 L33.4923664,66.5983607 L33.4923664,33.4016393 L22.4872773,33.4016393 Z M99.5229008,55.5327869 L99.5229008,44.4672131 L44.4974555,44.4672131 L44.4974555,55.5327869 L99.5229008,55.5327869 Z M66.5076336,33.4016393 L77.5127229,33.4016393 L77.5127229,22.3360656 L99.5229008,22.3360656 L99.5229008,11.2704918 L77.5127229,11.2704918 L77.5127229,0.204918033 L66.5076336,0.204918033 L66.5076336,33.4016393 Z" id="path-1"></path>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-28.000000, -29.000000)">
+            <g id="Group" transform="translate(30.000000, 31.000000)">
+                <g id="TUNE-ICON" transform="translate(28.000000, 29.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <g id="path-1"></g>
+                    <g id="Colors/Black" mask="url(#mask-2)">
+                        <g transform="translate(-87.786260, -88.524590)" id="Black">
+                            <g transform="translate(0.222647, 0.204918)">
+                                <rect id="Rectangle-path" fill="#000000" x="0" y="0" width="274.80916" height="277.04918"></rect>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+                <ellipse id="Oval" stroke="#020202" stroke-width="4" cx="78" cy="78.5" rx="78" ry="78.5"></ellipse>
+            </g>
+        </g>
+    </g>
+</svg>

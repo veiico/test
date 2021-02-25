@@ -1,0 +1,237 @@
+@import '~assets/css/variables';
+.merchantProfileStyle{
+  width: 80%;
+  height: auto;
+  margin: auto;
+  .profileP{
+    border-radius: 5.1px;
+    box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.12);
+    border: solid 0 #212529;
+    background-color: #ffffff;
+    padding: 23px;
+    cursor: pointer;
+    img{
+      border-radius: 0px;
+      object-fit: contain;
+    }
+    .dataHeading{
+      font-size: 14px;
+      font-weight: 600;
+      color: #797979;
+    }
+    .dataValue{
+      font-size: 16px;
+      color: #000000;
+      //height: 100px;
+      span{
+        word-break: break-all;
+      }
+
+    }
+  }
+  .profile-view-only{
+
+    img{
+      max-width:100%
+    }
+    .profileNameHeading{
+      font-family: $proxima-reg;
+      font-size: 22px;
+      font-weight: 600;
+      color: #333333;
+      //text-align: center;
+      p{
+        font-family: $proxima-semi-bold;
+        font-size: 18px;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: #191919;
+        text-transform: capitalize;
+      }
+    }
+    .profileNumberDiv{
+      font-family: $proxima-reg;
+      font-size: 18px;
+      color: #191919;
+      word-break: break-all;
+    }
+    .profileEmailDiv{
+      font-family: $proxima-reg;
+      font-size: 18px;
+      color: #191919;
+      overflow-wrap: break-word;
+    }
+
+  }
+
+  .w-50{
+    width: 50%;
+  }
+  .rating-div{
+    display: flex;
+    align-items: center;
+    // margin-top: -10px;
+  }
+  .rating-bigtext{
+    font-size: 3rem;
+  }
+  .rating-address-bar{
+    background: var(--rating-bar-color);
+    display: flex;
+    color: #fff;
+  }
+  .rating-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .addr-border{
+    border-left: solid 1px #fff;
+  }
+  .rating-outoftext{
+    line-height: 1;
+    margin-left: 0.3rem;
+    font-size: 1.2rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+
+.star-container-bar{
+  position: relative;
+  margin: -1.5rem 1rem -1rem 1rem;
+  .filled-stars{
+    z-index: 2;
+    display: flex;
+    color: #f8ce0b;
+    overflow: hidden;
+    font-size: 25px;
+  }
+  .unfilled-stars{
+    z-index: 1;
+    display: flex;
+    position: absolute;
+    color: #f8cd0b33;
+    left: 0;
+    top: 0;
+    font-size: 25px;
+  }
+}
+
+  @media only screen and (max-width: 767px){
+    .profile-view-only{
+      text-align: center;
+    }
+    .review-container {
+      flex-direction: column !important;
+    }
+    .review-data {
+      width:100%;
+      min-height:22rem;
+    }
+    .rating{
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
+}
+.m-0{
+  margin:0;
+}
+
+.head{
+  h3{
+    color: #191919;
+    font-size: 20px;
+    font-family: $proxima-semi-bold;
+  }
+}
+.box-large{
+  border-top: solid 1px rgba(151, 151, 151, 0.13);
+  padding-top: 30px;
+  margin-top: 30px;
+
+}
+.checked {
+  color: orange;
+}
+.rating {
+  display: flex;
+  justify-content: flex-start;
+}
+.review-container {
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 5px;
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.12);
+  border: solid 0 #212529;
+  background-color: #ffffff;
+  padding: 13px;
+  cursor: pointer;
+  padding-top: 0px;
+  padding-bottom: 2rem;
+  max-height: 500px;
+  overflow: auto;
+}
+.review-data {
+  width:33%;
+  font-size: 16px;
+  display: flex;
+  justify-content: center
+}
+.review {
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  overflow-wrap: break-word;
+  background-color: rgba(240, 248, 255,0.3);
+  z-index: 9;
+  min-height: 200px;
+  margin-top: 25px;
+  padding: 15px;
+  box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.1);
+}
+.image > img {
+    border: 0;
+    height: 41px;
+    width: 42px;
+    border-radius: 50%;
+}
+.image {
+  margin-right: 8px;
+}
+.headerDetails {
+  display: flex;
+}
+.back-btn{
+  display:none;
+  cursor: pointer;
+}
+:host /deep/ .modal-header .close{
+  margin-top:-25px;
+}
+@media only screen and (max-width: 425px){
+  .back-btn{
+    display:block;
+  }
+  .merchantProfileStyle{
+    margin-top: -5rem !important;
+  }
+  .rating {
+    justify-content: center !important;
+  }
+  .review-container {
+    max-height: fit-content !important;
+  }
+  .star-container-bar{
+    margin: 0px !important;
+  }
+}
+
+@media only screen and (max-width: 768px){
+  .review-data{
+    width:50%;
+  }
+}

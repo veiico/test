@@ -1,0 +1,36 @@
+<div class="tip">
+  <form [formGroup]="tipForm" class="form">
+    <div class="point">
+      <div class="text" [ngStyle]="{ 'direction' : direction }">
+        <p>
+          <img src="assets/img/icon_tip.svg" alt="tip icon"  width="20px"/>
+          <ng-container>{{terminology.TIP}}</ng-container>
+        </p>
+      </div>
+      <div class="inputField">
+        <input type="text" [ngStyle]="{ 'direction' : direction }"
+               formControlName="tip"
+               (change)="changeTipValue()"
+               [attr.disabled]="_list.TIP_OPTION_ENABLE == 1 ? '' : null"
+               class="inputTip" placeholder="{{languageStrings.enter_tip_amount || 'Enter Tip Amount'}}" aria-label= 'Enter Tip Amount'/>
+        <button type="button" (click)="submitTip()" class="tipbtn">{{languageStrings.apply || 'Apply'}}</button>
+      </div>
+      <app-control-messages [control]="tipForm.controls.tip"></app-control-messages>
+    </div>
+    <div class="info" *ngIf="_list.TIP_OPTION_LIST && _list.TIP_OPTION_LIST.length && (_list.TIP_OPTION_ENABLE == 2 || _list.TIP_OPTION_ENABLE == 1)">
+      <hr/>
+      <div class="row">
+        <div class="col-lg-4 col-sm-4 col-md-4 col-xs-6" *ngFor="let option of _list.TIP_OPTION_LIST;let i = index;">
+          <div class="tipOption" (click)="chooseTipOption(i)"> <!-- (click)="chooseTipOption(i)" [ngClass]="{'selectedTipOption': tipOption.selected, 'nonSelectedTipOption': !tipOption.selected}" -->
+            <span class="underlineHover">
+              <span *ngIf="_list.TIP_TYPE == 2">{{currency}}</span>{{option.value}}<span *ngIf="_list.TIP_TYPE == 1">%</span>
+            </span>
+          </div>
+          <div>
+            <hr class="tipHr"/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

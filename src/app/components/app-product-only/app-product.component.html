@@ -1,0 +1,474 @@
+<div class="productOnly"
+  id="general_background">
+  <div class="row marginZero"
+    [ngClass]="{'containerWithFull': config.pdp_view == 1}">
+    <div class="col-sm-12 col-xs-12 col-lg-8 col-md-6 productDetailsOnly paddingZero"
+      [ngClass]="{'col-lg-8 col-md-6': config.pdp_view == 0,'col-lg-12 col-md-12': config.pdp_view == 1}">
+      <div class="row mainCon">
+        <div class="chk_hidden_space cf-col"
+          [ngStyle]="{ 'direction' : direction }"
+          *ngIf="config.business_model_type == 'ECOM'  && config.nlevel_enabled === 1 && (queryParam && !queryParam.hideFilter)">
+          <span style="margin: 16px;font-weight: bold">
+            <ng-container >{{ languageStrings.categories || 'CATEGORIES' }} </ng-container>
+          </span><br>
+          <select class="chk-input selectbox"
+            placeholder="Select"
+            [(ngModel)]="selectedProductFilter"
+            (change)="getFilteredData(selectedProductFilter)"
+            aria-label="Select Category">
+            <option [value]="0"
+              selected>
+              <ng-container >{{ languageStrings.all || "All"}}</ng-container>
+            </option>
+            <option [value]="option.catalogue_id"
+              *ngFor="let option of filteredData;">{{option.name}}</option>
+          </select>
+        </div>
+        <div class="col-sm-6 col-xs-12 col-md-4 card"
+          [ngClass]="{'col-lg-4': config.pdp_view == 0,'col-lg-3': config.pdp_view == 1}"
+          [style.display]="product.inventory_enabled && (product.available_quantity <= 0)? (config.show_outstocked_product?'block':'none') : 'block'"
+          *ngFor="let product of productList; let i = index;">
+          <div class="mainCard">
+            <a class=" fluid-thumbnail-grid-image-item-link">
+              <!-- (click)="showLightBox(product,i+1)"-->
+              <div class="fluid-thumbnail-grid-image-image-container">
+                <img
+                  [ngStyle]="{'cursor':product.multi_image_url?(product.multi_image_url.length > 0 ? 'pointer':'default'):'default'}"
+                  class="fluid-thumbnail-grid-image-image"
+                  [src]="product.thumb_list?product.thumb_list['400x400']: product.image_url ? product.image_url : 'assets/img/image-placeholder.svg'"
+                  [alt]="product.name + ' Logo'">
+                <div
+                  [ngStyle]="{'cursor':product.multi_image_url?(product.multi_image_url.length > 0 ? 'pointer':'default'):'default'}"
+                  class="fluid-thumbnail-grid-image-overlay"></div>
+                <div class="quickLook displayQuickLook"
+                  *ngIf="(product.multi_image_url && product.multi_image_url.length > 0)">
+                  <app-quick-look (showMultiImages)="showMultiImagesEvent($event)"
+                    [productData]="product"></app-quick-look>
+                </div>
+              </div>
+            </a>
+            <div class="home-fluid-thumbnail-grid-author"
+              (click)="goToProductDetailsPage(product,i+1)"
+              [ngStyle]="{'cursor': config.pdp_view == 1? 'pointer': 'default'}">
+              <div class="row marginZero">
+                <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12 productName paddingZero">
+                  <p [tooltip]="product.layout_data.lines[0] ? product.layout_data.lines[0].data : ''">
+                    {{product.layout_data.lines[0] ? product.layout_data.lines[0].data : ''}}</p>
+                </div>
+                <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12 paddingZero"
+                  *ngIf="product.display_address && config.show_product_location">
+                  <p class="descriptionP">
+                    <img src="assets/img/location-marker-red.svg"
+                      style="width:12px;"
+                      alt="map location marker" />
+                    {{product.display_address}}
+                  </p>
+                </div>
+                <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12 paddingZero"
+                  *ngIf="product.layout_data && product.layout_data.lines[1]">
+                  <p class="descriptionP hidden-xs hidden-sm">
+                    {{product.layout_data.lines[1].data | truncate : 75 : '.'}}
+                    <span class="readMore"
+                      *ngIf="product.layout_data.lines[1].data.length > 75">
+                      <ng-container >{{ languageStrings.read_more || 'Read More' }}</ng-container>
+                    </span>
+                  </p>
+                  <p class="descriptionP hidden-lg hidden-md">
+                    {{product.layout_data.lines[1].data | truncate : 60 : '.'}}
+                    <span class="readMore"
+                      *ngIf="product.layout_data.lines[1].data.length > 60"><ng-container >{{ languageStrings.read_more || 'Read More'}}</ng-container>
+                    </span>
+                  </p>
+                </div>
+                <div class="paddingZero"
+                  [ngClass]="{'col-lg-6 col-xs-6 col-sm-6 col-md-6': config.pdp_view == 0,'col-lg-12 col-md-12 col-xs-12 col-md-12': config.pdp_view == 1}">
+                  <div class="discount-box">
+                    <div class="discount-price"
+                      *ngIf="(formSetting.show_product_price == 1 || product.price > 0) && product.original_price">
+                      {{currency + '' +product.original_price}}
+                    </div>
+                    <div class="product-cl-data"
+                      *ngIf="formSetting.show_product_price == 1 || product.price > 0">
+                      {{currency+''+product.layout_data.lines[2] ? product.layout_data.lines[2].data : ''}}
+                    </div>
+                  </div>
+                  <div *ngIf="product && product.discount"
+                    class="discount-percent">{{product.discount}}%
+                    <ng-container >{{ languageStrings.discounts || "Discount" }}</ng-container>
+                    <ng-container *ngIf="product.max_discount_amount">
+                      <ng-container >{{ languageStrings.upto || "Upto"}}</ng-container>
+                      {{currency + product.max_discount_amount}}
+                    </ng-container>
+                  </div>
+                  <!-- <p class="currencyAmount" *ngIf="config.show_product_price == 1 || product.price > 0">{{currency+''+product.layout_data.lines[2] ? product.layout_data.lines[2].data : ''}}</p> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--======================cart data========================-->
+        <div class="col-lg-4 col-sm-12 col-xs-12 col-md-6 cartData paddingZero"
+          *ngIf="config.pdp_view == 0">
+          <div class="hidden-xs hidden-sm deskView row mainCart"
+            id="cart-fix-1">
+            <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12 cartStart paddingZero">
+              <div class="app-cart-text text-center"
+                appColor
+                bg="true">
+                <span class="text-capitalize">{{ languageStrings.your_cart || 'Your cart'}}</span>
+              </div>
+            </div>
+
+            <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12 paddingZero">
+              <div class="app-cart-div">
+                <div class="app-cart-item"
+                  *ngIf="cartData.length">
+                  <div class="app-cart-list">
+                    <div class="app-cart-item"
+                      *ngFor="let product of cartData;let i = index;">
+                      <div>
+                        <p class="app-item-head">{{product.name}}</p>
+                        <p *ngIf="product.customizations && product.customizations.length"
+                          class="app-sub-item">
+                          <span
+                            *ngFor="let custom of product.customizations;let last = last">{{custom.name | truncate : 100 : '.'}}<span
+                              *ngIf="!last"
+                              style="padding:0;">, </span></span>
+                        </p>
+                      </div>
+                      <div class="app-item-info">
+                        <div class="cart-p-detail-sec">
+                          <div class="p-action-btn">
+                            asdj fjhgas djhgk jahdg
+                            <div [ngStyle]="{'display': (product.type != 1) ? 'flex':'none'}">
+                              <div class="p-minus btn-cursor"
+                                (click)="decreamentQuantityCart(product.id,i)"
+                                appBs>
+                                <!--appBs-->
+                                <svg width="10"
+                                  height="7"
+                                  viewBox="0 0 10 2">
+                                  <path fill="#858585"
+                                    fill-rule="nonzero"
+                                    d="M0 1.75h10V.25H0z" />
+                                </svg>
+                              </div>
+                              <div class="p-quantity">{{product.quantity}}</div>
+                              <div class="p-plus btn-cursor"
+                                (click)="increaseQuantityCart(product.id,i)"
+                                [style.background-color]="config.btn_color?config.btn_color:'#1a9943'"
+                                appBs
+                                appTapEffect>
+                                <!-- appBs appColor bg='true'-->
+                                <svg width="9"
+                                  height="9"
+                                  viewBox="0 0 10 10">
+                                  <path fill="#FFF"
+                                    fill-rule="nonzero"
+                                    d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+                                </svg>
+                              </div>
+                            </div>
+                            <div [ngStyle]="{'display': (product.type == 1) ? 'flex':'none'}">
+                              <div class="p-minus btn-cursor t-btn"
+                                (click)="decreamentQuantityCart(product.id,i)"
+                                appBs>
+                                <!--appBs-->
+                                {{removeBtnTxt}}
+                              </div>
+                            </div>
+                          </div>
+                          <div class="app-item-totalprice"
+                            *ngIf="config.show_product_price == 1 || product.showPrice > 0">
+                            <span>{{currency+''+ ((product.quantity * product.showPrice) |decimalConfig) }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <hr
+                        [ngClass]="{'app-cart_item_seperation': i < cartData.length - 1 , 'app-subtotal_seperation': i == cartData.length - 1 }" />
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="!cartData.length"
+                  class="emptyCart">
+                  <span class="">{{ languageStrings.your_cart_is_empty || 'Your cart is empty'}}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 paddingZero"
+              *ngIf="config.show_product_price == 1 || totalCount > 0">
+              <div class="app-subtotal">
+                <!-- <div class="separtor"
+                  *ngIf="!cartData.length"></div> -->
+                <div class="app-item-subtotal"
+                  *ngIf="cartData.length">
+                  <div class="total-txt"
+                    [ngStyle]="{ 'direction' : direction }">
+                    <span class="head">
+                      <ng-container >{{ languageStrings.subtotal || "Subtotal" }}</ng-container>
+                    </span>
+                  </div>
+                  <div class="total">
+                    <span class="total">{{currency+''+(totalCount |decimalConfig )}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 paddingZero">
+              <button mat-button
+                *ngIf="cartData.length"
+                class="cart-btn btn btn-default btn-block ripple"
+                appColor
+                hoverbgSimple="true"
+                (click)="goToCheckout()"
+                [style.background-color]="config.color">
+                <span class="text-capitalize">{{terminology.CHECKOUT}}</span>
+              </button>
+            </div>
+          </div>
+
+
+          <button class="visible-sm visible-xs bottom-bar"
+            mat-button
+            appColor
+            bg="true"
+            *ngIf="cartData.length"
+            (click)="goToCheckout()">
+            <div class="col-xs-6  align-items-center checkout-bottom"
+              style="justify-content: flex-start;">
+              <div style="padding: 4px;">
+                <!--<img src="assets/img/cart-heading.svg" />-->
+                <span style="font-size: 24px;padding-right: 8px;">
+                  <i class="fa fa-shopping-cart"
+                    aria-hidden="true"></i>
+                </span>
+                <span
+                  style="text-transform: uppercase;">{{cartData.length > 1 ? cartData.length +' '+ terminology.ITEM +' IN ' + terminology.CART : cartData.length +' '+ terminology.ITEM +' IN ' + terminology.CART}}</span>
+              </div>
+            </div>
+            <div class="col-xs-6 align-items-center checkout-bottom text-capitalize"
+              *ngIf="config.show_product_price == 1 || totalCount > 0">
+              <!--<span>{{terminology.CHECKOUT}}</span>-->
+              <span class="total">{{currency+' '+(totalCount |decimalConfig) }}</span>
+            </div>
+          </button>
+
+        </div>
+      </div>
+
+      <app-modal [modalType]="modalType"
+        *ngIf="openMultiImage"
+        (esc)="hideMultiImageDialog()"
+        (onClose)="hideMultiImageDialog()">
+        <div body
+          style="padding: 15px 30px">
+          <div class="row">
+            <div class="col-12 cancel-popup">
+              <div><img src="assets/images/cancel.svg"
+                  style="height: 15px;cursor:pointer;"
+                  (click)="hideMultiImageDialog()" /></div>
+            </div>
+            <div class="col-12 carousel slide"
+              id="lightbox">
+              <ol class="carousel-indicators"
+                *ngIf="caraouselImages.length > 1">
+                <li *ngFor="let image of caraouselImages;let i = index;"
+                  data-target="#lightbox"
+                  [attr.data-slide-to]="i"
+                  [ngClass]="{'active' : i==0}"></li>
+              </ol>
+              <div class="carousel-inner">
+                <div *ngFor="let image of caraouselImages;let i = index;"
+                  style="height:366px;"
+                  class="item"
+                  [ngClass]="{'active' : i==0}">
+                  <img style="height: 100%; width: 100%; object-fit: contain; margin: 0 auto;"
+                    [src]="image"
+                    [alt]="'caraousel slide ' + i">
+                </div>
+              </div>
+              <!-- /.carousel-inner -->
+              <a *ngIf="caraouselImages.length > 1"
+                class="left carousel-control"
+                href="#lightbox"
+                role="button"
+                data-slide="prev">
+                <span style="font-family:'Glyphicons Halflings'!important;"
+                  class="glyphicon glyphicon-chevron-left"></span>
+              </a>
+              <a *ngIf="caraouselImages.length > 1"
+                class="right carousel-control"
+                href="#lightbox"
+                role="button"
+                data-slide="next">
+                <span style="font-family:'Glyphicons Halflings'!important;"
+                  class="glyphicon glyphicon-chevron-right"></span>
+              </a>
+            </div>
+            <div class="col-12">
+              <div class="cls-cust-main-div"
+                style="word-break: break-all;"
+                *ngIf="productLongDescription">
+                <h4 class="text-center"
+                  >{{ languageStrings.description || 'Description'}}</h4>
+                <div [innerHtml]="productLongDescription"
+                  class="long_description cls-pcust-head text-inherit"
+                  style="max-height: 200px;overflow-y: auto">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </app-modal>
+
+      <!--------------------------product timing modla------------------------>
+      <div class="modal fade and carousel slide"
+        id="timeSelection">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <app-product-timing [product]="productSelectedToAdd"
+              [productIndex]="indexGot"
+              (sendDataForProduct)="getSelectedTiming($event)"></app-product-timing>
+          </div>
+        </div>
+      </div>
+
+      <!----------------------------custom modal----------------------------->
+      <div class="modal fade"
+        id="myModal"
+        role="dialog"
+        *ngIf="currentProduct">
+        <div class="modalFlex">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title header-modal text-capitalize">{{currentProduct?.name}}</h4>
+                <div class="cls-cust-head">
+                  <div class="cls-cust-n pl-25">
+                    <!-- <p>{{currentProduct?.name}}</p> -->
+                    <p>{{currency+' '+currentProduct?.price}}</p>
+                  </div>
+                  <div class="p-action-btn">
+                    <div [ngStyle]="{'display':(currentProduct.type != 1) ? 'flex':'none'}">
+                      <div class="p-minus btn-cursor"
+                        (click)="decreaseCustomizeProduct()"
+                        appBs>
+                        <!--appBs-->
+                        <svg width="10"
+                          height="7"
+                          viewBox="0 0 10 2">
+                          <path fill="#858585"
+                            fill-rule="nonzero"
+                            d="M0 1.75h10V.25H0z" />
+                        </svg>
+                      </div>
+                      <div class="p-quantity">{{currentProduct.quantity}}</div>
+                      <div class="p-plus btn-cursor"
+                        (click)="increaseCustomizeProduct()"
+                        [style.background-color]="config.btn_color?config.btn_color:'#1a9943'"
+                        appBs>
+                        <!--appBs appColor bg='true'-->
+                        <svg width="9"
+                          height="9"
+                          viewBox="0 0 10 10">
+                          <path fill="#FFF"
+                            fill-rule="nonzero"
+                            d="M5.765 10V5.765H10v-1.53H5.765V0h-1.53v4.235H0v1.53H4.235V10z" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div [ngStyle]="{'display':(currentProduct.type == 1) ? 'flex':'none'}">
+                      <div class="p-minus btn-cursor t-btn t-btn-26 "
+                        (click)="decreaseCustomizeProduct()"
+                        appBs>
+                        {{removeBtnTxt}}
+                      </div>
+                      <!--appBs-->
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-body">
+                <div class="cls-cust-body">
+                  <div class="cls-cust-main-div"
+                    style="word-break: break-all;"
+                    *ngIf="currentProduct.description">
+                    <div class="cls-pcust-head">{{ languageStrings.long_descriptions || "Long Description" }}</div>
+                    <div [innerHtml]="currentProduct.description"
+                      class="long_description cls-pcust-head text-inherit"> </div>
+                  </div>
+                  <div class="cls-cust-main-div"
+                    *ngFor="let custom of currentProduct.customization;let custIndex = index;">
+                    <p class="cls-pcust-head">{{custom.name | truncate : 100 : '.'}}
+                      <span style="font-size:10px;text-transform: none"
+                        *ngIf="!custom.is_check_box">(<ng-container >{{ languageStrings.select_any_1 ||"Select any" }}</ng-container>)</span>
+                      <span style="font-size:10px;text-transform: none"
+                        *ngIf="custom.is_check_box">{{(custom.minimum_selection >1) && custom.minimum_selection_required  ? ( languageStrings.select_any + custom.minimum_selection || '(Select any '+custom.minimum_selection+')' ): (languageStrings.optional || 'Optional') }}</span>
+
+                    </p>
+                    <div class="cls-cust-option"
+                      *ngFor="let option of custom.customize_options;let optionIndex = index;">
+                      <div class="cls-cust-check"
+                        (click)="changeExtrasStatus(currentProduct.product_id,custom,custIndex,optionIndex,customizedObj[currentProduct.product_id].customization[custIndex].customize_options[optionIndex].is_default)">
+                        <svg width="10"
+                          height="12"
+                          viewBox="0 0 10 7"
+                          *ngIf="customizedObj[currentProduct.product_id].customization[custIndex].customize_options[optionIndex].is_default">
+                          <path [attr.fill]="config.color"
+                            fill-rule="nonzero"
+                            d="M3.598 6.906a.808.808 0 0 1-.561-.223L.232 3.991a.74.74 0 0 1 0-1.076.817.817 0 0 1 1.122 0l2.244 2.153L8.646.223a.817.817 0 0 1 1.122 0 .74.74 0 0 1 0 1.077l-5.61 5.383a.808.808 0 0 1-.56.223z" />
+                        </svg>
+                      </div>
+                      <div style="flex: 1 1 0%; margin-right: 10px;">
+                        <span>{{option.name}}</span>
+                      </div>
+                      <div class="txt-right"
+                        *ngIf="option.price > 0">
+                        <span>{{currency+' '+(option.price |decimalConfig)}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button mat-button
+                    class="dialog-cancel btn"
+                    [ngStyle]="{ 'direction' : direction }"
+                    (click)="resetDialog()"
+                    appBs>
+                    <ng-container >{{ languageStrings.cancel || "Cancel"}}</ng-container>
+                  </button>
+                  <button mat-button
+                    class="dialog-ok btn"
+                    [ngStyle]="{ 'direction' : direction }"
+                    (click)="addCustomization(0)"
+                    appColor
+                    bg="'true'"
+                    *ngIf="addBtnTxt"
+                    appBs>{{addBtnTxt}} <ng-container >{{languageStrings.for || "for"}}</ng-container>
+                    {{currency+' '+((currentProduct.totalPrice*currentProduct.quantity) |decimalConfig) }}</button>
+                  <button mat-button
+                    class="dialog-ok btn"
+                    [ngStyle]="{ 'direction' : direction }"
+                    (click)="addCustomization(0)"
+                    appColor
+                    bg="'true'"
+                    appBs
+                    *ngIf="!addBtnTxt">
+                    <ng-container >{{languageStrings.add_for ||"Add for"}}</ng-container> 
+                    {{currency+' '+((currentProduct.totalPrice*currentProduct.quantity) |decimalConfig) }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<app-customer-verification-popup *ngIf="showCustomerVerificationPopUp"
+  (popUpClose)="onPopUpClose()"></app-customer-verification-popup>

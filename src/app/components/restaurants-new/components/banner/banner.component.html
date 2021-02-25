@@ -1,0 +1,52 @@
+<div class="bannerComponent">
+  <div class="row m-0 bannerDiv" *ngIf="!showMultipleBanners">
+    <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12  p-0">
+      <div class="bg-image" *ngIf="!ecomView" [ngStyle]="{'background-image':config && config.webapp_logo ? 'linear-gradient(0deg, rgba(38, 37, 37, 0.61), rgba(38, 37, 37, 0.66)),url('+config.webapp_logo+')': ''}">
+        <div class="brand_text_div">
+          <h1 class="brand_text">{{config ? config.app_description : ''}}</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- multiple banners -->
+  <div class="row m-0 " *ngIf="showMultipleBanners &&  !is3dEnabled">
+
+    <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 multiBanners" *ngIf="newList && newList.length > 0">
+      <div class="carouselDiv">
+        <div id="banner" class="carousel slide" data-ride="carousel">
+          <ol class="carousel-indicators" *ngIf="newList && newList.length > 1">
+            <li *ngFor="let newData of newList;let i = index;" data-target="#banner" [attr.data-slide-to]="i" [ngClass]="{'active' : i==0}"></li>
+          </ol>
+          <div class="carousel-inner">
+            <div class="item" *ngFor="let newData of newList;let i = index;" [ngClass]="{'active' : i==0}" (touchstart)="swipe($event, 'start')" (touchend)="swipe($event, 'end',i)">
+              <img [src]="newData.image" class="logo hidden-xs m-0" alt="banner image m-0" (click)="goToParticularRestaurant(newData)" />
+              <img [src]="newData.mobile_web_image || newData.image" class="logo visible-xs m-0" alt="banner image" (click)="goToParticularRestaurant(newData)" />
+            </div>
+          </div>
+          <a [hidden]='true' class="left carousel-control" id="prev" href="#banner" role="button" data-slide="prev" aria-label="go to previous slide">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+            <i class="fa fa-angle-left" aria-hidden="true"></i>
+          </a>
+          <a [hidden]='true' class="right carousel-control" id='click-event' href="#banner" role="button" data-slide="next" aria-label="go to next slide">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="carousel" *ngIf="showMultipleBanners && is3dEnabled" #carosoul>
+    <figure [attr.numImages] = "numImages" >
+      <img class = "corosoulImage hidden-xs" *ngFor="let newData of newList" [src]="newData.image" alt="" (click)="goToParticularRestaurant(newData)" />
+      <img class = "corosoulImage visible-xs" *ngFor="let newData of newList" [src]="newData.mobile_web_image" alt="" (click)="goToParticularRestaurant(newData)" />
+    </figure>
+    <div class = "switchButton">
+            <a (click) = "onClick(false)" class="fa fa-angle-left" aria-hidden="true">
+            </a>
+          <a (click) = "onClick(true)" class="fa fa-angle-right" aria-hidden="true">
+          </a>
+    </div>
+</div>
+
+</div>

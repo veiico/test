@@ -1,0 +1,7 @@
+<div class="overlay-area"></div>
+<div class="holdAmount" *ngIf="_list">
+  <div class="content">
+    <h3>{{currency}}{{_list.HOLD_AMOUNT | decimalConfig}} {{languageStrings.amount_will_be_on_hold || "amount will be on hold."}}</h3>
+    <button class="btn gotIt" (click)="gotIt()">{{languageStrings.got_it || 'Got It'}}</button>
+  </div>
+</div>

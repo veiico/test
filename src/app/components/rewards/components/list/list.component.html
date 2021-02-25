@@ -1,0 +1,103 @@
+<app-header style="height:85px;padding: 0px" class="col-xs-12" [headerData]="headerData" *ngIf="!ecomView"></app-header>
+
+<div class="main-c row">
+  <div class="col-xs-12">
+    <div class="heading">
+      <p class="title text-capitalize">{{terminology.REWARDS}}</p>
+      <hr class="line" [style.border-top-color]="config.color" />
+    </div>
+  </div>
+
+  <div class="containerOrder center-c d">
+    <div class="row-eq-height">
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 row-col-eq" *ngFor="let reward of rewardData">
+        <div class="card" [ngClass]="{'borderSelect': reward.is_purchased}">
+          <div class="plan dFlex">
+            <div class="name">
+              <span *ngIf="reward.reward_name.length < 21">{{reward.reward_name}}</span>
+              <span *ngIf="reward.reward_name.length > 21" [tooltip]="reward.reward_name">{{reward.reward_name | truncate : 21 : '.'}}</span>
+            </div>
+            <div class="valid">
+              <ng-container>{{languageStrings.valid_upto || 'Valid upto'}}</ng-container> {{reward.valid_upto ? (reward.valid_upto/86400000) : reward.valid_upto}}
+              <ng-container *ngIf="(reward.valid_upto/86400000) > 1">{{languageStrings.days || "Days"}}</ng-container>
+              <ng-container *ngIf="(reward.valid_upto/86400000) == 1">{{languageStrings.day || "Day"}}</ng-container>
+            </div>
+          </div>
+          <div class="description valid" *ngIf="reward.description">
+            <!-- style="display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;overflow: hidden;" -->
+            {{reward.description}}
+            <!-- <span *ngIf="reward.description && reward.description.length > 150"
+                   class="readMore" placement="bottom" (click)="readMore = true;"><ng-container i18n>Read More</ng-container></span> -->
+          </div>
+          <div class="description valid">
+            <ng-container>{{languageStrings.orders_count || "Order Count"}}</ng-container>: {{reward.is_purchased ? reward.total_count : reward.order_count}}
+          </div>
+          <div class="description valid" *ngIf="reward.is_purchased && reward.order_count !== reward.total_count">
+            <ng-container>{{languageStrings.orders_left || "Order Left"}}</ng-container>: {{reward.order_count}}
+          </div>
+          <div class="dFlex description">
+            <div class="cashback">
+              {{reward.percentage_cashback}}% <ng-container>{{languageStrings.cashback || "Cashback"}}</ng-container>
+            </div>
+            <div class="logo" [ngClass]="{'colorSelect': reward.is_purchased}">
+              <i class="yfn yfn-reward_icon"></i>
+            </div>
+          </div>
+          <div class="cashback description">
+            <ng-container>{{languageStrings.maximum_amount || "Maximum Amount"}}</ng-container> {{currency}}{{reward.fixed_cashback | decimalConfig}}
+          </div>
+          <div class="dFlex mt-10">
+            <div class="name" [ngClass]="{'colorSelect': reward.is_purchased}">
+              {{currency}}{{reward.plan_fees | decimalConfig}}
+            </div>
+            <div class="activate">
+              <span class="activated" *ngIf="reward.is_purchased && !reward.is_expired">{{languageStrings.activated || "Activated"}}</span>
+              <span class="activated" *ngIf="reward.is_purchased && reward.is_expired">{{languageStrings.expired || "Expired"}}</span>
+              <button class="btn" *ngIf="!reward.is_purchased" (click)="activatePlan(reward)"><ng-container>{{languageStrings.activate || "Activate"}}</ng-container></button>
+            </div>
+          </div>
+        </div>
+        <div class="selected" *ngIf="reward.is_purchased">
+
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-12 col-md-12 col-md-12" *ngIf="rewardData && !rewardData.length">
+        <div class="noPlan">
+          <div class="logo">
+            <img src="assets/img/no-plan.svg" />
+            <p>{{languageStrings.no_plan_yet || "No Plan Yet!"}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<app-modal *ngIf="showModal" [modalType]="modalType.MEDIUM" (esc)="showModal = false" (onClose)="showModal = false">
+  <div body>
+    <div class="container-fluid modal-padding">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <span class="text">{{languageStrings.buy_plan || 'Buy Plan'}}</span>
+          <span (click)="hidePaymentModal()" class="fa fa-times pull-right" [ngStyle]="{'direction':direction}"></span>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-12 mt-10">
+          <app-enabled-payment-methods [list]="billInfo"
+                                       [hideCash]="'true'"
+                                       [hidePayLater]="'true'"
+                                       [paymentFor]="'5'"
+                                       [triggerPayment]="triggerPayment"
+                                       [walletDetails]="walletDetails"
+                                       (paymentResponse)="addCardResponse($event)"
+                                       (selectedMethod)="paymentMethod($event)" [getOrderCreationPayload]="getOrderCreationPayload"></app-enabled-payment-methods>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</app-modal>
+
+<app-footer></app-footer>

@@ -1,0 +1,119 @@
+<div class="col-12 p-0" *ngIf="!is_google_map">
+  <div id="map"></div>
+</div>
+<div id="map" *ngIf="is_google_map">
+  <agm-map #AgmMap [latitude]="lat" [longitude]="lng" [maxZoom]="18" [styles]="mapStyle" [mapTypeControl]="true"
+    id="agmMapHeight">
+    <!-- <agm-marker-cluster *ngIf="bussinessData.length > 0" imagePath="./assets/img/m"> -->
+    <agm-marker *ngFor="let data of bussinessData; let i = index" [agmFitBounds]="true"
+      (markerClick)="select_marker(infoWindow,i,$event)" [markerClickable]="!data.current_location"
+      [iconUrl]="data.current_location ? iconUrl.current_loc :(data.isClicked == false || data.isClicked == undefined) ? iconUrl.url : iconUrl.url2"
+      [latitude]="data.latitude" [longitude]="data.longitude">
+      <agm-info-window #infoWindow>
+        <ng-container>
+          <div class="flex" *ngIf="popupInfoData.length>0">
+            <div class="flex-1" (click)="navigate(popupInfoData[selected_pointer])">
+              <img
+                [src]="(popupInfoData[selected_pointer].thumb_list && popupInfoData[selected_pointer].thumb_list['250x250']) ? popupInfoData[selected_pointer].thumb_list['250x250'] : popupInfoData[selected_pointer].thumb_url"
+                [alt]="popupInfoData[selected_pointer].name + ' image'" class="img-marker" />
+            </div>
+            <div class="flex-3">
+              <div class="f-d-c">
+                <div class="flex-5 store_Name">
+                  <div style="display: flex">
+                      <p class="storeAddress">{{popupInfoData[selected_pointer].store_name}}</p>
+                      <span (click)="closeMarkerPopup()"><i class="fa fa-close"></i> </span>
+                  </div>
+               
+                  <span
+                    class="storeAddressDist">{{popupInfoData[selected_pointer].distance}}-{{popupInfoData[selected_pointer].display_address | slice:0:80}}</span>
+                  <p class="store_rating" *ngIf="popupInfoData[selected_pointer].store_rating > 0">
+                    <i class="fa fa-star rating" aria-hidden="true"></i>{{popupInfoData[selected_pointer].store_rating}}
+                  </p>
+                  <p style="color: #3C963C;" *ngIf="popupInfoData[selected_pointer].is_sponsored == 1">{{languageStrings.sponsored || 'Sponsored'}}
+                  </p>
+                  <p style="color:#F39C12;"
+                    *ngIf="((popupInfoData[selected_pointer].available == 0) && (popupInfoData[selected_pointer].scheduled_task == 1))"
+                    >{{languageStrings.preorder || 'Preorder'}}
+                  </p>
+                  <p style="color: #f00;"
+                    *ngIf="((popupInfoData[selected_pointer].available == 0) && (popupInfoData[selected_pointer].scheduled_task == 0))"
+                  >{{languageStrings.closed || 'Closed'}}
+                  </p>
+                </div>
+                <div class="flex-1view">
+                  <p (click)="navigate(popupInfoData[selected_pointer])">{{languageStrings.view_menu || 'View Menu'}}</p>
+                </div>
+              </div>
+            </div>
+            <i (click)="changeMarkerContent(0)" *ngIf="popupInfoData.length>1 && selected_pointer != 0"
+              class="fa fa-arrow-circle-left fa-lg pt17" aria-hidden="true"></i>&nbsp;
+            <i (click)="changeMarkerContent(1)"
+              *ngIf="popupInfoData.length>1 && selected_pointer != popupInfoData.length-1"
+              class="fa fa-arrow-circle-right fa-lg pt17" style="padding-right: 5px;" aria-hidden="true"></i>
+          </div>
+        </ng-container>
+      </agm-info-window>
+    </agm-marker>
+    <!-- </agm-marker-cluster> -->
+    <ng-container>
+      <agm-overlay [latitude]="popupInfoData[selected_pointer].latitude"
+        [longitude]="popupInfoData[selected_pointer].longitude" *ngIf="popupInfoData.length">
+        <div class="agm-overlay-div">
+          <img class="storeImg-marker" style=" width: 40px;
+  height: 40px;
+  border-radius: 50%;"
+            [src]="(popupInfoData[selected_pointer].thumb_list && popupInfoData[selected_pointer].thumb_list['250x250']) ? popupInfoData[selected_pointer].thumb_list['250x250'] : popupInfoData[selected_pointer].thumb_url">
+        </div>
+      </agm-overlay>
+    </ng-container>
+  </agm-map>
+  <div>
+    <ng-container *ngIf="show_popup">
+      <div class="flex_popup" *ngIf="popupInfoData.length>0">
+        <div class="flex-1" (click)="navigate(popupInfoData[selected_pointer])">
+          <img
+            [src]="(popupInfoData[selected_pointer].thumb_list && popupInfoData[selected_pointer].thumb_list['250x250']) ? popupInfoData[selected_pointer].thumb_list['250x250'] : popupInfoData[selected_pointer].thumb_url"
+            [alt]="popupInfoData[selected_pointer].name + ' image'" class="img-marker" />
+        </div>
+        <div class="flex-3">
+          <div class="f-d-c">
+            <div class="flex-6 store_Name_popup">
+              <div class="flex-1">
+                <p class="storeName" style="font-size: small;
+  font-weight: 400;">{{popupInfoData[selected_pointer].store_name}}</p>
+                <i (click)="changeMarkerContent(0)" *ngIf="popupInfoData.length>1 && selected_pointer != 0"
+                  class="fa fa-arrow-circle-left fa-lg" aria-hidden="true"></i> &nbsp;
+                <i (click)="changeMarkerContent(1)"
+                  *ngIf="popupInfoData.length>1 && selected_pointer != popupInfoData.length-1"
+                  class="fa fa-arrow-circle-right fa-lg" aria-hidden="true"></i>
+              </div>
+              <div class="flex-1 store_Add">
+                <span
+                  class="storeAddressDist_popup">{{popupInfoData[selected_pointer].distance}}-{{popupInfoData[selected_pointer].display_address}}</span>
+                <p class="store_rating_popup">
+                  <i class="fa fa-star rating" aria-hidden="true"></i>{{popupInfoData[selected_pointer].store_rating}}
+                </p>
+              </div>
+              <div class="flex-4 mt8">
+                <p class="sponsoredTag" *ngIf="popupInfoData[selected_pointer].is_sponsored == 1">{{languageStrings.sponsored || 'Sponsored'}}
+                </p>
+                <p class="preorderTag"
+                  *ngIf="((popupInfoData[selected_pointer].available == 0) && (popupInfoData[selected_pointer].scheduled_task == 1))">
+                 {{languageStrings.preorder || 'Preorder'}} 
+                </p>
+                <p class="closedTag"
+                  *ngIf="((popupInfoData[selected_pointer].available == 0) && (popupInfoData[selected_pointer].scheduled_task == 0))">
+                    {{languageStrings.closed || 'Closed'}}
+                </p>
+              </div>
+            </div>
+            <div class="flex-1view_popup">
+              <p (click)="navigate(popupInfoData[selected_pointer])">{{languageStrings.view_menu || 'View Menu'}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

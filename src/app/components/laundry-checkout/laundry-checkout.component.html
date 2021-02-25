@@ -1,0 +1,39 @@
+<app-header style="height:85px;padding: 0px;" class="col-xs-12" [headerData]="headerData" *ngIf="!ecomView"></app-header>
+
+<div class="checkoutView">
+  <div class="row m0">
+    <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 p-0">
+      <div class="container boxView">
+        <h3 class="head" [ngStyle]="{ 'direction' : direction }">{{terminology.CHECKOUT}}</h3>
+        <app-progress-bar [stepsArray]="stepsArray" (goToParticularStep)="goToParticularStep($event)" [activeStep]="this.activeStep.step"></app-progress-bar>
+        <app-laundry-address *ngIf="activeStep.step == 1 && activeStep.active == 1 && !staticAddress"
+                              [stepsArray]="stepsArray"
+                              [type]="'pickup'"
+                              (stepComplete)="stepComplete($event)"></app-laundry-address>
+        <app-static-address-laundry *ngIf="activeStep.step == 1 && activeStep.active == 1 && staticAddress"
+                                    [stepsArray]="stepsArray"
+                                    [type]="'pickup'"
+                                    [list]="staticAddressList"
+                                    (stepComplete)="stepComplete($event)"></app-static-address-laundry>
+        <app-laundry-address *ngIf="activeStep.step == 2 && activeStep.active == 1 && !staticAddress"
+                              [stepsArray]="stepsArray"
+                              [type]="'delivery'"
+                              (stepComplete)="stepComplete($event)"></app-laundry-address>
+        <app-static-address-laundry *ngIf="activeStep.step == 2 && activeStep.active == 1 && staticAddress"
+                                    [stepsArray]="stepsArray"
+                                    [type]="'delivery'"
+                                    [list]="staticAddressList"
+                                    (stepComplete)="stepComplete($event)"></app-static-address-laundry>
+        <app-laundry-schedule *ngIf="activeStep.step == 3 && activeStep.active == 1"
+                               [stepsArray]="stepsArray"
+                               (stepComplete)="stepComplete($event)"></app-laundry-schedule>
+        <app-review-order *ngIf="activeStep.step == 4 && activeStep.active == 1"
+                          [stepsArray]="stepsArray"
+                          (stepComplete)="stepComplete($event)"></app-review-order>
+        <app-payment-laundry *ngIf="activeStep.step == 5 && activeStep.active == 1"
+                     [stepsArray]="stepsArray"></app-payment-laundry>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

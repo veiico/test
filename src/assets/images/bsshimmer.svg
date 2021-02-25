@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="124" height="162" viewBox="0 0 124 162">
+    <defs>
+        <path id="a" d="M7.85.536h85.343a7.57 7.57 0 0 1 7.57 7.57v85.796a7.57 7.57 0 0 1-7.57 7.57H7.85a7.57 7.57 0 0 1-7.57-7.57V8.106A7.57 7.57 0 0 1 7.85.536z"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd" transform="translate(0 .536)">
+        <path stroke="#EAEAEA" d="M7.57.5A7.07 7.07 0 0 0 .5 7.57v146.274a7.07 7.07 0 0 0 7.07 7.07h108.432a7.07 7.07 0 0 0 7.07-7.07V7.57a7.07 7.07 0 0 0-7.07-7.07H7.57z"/>
+        <use fill="#EAEAEA" transform="translate(11.075 10.82)" xlink:href="#a"/>
+        <rect width="74" height="10" x="25" y="137" fill="#EAEAEA" fill-rule="nonzero" rx="1"/>
+    </g>
+</svg>

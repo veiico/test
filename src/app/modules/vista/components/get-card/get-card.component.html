@@ -1,0 +1,25 @@
+   <div class="cardList">
+    <div class="row">
+      <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12">
+        <h3 class="head"><ng-container>{{languageStrings.saved_cards || 'Saved Cards'}}</ng-container><ng-container *ngIf="cardList.length > 0"><span class="selectMsg"><ng-container>({{languageStrings.please_select_your_card_from_list_below || 'Please select your card from the list below'}})</ng-container></span></ng-container></h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12" *ngFor="let cards of cardList;let i = index;">
+        <div class="card" [ngClass]="{'selected': cards.selected}" (click)="selectCard(cards, i, $event)">
+          <div class="type">
+            <h1>{{cards.brand}}</h1>
+          </div>
+          <div class="details">
+            <p class="number">XXXX-XXXX-XXXX-{{cards.last4_digits}}</p>
+            <p class="valid"><ng-container>{{languageStrings.valid_thru || 'Valid Thru'}}</ng-container> {{cards.expiry_date}}</p>
+            <div class="delete" *ngIf="showDeleteButton" (click)="deleteCard(cards, i, $event)">
+              <i class="fa fa-trash-o" aria-hidden="true"></i>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    
+  

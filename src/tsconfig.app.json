@@ -1,0 +1,27 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/app",
+    "baseUrl": "./",
+    "module": "es2015",
+    "types": [],
+    "paths": {
+      "stream": [
+        "../node_modules/stream-browserify",
+        // "../node_modules/readable-stream/readable.js"
+      ],
+      // "jszip": [
+      //   "../node_modules/jszip/dist/jszip.min.js"
+      // ]
+    }
+  },
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts"
+  ],
+  "angularCompilerOptions": {
+    "preserveWhitespaces": true,
+    "entryModule": "app/app.module#AppModule"
+
+  }
+}

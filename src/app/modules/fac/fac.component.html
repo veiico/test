@@ -1,0 +1,27 @@
+
+<!-- <div class="container-fluid fac">
+  <div class="row" *ngIf="facPaymentUrl" style="padding: 10px">
+    <div class="col-md-12 text-center">
+      <h4>
+        <ng-container i18n>First Atlantic Ecommerce</ng-container>
+      </h4>
+    </div>
+    <div class="col-md-12">
+      <iframe id="facIFrame" style="border: none" #facIFrame [src]="facPaymentUrl" height="610px" width="100%" (load)="getContentFac(facIFrame)"></iframe>
+    </div>
+  </div>
+</div> -->
+
+<div class="authorize-net">
+  <app-fac-card-list *ngIf="cardList && cardList.length > 0" [cardList]="cardList"
+                         [NET_PAYABLE_AMOUNT]="NET_PAYABLE_AMOUNT"
+                         (secureUrl)="secureUrl($event)"
+                         [showDeleteButton]="deleteButton"
+                         (deleteCardEvent)="deleteCard($event)"
+                         (paymentMade)="paymentMade($event)"
+                         ></app-fac-card-list>
+  <app-fac-add-card *ngIf="addCardLink" [addCardLink]="addCardLink"
+                        [secureUrlFrame]="secureUrlFrame"
+                        [hideIframe]="hideIframe"
+                        (cardWindowRefOut)="cardWindowRefOut($event)"></app-fac-add-card>
+</div> 

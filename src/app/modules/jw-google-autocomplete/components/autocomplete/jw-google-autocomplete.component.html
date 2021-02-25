@@ -1,0 +1,23 @@
+<div style="position: relative;width:100%;height:100%">
+  <input type="text" [placeholder]="placeholder ? placeholder : ''" class="input-box" [(ngModel)]="text" #ctrl="ngModel"
+    (blur)="onTouch()" style="height: 100% !important" #el id="jw-autocomplete" (keydown)="onKeyDown($event)" 
+    aria-label="Enter address via autocomplete" (click)="$event.target.select()" autocomplete="off">
+  <div class="pac-container" *ngIf="predictions.length">
+    <div class="pac-item" *ngFor="let prediction of predictions;let i=index"
+      (click)="is_google_map ? onLocationSelect(prediction) : onFlightmapLocationSelect(prediction)"
+      [ngClass]="{'active':i==scrollIndex}">
+      <span class="pac-icon pac-icon-marker"></span>
+      <span class="pac-item-query">
+        {{prediction.address || prediction.description}}
+      </span>
+    </div>
+  </div>
+ 
+</div>
+<div class="container" *ngIf="googleApiError && googleKeyError && !flightMapError && config.business_model_type !== 'FREELANCER'">
+  <ng-container>{{languageStrings.please_update_your_google_maps_api_key || 'Please update your google maps api key'}}</ng-container>
+    </div> 
+    <div class="container" *ngIf="googleApiError && flightMapError && !googleKeyError && config.business_model_type !== 'FREELANCER'">
+      <ng-container>{{languageStrings.please_update_your_flightMap_api_key || 'Please update your FlightMap api key'}}</ng-container>
+        </div> 
+<div class="modal-backdrop fade show" *ngIf="predictions.length" style="opacity:0" (click)="outsideClick()"></div>

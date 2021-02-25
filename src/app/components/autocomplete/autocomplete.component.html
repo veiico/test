@@ -1,0 +1,76 @@
+<div class="autoCompleteGoogle"
+  *ngIf='!isEcomFlow'>
+  <form [formGroup]="autoCompleteGoogleForm"
+    class="autoCompleteGoogleForm"
+    (ngSubmit)="onSubmit(autoCompleteGoogleForm,$event,'shake')"
+    autocomplete="off">
+    <div class="input-group">
+      <i class="fa fa-2x fa-map-marker"
+        aria-hidden="true"
+         *ngIf="!hideMapIcon"
+        (click)="openMap()"></i>
+        <!-- location input field -->
+        <app-jw-google-autocomplete class="form-control autoComplete"
+                                    formControlName="googleSearch"
+                                    (latLng)="onLatLngEvent($event)"
+                                    (modelChange)="clearLatLng()"
+                                    class="autocompleteWrapper"
+                                    [placeholder]="placeholder">
+        </app-jw-google-autocomplete>
+       <!-- fetch location icon -->
+      <div (click)="fetchLocationOnClick()" *ngIf="!hideMapIcon"
+        class="auto-detect">
+        <span *ngIf="fetchingLocation" class="inline-flex f-j-c f-a-c"><i class="fa fa-circle-o-notch fa-spin"></i> <span class="hidden-xs hideSpan" style="font-size: 1.2rem"><ng-container>{{languageStrings.loading || "Loading" }}</ng-container></span></span>
+        <span *ngIf="!fetchingLocation" class="inline-flex f-j-c f-a-c">
+          <img src="assets/images/aim.svg" alt='location icon'>
+          <span class="hidden-xs hideSpan" style="font-size: 1.2rem"><ng-container>{{languageStrings.locate_me || "Locate Me"}}</ng-container>
+        </span>
+      </span>
+
+      </div>
+      <!-- for new header design -->
+      <div (click)="fetchLocationOnClick()" *ngIf="hideMapIcon"
+        class="auto-detect header-new">
+        <span *ngIf="fetchingLocation" class="inline-flex f-j-c f-a-c"><i class="fa fa-circle-o-notch fa-spin"></i> <span class="load-span"><ng-container>{{languageStrings.loading || "Loading" }}</ng-container></span></span>
+        <span *ngIf="!fetchingLocation" class="inline-flex f-j-c f-a-c">
+          <img class="locateme-logo" src="assets/img/new-loc2.svg">
+          <span class="load-span" ><ng-container>{{languageStrings.locate_me || "Locate Me"}}</ng-container></span>
+        </span>
+
+      </div>
+
+    </div>
+    <!-- error msg in case of unable to fetch your location -->
+    <div class="errorpop" *ngIf="showFetchingLocationError">
+      <div class="dFlex">
+        <span style="margin-left: 5px;margin-right: 5px;">{{languageStrings.unable_to_fetch_your_location || "Unable to fetch your location" }}</span>
+      </div>
+      <div class="cross-class"> 
+        <span class="times" (click)="showFetchingLocationError = ''">
+          <i class="fa fa-times" ></i>
+        </span>
+      </div>
+    </div>
+    <div class="infopop" *ngIf="infoMessage">
+      <div class="dFlex">
+        <span style="margin-left: 5px;margin-right: 5px;">{{languageStrings.unable_to_fetch_your_location || "Unable to fetch your location" }}</span>
+      </div>
+      <div class="cross-class">
+         <span class="times" (click)="infoMessage = false">
+          <i class="fa fa-times" ></i>
+        </span>
+      </div>
+    </div>
+    <!-- form control msg in case of location not entered -->
+    <app-control-messages [control]="autoCompleteGoogleForm.controls.googleSearch"></app-control-messages>
+  </form>
+
+</div>
+ 
+<!-- location picker popup -->
+<app-map-popup
+  *ngIf="showTemplatePopup"
+  [lat]="lat" [lng]="lng" [formattedAddress]="formattedAddress"
+  (save)="onMapPopupSave($event)"
+  (close)="hideTempltePopup($event)">
+</app-map-popup> 

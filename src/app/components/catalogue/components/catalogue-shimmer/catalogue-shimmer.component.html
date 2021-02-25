@@ -1,0 +1,65 @@
+<div class="category-shimmer-container" *ngIf="shimmerType==1">
+    <div class="pulsate block"></div>
+    <div class="pulsate block"></div>
+    <div class="pulsate block"></div>
+    <div class="pulsate block"></div>
+    <div class="pulsate block"></div>
+    <div class="pulsate block"></div>
+</div>
+
+<div class="n-level-category-shimmer-container" *ngIf="shimmerType==4">
+    <div class="row-eq-height">
+        <div class="row-col-eq" *ngFor="let category of [1,2,3,4,5,6,7,8]">
+            <div class="grid-item" >
+                <div class="image_div">
+                  <div class="image-cat pulsate block"></div>
+                </div>
+                <div class="name_div">
+                  <div class="pulsate block"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="shimmerType==3" class="row">
+  <div class="col-lg-4 col-xs-6" *ngFor="let category of [1,2,3,4,5,6]">
+    <div class="product-shimmer-container grid">
+      <div class="image-div pulsate block"></div>
+      <div class="detail-div">
+        <div class="detail-grp-1">
+          <div class="pulsate block"></div>
+          <div class="pulsate block"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-container *ngIf="shimmerType==2">
+<div class="product-shimmer-container list" *ngFor="let category of [1,2,3]">
+  <div class="image-div pulsate block">
+  </div>
+  <div class="detail-div">
+    <div class="detail-grp-1">
+        <div class="pulsate block"></div>
+        <div class="pulsate block"></div>
+        <div class="pulsate block"></div>
+    </div>
+    <div class="detail-grp-2">
+    <div class="pulsate block"></div>
+    </div>
+  </div>
+</div>
+</ng-container>
+
+<div class="logo-card-shimmer-container" *ngIf="shimmerType==5">
+  <div class="image-div pulsate block">
+  </div>
+  <div class="detail-div">
+        <div class="pulsate block"></div>
+        <div class="pulsate block"></div>
+        <div class="pulsate block"></div>
+        <div class="pulsate block"></div>
+  </div>
+</div>

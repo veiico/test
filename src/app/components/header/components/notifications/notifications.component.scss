@@ -1,0 +1,91 @@
+@import '~assets/css/variables.scss';
+
+.notification-icon {
+  img {
+    width: 2rem;
+  }
+}
+
+.notifications {
+  cursor: pointer;
+  position: relative;
+
+  i {
+    color: $header-color;
+    margin-top: 0.1rem;
+    font-size: 2rem;
+  }
+
+  #notification_count {
+    position: absolute;
+    z-index: 1000;
+    top: -3px;
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    background: $color-theme;
+    color: $header-color;
+    align-items: center;
+    padding: 0.5rem;
+    right: -5px;
+  }
+}
+
+
+.notificationContainer {
+  background-color: #fff;
+  border: 1px solid rgba(100, 100, 100, 0.4);
+  -webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+  //overflow: scroll;
+  position: absolute;
+  top: 45px;
+  width: 21rem;
+  max-height: 30rem;
+  overflow: auto;
+  left: -10rem;
+  z-index: 1000;
+  background: $header-bg-color;
+  color: $header-color;
+
+  //max-height: 250px;
+  .clearAllLink {
+    float: right;
+    color: $color-theme;
+  }
+
+  .notificationTitle {
+    padding: 1rem;
+    z-index: 2;
+    position: relative;
+  }
+}
+
+.notif-overlay {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+}
+
+.notification-bar {
+  color: $header-color;
+  padding: 1rem 1rem;
+  border-bottom: 1px solid rgba(256, 256, 256, 0.2);
+
+  &:hover {
+    background: $header-color;
+    color: $header-bg-color;
+  }
+
+  cursor: pointer;
+}
+
+@media only screen and (min-width: 768px) {
+  .notificationContainer {
+    width: 31rem;
+	left: -20rem;
+  }
+}

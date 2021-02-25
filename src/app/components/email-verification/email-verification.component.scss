@@ -1,0 +1,32 @@
+@import '~assets/css/variables';
+.emailVerify{
+  max-width: 700px;
+  margin: auto;
+  padding-top: 100px;
+  padding-bottom: 20px;
+  height: auto;
+  min-height: calc(100vh - 180px);
+  .msgBlock{
+    height: 250px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 5px 20px 0 rgba(36, 150, 255, 0.27);
+    padding: 50px;
+    text-align: center;
+    img{
+      height: 50px;
+      margin-bottom: 10px;
+    }
+    p{
+      font-family: $proxima-reg;
+      font-size: 24px;
+      font-weight: 600;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      color: #474747;
+      text-align: center;
+    }
+  }
+}

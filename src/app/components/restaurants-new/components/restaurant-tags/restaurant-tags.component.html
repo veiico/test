@@ -1,0 +1,3 @@
+    <p class="preorder-tag-data" *ngIf="(previewOn ? true : item.available == 0 && item.scheduled_task == 1) && showPreOrderTag" >{{tagsData.preorder_tag.data.heading}}</p>
+    <p class="closed-tag-data" *ngIf="(previewOn ? true : item.available == 0) && showClosedTag">{{tagsData.closed_tag.data.heading}}</p>
+    <p class="sponsored-tag-data" *ngIf="(previewOn ? true : item.is_sponsored == 1 && (item.available == 1 || item.scheduled_task == 1)) && showSponsoredTag" >{{tagsData.sponsored_tag.data.heading}}</p>

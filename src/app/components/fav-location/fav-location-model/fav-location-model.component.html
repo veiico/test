@@ -1,0 +1,35 @@
+<div class="container-fluid model-container" *ngIf="address.house || address.landmark || address.address">
+  <div class="col-xs-12 action-container">
+    <a class="address-action" (click)="deleteAddress($event)" *ngIf="!readOnly">
+      <img src="assets/img/delete_address.svg" alt="Delete address">
+    </a>
+
+  </div>
+  <div class="content-wrapper" *ngIf="locationTypes">
+     <div class="icon" *ngIf="langJson">
+      <img class="loc-type-img" [src]="locationTypes[address.locType].icon" [alt]="locationTypes[address.locType].label">
+    </div>
+    <div class="content">
+      <div class="content-inner">
+        <div class="col-xs-12 flex" style="padding-right: 0;min-height: 3rem;">
+          <span class="title flex-1" *ngIf="langJson">
+
+            {{locationTypes[address.locType].label}}
+          </span> 
+          <span class="yf yf-ic-create" (click)="editAddress($event)"></span>
+          <i *ngIf="locationTypes[address.locType].value != 3" class="fa fa-trash-o delete-icon" aria-hidden="true" (click)="deleteAddress($event)"></i>
+        </div>
+        <div class="col-xs-12" (click)="editAddress($event)">
+          <p class="complete-address">{{address.house ? address.house + ", " : ''}}{{address.address}}{{address.landmark ? ', '+address.landmark: ''}}{{address.postal_code ? ', '+address.postal_code : ''}}</p>
+        </div>
+      </div>
+      <div class="col-xs-12 text-center" *ngIf="readOnly">
+        <button type="button" class="btn btn-sm btn-deliver-here ">
+          <ng-container *ngIf="!laundry_pickup && !laundry_delivery">{{terminology.DELIVER_HERE || 'Deliver here'}}</ng-container>
+          <ng-container *ngIf="laundry_pickup">{{languageStrings.select || "Select"}}</ng-container>
+          <ng-container *ngIf="laundry_delivery">{{languageStrings.select || "Select"}}</ng-container>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

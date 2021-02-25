@@ -1,0 +1,258 @@
+@import '~assets/css/variables';
+
+.error {
+  color: red;
+}
+
+.autoComplete {
+  >div {
+    width: 100%;
+  }
+}
+
+
+
+.input-container {
+  width: 100%;
+
+  app-jw-google-autocomplete {
+    /deep/ input {
+      // padding: 25px 10px;
+      box-shadow: none;
+      border: none;
+      // padding-right: 100px;
+      height: $autocomplete-box-height;
+      border-radius: 0;
+      font-family: $proxima-semi-bold;
+      display: block;
+      width: 100%;
+      padding: 6px 12px;
+      font-size: 14px;
+      line-height: 1.42857143;
+      color: #555;
+      background-color: #fff;
+      background-image: none;
+      transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    }
+  }
+}
+
+.auto-detect {
+  i {
+    margin-right: 0.3rem;
+  }
+
+  // width:12%;
+  display:inline;
+  cursor: pointer;
+}
+
+.autocompleteWrapper {
+  width: 80%;
+  height: 100%;
+  display: inline-block;
+}
+
+form {
+  display: flex;
+  height: auto;
+  background-color: white;
+
+  .search-button {
+    margin: auto;
+    margin-right: 4px !important;
+    font-family: $proxima-reg;
+    background-color: $autocomplete-btn-search-bg-color;
+    color: $autocomplete-btn-search-font-color;
+    border: 2px solid $autocomplete-btn-search-bg-color;
+    height: calc(#{$autocomplete-box-height} - 10px);
+    width: auto;
+    right: 18px;
+    border-radius: 1px;
+    top: 3px;
+
+    &:hover {
+      background-color: $autocomplete-btn-search-font-color;
+      color: $autocomplete-btn-search-bg-color;
+    }
+  }
+
+  &.date-range-enabled {
+    background-color: transparent;
+    flex-direction: column;
+
+    .search-button {
+      width: 100%;
+    }
+  }
+}
+
+//@at-root
+.date-range-container {
+  background-color: #e8e8e8;
+  display: flex;
+  justify-content: flex-start;
+  min-width: 180px;
+  margin: auto;
+  margin-right: 5px;
+  width: 100%;
+  cursor: pointer;
+  height: calc(var(--autocomplete_box_height) - 0px);
+  padding: 0 15px;
+
+  .v-line {
+    width: 2px;
+    background-color: $color-theme;
+    height: 70%;
+    display: flex;
+    align-self: center;
+  }
+
+  .checkin-checkout {
+    line-height: 1.1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1;
+  }
+
+  .heading {
+    font-family: $proxima-semi-bold;
+    color: #606060;
+    ;
+    font-size: 14px;
+  }
+
+  .date {
+    font-family: $proxima-reg;
+    text-align: center;
+    color: #4f4f4f;
+    ;
+    // font-size: 12px;
+    font-size: 11px;
+
+  }
+
+  .calendar-image {
+    // background-image: url('/assets/img/calendar.svg');
+    background-repeat: no-repeat;
+    height: 22px;
+    margin-top: 5px;
+    min-width: 20px;
+    align-self: center;
+    mask: url('/assets/img/calendar.svg');
+    mask-repeat: no-repeat;
+    background-color: #424242;
+  }
+
+  &:hover {
+    .calendar-image {
+      background-color: $color-theme;
+    }
+  }
+}
+
+@media (min-width:768px) {
+  .auto-detect {
+    i {
+      margin-right: 0.3rem;
+    }
+
+    // width:20%;
+    display:inline;
+    cursor: pointer;
+  }
+
+  .autocompleteWrapper {
+    width: 88%;
+    height: 100%;
+    display: inline-block;
+  }
+}
+
+@media (min-width:992px) {
+  form {
+    display: flex;
+    height: $autocomplete-box-height;
+    background-color: white;
+    flex-direction: row;
+
+    &.date-range-enabled {
+      background-color: white;
+      flex-direction: row;
+
+      .search-button {
+        width: auto;
+      }
+    }
+  }
+
+  .search-button {
+    width: auto;
+  }
+
+  .input-container {
+    input.search {
+      height: 100%;
+    }
+  }
+
+  .date-range-container {
+    width: auto;
+    padding: 2px;
+    justify-content: space-around;
+    height: calc(#{$autocomplete-box-height} - 10px);
+
+    .calendar-image {
+      margin-left: 5px;
+    }
+  }
+}
+
+.errorpop{
+  color:#fff;
+  font-size: 14px;
+  background-color: #f85359;
+  padding: 10px;
+  //border-radius: 4px;
+  font-family: $proxima-reg;
+  //margin-top: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .dFlex{
+    display: flex;
+    align-items: center;
+  }
+  .times{
+    cursor: pointer;
+    float: right;
+  }
+}
+
+.infopop{
+  color:#fff;
+  font-size: 14px;
+  background-color: #2396ff;
+  padding: 10px;
+  //border-radius: 4px;
+  font-family: $proxima-reg;
+  //margin-top: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .dFlex{
+    display: flex;
+    align-items: center;
+  }
+  .times{
+    cursor: pointer;
+    float: right;
+  }
+}
+
+@media only screen and (min-width:1441px){
+  .autocompleteWrapper {
+    width: 92% !important;
+  }
+}

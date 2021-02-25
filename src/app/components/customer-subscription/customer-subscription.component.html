@@ -1,0 +1,37 @@
+<div class="subscription">
+  <div class="row">
+    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+      <h3 class="head">{{languageStrings.signup_fee || "Signup Fee"}}</h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12 descriptionText">
+      <h3><ng-container>{{languageStrings.you_pay_below_amount_to_complete_registration || "You have to pay below amount to complete your registration."}}</ng-container></h3>
+    </div>
+    <div class="col-lg-12 payStyle">
+      <div>
+        <span>{{curreny}}{{subscription.plan_amount | decimalConfig}}</span>
+      </div>
+    </div>
+
+    <div class="col-lg-12 cashtext" *ngIf="paymentMethod !== 2">
+      <h3><ng-container>{{languageStrings.payment_mode_for_account_not_enabled_you_have_pay_cash_amount_to_admin_and_then_you_successfully_able_login || "The Payment Mode for this account is not enabled, you have to pay cash amount to admin and then you are successfully able to login."}}</ng-container></h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <app-stripe [loginResponse]="loginResponse" (paymentMadeResponse)="paymentMadeResponse($event)" *ngIf="paymentMethod === 2"></app-stripe>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="paymentMethod === 2">
+    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 text-center">
+      <button class="payButton btn" mat-button [disabled]="payDisabled" (click)="pay()">
+        <span >{{ languageStrings.pay || "Pay"}}</span>
+        <span class="amount">{{curreny}}{{subscription.plan_amount | decimalConfig}}</span>
+      </button>
+    </div>
+  </div>
+</div>

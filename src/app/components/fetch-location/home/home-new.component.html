@@ -1,0 +1,139 @@
+<app-header style="height:85px;padding: 0px;" class="col-xs-12" [headerData]="data"></app-header>
+<div class="fetch-location" *ngIf="config" id="fetchLocation"
+     [ngStyle]="{'background-image':config && config.background_image ? getBackgroundImage() :
+            'linear-gradient(0deg, rgba(38, 37, 37, 0.61), rgba(38, 37, 37, 0.66)),url(assets/img/background-home.jpg)'}">
+  <div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12">
+      <!--<img src="assets/img/background-home.jpg" />-->
+      <div class="location-div" [ngClass]="{'location-div': config.show_date_filter == 0, 'location-div-1': config.show_date_filter == 1,'centerConcierge':showDefaultCustom}">
+        <div class="heading" [ngClass]="{'headingConcirege':showDefaultCustom && !showFindBusiness}">
+          <h1>
+            {{config ? config.app_description : 'We get what you love'}}
+          </h1>
+          <!--<h3>-->
+          <!--Get all your favorite businesses delivered in minutes-->
+          <!--</h3>-->
+        </div>
+        <div class="form-div row" *ngIf="!isPlatformServer;else serverShimmer">
+          <div [ngClass]="{'col-lg-10 col-sm-10 col-xs-12 col-md-10 col-lg-offset-1 col-md-offset-1 col-xs-offset-0 col-sm-offset-1' : !config.show_date_filter, 'col-lg-12 col-sm-12 col-xs-12 col-md-12': config.show_date_filter == 1 }">
+            <form [formGroup]="locationForm" (ngSubmit)="onSubmit(locationForm,$event,'shake')" autocomplete="off"><!--[@shake]="{ value: formInvalid?shake:''}"-->
+              <div class="form-group" *ngIf="!mobileView" [@slideInOutState]="!showFindBusiness">
+                <!--[ngClass]="{'hidden-xs visible-lg visible-md visible-sm': config.show_date_filter == 1,'visible-xs visible-lg visible-md visible-sm': config.show_date_filter == 0}"-->
+                <div class="displayFlex" id="shakeFilter" >
+                  <div [ngClass]="{'flex-5': config.show_date_filter == 1, 'widthDiv': config.show_date_filter == 1, 'widthFull': config.show_date_filter != 1}">
+                    <!--<div class="input-group">-->
+                    <!--<span class="input-group-addon add-on-set noBorder" appColor onlyColor="true" (click)="openMap()"><i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i></span>-->
+                    <!--<input type="text" autocomplete="off" #search id="mapAddress" [ngStyle]="{ 'direction' : direction }"-->
+                    <!--required="required" formControlName="searchControl"-->
+                    <!--class="focusable form-control custom_register_form-control input-style addressInput" -placeholder placeholder="Address"/>-->
+                    <!--</div>-->
+                    <!--<app-control-messages [control]="locationForm.controls.searchControl"></app-control-messages>-->
+                    <!--[ngStyle]="{'border-color':config.borderColor}" [ngStyle]="{'border-color':config.borderColor}"-->
+
+                    <div>
+                      <app-autocomplete></app-autocomplete>
+                    </div>
+                  </div>
+                  <div ngClass="widthDiv positionRelative flex-3" *ngIf="config.show_date_filter == 1">
+                    <div class="displayFlex">
+                      <input class="form-control" [bsConfig]="bsConfig" #drp="bsDaterangepicker" bsDaterangepicker formControlName="bsRangeValue" [(ngModel)]="dateStart" [minDate]="minDate" style="visibility:hidden;width:0px;position: absolute;" (onHidden)="handlerOnHide()" (onShown)="showFirstCalendar()" aria-label="start date">
+                      <input class="form-control" [bsConfig]="bsConfig" #drp_1="bsDaterangepicker" bsDaterangepicker formControlName="bsRangeValue_1" [(ngModel)]="dateEnd" [minDate]="minDate" style="visibility:hidden;width:0px;" (onHidden)="handlerOnHideSecond()" (onShown)="showSecondCalendar()"  aria-label="end date">
+                    </div>
+                    <div class="checkInOutDiv">
+                      <div class="displayFlex hoverEffect" (click)="drp.toggle()" [attr.aria-expanded]="drp.isOpen" style="cursor:pointer;">
+                        <div class="calendarImage">
+                          <i class="fa fa-calendar" aria-hidden="true"></i>
+                        </div>
+                        <!--<img src="assets/img/calendar-grey.svg" >-->
+                        <div class="displayFlex paddingLeft">
+                          <div class="widthFifty borderRight positionRelative">
+                            <p class="checkInOut" ><ng-container>{{terminology.CHECK_IN}}</ng-container></p>
+                            <p class="date">{{checkInDate | date: 'MMM d, y'}}</p>
+                            <p class="day">{{checkInDate | date: 'EEEE'}}</p>
+                          </div>
+                          <div class="paddingLeft widthFifty">
+                            <p class="checkInOut" ><ng-container>{{terminology.CHECK_OUT}}</ng-container></p>
+                            <p class="date">{{checkOutDate | date: 'MMM d, y'}}</p>
+                            <p class="day">{{checkOutDate | date: 'EEEE'}}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="find" *ngIf="!mobileView" [ngClass]="{'eqHeight':showDefaultCustom && !showFindBusiness}">
+                <!--[ngClass]="{'hidden-xs visible-lg visible-md visible-sm': config.show_date_filter == 1,'visible-xs visible-lg visible-md visible-sm': config.show_date_filter == 0}"-->
+                <button class="btn findButton" [ngClass]="{'conciergeBtn':showDefaultCustom && !showFindBusiness}" appColor hoverbgSimple="true" type="button" *ngIf="showDefaultCustom && !showFindBusiness" (click)="goToCustomCheckout()">{{terminology.CUSTOM_ORDER}}</button>
+                <button class="btn findButton" [ngClass]="{'conciergeBtn':showDefaultCustom && !showFindBusiness}" appColor hoverbgSimple="true" *ngIf="showFindBusiness" >{{terminology.GO_TO_MARKETPLACE}}</button>
+                <button class="btn findButton" [ngClass]="{'conciergeBtn':showDefaultCustom && !showFindBusiness}" appColor hoverbgSimple="true"  *ngIf="showDefaultCustom && !showFindBusiness">{{terminology.GO_TO_MARKETPLACE}}</button>
+              </div>
+              <div class="text-center back-link" *ngIf="showFindBusiness && showDefaultCustom && !mobileView">
+                <span (click)="showFindBusiness=false" ><i class="fa fa-angle-left" aria-hidden="true"></i> <ng-container >{{languageStrings.back || 'Back'}}</ng-container></span>
+              </div>
+
+
+              <!--================================mobile view design=========================-->
+              <div class="mobileUiFilter" *ngIf="mobileView" [ngClass]="{'transparentConcirege':showDefaultCustom && !showFindBusiness}">
+                <!--[ngClass]="{'visible-xs hidden-lg hidden-sm hidden-md': config.show_date_filter == 1,'hidden-xs hidden-lg hidden-sm hidden-md': config.show_date_filter == 0}"-->
+                <div class="form-group" [@slideInOutState]="!showFindBusiness">
+                  <div>
+                    <app-autocomplete></app-autocomplete>
+                  </div>
+                  <!--<div class="input-group">-->
+                  <!--<span class="input-group-addon add-on-set noBorder" appColor onlyColor="true" (click)="openMap()"><i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i></span>-->
+                  <!--<input type="text" autocomplete="off" #search_1 id="mapAddress-1"-->
+                  <!--required="required" formControlName="searchControl" [ngStyle]="{ 'direction' : direction }"-->
+                  <!--class="focusable form-control custom_register_form-control input-style addressInput" -placeholder placeholder="Address"/>-->
+                  <!--</div>-->
+                  <!--<app-control-messages [control]="locationForm.controls.searchControl"></app-control-messages>-->
+                  <!--[ngStyle]="{'border-color':config.borderColor}" [ngStyle]="{'border-color':config.borderColor}"-->
+                </div>
+                <div class="calendarUi" [@slideInOutState]="!showFindBusiness">
+                  <div class="widthFull positionRelative">
+                    <div class="displayFlex">
+                      <input class="form-control" [bsConfig]="bsConfig" #drp="bsDaterangepicker" bsDaterangepicker formControlName="bsRangeValue" [(ngModel)]="dateStart" [minDate]="minDate" style="visibility:hidden;position: absolute;" (onHidden)="handlerOnHide()" (onShown)="showFirstCalendar()"  aria-label="start date">
+                      <input class="form-control" [bsConfig]="bsConfig" #drp_1="bsDaterangepicker" bsDaterangepicker formControlName="bsRangeValue_1" [(ngModel)]="dateEnd" [minDate]="minDate" style="visibility:hidden;" (onHidden)="handlerOnHideSecond()" (onShown)="showSecondCalendar()"  aria-label="end date">
+                    </div>
+                    <div class="checkInOutDiv">
+                      <div class="displayFlex hoverEffect" (click)="drp.toggle()" [attr.aria-expanded]="drp.isOpen" style="cursor:pointer;">
+                        <div class="calendarImage">
+                          <i class="fa fa-calendar" aria-hidden="true"></i>
+                        </div>
+                        <!--<img src="assets/img/calendar-grey.svg" >-->
+                        <div class="displayFlex paddingLeft">
+                          <div class="widthFifty borderRight positionRelative">
+                            <p class="checkInOut" ><ng-container>{{terminology.CHECK_IN}}</ng-container></p>
+                            <p class="date">{{checkInDate | date: 'MMM d, y'}}</p>
+                            <p class="day">{{checkInDate | date: 'EEEE'}}</p>
+                          </div>
+                          <div class="paddingLeft widthFifty">
+                            <p class="checkInOut" ><ng-container>{{terminology.CHECK_OUT}}</ng-container></p>
+                            <p class="date">{{checkOutDate | date: 'MMM d, y'}}</p>
+                            <p class="day">{{checkOutDate | date: 'EEEE'}}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="find" [ngClass]="{'eqHeight':showDefaultCustom && !showFindBusiness}">
+                  <button class="btn findButton" [ngClass]="{'conciergeBtn':showDefaultCustom && !showFindBusiness}" appColor hoverbgSimple="true" *ngIf="showFindBusiness" >{{terminology.GO_TO_MARKETPLACE}}</button>
+                  <button class="btn findButton" [ngClass]="{'conciergeBtn':showDefaultCustom && !showFindBusiness}" appColor hoverbgSimple="true" type="button" *ngIf="showDefaultCustom && !showFindBusiness" (click)="goToCustomCheckout()">{{terminology.CUSTOM_ORDER}}</button>
+                  <button class="btn findButton" [ngClass]="{'conciergeBtn':showDefaultCustom && !showFindBusiness}" appColor hoverbgSimple="true"  *ngIf="showDefaultCustom && !showFindBusiness">{{terminology.GO_TO_MARKETPLACE}}</button>
+                </div>
+                <div class="text-center back-link" style="color: black" *ngIf="showFindBusiness && showDefaultCustom">
+                  <span (click)="showFindBusiness=false" ><i class="fa fa-angle-left" aria-hidden="true"></i> <ng-container>{{languageStrings.back || 'Back'}}</ng-container></span>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <ng-template #serverShimmer>
+          <div class="skeleton-loader"></div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

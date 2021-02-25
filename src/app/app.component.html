@@ -1,0 +1,23 @@
+<div id="global_loader" class="glb-ldr-prt">
+    <div class="gl-ldr-cld">
+      <div class="gl-ldr-ctr">
+        <div class="loader" id="loader" [ngStyle]="{'border-bottom-color': data.color,'border-left-color': data.color}"></div>
+      </div>
+    </div>
+</div>
+<app-confirm *ngIf="confirmationService.showPopup"></app-confirm>
+<router-outlet></router-outlet>
+<div *ngIf="!isPlatformServer">
+  <app-cookie-footer *ngIf="!data.is_demo && !data.hide_gdpr"></app-cookie-footer>
+</div>
+
+  <app-modal [modalType]="modalType.SMALL" *ngIf="showModalMainPopup" (esc)="hideDialog()" (onClose)="hideDialog()">
+    <div body id="newId">
+      <div class="row">
+        <div class="col-lg-12 width100">
+          <button type="button" class="close" (click)="hideDialog()">&times;</button>
+          <img [src]="data.popup_image_url" alt="" srcset="" class="modalImage" (click)="gotoImageLink()">
+        </div>
+      </div>
+    </div>
+  </app-modal>

@@ -1,0 +1,52 @@
+<app-modal [modalType]="modalType" (esc)="close()" (onClose)="close()">
+    <div body>
+        <div class="text-right">
+            <span (click)="close()" *ngIf="!hideClose" class="close-x" [ngClass]="{'sotreOpen': !storeData || storeData.available}" [ngStyle]="{'direction':direction}">&times;</span>
+        </div>
+        <div class="popup-head" *ngIf="storeData && !storeData.available">
+            <div class="popup-head-tag">
+                <img src="assets/images/closed-store.svg" alt="closed store icon">
+            </div>
+            <div class="popup-head-text" *ngIf="terminology">
+                <p>{{languageStrings.Oops_looks_like_merchant_you_have_choosen_closed_for_now || 'Oops! Looks like the merchant you have choosen is closed for now.'}}</p>
+            </div>
+        </div>
+
+        <div class="schedule-delivery">
+            <p class="schedule-delivery-heading">{{languageStrings.schedule_your_delivery_for_later || 'Schedule your delivery for later'}}</p>
+            <div class="date-time-picker">
+                <div class="row">
+                    <form [formGroup]="dateTimeForm">
+                        <div class="col-xs-6">
+                            <div class="pos-rel">
+                                <i class="fa fa-calendar input-icon" aria-hidden="true"></i>
+                                <p-calendar class="" placeholder="{{languageStrings.enter_date || 'Enter Date'}}" dateFormat="dd/mm/yy" [readonlyInput]="true" formControlName="date" [minDate]="currentDateTime"></p-calendar>
+                                <app-control-messages [control]="dateTimeForm.get('date')"></app-control-messages>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="pos-rel">
+                                <i class="fa fa-clock-o input-icon" aria-hidden="true"></i>
+                                <p-calendar class="" placeholder="{{languageStrings.enter_time || 'Enter Time'}}"
+                                            [hourFormat]="config.time_format === timeFormat.TWELVE_HOURS ? 12 : 24"
+                                            [timeOnly]="true" [readonlyInput]="true" formControlName="time"></p-calendar>
+                                <app-control-messages [control]="dateTimeForm.get('date')"></app-control-messages>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <hr class="seperator" />
+
+        <div class="text-right btn-box">
+            <button type="button" class="btn accept cancelButton" *ngIf="!hideClose" [ngStyle]="{ 'direction' : direction }" (click)="close()">
+                <ng-container>{{languageStrings.cancel || 'Cancel'}} </ng-container>
+            </button>
+            <button type="button" class="btn accept" appColor bg="true" [ngStyle]="{ 'direction' : direction }" (click)="onSubmit()">
+                <ng-container>{{languageStrings.submit || 'Submit'}}</ng-container>
+            </button>
+        </div>
+    </div>
+</app-modal>

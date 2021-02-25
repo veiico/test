@@ -1,0 +1,135 @@
+<div class="staticAddress">
+  <p class="details" *ngIf="type == 'pickup'" [ngStyle]="{ 'direction' : direction }">
+    <ng-container>{{languageStrings.pickup_details ||'Pickup Details'}}</ng-container>
+  </p>
+  <p class="details" *ngIf="type == 'delivery'" [ngStyle]="{ 'direction' : direction }">
+    <ng-container>{{languageStrings.delivery_details ||'Delivery Details'}}</ng-container>
+  </p>
+  <div class="row" *ngIf="type == 'delivery'">
+    <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12">
+      <label class="sameAsPickup" [ngStyle]="{ 'direction' : direction }">
+        <input type="checkbox" [(ngModel)]="sameAsPickup" (change)="sameAsPickupDetails($event)"
+               aria-label="Make delivery details same." />
+        <ng-container>{{languageStrings.make_delivery_details_same_pickup || 'Make delivery details same as pickup'}}.</ng-container>
+      </label>
+    </div>
+  </div>
+
+  <form [formGroup]="addressForm" class="form">
+    <div class="row">
+      <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+        <label for="addr-name" class="control-label" [ngStyle]="{ 'direction' : direction }">
+          <ng-container>{{languageStrings.name || 'Name'}}</ng-container><span style="color:red">*</span>
+        </label>
+        <input type="text" id="addr-name" [ngStyle]="{ 'direction' : direction }" class="form-control inputStyle"
+               placeholder="{{languageStrings.enter_name || 'Enter Name'}}" formControlName="name" />
+        <app-control-messages [control]="addressForm.controls.name"></app-control-messages>
+      </div>
+      <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+        <label for="addr-email" class="control-label" [ngStyle]="{ 'direction' : direction }">
+          <ng-container>{{languageStrings.email || 'Email'}}</ng-container><span style="color:red">*</span>
+        </label>
+        <input type="text" id="addr-email" [ngStyle]="{ 'direction' : direction }" class="form-control inputStyle" 
+               placeholder="{{languageStrings.enter_email || 'Enter Email'}}" formControlName="email" />
+        <app-control-messages [control]="addressForm.controls.email"></app-control-messages>
+      </div>
+    </div>
+    <div class="row mt-10">
+      <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+        <label for="addr-mob" class="control-label" [ngStyle]="{ 'direction' : direction }">
+          <ng-container>{{languageStrings.mobile_number || 'Mobile Number'}}</ng-container><span style="color:red">*</span>
+        </label>
+        <app-fugu-tel-input id="addr-mob" class="phone_style" formControlName="phone" [(ngModel)]="phoneNumber" [(phone)]="phoneNumber" [(dialCode)]="country_code"></app-fugu-tel-input>
+        <app-control-messages [control]="addressForm.controls.phone"></app-control-messages>
+      </div>
+    </div>
+
+    <div class="row mt-10">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <p class="details" [ngStyle]="{ 'direction' : direction }">
+          <ng-container>{{languageStrings.choose_address || 'Choose Address'}}</ng-container>
+        </p>
+      </div>
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div>
+          <div class="searchField" *ngIf="!selectedAddress">
+            <input type="text" [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Search"  aria-label="search address" />
+          </div>
+          <button type="button" class="btn continueBtn changeAddress" (click)="onChangeClick()" *ngIf="selectedAddress">
+            <ng-container>{{languageStrings.change_address || 'Change Address'}}</ng-container>
+          </button>
+        </div>
+        <div class="clear clearfix"></div>
+      </div>
+      <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 mt-10">
+        <ng-container *ngIf="!selectedAddress; else elseTemplate">
+          <ng-container *ngIf="list && list.length; else elseTemplate">
+            <div class="chk_cnt_div chk_form no-gutter m0 scrollData" *ngIf="content">
+              <div *ngFor="let data of list | search : searchText; let i = index;">
+                <div class="container-fluid model-container" *ngIf="i < showLimit">
+
+                  <div class="content">
+                    <div class="content-inner">
+                      <div class="col-xs-12">
+                        <p class="title">
+                          <!--<img class="loc-type-img" [src]="locationTypes[address.locType].icon" alt="">-->
+                          {{data.label}}
+                        </p>
+                      </div>
+                      <div class="col-xs-12">
+                        <p class="complete-address">{{data && data.showAddress ? data.showAddress : data.address}}</p>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 text-center">
+                      <button type="button" class="btn btn-sm btn-deliver-here " (click)="onAddressClick(data, i)">
+                        <ng-container>{{languageStrings.select || 'Select'}}</ng-container>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="seeMore text-center" style="padding: 6px 0px;" *ngIf="hideSeeMore">
+              <button type="button" class="btn btn-sm btn-deliver-here " (click)="seeMore()">
+                <ng-container>{{languageStrings.see_more ||'See More'}}</ng-container>
+              </button>
+            </div>
+          </ng-container>
+          <ng-template #elseTemplate>
+            <p style="padding:20px;font-size:18px;" class="text-center">
+              <ng-container>{{languageStrings.no_saved_addresses || 'No Saved Addresses'}}</ng-container>
+            </p>
+          </ng-template>
+        </ng-container>
+        <ng-template #elseTemplate>
+          <div class="chk_cnt_div selected-address m0 borderSelected">
+            <div class="container-fluid flex">
+              <div class="icon">
+                <span class="yf yf-ic-place"> </span>
+              </div>
+              <div class="row address">
+                <div class="col-xs-12">
+                  <p class="title">
+                    {{selectedAddress.label}}
+                  </p>
+                </div>
+                <div class="col-xs-12">
+                  <p class="complete-address">{{selectedAddress.showAddress}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+    <div class="row mt-20">
+      <div class="col-lg-12 text-right">
+        <button class="btn continueBtn" type="button" (click)="continueOption()" [disabled]="!addressForm.valid"
+                [ngStyle]="{ 'direction' : direction }">
+          <ng-container>{{languageStrings.next || 'Next'}}</ng-container>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
